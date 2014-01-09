@@ -2,10 +2,10 @@ package eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event;
 
 import java.util.List;
 
-import com.astuetz.PagerSlidingTabStrip;
 
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.CommentsHandler;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.PagerSlidingTabStrip;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.Utils;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.DTHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.LocalEventObject;

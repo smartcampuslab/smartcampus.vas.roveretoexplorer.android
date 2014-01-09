@@ -52,8 +52,6 @@ public class Fragment_EvDetail_Info extends Fragment {
 	private static final DateFormat extDateFormat = new SimpleDateFormat("EEEEEE dd/MM/yyyy");
 
 
-
-
 	public static Fragment_EvDetail_Info newInstance(String event_id) {
 		Fragment_EvDetail_Info  f = new Fragment_EvDetail_Info();
 		Bundle b = new Bundle();
