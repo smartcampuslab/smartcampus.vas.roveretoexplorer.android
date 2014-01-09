@@ -29,10 +29,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
-
-import com.astuetz.PagerSlidingTabStrip;
-
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;

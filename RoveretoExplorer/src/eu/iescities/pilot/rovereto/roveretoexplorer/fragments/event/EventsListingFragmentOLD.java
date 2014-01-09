@@ -15,8 +15,6 @@
  ******************************************************************************/
 package eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -24,9 +22,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -48,15 +44,7 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.ViewSwitcher;
-import eu.trentorise.smartcampus.android.common.SCAsyncTask.SCAsyncTaskProcessor;
-import eu.trentorise.smartcampus.android.common.listing.AbstractLstingFragment;
-import eu.trentorise.smartcampus.android.common.tagging.SemanticSuggestion;
-import eu.trentorise.smartcampus.android.common.tagging.TaggingDialog.TagProvider;
-import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
-import eu.trentorise.smartcampus.territoryservice.model.BaseDTObject;
-import eu.trentorise.smartcampus.territoryservice.model.CommunityData;
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.AbstractAsyncTaskProcessor;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.CategoryHelper;
@@ -71,6 +59,12 @@ import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.search.WhenForSear
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.search.WhereForSearch;
 import eu.iescities.pilot.rovereto.roveretoexplorer.map.MapFragment;
 import eu.iescities.pilot.rovereto.roveretoexplorer.map.MapManager;
+import eu.trentorise.smartcampus.android.common.SCAsyncTask.SCAsyncTaskProcessor;
+import eu.trentorise.smartcampus.android.common.listing.AbstractLstingFragment;
+import eu.trentorise.smartcampus.android.common.tagging.SemanticSuggestion;
+import eu.trentorise.smartcampus.android.common.tagging.TaggingDialog.TagProvider;
+import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
+import eu.trentorise.smartcampus.territoryservice.model.BaseDTObject;
 
 // to be used for event listing both in categories and in My Events
 public class EventsListingFragmentOLD extends AbstractLstingFragment<LocalEventObject> implements TagProvider {

@@ -1,9 +1,6 @@
 package eu.iescities.pilot.rovereto.roveretoexplorer;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 
 import android.app.Activity;
 import android.content.Intent;
@@ -13,42 +10,25 @@ import android.content.res.Resources.NotFoundException;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ExpandableListView;
-import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.AbstractAsyncTaskProcessor;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.DrawerItemOld;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.HackActionBarToggle;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.DTHelper;
+import eu.iescities.pilot.rovereto.roveretoexplorer.map.MapFragment;
+import eu.iescities.pilot.rovereto.roveretoexplorer.ui.navdrawer.NavDrawerAdapter;
+import eu.iescities.pilot.rovereto.roveretoexplorer.ui.navdrawer.NavDrawerItem;
+import eu.iescities.pilot.rovereto.roveretoexplorer.ui.navdrawer.NavMenuItem;
 import eu.trentorise.smartcampus.android.common.GlobalConfig;
 import eu.trentorise.smartcampus.android.common.SCAsyncTask;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 import eu.trentorise.smartcampus.territoryservice.model.BaseDTObject;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.AbstractAsyncTaskProcessor;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.CategoryHelper;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.DrawerItemOld;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.HackActionBarToggle;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.DTHelper;
-import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.EventsListingFragment;
-import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.info.InfoListingFragment;
-import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.poi.PoisListingFragment;
-import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.search.SearchFragment;
-import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.track.TrackListingFragment;
-import eu.iescities.pilot.rovereto.roveretoexplorer.map.MapFragment;
-import eu.iescities.pilot.rovereto.roveretoexplorer.ui.navdrawer.AbstractNavDrawerActivity;
-import eu.iescities.pilot.rovereto.roveretoexplorer.ui.navdrawer.NavDrawerActivityConfiguration;
-import eu.iescities.pilot.rovereto.roveretoexplorer.ui.navdrawer.NavDrawerAdapter;
-import eu.iescities.pilot.rovereto.roveretoexplorer.ui.navdrawer.NavDrawerItem;
-import eu.iescities.pilot.rovereto.roveretoexplorer.ui.navdrawer.NavMenuItem;
-import eu.iescities.pilot.rovereto.roveretoexplorer.ui.navdrawer.NavMenuSection;
 
 public class MainActivityOld extends ActionBarActivity{
 

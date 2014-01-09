@@ -26,8 +26,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import eu.trentorise.smartcampus.territoryservice.model.BaseDTObject;
-import eu.trentorise.smartcampus.territoryservice.model.POIObject;
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.CategoryHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.Utils;
@@ -37,6 +35,8 @@ import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.TrackObjec
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.EventDetailsFragment;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.poi.PoiDetailsFragment;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.track.TrackDetailsFragment;
+import eu.trentorise.smartcampus.territoryservice.model.BaseDTObject;
+import eu.trentorise.smartcampus.territoryservice.model.POIObject;
 
 public class InfoDialog extends DialogFragment {
 	public static final String PARAM = "DTO_OBJECT";

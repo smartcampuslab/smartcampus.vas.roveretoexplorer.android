@@ -41,7 +41,8 @@ import android.widget.TextView;
 
 import java.util.Locale;
 
-import com.astuetz.pagerslidingtabstrip.R;
+import eu.iescities.pilot.rovereto.roveretoexplorer.R;
+
 
 public class PagerSlidingTabStrip extends HorizontalScrollView {
 

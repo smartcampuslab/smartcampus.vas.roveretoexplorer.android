@@ -23,10 +23,9 @@ import java.util.Map;
 import java.util.Set;
 
 import android.util.Log;
-
-import eu.trentorise.smartcampus.territoryservice.model.BaseDTObject;
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.InfoObject;
+import eu.trentorise.smartcampus.territoryservice.model.BaseDTObject;
 
 public class CategoryHelper {
 	

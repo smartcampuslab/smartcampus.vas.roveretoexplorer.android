@@ -1,7 +1,5 @@
 package eu.iescities.pilot.rovereto.roveretoexplorer.ui.navdrawer;
 
-import eu.iescities.pilot.rovereto.roveretoexplorer.R;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.DTHelper;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -12,13 +10,11 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.DTHelper;
 
 public abstract class AbstractNavDrawerActivity extends ActionBarActivity {
 
