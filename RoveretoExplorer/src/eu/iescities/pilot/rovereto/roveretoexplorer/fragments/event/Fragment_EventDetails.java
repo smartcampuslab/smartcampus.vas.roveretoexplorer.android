@@ -1,5 +1,6 @@
 package eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event;
 
+
 import java.util.List;
 
 
@@ -13,7 +14,6 @@ import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.search.SearchFragm
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
