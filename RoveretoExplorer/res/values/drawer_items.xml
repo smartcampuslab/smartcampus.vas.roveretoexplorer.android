@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+ 
+     <!-- The names of the menu items  -->
+    
+    <string-array name="drawer_items_labels">
+        <item>I miei eventi</item>
+        <item>Oggi</item>
+        <item>Cultura</item>
+        <item>Sport</item>
+        <item>Svago</item>
+        <item>Altri eventi</item>
+    </string-array>
+
+    <!-- The icons associated to the menu items  -->
+    
+    <string-array name="drawer_items_icons">
+        <item>@drawable/ic_miei_eventi</item>
+        <item>@drawable/ic_eventi_oggi</item>
+        <item>@drawable/ic_cultura</item>
+        <item>@drawable/ic_sport</item>
+         <item>@drawable/ic_svago</item>
+        <item>@drawable/ic_altri_eventi</item>
+    </string-array>   
+
+	<!-- The icons associated to the menu items  -->
+    
+    <string-array name="drawer_items_actionbar_titles">
+        <item>I miei eventi</item>
+        <item>Eventi di oggi</item>
+        <item>Eventi Culturali</item>
+        <item>Eventi Sportivi</item>
+         <item>Eventi di Svago</item>
+        <item>Altri Eventi</item>
+    </string-array>   
+    
+</resources>

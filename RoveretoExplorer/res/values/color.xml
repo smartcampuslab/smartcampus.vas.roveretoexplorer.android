@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="black_background">#333</color>
+    <color name="silver">#ccc</color>
+<!--     <color name="dtappcolor_light">#BB8C81C1</color> -->
+<!--     <color name="dtappcolor">#8C81C1</color> -->
+    <color name="dtappcolor_light">#b7d5e7</color>
+    <color name="dtappcolor">#2975a7</color>
+    <color name="path">#cc0000ff</color>
+    <color name="ligth_blue">#b7d5e7</color>
+    <color name="dark_blue">#2975a7</color>
+    <color name="highlight_blue">#4ecdf9</color>
+    <color name="orange_rovereto">#ec9314</color>
+    <color name="green_yellow">#E3FF49</color>
+    <color name="lime_green">#41A317</color>
+    
+</resources>

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">RoveretoExplorer</string>
+    <string name="app_failure_init">Failed to initialize ViviTrento application</string>
+
+    <!-- MainActivity -->
+    <string name="nav_drawer_map">Eventi</string>
+    <string name="action_poi">POIs</string>
+    <string name="action_list">Lista</string>
+    <string name="empty" />
+    <string name="categories_event_summer_family">Estate giovani e famiglia</string>
+    <string name="categories_event_alto_garda">Alto Garda</string>
+    <string name="categories_event_cultura">Cultura</string>
+    <string name="categories_event_sport">Sport</string>
+    <string name="categories_event_svago">Svago</string>
+    <string name="categories_event_altri_eventi">Altri eventi</string>
+    
+    
+    <string name="categories_poi_family_audit">\"Family Audit\"</string>
+    <string name="categories_poi_summer_holyday">Vacanze al mare</string>
+    <string name="categories_poi_new_media">Tavolo \"Nuovi Media\"</string>
+    <string name="categories_poi_breast_point">Punti allattamento</string>
+    <string name="categories_poi_trentino_family">\"Family in Trentino\"</string>
+    <string name="categories_info_provincial_politics">Politiche provinciali</string>
+    <string name="categories_info_certifiers">Consulenti \"Audit\"</string>
+    <string name="categories_info_evaluators">Valutatori \"Audit\"</string>
+    <string name="categories_info_distrectual_politics">Politiche dei distretti</string>
+    <string name="categories_info_news">Notizie</string>
+    <string name="categories_info_organizations">Distretti e organizzazioni</string>
+    <string name="categories_track_pedestrian">Piste ciclopedonali</string>
+    <string name="categories_track_trekking">Passeggiate</string>
+    <string name="categories_track_bicycle">Pista ciclabile</string>
+    <string name="categories_event_today">Today\'s Events</string>
+    <string name="categories_event_my">My Events</string>
+    <string name="categories_story_my">My Stories</string>
+    <string name="search_txt">Search</string>
+    <string name="comments">View reviews</string>
+    <string name="source_smartcampus">SmartCampus</string>
+    <string name="submenu_related_events">Related events</string>
+    <string name="search_in_category">in category</string>
+    <string name="search_today_events">Search today\'s events</string>
+    <string name="eventlist_at_place">Events at</string>
+    <string name="toast_poi_not_found">Place not found</string>
+    <string name="warning_for_direction">Warning! The directions will lead you to the seat of the organization and not to the venue.</string>
+    <string name="list_event_today">Today</string>
+    <string name="list_event_tomorrow">Tomorrow</string>
+    <string name="content_empty">No results.</string>
+    <string name="app_failure_security">Failed to retrieve authentication data</string>
+    <string name="app_failure_operation">OOPS! An error occurred. Please check your connection or try again later</string>
+    <string name="initial_data_load">Loading initial data&#8230; (it may take a while this time)</string>
+    <string name="backstring">Indietro</string>
+    <string name="showdetails">Dettagli&#8230;</string>
+    <string name="info_dialog_title_poi">Informazioni luogo</string>
+    <string name="info_dialog_title_event">Informazioni evento</string>
+    <string name="info_dialog_title_track">Informazioni tracciato</string>
+    <string name="app_failure_obj_not_found">Oggetto non trovato!</string>
+        
+    <!-- <string name="smartcampus_auth_url"> https://vas-dev.smartcampuslab.it/accesstoken-provider/ac</string> -->
+    <!-- <string name="smartcampus_app_url">https://vas.smartcampuslab.it</string> -->
+    <string name="smartcampus_app_url">https://vas-dev.smartcampuslab.it</string>
+    <!-- String for the searching fragment -->
+    <string name="search_what">What: </string>
+    <string name="search_when">When: </string>
+    <string name="search_where">Where: </string>
+    <string name="search_anytime">Anytime</string>
+    <string name="search_today">Today</string>
+    <string name="search_tomorrow">Tomorrow</string>
+    <string name="search_thisweek">This week</string>
+    <string name="search_intwoweeks">In two weeks</string>
+    <string name="search_inonemonth">In one month</string>
+    <string name="search_anywhere">Anywhere</string>
+    <string name="search_within">Within %s</string>
+    <string name="dialog_connection_search">Offline mode supports only basic search. To exploit advanced search please connect to a network.</string>
+    <string name="search_for">Search for</string>
+    <string name="auth_failed">Application initialization failed.</string>
+
+    <!-- Menu -->
+    <string name="map_view">View on map</string>
+    <!-- Menu to be translated -->
+    <string name="mapmenu_events"> Eventi</string>
+    <string name="mapmenu_freetime"> Tempo libero e vacanze</string>
+    <string name="mapmenu_places"> Posti certificati</string>
+    <string name="mapmenu_babies"> Neonati</string>
+
+    <!-- Rating -->
+
+    <string name="ratingtext_average">Average rating:</string>
+    <string name="ratingtext_user">Your rating: %s</string>
+    <string name="ratingtext_raters">Total rates: %s</string>
+    <string name="rating_place_dialog_title">Rate this place:</string>
+    <string name="rating_event_dialog_title">Rate this event:</string>
+    <string name="rating_success">Your rating has been saved</string>
+    <string name="rate_button">Rate it!</string>
+    
+    <string name="hotel_level">Family level: %s</string>
+    <string name="hotel_cat">Category: %s stars</string>
+
+    <string name="event_subcat">Category: %s</string>
+    <string name="event_price">Price: %s </string>
+    <string name="event_price_free">Price: free</string>
+
+    <string name="audit_person_date">Qualification achievement date: %s</string>
+    
+    <string name="auth_required">Please sign in with your Google account. </string>
+    
+    <string name="comment_hint">Comment</string>
+    <string name="filter_dialog_title">Mostra eventi selezionati</string>
+    
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+   
+    
+</resources>
