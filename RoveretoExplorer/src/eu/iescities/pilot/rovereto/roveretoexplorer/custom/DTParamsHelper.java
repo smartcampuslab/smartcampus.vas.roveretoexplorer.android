@@ -9,7 +9,6 @@ import android.content.Context;
 import eu.trentorise.smartcampus.android.common.params.ParamsHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.CategoryHelper.CategoryDescriptor;
 
-
 public class DTParamsHelper {
 	private static final String TAG = "DTParamsHelper";
 	private static Context mContext;
@@ -24,7 +23,7 @@ public class DTParamsHelper {
 	public static final String KEY_EVENT_CATEGORIES = "events_categories";
 	public static final String KEY_INFO_CATEGORIES = "infos_categories";
 	public static final String KEY_TRACK_CATEGORIES = "tracks_categories";
- 
+
 	public static final String KEY_EVENTS_DEFAULT = "events_default";
 	public static final String KEY_POIS_DEFAULT = "pois_default";
 	public static final String KEY_EXCLUDE = "exclude";
@@ -66,30 +65,11 @@ public class DTParamsHelper {
 	}
 
 	public static CategoryDescriptor[] getFilteredArrayByParams(CategoryDescriptor[] categories, String type) {
-		if (type.equalsIgnoreCase(CategoryHelper.CATEGORY_TYPE_POIS)) {
-			if (getInstance().getParamsAsset().containsKey(KEY_POI_CATEGORIES)) {
 
-				return orderArrayByKey(CategoryHelper.POI_CATEGORIES,
-						(List<Integer>) getInstance().getParamsAsset().get(KEY_POI_CATEGORIES),type);
-
-			}
-		}
 		if (type.equalsIgnoreCase(CategoryHelper.CATEGORY_TYPE_EVENTS)) {
 			if (getInstance().getParamsAsset().containsKey(KEY_EVENT_CATEGORIES)) {
-				return orderArrayByKey(CategoryHelper.EVENT_CATEGORIES,
-						(List<Integer>) getInstance().getParamsAsset().get(KEY_EVENT_CATEGORIES),type);
-			}
-		}
-		if (type.equalsIgnoreCase(CategoryHelper.CATEGORY_TYPE_INFOS)) {
-			if (getInstance().getParamsAsset().containsKey(KEY_INFO_CATEGORIES)) {
-				return orderArrayByKey(CategoryHelper.INFO_CATEGORIES,
-						(List<Integer>) getInstance().getParamsAsset().get(KEY_INFO_CATEGORIES),type);
-			}
-		}
-		if (type.equalsIgnoreCase(CategoryHelper.CATEGORY_TYPE_TRACKS)) {
-			if (getInstance().getParamsAsset().containsKey(KEY_TRACK_CATEGORIES)) {
-				return orderArrayByKey(CategoryHelper.TRACK_CATEGORIES,
-						(List<Integer>) getInstance().getParamsAsset().get(KEY_TRACK_CATEGORIES),type);
+				return orderArrayByKey(CategoryHelper.EVENT_CATEGORIES, (List<Integer>) getInstance().getParamsAsset()
+						.get(KEY_EVENT_CATEGORIES), type);
 			}
 		}
 
@@ -107,25 +87,14 @@ public class DTParamsHelper {
 		returnMap = (Map<String, Object>) getInstance().getParamsAsset().get(KEY_INCLUDE);
 		return returnMap;
 	}
-	
-	
+
 	public static CategoryDescriptor[] getDefaultArrayByParams(String type) {
-		if (type.equalsIgnoreCase(CategoryHelper.CATEGORY_TYPE_POIS)) {
-			if (getInstance().getParamsAsset().containsKey(KEY_POIS_DEFAULT)) {
-
-				return orderArrayByKey(CategoryHelper.POI_CATEGORIES,
-						(List<Integer>) getInstance().getParamsAsset().get(KEY_POIS_DEFAULT),type);
-
-			}
-		}
 		if (type.equalsIgnoreCase(CategoryHelper.CATEGORY_TYPE_EVENTS)) {
 			if (getInstance().getParamsAsset().containsKey(KEY_EVENTS_DEFAULT)) {
-				return orderArrayByKey(CategoryHelper.EVENT_CATEGORIES,
-						(List<Integer>) getInstance().getParamsAsset().get(KEY_EVENTS_DEFAULT),type);
+				return orderArrayByKey(CategoryHelper.EVENT_CATEGORIES, (List<Integer>) getInstance().getParamsAsset()
+						.get(KEY_EVENTS_DEFAULT), type);
 			}
 		}
-
-
 
 		return null;
 	}
@@ -134,22 +103,24 @@ public class DTParamsHelper {
 		return paramsAsset;
 	}
 
-	
-	private static CategoryDescriptor[] orderArrayByKey(CategoryDescriptor[] pOI_CATEGORIES2, List<Integer> filter, String type) {
+	private static CategoryDescriptor[] orderArrayByKey(CategoryDescriptor[] pOI_CATEGORIES2, List<Integer> filter,
+			String type) {
 		List<CategoryDescriptor> returnlist = new ArrayList<CategoryDescriptor>();
 		for (Integer index : filter) {
-			 returnlist.add(pOI_CATEGORIES2[index - 1]);
+			returnlist.add(pOI_CATEGORIES2[index - 1]);
 		}
 		return returnlist.toArray(new CategoryDescriptor[] {});
 	}
-	public static int getZoomLevelMap(){
+
+	public static int getZoomLevelMap() {
 		Integer zoom = (Integer) getInstance().getParamsAsset().get(KEY_ZOOM_MAP);
 		if (zoom == null)
 			return 0;
-		else return zoom;
+		else
+			return zoom;
 	}
-	
-	public static List<Double> getCenterMap(){
+
+	public static List<Double> getCenterMap() {
 		return (List<Double>) getInstance().getParamsAsset().get(KEY_CENTER_MAP);
 	}
 }

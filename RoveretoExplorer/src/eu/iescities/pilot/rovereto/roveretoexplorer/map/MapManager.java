@@ -46,14 +46,13 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapView;
 
-import eu.trentorise.smartcampus.territoryservice.model.BaseDTObject;
-import eu.trentorise.smartcampus.territoryservice.model.POIObject;
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.CategoryHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.DTParamsHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.DTHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.LocalEventObject;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.TrackObject;
+import eu.trentorise.smartcampus.territoryservice.model.BaseDTObject;
+import eu.trentorise.smartcampus.territoryservice.model.POIObject;
 
 public class MapManager {
 
@@ -94,20 +93,14 @@ public class MapManager {
 		double[] llrr = null;
 		if (objects != null && !objects.isEmpty()) {
 			for (BaseDTObject o : objects) {
-				if (o instanceof TrackObject && objects.size()==1) {
-					double[] point = new double[2];
-					for (LatLng ll : ((TrackObject) o).decodedLine()) {
-						point[0] = ll.latitude;
-						point[1] = ll.longitude;
-						llrr = fit(llrr, point);
-					}
-				} else {
-					llrr = fit(llrr, o.getLocation());
-				}
+
+				llrr = fit(llrr, o.getLocation());
+
 			}
 		}
 		if (llrr != null) {
-			fit(map, new double[]{llrr[0], llrr[1]}, new double[]{llrr[2], llrr[3]}, objects != null && objects.size() > 1);
+			fit(map, new double[] { llrr[0], llrr[1] }, new double[] { llrr[2], llrr[3] },
+					objects != null && objects.size() > 1);
 		} else {
 			fit(map, null, null, objects != null && objects.size() > 1);
 		}
@@ -143,24 +136,28 @@ public class MapManager {
 		}
 	}
 
-//	public static MarkerOptions createStoryStepMarker(Context ctx, BaseDTObject obj, int pos, boolean selected) {
-//		LatLng latLng = getLatLngFromBasicObject(obj);
-//
-//		int markerIcon = selected ? R.drawable.selected_step : R.drawable.step;
-//
-//		BitmapDescriptor bd = BitmapDescriptorFactory.fromBitmap(writeOnStoryMarker(ctx, markerIcon,
-//				Integer.toString(pos)));
-//		MarkerOptions marker = new MarkerOptions().anchor(0.5f, 0.5f).position(latLng).icon(bd).title("" + pos);
-//		return marker;
-//	}
-//
-//	public static PolylineOptions createStoryStepLine(Context ctx, BaseDTObject from, BaseDTObject to) {
-//		LatLng latLngFrom = getLatLngFromBasicObject(from);
-//		LatLng latLngTo = getLatLngFromBasicObject(to);
-//		PolylineOptions line = new PolylineOptions().add(latLngFrom, latLngTo)
-//				.color(Color.parseColor(ctx.getString(R.color.dtappcolor))).width(6);
-//		return line;
-//	}
+	// public static MarkerOptions createStoryStepMarker(Context ctx,
+	// BaseDTObject obj, int pos, boolean selected) {
+	// LatLng latLng = getLatLngFromBasicObject(obj);
+	//
+	// int markerIcon = selected ? R.drawable.selected_step : R.drawable.step;
+	//
+	// BitmapDescriptor bd =
+	// BitmapDescriptorFactory.fromBitmap(writeOnStoryMarker(ctx, markerIcon,
+	// Integer.toString(pos)));
+	// MarkerOptions marker = new MarkerOptions().anchor(0.5f,
+	// 0.5f).position(latLng).icon(bd).title("" + pos);
+	// return marker;
+	// }
+	//
+	// public static PolylineOptions createStoryStepLine(Context ctx,
+	// BaseDTObject from, BaseDTObject to) {
+	// LatLng latLngFrom = getLatLngFromBasicObject(from);
+	// LatLng latLngTo = getLatLngFromBasicObject(to);
+	// PolylineOptions line = new PolylineOptions().add(latLngFrom, latLngTo)
+	// .color(Color.parseColor(ctx.getString(R.color.dtappcolor))).width(6);
+	// return line;
+	// }
 
 	/*
 	 * CLUSTERING
@@ -272,6 +269,7 @@ public class MapManager {
 
 		/**
 		 * Render markers on the map
+		 * 
 		 * @param map
 		 * @param markers
 		 */
@@ -282,34 +280,20 @@ public class MapManager {
 		}
 
 		/**
-		 * Render clustered object markers and eventual lines of the {@link TrackObject}
+		 * Render clustered object markers
+		 * 
 		 * @param map
 		 * @param markers
 		 * @param objects
 		 */
-		public static void render(Context ctx, GoogleMap map, List<MarkerOptions> markers, Collection<? extends BaseDTObject> objects) {
+		public static void render(Context ctx, GoogleMap map, List<MarkerOptions> markers,
+				Collection<? extends BaseDTObject> objects) {
 			for (MarkerOptions mo : markers) {
 				map.addMarker(mo);
 			}
-			List<List<LatLng>> paths = new ArrayList<List<LatLng>>();
-			for (BaseDTObject o : objects) {
-				if (o instanceof TrackObject) {
-					paths.add(((TrackObject)o).decodedLine());
-				}
-			}
-			if (paths.size() == 1) {
-				draw(map, paths, ctx);
-			}
+
 		}
 
-		private static MarkerOptions createTrackMarker(TrackObject item) {
-			LatLng latLng = item.startingPoint();
-			int markerIcon = CategoryHelper.getMapIconByType(item.getType());
-
-			MarkerOptions marker = new MarkerOptions().position(latLng)
-					.icon(BitmapDescriptorFactory.fromResource(markerIcon)).title(item.getId());
-			return marker;
-		}
 
 		private static MarkerOptions createSingleMarker(BaseDTObject item, int x, int y) {
 			LatLng latLng = getLatLngFromBasicObject(item);
@@ -466,12 +450,7 @@ public class MapManager {
 	}
 
 	private static LatLng getLatLngFromBasicObject(BaseDTObject object) {
-		LatLng latLng = null;
-		if (object instanceof TrackObject) {
-			latLng = ((TrackObject) object).startingPoint();
-		} else { 
-			latLng = new LatLng(object.getLocation()[0], object.getLocation()[1]);
-		}
+		LatLng latLng =  new LatLng(object.getLocation()[0], object.getLocation()[1]);
 		return latLng;
 	}
 

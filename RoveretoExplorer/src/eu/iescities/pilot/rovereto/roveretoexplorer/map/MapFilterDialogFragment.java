@@ -144,8 +144,6 @@ public class MapFilterDialogFragment extends DialogFragment implements
 				}
 				if(mReqType==REQUEST_TYPE.EVENT)
 					mCallback.setEventCategoriesToLoad(toLoad.toArray(new String[toLoad.size()]));
-				else if(mReqType==REQUEST_TYPE.POI)
-					mCallback.setPOICategoriesToLoad(toLoad.toArray(new String[toLoad.size()]));
 				else
 					mCallback.setMiscellaneousCategoriesToLoad(toLoad.toArray(new String[toLoad.size()]));
 				getDialog().dismiss();

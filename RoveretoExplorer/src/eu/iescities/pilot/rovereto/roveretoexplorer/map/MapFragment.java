@@ -1,6 +1,5 @@
 package eu.iescities.pilot.rovereto.roveretoexplorer.map;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -21,7 +20,6 @@ import android.util.Log;
 import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,14 +35,6 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import eu.trentorise.smartcampus.android.common.SCAsyncTask;
-import eu.trentorise.smartcampus.protocolcarrier.exceptions.ConnectionException;
-import eu.trentorise.smartcampus.protocolcarrier.exceptions.ProtocolException;
-import eu.trentorise.smartcampus.storage.DataException;
-import eu.trentorise.smartcampus.storage.StorageConfigurationException;
-import eu.trentorise.smartcampus.territoryservice.model.BaseDTObject;
-import eu.trentorise.smartcampus.territoryservice.model.EventObject;
-import eu.trentorise.smartcampus.territoryservice.model.POIObject;
 import eu.iescities.pilot.rovereto.roveretoexplorer.MainActivity;
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.AbstractAsyncTaskProcessor;
@@ -53,19 +43,17 @@ import eu.iescities.pilot.rovereto.roveretoexplorer.custom.CategoryHelper.Catego
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.DTParamsHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.DTHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.LocalEventObject;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.TrackObject;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.TrackObjectForBean;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.EventDetailsFragment;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.EventsListingFragment;
-import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.info.InfoListingFragment;
-import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.poi.PoiDetailsFragment;
-import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.poi.PoisListingFragment;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.search.SearchFragment;
-import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.track.TrackListingFragment;
 import eu.iescities.pilot.rovereto.roveretoexplorer.map.MapFilterDialogFragment.REQUEST_TYPE;
+import eu.trentorise.smartcampus.android.common.SCAsyncTask;
+import eu.trentorise.smartcampus.territoryservice.model.BaseDTObject;
+import eu.trentorise.smartcampus.territoryservice.model.EventObject;
+import eu.trentorise.smartcampus.territoryservice.model.POIObject;
 
-public class MapFragment extends Fragment implements MapItemsHandler,
-		OnCameraChangeListener, OnMarkerClickListener, MapObjectContainer {
+public class MapFragment extends Fragment implements MapItemsHandler, OnCameraChangeListener, OnMarkerClickListener,
+		MapObjectContainer {
 
 	private static final String TAG_FRAGMENT_POI_SELECT = "poi_select";
 	public static final String ARG_POI_CATEGORY = "poi category";
@@ -86,8 +74,7 @@ public class MapFragment extends Fragment implements MapItemsHandler,
 	private static View view;
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		if (view != null) {
 			ViewGroup parent = (ViewGroup) view.getParent();
 			if (parent != null)
@@ -101,74 +88,66 @@ public class MapFragment extends Fragment implements MapItemsHandler,
 		return view;
 	}
 
-/*	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		Log.i("MENU", "start on Create Option Menu MAP frag");
-		inflater.inflate(R.menu.map_menu, menu);
-		if (listmenu) {
-			Log.i("MENU", "ITEM 0" + menu.getItem(0).toString());
-			menu.getItem(0).setVisible(false);
-		} 
-		
-		//else {
-			//Log.i("MENU", "ITEM 1" + menu.getItem(1).toString());
-			//menu.getItem(1).setVisible(false);
-		//}
-		super.onCreateOptionsMenu(menu, inflater);
-	} */
+	/*
+	 * @Override public void onCreateOptionsMenu(Menu menu, MenuInflater
+	 * inflater) { Log.i("MENU", "start on Create Option Menu MAP frag");
+	 * inflater.inflate(R.menu.map_menu, menu); if (listmenu) { Log.i("MENU",
+	 * "ITEM 0" + menu.getItem(0).toString());
+	 * menu.getItem(0).setVisible(false); }
+	 * 
+	 * //else { //Log.i("MENU", "ITEM 1" + menu.getItem(1).toString());
+	 * //menu.getItem(1).setVisible(false); //} super.onCreateOptionsMenu(menu,
+	 * inflater); }
+	 */
 
-	
-	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		Log.i("MENU", "start on Options Item Selected MAP frag");
-		/*if (item.getItemId() == R.id.action_poi_places) {
-			PoiSelectFragment psf = PoiSelectFragment.istantiate(this,
-					R.array.map_items_places_labels,
-					R.array.map_items_places_icons, REQUEST_TYPE.POI,
-					new String[] { CategoryHelper.POI_CATEGORIES[0].category,
-							CategoryHelper.POI_CATEGORIES[4].category });
+		/*
+		 * if (item.getItemId() == R.id.action_poi_places) { PoiSelectFragment
+		 * psf = PoiSelectFragment.istantiate(this,
+		 * R.array.map_items_places_labels, R.array.map_items_places_icons,
+		 * REQUEST_TYPE.POI, new String[] {
+		 * CategoryHelper.POI_CATEGORIES[0].category,
+		 * CategoryHelper.POI_CATEGORIES[4].category });
+		 * psf.show(getFragmentManager(), TAG_FRAGMENT_POI_SELECT); return true;
+		 * }
+		 *//*
+			 * else if (item.getItemId() == R.id.action_poi_events) {
+			 * PoiSelectFragment psf = PoiSelectFragment.istantiate(this,
+			 * R.array.map_items_events_labels, R.array.map_items_events_icons,
+			 * REQUEST_TYPE.EVENT, CategoryHelper.getEventCategories());
+			 * psf.show(getFragmentManager(), TAG_FRAGMENT_POI_SELECT); return
+			 * true; } else
+			 */// if (item.getItemId() == R.id.action_poi) {
+		if (item.getTitle() == "filtro") {
+			MapFilterDialogFragment psf = MapFilterDialogFragment.istantiate(this, R.array.map_items_events_labels,
+					R.array.map_items_events_icons, REQUEST_TYPE.EVENT, CategoryHelper.getEventCategories());
 			psf.show(getFragmentManager(), TAG_FRAGMENT_POI_SELECT);
 			return true;
-		} */ /*else if (item.getItemId() == R.id.action_poi_events) {
-			PoiSelectFragment psf = PoiSelectFragment.istantiate(this,
-					R.array.map_items_events_labels,
-					R.array.map_items_events_icons, REQUEST_TYPE.EVENT,
-					CategoryHelper.getEventCategories());
-			psf.show(getFragmentManager(), TAG_FRAGMENT_POI_SELECT);
-			return true;
-		} else */  //if (item.getItemId() == R.id.action_poi) {
-			if (item.getTitle() == "filtro") {
-			MapFilterDialogFragment psf = MapFilterDialogFragment.istantiate(this,
-					R.array.map_items_events_labels,
-					R.array.map_items_events_icons, REQUEST_TYPE.EVENT,
-					CategoryHelper.getEventCategories());
-			psf.show(getFragmentManager(), TAG_FRAGMENT_POI_SELECT);
-			return true;
-		} /*else if (item.getItemId() == R.id.action_poi_babies) {
-			PoiSelectFragment psf = PoiSelectFragment.istantiate(this,
-					R.array.map_items_babies_labels,
-					R.array.map_items_babies_icons, REQUEST_TYPE.POI,
-					new String[] { CategoryHelper.POI_CATEGORIES[3].category });
-			psf.show(getFragmentManager(), TAG_FRAGMENT_POI_SELECT);
-			return true; 
-		} */ /*else if (item.getItemId() == R.id.action_list) {
-			Log.i("MENU", "ACTION LIST!!!!");
-			if (getArguments().containsKey(ARG_EVENT_CATEGORY)
-					|| getArguments().containsKey(ARG_TRACK_CATEGORY)
-					|| getArguments().containsKey(ARG_POI_CATEGORY)) {
-				switchToList();
-			}
-			return true;
-		}*/
+		} /*
+		 * else if (item.getItemId() == R.id.action_poi_babies) {
+		 * PoiSelectFragment psf = PoiSelectFragment.istantiate(this,
+		 * R.array.map_items_babies_labels, R.array.map_items_babies_icons,
+		 * REQUEST_TYPE.POI, new String[] {
+		 * CategoryHelper.POI_CATEGORIES[3].category });
+		 * psf.show(getFragmentManager(), TAG_FRAGMENT_POI_SELECT); return true;
+		 * }
+		 *//*
+			 * else if (item.getItemId() == R.id.action_list) { Log.i("MENU",
+			 * "ACTION LIST!!!!"); if
+			 * (getArguments().containsKey(ARG_EVENT_CATEGORY) ||
+			 * getArguments().containsKey(ARG_TRACK_CATEGORY) ||
+			 * getArguments().containsKey(ARG_POI_CATEGORY)) { switchToList(); }
+			 * return true; }
+			 */
 		// this is needed because the activity manage the navigation drawer
-		//return getActivity().onOptionsItemSelected(item);
+		// return getActivity().onOptionsItemSelected(item);
 		return true;
 	}
 
 	private void switchToList() {
-		FragmentTransaction ft = getActivity().getSupportFragmentManager()
-				.beginTransaction();
+		FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
 		ft.setCustomAnimations(R.anim.enter, R.anim.exit);
 
 		String cat = null;
@@ -178,27 +157,8 @@ public class MapFragment extends Fragment implements MapItemsHandler,
 			EventsListingFragment elf = new EventsListingFragment();
 			args.putString(SearchFragment.ARG_CATEGORY, cat);
 			elf.setArguments(args);
-			ft.replace(R.id.content_frame, elf,
-					MainActivity.TAG_FRAGMENT_EVENT_LIST);
+			ft.replace(R.id.content_frame, elf, MainActivity.TAG_FRAGMENT_EVENT_LIST);
 			ft.addToBackStack(MainActivity.TAG_FRAGMENT_EVENT_LIST);
-		} else if (getArguments().containsKey(ARG_TRACK_CATEGORY)) {
-			cat = getArguments().getString(ARG_TRACK_CATEGORY);
-			Bundle args = new Bundle();
-			TrackListingFragment elf = new TrackListingFragment();
-			args.putString(SearchFragment.ARG_CATEGORY, cat);
-			elf.setArguments(args);
-			ft.replace(R.id.content_frame, elf,
-					MainActivity.TAG_FRAGMENT_TRACK_LIST);
-			ft.addToBackStack(MainActivity.TAG_FRAGMENT_TRACK_LIST);
-		} else if (getArguments().containsKey(ARG_POI_CATEGORY)) {
-			cat = getArguments().getString(ARG_POI_CATEGORY);
-			Bundle args = new Bundle();
-			PoisListingFragment elf = new PoisListingFragment();
-			args.putString(SearchFragment.ARG_CATEGORY, cat);
-			elf.setArguments(args);
-			ft.replace(R.id.content_frame, elf,
-					MainActivity.TAG_FRAGMENT_POI_LIST);
-			ft.addToBackStack(MainActivity.TAG_FRAGMENT_POI_LIST);
 		}
 
 		ft.commit();
@@ -208,18 +168,14 @@ public class MapFragment extends Fragment implements MapItemsHandler,
 	public void onStart() {
 		super.onStart();
 		// hide keyboard if it is still open
-		InputMethodManager imm = (InputMethodManager) getActivity()
-				.getSystemService(Context.INPUT_METHOD_SERVICE);
-		imm.hideSoftInputFromWindow(
-				getActivity().findViewById(R.id.content_frame).getWindowToken(),
-				0);
+		InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+		imm.hideSoftInputFromWindow(getActivity().findViewById(R.id.content_frame).getWindowToken(), 0);
 
 		if (!loaded) {
 			String key = getString(R.string.view_intent_arg_object_id);
-			if (getActivity().getIntent() != null
-					&& getActivity().getIntent().hasExtra(key)) {
-				new SCAsyncTask<Void, Void, BaseDTObject>(getActivity(),
-						new LoadDataProcessor(getActivity())).execute();
+			if (getActivity().getIntent() != null && getActivity().getIntent().hasExtra(key)) {
+				new SCAsyncTask<Void, Void, BaseDTObject>(getActivity(), new LoadDataProcessor(getActivity()))
+						.execute();
 				eventsCategories = null;
 				poiCategories = null;
 			} else {
@@ -247,14 +203,12 @@ public class MapFragment extends Fragment implements MapItemsHandler,
 			eventsCategories = Arrays.asList(eventCategory.toArray()).toArray(
 					new String[eventCategory.toArray().length]);
 		}
-		CategoryDescriptor[] poisDefault = DTParamsHelper
-				.getDefaultArrayByParams(CategoryHelper.CATEGORY_TYPE_POIS);
+		CategoryDescriptor[] poisDefault = DTParamsHelper.getDefaultArrayByParams(CategoryHelper.CATEGORY_TYPE_POIS);
 		if (poisDefault != null) {
 			List<String> poisCategory = new ArrayList<String>();
 			for (CategoryDescriptor poi : poisDefault)
 				poisCategory.add(poi.category);
-			poiCategories = Arrays.asList(poisCategory.toArray()).toArray(
-					new String[poisCategory.toArray().length]);
+			poiCategories = Arrays.asList(poisCategory.toArray()).toArray(new String[poisCategory.toArray().length]);
 
 		}
 
@@ -275,44 +229,23 @@ public class MapFragment extends Fragment implements MapItemsHandler,
 		if (getArguments() != null && getArguments().containsKey(ARG_OBJECTS)) {
 			poiCategories = null;
 			eventsCategories = null;
-			drawTracks((List<BaseDTObject>) getArguments().getSerializable(
-					ARG_OBJECTS));
+			drawTracks((List<BaseDTObject>) getArguments().getSerializable(ARG_OBJECTS));
 			Log.i("MENU", "ARG_OBJECTS");
 
-		} else if (getArguments() != null
-				&& getArguments().containsKey(ARG_POI_CATEGORY)) {
-			
-			listmenu = true;
-			Log.i("MENU", "LIST MENU in ARG_POI_CATEGORY");
-			eventsCategories = null;
-			setPOICategoriesToLoad(getArguments().getString(ARG_POI_CATEGORY));
-		} else if (getArguments() != null
-				&& getArguments().containsKey(ARG_EVENT_CATEGORY)) {
+		} else if (getArguments() != null && getArguments().containsKey(ARG_EVENT_CATEGORY)) {
 			listmenu = true;
 			Log.i("MENU", "LIST MENU in ARG_EVENT_CATEGORY");
 			poiCategories = null;
-			setEventCategoriesToLoad(getArguments().getString(
-					ARG_EVENT_CATEGORY));
-		} else if (getArguments() != null
-				&& getArguments().containsKey(ARG_TRACK_CATEGORY)) {
-			listmenu = true;
-			Log.i("MENU", "LIST MENU in ARG_TRACK_CATEGORY");
-			tracksCategories = null;
-			setMiscellaneousCategoriesToLoad(getArguments().getString(ARG_TRACK_CATEGORY));
+			setEventCategoriesToLoad(getArguments().getString(ARG_EVENT_CATEGORY));
 		} else {
 			Log.i("MENU", "ELSE");
 
-			if (poiCategories != null) {
-				setPOICategoriesToLoad(poiCategories);
-				Log.i("MENU", "set poi categories to load");
-
-			}
 			if (eventsCategories != null) {
 				setEventCategoriesToLoad(eventsCategories);
 				Log.i("MENU", "set event categories to load");
 			}
 		}
-		
+
 		Log.i("MENU", "LIST MENU is" + listmenu);
 
 	}
@@ -323,8 +256,7 @@ public class MapFragment extends Fragment implements MapItemsHandler,
 
 		new AsyncTask<List<? extends BaseDTObject>, Void, List<? extends BaseDTObject>>() {
 			@Override
-			protected List<? extends BaseDTObject> doInBackground(
-					List<? extends BaseDTObject>... params) {
+			protected List<? extends BaseDTObject> doInBackground(List<? extends BaseDTObject>... params) {
 				return params[0];
 			}
 
@@ -366,102 +298,47 @@ public class MapFragment extends Fragment implements MapItemsHandler,
 	@Override
 	public void onPrepareOptionsMenu(Menu menu) {
 		Log.i("MENU", "start on Prepare Options Menu MAP frag: " + menu.toString());
-		
-	   MenuItem filter = menu.add(Menu.NONE, Menu.NONE, 1, "filtro");
-	   //ovItem.setIcon(getResources().getDrawable(R.drawable.ic_location_actionbar));
-	   filter.setIcon(getResources().getDrawable(R.drawable.ic_filtro_eventi_nero));
-	   filter.setVisible(true);
-	   filter.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+
+		MenuItem filter = menu.add(Menu.NONE, Menu.NONE, 1, "filtro");
+		// ovItem.setIcon(getResources().getDrawable(R.drawable.ic_location_actionbar));
+		filter.setIcon(getResources().getDrawable(R.drawable.ic_filtro_eventi_nero));
+		filter.setVisible(true);
+		filter.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 
 		super.onPrepareOptionsMenu(menu);
 	}
 
-	public void setPOICategoriesToLoad(final String... categories) {
-		this.poiCategories = categories;
-		/* actually only event or poi at the same time */
-		this.eventsCategories = null;
+	public void setMiscellaneousListToLoad(final List<String> trackCategories, List<String> poiCategories,
+			List<String> eventCategories) {
 
-		new SCAsyncTask<Void, Void, Collection<? extends BaseDTObject>>(
-				getActivity(), new MapLoadProcessor(getActivity(), this,
-						getSupportMap()) {
-					@Override
-					protected Collection<? extends BaseDTObject> getObjects() {
-						try {
-							/*
-							 * check if todays is checked and cat with
-							 * searchTodayEvents
-							 */
-							Collection<POIObject> list = DTHelper
-									.getPOIByCategory(0, -1, categories);
-							Iterator<POIObject> i = list.iterator();
-							while (i.hasNext()) {
-								POIObject obj = i.next();
-								obj.getLocation();
-								if (obj.getLocation()[0] == 0
-										&& obj.getLocation()[1] == 0)
-									i.remove();
-							}
-							return list;
-
-						} catch (Exception e) {
-							e.printStackTrace();
-							return Collections.emptyList();
-						}
-					}
-
-				}).execute();
-	}
-
-	public void setMiscellaneousListToLoad(final List<String> trackCategories,
-			List<String> poiCategories, List<String> eventCategories) {
-
-		final String[] pcat = poiCategories.toArray(new String[poiCategories
-				.size()]);
+		final String[] pcat = poiCategories.toArray(new String[poiCategories.size()]);
 		this.poiCategories = pcat;
-		final String[] ecat = eventCategories
-				.toArray(new String[eventCategories.size()]);
+		final String[] ecat = eventCategories.toArray(new String[eventCategories.size()]);
 		this.eventsCategories = ecat;
 
-		new SCAsyncTask<Void, Void, Collection<? extends BaseDTObject>>(
-				getActivity(), new MapLoadProcessor(getActivity(), this,
-						getSupportMap()) {
-					@Override
-					protected Collection<? extends BaseDTObject> getObjects() {
-						try {
-							/*
-							 * check if todays is checked and cat with
-							 * searchTodayEvents
-							 */
-							Collection<BaseDTObject> list = new ArrayList<BaseDTObject>();
-							if(pcat.length>0)
-								list.addAll(DTHelper.getPOIByCategory(0, -1, pcat));
-							if(ecat.length>0)
-								list.addAll(DTHelper.getEventsByCategories(0, -1, ecat));
-							SortedMap<String, Integer> sort = new TreeMap<String, Integer>();
-							sort.put("title", 1);
-							
-							if(trackCategories.size()>0){
-								Collection<TrackObjectForBean> result = DTHelper.searchInGeneral(
-										0, -1, null, null, null, false,
-										TrackObjectForBean.class, sort,
-										trackCategories
-												.toArray(new String[trackCategories
-														.size()]));
-	
-								for (TrackObjectForBean trackBean : result) {
-									list.add(trackBean.getObjectForBean());
-								}
-							}
+		new SCAsyncTask<Void, Void, Collection<? extends BaseDTObject>>(getActivity(), new MapLoadProcessor(
+				getActivity(), this, getSupportMap()) {
+			@Override
+			protected Collection<? extends BaseDTObject> getObjects() {
+				try {
+					/*
+					 * check if todays is checked and cat with searchTodayEvents
+					 */
+					Collection<BaseDTObject> list = new ArrayList<BaseDTObject>();
 
-							return list;
+					if (ecat.length > 0)
+						list.addAll(DTHelper.getEventsByCategories(0, -1, ecat));
+					SortedMap<String, Integer> sort = new TreeMap<String, Integer>();
+					sort.put("title", 1);
+					return list;
 
-						} catch (Exception e) {
-							e.printStackTrace();
-							return Collections.emptyList();
-						}
-					}
+				} catch (Exception e) {
+					e.printStackTrace();
+					return Collections.emptyList();
+				}
+			}
 
-				}).execute();
+		}).execute();
 	}
 
 	@Override
@@ -470,15 +347,8 @@ public class MapFragment extends Fragment implements MapItemsHandler,
 		List<String> events = new ArrayList<String>();
 		List<String> pois = new ArrayList<String>();
 		for (String s : categories) {
-			if (Arrays.asList(CategoryHelper.getTrackCategories()).contains(s)) {
-				tracks.add(s);
-
-			} else if (Arrays.asList(CategoryHelper.getEventCategories())
-					.contains(s)) {
+			if (Arrays.asList(CategoryHelper.getEventCategories()).contains(s)) {
 				events.add(s);
-			} else if (Arrays.asList(CategoryHelper.getPOICategories())
-					.contains(s)) {
-				pois.add(s);
 			} else
 				Log.e(this.getClass().getName(), "category not found: " + s);
 		}
@@ -501,24 +371,16 @@ public class MapFragment extends Fragment implements MapItemsHandler,
 			onBaseDTObjectTap(list.get(0));
 			return;
 		}
-		FragmentTransaction fragmentTransaction = getFragmentManager()
-				.beginTransaction();
+		FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
 		Fragment fragment = null;
 		Bundle args = new Bundle();
 		if (list.get(0) instanceof LocalEventObject) {
 			fragment = new EventsListingFragment();
 			args.putSerializable(SearchFragment.ARG_LIST, new ArrayList(list));
-		} else if (list.get(0) instanceof POIObject) {
-			fragment = new PoisListingFragment();
-			args.putSerializable(SearchFragment.ARG_LIST, new ArrayList(list));
-		} else if (list.get(0) instanceof TrackObject) {
-			fragment = new TrackListingFragment();
-			args.putSerializable(SearchFragment.ARG_LIST, new ArrayList(list));
 		}
 		if (fragment != null) {
 			fragment.setArguments(args);
-			fragmentTransaction
-					.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+			fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
 			// fragmentTransaction.detach(this);
 			fragmentTransaction.replace(R.id.content_frame, fragment, "me");
 			fragmentTransaction.addToBackStack(fragment.getTag());
@@ -538,45 +400,38 @@ public class MapFragment extends Fragment implements MapItemsHandler,
 
 		getSupportMap().clear();
 
-		new SCAsyncTask<Void, Void, Collection<? extends BaseDTObject>>(
-				getActivity(), new MapLoadProcessor(getActivity(), this,
-						getSupportMap()) {
-					@Override
-					protected Collection<? extends BaseDTObject> getObjects() {
-						try {
-							/*
-							 * check if todays is checked and cat with
-							 * searchTodayEvents
-							 */
-							Collection<LocalEventObject> newList;
-							if (isTodayIncluded()) {
-								newList = new ArrayList<LocalEventObject>();
-								newList.addAll(DTHelper.searchTodayEvents(0,
-										-1, ""));
-								if (categories != null)
-									newList.addAll(DTHelper
-											.getEventsByCategories(0, -1,
-													eventsNotTodayCategories));
+		new SCAsyncTask<Void, Void, Collection<? extends BaseDTObject>>(getActivity(), new MapLoadProcessor(
+				getActivity(), this, getSupportMap()) {
+			@Override
+			protected Collection<? extends BaseDTObject> getObjects() {
+				try {
+					/*
+					 * check if todays is checked and cat with searchTodayEvents
+					 */
+					Collection<LocalEventObject> newList;
+					if (isTodayIncluded()) {
+						newList = new ArrayList<LocalEventObject>();
+						newList.addAll(DTHelper.searchTodayEvents(0, -1, ""));
+						if (categories != null)
+							newList.addAll(DTHelper.getEventsByCategories(0, -1, eventsNotTodayCategories));
 
-							} else
-								newList = DTHelper.getEventsByCategories(0, -1,
-										categories);
-							Iterator<LocalEventObject> i = newList.iterator();
-							while (i.hasNext()) {
-								LocalEventObject obj = i.next();
-								obj.getLocation();
-								if (obj.getLocation()[0] == 0
-										&& obj.getLocation()[1] == 0)
-									i.remove();
-							}
-							return newList;
-						} catch (Exception e) {
-							e.printStackTrace();
-							return Collections.emptyList();
-						}
+					} else
+						newList = DTHelper.getEventsByCategories(0, -1, categories);
+					Iterator<LocalEventObject> i = newList.iterator();
+					while (i.hasNext()) {
+						LocalEventObject obj = i.next();
+						obj.getLocation();
+						if (obj.getLocation()[0] == 0 && obj.getLocation()[1] == 0)
+							i.remove();
 					}
+					return newList;
+				} catch (Exception e) {
+					e.printStackTrace();
+					return Collections.emptyList();
+				}
+			}
 
-				}).execute();
+		}).execute();
 	}
 
 	private boolean isTodayIncluded() {
@@ -591,8 +446,7 @@ public class MapFragment extends Fragment implements MapItemsHandler,
 					categoriesNotToday.add(eventsCategories[i]);
 
 			}
-		eventsNotTodayCategories = categoriesNotToday
-				.toArray(new String[categoriesNotToday.size()]);
+		eventsNotTodayCategories = categoriesNotToday.toArray(new String[categoriesNotToday.size()]);
 		return istodayincluded;
 	}
 
@@ -600,11 +454,9 @@ public class MapFragment extends Fragment implements MapItemsHandler,
 		if (mMap == null) {
 			if (getFragmentManager().findFragmentById(R.id.map) != null
 					&& getFragmentManager().findFragmentById(R.id.map) instanceof SupportMapFragment)
-				mMap = ((SupportMapFragment) getFragmentManager()
-						.findFragmentById(R.id.map)).getMap();
+				mMap = ((SupportMapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
 			if (mMap != null)
-				mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
-						MapManager.DEFAULT_POINT, MapManager.ZOOM_DEFAULT));
+				mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(MapManager.DEFAULT_POINT, MapManager.ZOOM_DEFAULT));
 
 		}
 		return mMap;
@@ -612,8 +464,7 @@ public class MapFragment extends Fragment implements MapItemsHandler,
 
 	@Override
 	public boolean onMarkerClick(Marker marker) {
-		List<BaseDTObject> list = MapManager.ClusteringHelper
-				.getFromGridId(marker.getTitle());
+		List<BaseDTObject> list = MapManager.ClusteringHelper.getFromGridId(marker.getTitle());
 		if (list == null || list.isEmpty())
 			return true;
 
@@ -633,8 +484,7 @@ public class MapFragment extends Fragment implements MapItemsHandler,
 	}
 
 	@Override
-	public <T extends BaseDTObject> void addObjects(
-			Collection<? extends BaseDTObject> objects) {
+	public <T extends BaseDTObject> void addObjects(Collection<? extends BaseDTObject> objects) {
 		if (getSupportMap() != null) {
 			this.objects = objects;
 			render(objects);
@@ -646,41 +496,29 @@ public class MapFragment extends Fragment implements MapItemsHandler,
 		if (getSupportMap() != null) {
 			getSupportMap().clear();
 			if (objects != null && getActivity() != null) {
-				List<MarkerOptions> cluster = MapManager.ClusteringHelper
-						.cluster(getActivity().getApplicationContext(),
-								getSupportMap(), objects);
-				MapManager.ClusteringHelper.render(getActivity(),
-						getSupportMap(), cluster, objects);
+				List<MarkerOptions> cluster = MapManager.ClusteringHelper.cluster(
+						getActivity().getApplicationContext(), getSupportMap(), objects);
+				MapManager.ClusteringHelper.render(getActivity(), getSupportMap(), cluster, objects);
 			}
 		}
 
 	}
 
-	private class LoadDataProcessor extends
-			AbstractAsyncTaskProcessor<Void, BaseDTObject> {
+	private class LoadDataProcessor extends AbstractAsyncTaskProcessor<Void, BaseDTObject> {
 
 		public LoadDataProcessor(Activity activity) {
 			super(activity);
 		}
 
 		@Override
-		public BaseDTObject performAction(Void... params)
-				throws SecurityException, Exception {
-			String entityId = getActivity().getIntent().getStringExtra(
-					getString(R.string.view_intent_arg_object_id));
-			String type = getActivity().getIntent().getStringExtra(
-					getString(R.string.view_intent_arg_entity_type));
+		public BaseDTObject performAction(Void... params) throws SecurityException, Exception {
+			String entityId = getActivity().getIntent().getStringExtra(getString(R.string.view_intent_arg_object_id));
+			String type = getActivity().getIntent().getStringExtra(getString(R.string.view_intent_arg_entity_type));
 
 			if (entityId != null && type != null) {
 				if ("event".equals(type))
-					return DTHelper.findEventByEntityId(entityId)
-							.getObjectForBean();
-				else if ("location".equals(type))
-					return DTHelper.findPOIByEntityId(entityId)
-							.getObjectForBean();
-				// else if ("narrative".equals(type))
-				// return
-				// DTHelper.findStoryByEntityId(entityId).getObjectForBean();
+					return DTHelper.findEventByEntityId(entityId).getObjectForBean();
+				
 			}
 			return null;
 		}
@@ -694,22 +532,15 @@ public class MapFragment extends Fragment implements MapItemsHandler,
 
 			if (entityId != null) {
 				if (result == null) {
-					Toast.makeText(getActivity(),
-							R.string.app_failure_obj_not_found,
-							Toast.LENGTH_LONG).show();
+					Toast.makeText(getActivity(), R.string.app_failure_obj_not_found, Toast.LENGTH_LONG).show();
 					return;
 				}
 
 				Fragment fragment = null;
 				Bundle args = new Bundle();
-				if (result instanceof POIObject) {
-					fragment = new PoiDetailsFragment();
-					args.putString(PoiDetailsFragment.ARG_POI_ID,
-							result.getId());
-				} else if (result instanceof EventObject) {
+				if (result instanceof EventObject) {
 					fragment = new EventDetailsFragment();
-					args.putString(EventDetailsFragment.ARG_EVENT_ID,
-							(result.getId()));
+					args.putString(EventDetailsFragment.ARG_EVENT_ID, (result.getId()));
 				}
 				// else if (result instanceof StoryObject) {
 				// fragment = new StoryDetailsFragment();
@@ -717,14 +548,12 @@ public class MapFragment extends Fragment implements MapItemsHandler,
 				// result.getId());
 				// }
 				if (fragment != null) {
-					FragmentTransaction fragmentTransaction = getActivity()
-							.getSupportFragmentManager().beginTransaction();
+					FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager()
+							.beginTransaction();
 					fragment.setArguments(args);
 
-					fragmentTransaction
-							.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-					fragmentTransaction.replace(R.id.content_frame, fragment,
-							"me");
+					fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+					fragmentTransaction.replace(R.id.content_frame, fragment, "me");
 					fragmentTransaction.addToBackStack(fragment.getTag());
 					fragmentTransaction.commit();
 				}

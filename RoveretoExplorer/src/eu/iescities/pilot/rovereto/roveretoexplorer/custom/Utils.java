@@ -15,10 +15,15 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import com.google.android.gms.maps.model.LatLng;
-
 import android.content.Context;
 import android.location.Address;
+
+import com.google.android.gms.maps.model.LatLng;
+
+import eu.iescities.pilot.rovereto.roveretoexplorer.R;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.DTHelper;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.EventObjectForBean;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.LocalEventObject;
 import eu.trentorise.smartcampus.android.common.tagging.SemanticSuggestion;
 import eu.trentorise.smartcampus.android.common.tagging.SemanticSuggestion.TYPE;
 import eu.trentorise.smartcampus.social.model.Concept;
@@ -26,12 +31,6 @@ import eu.trentorise.smartcampus.territoryservice.model.BaseDTObject;
 import eu.trentorise.smartcampus.territoryservice.model.CommunityData;
 import eu.trentorise.smartcampus.territoryservice.model.EventObject;
 import eu.trentorise.smartcampus.territoryservice.model.POIObject;
-import eu.iescities.pilot.rovereto.roveretoexplorer.R;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.DTHelper;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.EventObjectForBean;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.LocalEventObject;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.TrackObject;
-import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.EventPlaceholder;
 
 public class Utils {
 	public static final String userPoiObject = "eu.trentorise.smartcampus.dt.model.UserPOIObject";
@@ -120,13 +119,7 @@ public class Utils {
 	 * @param mTrack
 	 * @return
 	 */
-	public static Address getTrackAsGoogleAddress(TrackObject mTrack) {
-		Address a = new Address(Locale.getDefault());
-		a.setLatitude(mTrack.startingPoint().latitude);
-		a.setLongitude(mTrack.startingPoint().longitude);
-		a.setAddressLine(0, mTrack.getTitle());
-		return a;
-	}
+
 
 	public static boolean isCreatedByUser(BaseDTObject obj) {
 		if (obj.getDomainType() == null || userPoiObject.equals(obj.getDomainType())) {
