@@ -341,6 +341,8 @@ public class Utils {
 			customData.put("Propabilita dell'evento", "confermato");
 			customData.put("Lingua principale ", "Italiano");
 			customData.put("Abbigliamento consigliato", "sportivo");
+			customData.put("PromossoDa", "Comune di Rovereto");
+
 
 			fake_event = new LocalEventObject("Roverunning training", 3, 5, customData);
 			fake_event.setFromTime(Utils.toDateTimeLong(DATE_FORMAT, "17/12/2013"));

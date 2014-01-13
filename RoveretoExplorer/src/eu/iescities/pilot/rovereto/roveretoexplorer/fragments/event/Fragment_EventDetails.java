@@ -6,16 +6,12 @@ import eu.iescities.pilot.rovereto.roveretoexplorer.R;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.CommentsHandler;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.PagerSlidingTabStrip;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.Utils;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.DTHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.LocalEventObject;
-import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.search.SearchFragment;
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 
 
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -26,7 +22,6 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ExpandableListView;
 
 public class Fragment_EventDetails extends Fragment {
 	
