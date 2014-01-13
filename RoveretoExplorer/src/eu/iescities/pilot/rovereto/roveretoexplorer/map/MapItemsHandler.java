@@ -19,7 +19,6 @@ package eu.iescities.pilot.rovereto.roveretoexplorer.map;
 
 public interface MapItemsHandler {
 
-	public void setPOICategoriesToLoad(final String ... categories);
 	public void setEventCategoriesToLoad(final String ... categories);
 	public void setMiscellaneousCategoriesToLoad(final String ... categories);
 

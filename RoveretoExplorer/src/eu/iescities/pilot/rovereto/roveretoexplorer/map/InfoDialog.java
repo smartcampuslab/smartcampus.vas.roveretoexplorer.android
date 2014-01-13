@@ -31,10 +31,7 @@ import eu.iescities.pilot.rovereto.roveretoexplorer.custom.CategoryHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.Utils;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.DTHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.LocalEventObject;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.TrackObject;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.EventDetailsFragment;
-import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.poi.PoiDetailsFragment;
-import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.track.TrackDetailsFragment;
 import eu.trentorise.smartcampus.territoryservice.model.BaseDTObject;
 import eu.trentorise.smartcampus.territoryservice.model.POIObject;
 
@@ -55,9 +52,7 @@ public class InfoDialog extends DialogFragment {
 			getDialog().setTitle(getString(R.string.info_dialog_title_poi));
 		} else if (data instanceof LocalEventObject) {
 			getDialog().setTitle(R.string.info_dialog_title_event);
-		} else if (data instanceof TrackObject) {
-			getDialog().setTitle(R.string.info_dialog_title_track);
-		}
+		} 
 		return inflater.inflate(R.layout.mapdialog, container, false);
 	}
 
@@ -71,7 +66,7 @@ public class InfoDialog extends DialogFragment {
 					+ Utils.getPOIshortAddress(((POIObject) data)) + "</p>"));
 		} else if (data instanceof LocalEventObject) {
 			LocalEventObject event = (LocalEventObject) data;
-			POIObject poi = DTHelper.findPOIById(event.getPoiId());
+			POIObject poi = new POIObject();
 			String msgText = "";
 			msgText += "<h2>";
 			msgText += event.getTitle();
@@ -95,9 +90,7 @@ public class InfoDialog extends DialogFragment {
 				}
 			}
 			msg.setText(Html.fromHtml(msgText));
-		} else 	if (data instanceof TrackObject) {
-			msg.setText(Html.fromHtml("<h2>" + data.getTitle() + "</h2>"));
-		}	
+		} 
 
 		msg.setMovementMethod(new ScrollingMovementMethod());
 
@@ -117,28 +110,14 @@ public class InfoDialog extends DialogFragment {
 						.beginTransaction();
 				Bundle args = new Bundle();
 
-				if (data instanceof POIObject) {
-					PoiDetailsFragment fragment = new PoiDetailsFragment();
-					args.putString(PoiDetailsFragment.ARG_POI_ID, data.getId());
-					fragment.setArguments(args);
-					fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-					fragmentTransaction.replace(R.id.content_frame, fragment, "me");
-					fragmentTransaction.addToBackStack(fragment.getTag());
-				} else if (data instanceof LocalEventObject) {
+				if (data instanceof LocalEventObject) {
 					EventDetailsFragment fragment = new EventDetailsFragment();
 					args.putString(EventDetailsFragment.ARG_EVENT_ID, (data.getId()));
 					fragment.setArguments(args);
 					fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
 					fragmentTransaction.replace(R.id.content_frame, fragment, "me");
 					fragmentTransaction.addToBackStack(fragment.getTag());
-				} else if (data instanceof TrackObject) {
-					TrackDetailsFragment fragment = new TrackDetailsFragment();
-					args.putString(TrackDetailsFragment.ARG_TRACK_ID, (data.getId()));
-					fragment.setArguments(args);
-					fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-					fragmentTransaction.replace(R.id.content_frame, fragment, "me");
-					fragmentTransaction.addToBackStack(fragment.getTag());
-				}
+				} 
 				fragmentTransaction.commit();
 				getDialog().dismiss();
 			}

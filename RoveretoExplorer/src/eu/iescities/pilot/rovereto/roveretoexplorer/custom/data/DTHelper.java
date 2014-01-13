@@ -49,6 +49,16 @@ import android.widget.Toast;
 
 import com.google.android.maps.GeoPoint;
 
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.CategoryHelper;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.DTParamsHelper;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.EventObjectForBean;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.GenericObjectForBean;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.LocalEventObject;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.Review;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ReviewObject;
+import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.search.WhenForSearch;
+import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.search.WhereForSearch;
+import eu.iescities.pilot.rovereto.roveretoexplorer.map.MapManager;
 import eu.trentorise.smartcampus.ac.AACException;
 import eu.trentorise.smartcampus.ac.SCAccessProvider;
 import eu.trentorise.smartcampus.android.common.GlobalConfig;
@@ -75,21 +85,6 @@ import eu.trentorise.smartcampus.territoryservice.model.EventObject;
 import eu.trentorise.smartcampus.territoryservice.model.ObjectFilter;
 import eu.trentorise.smartcampus.territoryservice.model.POIObject;
 import eu.trentorise.smartcampus.territoryservice.model.StoryObject;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.CategoryHelper;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.DTParamsHelper;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.EventObjectForBean;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.GenericObjectForBean;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.InfoObject;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.InfoObjectForBean;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.LocalEventObject;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.PoiObjectForBean;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.Review;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ReviewObject;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.TrackObject;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.TrackObjectForBean;
-import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.search.WhenForSearch;
-import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.search.WhereForSearch;
-import eu.iescities.pilot.rovereto.roveretoexplorer.map.MapManager;
 
 public class DTHelper {
 
@@ -392,58 +387,11 @@ public class DTHelper {
 		return Collections.emptyList();
 	}
 
-	public static POIObject findPOIByTitle(String text) {
-		try {
 
-			/* need conversion */
-			Collection<PoiObjectForBean> poiCollection = getInstance().storage.query(PoiObjectForBean.class,
-					"title = ?", new String[] { text });
 
-			if (poiCollection.size() > 0)
-				return poiCollection.iterator().next().getObjectForBean();
-			return null;
-		} catch (Exception e) {
-			return null;
-		}
-	}
 
-	public static POIObject findPOIById(String poiId) {
-		try {
-			PoiObjectForBean poi = getInstance().storage.getObjectById(poiId, PoiObjectForBean.class);
-			return poi.getObjectForBean();
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
 
-	/**
-	 * @param trackId
-	 * @return
-	 */
-	public static TrackObject findTrackById(String trackId) {
-		try {
-			TrackObjectForBean track = getInstance().storage.getObjectById(trackId, TrackObjectForBean.class);
-			return track.getObjectForBean();
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
 
-	/**
-	 * @param idInfo
-	 * @return
-	 */
-	public static InfoObject findInfoById(String idInfo) {
-		try {
-			InfoObjectForBean info = getInstance().storage.getObjectById(idInfo, InfoObjectForBean.class);
-			return info.getObjectForBean();
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
 
 
 	/**
@@ -574,153 +522,6 @@ public class DTHelper {
 		return result;
 	}
 
-	public static Collection<BaseDTObject> getMostPopular() throws DataException, StorageConfigurationException,
-			ConnectionException, ProtocolException, SecurityException, TerritoryServiceException, AACException {
-		ArrayList<BaseDTObject> list = new ArrayList<BaseDTObject>();
-		if (Utils.getObjectVersion(mContext, DTParamsHelper.getAppToken(), Constants.SYNC_DB_NAME) > 0) {
-			Collection<PoiObjectForBean> pois = getInstance().storage.getObjects(PoiObjectForBean.class);
-			for (PoiObjectForBean poiBean : pois) {
-				list.add(poiBean.getObjectForBean());
-			}
-			if (pois.size() > 20) {
-				return list.subList(0, 20);
-			}
-			return list;
-		} else {
-			ObjectFilter filter = new ObjectFilter();
-			filter.setLimit(20);
-			List<POIObject> pois = tService.getPOIs(filter, getAuthToken());
-			for (POIObject poiObject : pois) {
-				list.add(poiObject);
-			}
-			return list;
-		}
-	}
-
-	public static Collection<POIObject> getPOIByCategory(int position, int size, String... inCategories)
-			throws DataException, StorageConfigurationException, ConnectionException, ProtocolException,
-			SecurityException, TerritoryServiceException, AACException {
-		ArrayList<POIObject> returnlist = new ArrayList<POIObject>();
-
-		if (inCategories == null || inCategories.length == 0)
-			return Collections.emptyList();
-
-		String[] categories = CategoryHelper.getAllCategories(new HashSet<String>(Arrays.asList(inCategories)));
-
-		if (Utils.getObjectVersion(mContext, DTParamsHelper.getAppToken(), Constants.SYNC_DB_NAME) > 0) {
-			List<String> nonNullCategories = new ArrayList<String>();
-			String where = "";
-			for (int i = 0; i < categories.length; i++) {
-				if (where.length() > 0)
-					where += " or ";
-				if (categories[i] != null) {
-					nonNullCategories.add(categories[i]);
-					where += " type = ?";
-				} else {
-					where += " type is null";
-				}
-			}
-
-			Collection<PoiObjectForBean> pois = getInstance().storage.query(PoiObjectForBean.class, where,
-					nonNullCategories.toArray(new String[nonNullCategories.size()]), position, size, "title ASC");
-			for (PoiObjectForBean poiBean : pois) {
-				returnlist.add(poiBean.getObjectForBean());
-			}
-			return returnlist;
-		} else {
-			for (int c = 0; c < categories.length; c++) {
-				ObjectFilter filter = new ObjectFilter();
-				filter.setSkip(position);
-				filter.setLimit(size);
-				filter.setTypes(Arrays.asList(categories));
-				returnlist.addAll(tService.getPOIs(filter, getAuthToken()));
-			}
-			return returnlist;
-		}
-	}
-
-	public static Collection<POIObject> searchPOIs(int position, int size, String text) throws DataException,
-			StorageConfigurationException, ConnectionException, ProtocolException, SecurityException,
-			TerritoryServiceException, AACException {
-		ArrayList<POIObject> returnlist = new ArrayList<POIObject>();
-
-		if (Utils.getObjectVersion(mContext, DTParamsHelper.getAppToken(), Constants.SYNC_DB_NAME) > 0) {
-			if (text == null || text.trim().length() == 0) {
-				Collection<PoiObjectForBean> pois = getInstance().storage.getObjects(PoiObjectForBean.class);
-				for (PoiObjectForBean poiBean : pois) {
-					returnlist.add(poiBean.getObjectForBean());
-				}
-				return returnlist;
-			}
-			Collection<PoiObjectForBean> pois = getInstance().storage.query(PoiObjectForBean.class, "pois MATCH ?",
-					new String[] { text }, position, size, "title ASC");
-			for (PoiObjectForBean poiBean : pois) {
-				returnlist.add(poiBean.getObjectForBean());
-			}
-			return returnlist;
-		} else {
-			ObjectFilter filter = new ObjectFilter();
-			Map<String, Object> criteria = new HashMap<String, Object>(1);
-			criteria.put("text", text);
-			filter.setCriteria(criteria);
-			filter.setSkip(position);
-			filter.setLimit(size);
-			returnlist.addAll(tService.getPOIs(filter, getAuthToken()));
-			return returnlist;
-		}
-	}
-
-	public static Collection<POIObject> searchPOIsByCategory(int position, int size, String text,
-			String... inCategories) throws DataException, StorageConfigurationException, ConnectionException,
-			ProtocolException, SecurityException, TerritoryServiceException, AACException {
-		ArrayList<POIObject> returnlist = new ArrayList<POIObject>();
-
-		if (inCategories == null || inCategories.length == 0)
-			return Collections.emptyList();
-
-		String[] categories = CategoryHelper.getAllCategories(new HashSet<String>(Arrays.asList(inCategories)));
-
-		if (Utils.getObjectVersion(mContext, DTParamsHelper.getAppToken(), Constants.SYNC_DB_NAME) > 0) {
-			List<String> nonNullCategories = new ArrayList<String>();
-			String where = "";
-			for (int i = 0; i < categories.length; i++) {
-				if (where.length() > 0)
-					where += " or ";
-				if (categories[i] != null) {
-					nonNullCategories.add(categories[i]);
-					where += " type = ?";
-				} else {
-					where += " type is null";
-				}
-			}
-			if (where.length() > 0) {
-				where = "(" + where + ")";
-			}
-			List<String> parameters = nonNullCategories;
-
-			if (text != null) {
-				where += "and ( pois MATCH ? )";
-				parameters.add(text);
-			}
-			Collection<PoiObjectForBean> pois = getInstance().storage.query(PoiObjectForBean.class, where,
-					parameters.toArray(new String[parameters.size()]), position, size, "title ASC");
-			for (PoiObjectForBean poiBean : pois) {
-				returnlist.add(poiBean.getObjectForBean());
-			}
-			return returnlist;
-		} else {
-			ArrayList<POIObject> result = new ArrayList<POIObject>();
-			for (int c = 0; c < categories.length; c++) {
-				ObjectFilter filter = new ObjectFilter();
-				filter.setTypes(Arrays.asList(categories));
-				filter.setSkip(position);
-				filter.setLimit(size);
-				returnlist.addAll(tService.getPOIs(filter, getAuthToken()));
-			}
-			return result;
-		}
-	}
-
 	public static Collection<EventObject> searchEventsByCategory(int position, int size, String text,
 			String... inCategories) throws DataException, StorageConfigurationException, ConnectionException,
 			ProtocolException, SecurityException, TerritoryServiceException, AACException {
@@ -779,56 +580,7 @@ public class DTHelper {
 		return c.getTimeInMillis();
 	}
 
-//	public static Collection<StoryObject> searchStoriesByCategory(int position, int size, String text,
-//			String... inCategories) throws DataException, StorageConfigurationException, ConnectionException,
-//			ProtocolException, SecurityException, TerritoryServiceException, AACException {
-//		ArrayList<StoryObject> returnlist = new ArrayList<StoryObject>();
-//
-//		if (inCategories == null || inCategories.length == 0)
-//			return Collections.emptyList();
-//
-//		String[] categories = CategoryHelper.getAllCategories(new HashSet<String>(Arrays.asList(inCategories)));
-//
-//		if (Utils.getObjectVersion(mContext, DTParamsHelper.getAppToken(), Constants.SYNC_DB_NAME) > 0) {
-//			List<String> nonNullCategories = new ArrayList<String>();
-//			String where = "";
-//			for (int i = 0; i < categories.length; i++) {
-//				if (where.length() > 0)
-//					where += " or ";
-//				if (categories[i] != null) {
-//					nonNullCategories.add(categories[i]);
-//					where += " type = ?";
-//				} else {
-//					where += " type is null";
-//				}
-//			}
-//			if (where.length() > 0) {
-//				where = "(" + where + ")";
-//			}
-//			List<String> parameters = nonNullCategories;
-//
-//			if (text != null) {
-//				where += "and ( stories MATCH ? )";
-//				parameters.add(text);
-//			}
-//			Collection<StoryObjectForBean> stories = getInstance().storage.query(StoryObjectForBean.class, where,
-//					parameters.toArray(new String[parameters.size()]), position, size, "title ASC");
-//			for (StoryObjectForBean storyBean : stories) {
-//				returnlist.add(storyBean.getObjectForBean());
-//			}
-//			return returnlist;
-//
-//		} else {
-//			for (int c = 0; c < categories.length; c++) {
-//				ObjectFilter filter = new ObjectFilter();
-//				filter.setTypes(Arrays.asList(categories));
-//				filter.setSkip(position);
-//				filter.setLimit(size);
-//				returnlist.addAll(tService.getStories(filter, getAuthToken()));
-//			}
-//			return returnlist;
-//		}
-//	}
+
 
 	public static Collection<LocalEventObject> getEventsByCategories(int position, int size, String... inCategories)
 			throws DataException, StorageConfigurationException, ConnectionException, ProtocolException,
@@ -1104,10 +856,7 @@ public class DTHelper {
 		return findDTObjectByEntityId(EventObjectForBean.class, entityId);
 	}
 
-	public static PoiObjectForBean findPOIByEntityId(String entityId) throws DataException,
-			StorageConfigurationException, ConnectionException, ProtocolException, SecurityException {
-		return findDTObjectByEntityId(PoiObjectForBean.class, entityId);
-	}
+
 
 	@SuppressWarnings("rawtypes")
 	private static <T extends GenericObjectForBean> T findDTObjectByEntityId(Class<T> cls, String entityId)
@@ -1515,18 +1264,7 @@ public class DTHelper {
 			// getAuthToken()).searchObjects(filter, cls);
 			Collection<T> result = new ArrayList<T>();
 
-			if (cls == PoiObjectForBean.class) {
-				Collection<POIObject> pois = null;
-				Collection<PoiObjectForBean> poisbean = new ArrayList<PoiObjectForBean>();
-				pois = tService.getPOIs(filter, null);
-
-				for (POIObject poi : pois) {
-					PoiObjectForBean poiBean = new PoiObjectForBean();
-					poiBean.setObjectForBean(poi);
-					poisbean.add(poiBean);
-				}
-				result = (Collection<T>) poisbean;
-			} else if (cls == EventObjectForBean.class) {
+			if (cls == EventObjectForBean.class) {
 				Collection<EventObject> events = null;
 				Collection<EventObjectForBean> eventsbean = new ArrayList<EventObjectForBean>();
 				events = tService.getEvents(filter, null);

@@ -37,16 +37,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-import eu.trentorise.smartcampus.android.common.listing.AbstractLstingFragment;
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.CategoryHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.CategoryHelper.CategoryDescriptor;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.SearchHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.DTHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.EventsListingFragment;
-import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.poi.PoisListingFragment;
-import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.track.TrackListingFragment;
-import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.info.InfoListingFragment;
 
 public class SearchFragment extends Fragment {
 
@@ -135,15 +131,7 @@ public class SearchFragment extends Fragment {
 				FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
 				if (CategoryHelper.CATEGORY_TYPE_EVENTS.equals(type)) {
 					fragment = new EventsListingFragment();
-				} else if (CategoryHelper.CATEGORY_TYPE_POIS.equals(type)) {
-					fragment = new PoisListingFragment();
-				}
-				 else if (CategoryHelper.CATEGORY_TYPE_INFOS.equals(type)) {
-				 fragment = new InfoListingFragment();
-				 }
-				 else if (CategoryHelper.CATEGORY_TYPE_TRACKS.equals(type)) {
-				 fragment = new TrackListingFragment();
-				 }
+				} 
 
 				Bundle args = new Bundle();
 				if (selectedWhen != null)
