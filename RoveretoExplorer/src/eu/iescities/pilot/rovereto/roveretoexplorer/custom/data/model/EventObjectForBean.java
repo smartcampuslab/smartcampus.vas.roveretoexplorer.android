@@ -1,6 +1,6 @@
 package eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model;
 
-import eu.trentorise.smartcampus.territoryservice.model.EventObject;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.EventObject;
 
 public class EventObjectForBean extends GenericObjectForBean<EventObject>{
 	/**

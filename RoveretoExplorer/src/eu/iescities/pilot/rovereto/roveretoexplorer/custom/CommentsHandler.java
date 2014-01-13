@@ -29,17 +29,17 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import eu.iescities.pilot.rovereto.roveretoexplorer.R;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.ReviewHelper.ReviewHandler;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.BaseDTObject;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.CommunityData;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.DTHelper;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.Review;
+import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.ReviewListFragment;
 import eu.trentorise.smartcampus.ac.AACException;
 import eu.trentorise.smartcampus.ac.SCAccessProvider;
 import eu.trentorise.smartcampus.android.common.SCAsyncTask;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
-import eu.trentorise.smartcampus.territoryservice.model.BaseDTObject;
-import eu.trentorise.smartcampus.territoryservice.model.CommunityData;
-import eu.iescities.pilot.rovereto.roveretoexplorer.R;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.ReviewHelper.ReviewHandler;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.DTHelper;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.Review;
-import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.ReviewListFragment;
 
 /**
  * @author raman

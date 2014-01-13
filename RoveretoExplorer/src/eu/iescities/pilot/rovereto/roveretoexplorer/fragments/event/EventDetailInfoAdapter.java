@@ -15,31 +15,20 @@
  ******************************************************************************/
 package eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event;
 
-import java.io.IOException;
-import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
-import android.os.AsyncTask;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.ImageView;
-import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.LocalEventObject;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.EventObject;
 
 
 //in Fragment_EvDetail_Info
@@ -57,7 +46,7 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 	private int layoutResourceId;
 
 
-	private LocalEventObject event = null;
+	private EventObject event = null;
 	//private EventPlaceholder eventPlaceHolder = null;
 	private TextView txtView = null;
 	

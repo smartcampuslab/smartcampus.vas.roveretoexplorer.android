@@ -21,9 +21,9 @@ import android.app.Activity;
 
 import com.google.android.gms.maps.GoogleMap;
 
-import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
-import eu.trentorise.smartcampus.territoryservice.model.BaseDTObject;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.AbstractAsyncTaskProcessor;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.BaseDTObject;
+import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 
 public abstract class MapLoadProcessor extends AbstractAsyncTaskProcessor<Void, Collection<? extends BaseDTObject>> {
 	

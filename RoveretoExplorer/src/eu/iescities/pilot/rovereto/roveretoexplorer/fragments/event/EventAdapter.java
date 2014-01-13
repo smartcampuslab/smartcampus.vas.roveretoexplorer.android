@@ -39,7 +39,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.LocalEventObject;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.EventObject;
 
 
 // in EventsListingFragment
@@ -52,7 +52,7 @@ public class EventAdapter extends BaseExpandableListAdapter {
 	private boolean postProcAndHeader = true;
 
 	//for expandable list 
-	private Map<String, List<LocalEventObject>> eventCollections;
+	private Map<String, List<EventObject>> eventCollections;
 	private List<String> dateGroupList;
 	private int layoutResourceId;
 
@@ -69,7 +69,7 @@ public class EventAdapter extends BaseExpandableListAdapter {
 	
 
 	public EventAdapter(Context context, int layoutResourceId, List<String> events_dates,
-			Map<String, List<LocalEventObject>> eventCollections) {
+			Map<String, List<EventObject>> eventCollections) {
 		this.context = context;
 		this.eventCollections = eventCollections;
 		this.dateGroupList = events_dates;
@@ -82,7 +82,7 @@ public class EventAdapter extends BaseExpandableListAdapter {
 	public View getChildView(final int groupPosition, final int childPosition,
 			boolean isLastChild, View convertView, ViewGroup parent) {
 
-		final LocalEventObject event = (LocalEventObject) getChild(groupPosition, childPosition);
+		final EventObject event = (EventObject) getChild(groupPosition, childPosition);
 
 		row = convertView;
 		if (row == null) {

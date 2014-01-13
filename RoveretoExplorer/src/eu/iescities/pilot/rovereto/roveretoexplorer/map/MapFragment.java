@@ -41,16 +41,14 @@ import eu.iescities.pilot.rovereto.roveretoexplorer.custom.AbstractAsyncTaskProc
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.CategoryHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.CategoryHelper.CategoryDescriptor;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.DTParamsHelper;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.BaseDTObject;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.DTHelper;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.LocalEventObject;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.EventObject;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.EventDetailsFragment;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.EventsListingFragment;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.search.SearchFragment;
 import eu.iescities.pilot.rovereto.roveretoexplorer.map.MapFilterDialogFragment.REQUEST_TYPE;
 import eu.trentorise.smartcampus.android.common.SCAsyncTask;
-import eu.trentorise.smartcampus.territoryservice.model.BaseDTObject;
-import eu.trentorise.smartcampus.territoryservice.model.EventObject;
-import eu.trentorise.smartcampus.territoryservice.model.POIObject;
 
 public class MapFragment extends Fragment implements MapItemsHandler, OnCameraChangeListener, OnMarkerClickListener,
 		MapObjectContainer {
@@ -374,7 +372,7 @@ public class MapFragment extends Fragment implements MapItemsHandler, OnCameraCh
 		FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
 		Fragment fragment = null;
 		Bundle args = new Bundle();
-		if (list.get(0) instanceof LocalEventObject) {
+		if (list.get(0) instanceof EventObject) {
 			fragment = new EventsListingFragment();
 			args.putSerializable(SearchFragment.ARG_LIST, new ArrayList(list));
 		}
@@ -408,18 +406,18 @@ public class MapFragment extends Fragment implements MapItemsHandler, OnCameraCh
 					/*
 					 * check if todays is checked and cat with searchTodayEvents
 					 */
-					Collection<LocalEventObject> newList;
+					Collection<EventObject> newList;
 					if (isTodayIncluded()) {
-						newList = new ArrayList<LocalEventObject>();
+						newList = new ArrayList<EventObject>();
 						newList.addAll(DTHelper.searchTodayEvents(0, -1, ""));
 						if (categories != null)
 							newList.addAll(DTHelper.getEventsByCategories(0, -1, eventsNotTodayCategories));
 
 					} else
 						newList = DTHelper.getEventsByCategories(0, -1, categories);
-					Iterator<LocalEventObject> i = newList.iterator();
+					Iterator<EventObject> i = newList.iterator();
 					while (i.hasNext()) {
-						LocalEventObject obj = i.next();
+						EventObject obj = i.next();
 						obj.getLocation();
 						if (obj.getLocation()[0] == 0 && obj.getLocation()[1] == 0)
 							i.remove();

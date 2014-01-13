@@ -18,6 +18,7 @@ import android.view.MenuInflater;
 import android.widget.Toast;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.AbstractAsyncTaskProcessor;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.CategoryHelper;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.BaseDTObject;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.DTHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.EventsListingFragment;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.search.SearchFragment;
@@ -31,7 +32,6 @@ import eu.iescities.pilot.rovereto.roveretoexplorer.ui.navdrawer.NavMenuSection;
 import eu.trentorise.smartcampus.android.common.GlobalConfig;
 import eu.trentorise.smartcampus.android.common.SCAsyncTask;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
-import eu.trentorise.smartcampus.territoryservice.model.BaseDTObject;
 
 public class MainActivity extends AbstractNavDrawerActivity{
 

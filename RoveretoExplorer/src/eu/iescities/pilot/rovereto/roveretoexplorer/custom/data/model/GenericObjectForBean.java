@@ -1,7 +1,7 @@
 package eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model;
 
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.BaseDTObject;
 import eu.trentorise.smartcampus.storage.BasicObject;
-import eu.trentorise.smartcampus.territoryservice.model.BaseDTObject;
 
 public class GenericObjectForBean<T extends BaseDTObject> extends BasicObject {
 	/**

@@ -16,14 +16,12 @@
 package eu.iescities.pilot.rovereto.roveretoexplorer.custom.data;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 import eu.trentorise.smartcampus.android.common.Utils;
-import eu.trentorise.smartcampus.social.model.Concept;
-import eu.trentorise.smartcampus.territoryservice.model.BaseDTObject;
-import eu.trentorise.smartcampus.territoryservice.model.CommunityData;
 
 public class BaseDTStorageHelper {
 
@@ -39,7 +37,7 @@ public class BaseDTStorageHelper {
 			o.setType(cursor.getString(cursor.getColumnIndex("type")));
 			o.setCreatorId(cursor.getString(cursor.getColumnIndex("creatorId")));
 			o.setCreatorName(cursor.getString(cursor.getColumnIndex("creatorName")));
-			o.setEntityId(cursor.getString(cursor.getColumnIndex("entityId")));
+			o.setEntityId(cursor.getLong(cursor.getColumnIndex("entityId")));
 			o.setLocation(new double[] { cursor.getDouble(cursor.getColumnIndex("latitude")),
 					cursor.getDouble(cursor.getColumnIndex("longitude")) });
 
@@ -47,12 +45,12 @@ public class BaseDTStorageHelper {
 			o.getCommunityData().setAverageRating(cursor.getInt(cursor.getColumnIndex("averageRating")));
 			o.getCommunityData().setFollowing(
 					Utils.convertJSONToObject(cursor.getString(cursor.getColumnIndex("following")), Map.class));
-			o.getCommunityData().setRating(
-					Utils.convertJSONToObject(cursor.getString(cursor.getColumnIndex("ratings")), Map.class));
+			o.getCommunityData().setRatings(
+					Utils.convertJSONToObjects(cursor.getString(cursor.getColumnIndex("ratings")), Rating.class));
 			o.getCommunityData().setRatingsCount(cursor.getInt(cursor.getColumnIndex("ratingsCount")));
 			o.getCommunityData().setFollowsCount(cursor.getInt(cursor.getColumnIndex("followsCount")));
 			o.getCommunityData().setTags(
-					Utils.convertJSONToObjects(cursor.getString(cursor.getColumnIndex("tags")), Concept.class));
+					Utils.convertJSONToObjects(cursor.getString(cursor.getColumnIndex("tags")), String.class));
 
 			@SuppressWarnings("unchecked")
 			Map<String, Object> map = Utils.convertJSONToObject(cursor.getString(cursor.getColumnIndex("customData")),
@@ -82,9 +80,8 @@ public class BaseDTStorageHelper {
 		if (bean.getCommunityData() != null) {
 			values.put("averageRating", bean.getCommunityData().getAverageRating());
 			values.put("following", Utils.convertToJSON(bean.getCommunityData().getFollowing()));
-			if (bean.getCommunityData().getRating() != null) {
-				values.put("ratings", Utils.convertToJSON(bean.getCommunityData().getRating()));
-			}
+			values.put("ratings", Utils.convertToJSON(bean.getCommunityData().getAverageRating()));
+			
 			values.put("ratingsCount", bean.getCommunityData().getRatingsCount());
 			values.put("followsCount", bean.getCommunityData().getFollowsCount());
 			if (bean.getCommunityData().getTags() != null) {

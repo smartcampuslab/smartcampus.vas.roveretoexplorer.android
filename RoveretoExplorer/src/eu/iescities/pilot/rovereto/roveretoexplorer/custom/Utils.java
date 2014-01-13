@@ -12,25 +12,19 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import android.content.Context;
-import android.location.Address;
 
 import com.google.android.gms.maps.model.LatLng;
 
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.DTHelper;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.EventObjectForBean;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.LocalEventObject;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.BaseDTObject;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.CommunityData;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.EventObject;
+import eu.trentorise.smartcampus.android.common.follow.model.Concept;
 import eu.trentorise.smartcampus.android.common.tagging.SemanticSuggestion;
 import eu.trentorise.smartcampus.android.common.tagging.SemanticSuggestion.TYPE;
-import eu.trentorise.smartcampus.social.model.Concept;
-import eu.trentorise.smartcampus.territoryservice.model.BaseDTObject;
-import eu.trentorise.smartcampus.territoryservice.model.CommunityData;
-import eu.trentorise.smartcampus.territoryservice.model.EventObject;
-import eu.trentorise.smartcampus.territoryservice.model.POIObject;
 
 public class Utils {
 	public static final String userPoiObject = "eu.trentorise.smartcampus.dt.model.UserPOIObject";
@@ -90,30 +84,7 @@ public class Utils {
 		return content;
 	}
 
-	public static String getPOIshortAddress(POIObject poi) {
-		String res = (poi.getPoi().getStreet() == null || poi.getPoi().getStreet().length() == 0 ? 
-				"" : poi .getPoi().getStreet());
 
-		String city = (poi.getPoi().getCity() == null || poi.getPoi().getCity().length() == 0 ? 
-				"" : poi .getPoi().getCity());
-		if (city != null && city.length() > 0) res += (res.length() > 0 ? " " : "") + city;
-
-		if (res.length() > 0) return res;
-		return poi.getTitle();
-	}
-
-	public static Address getPOIasGoogleAddress(POIObject poi) {
-		Address a = new Address(Locale.getDefault());
-		a.setLatitude(poi.getLocation()[0]);
-		a.setLongitude(poi.getLocation()[1]);
-		a.setAddressLine(0, poi.getPoi().getStreet());
-		a.setCountryCode(poi.getPoi().getCountry());
-		a.setCountryName(poi.getPoi().getState());
-		a.setLocality(poi.getPoi().getCity());
-		a.setPostalCode(poi.getPoi().getPostalCode());
-		a.setAdminArea(poi.getPoi().getRegion());
-		return a;
-	}
 
 	/**
 	 * @param mTrack
@@ -128,33 +99,33 @@ public class Utils {
 			return false;
 	}
 
-	public static Collection<LocalEventObject> convertToLocalEventFromBean(
-			Collection<EventObjectForBean> searchInGeneral) {
-		Collection<LocalEventObject> returnCollection = new ArrayList<LocalEventObject>();
-		for (EventObjectForBean event : searchInGeneral) {
-			LocalEventObject localEvent = DTHelper.findEventById(event.getObjectForBean().getId());
-			if (localEvent != null) {
+//	public static Collection<LocalEventObject> convertToLocalEventFromBean(
+//			Collection<EventObjectForBean> searchInGeneral) {
+//		Collection<LocalEventObject> returnCollection = new ArrayList<LocalEventObject>();
+//		for (EventObjectForBean event : searchInGeneral) {
+//			LocalEventObject localEvent = DTHelper.findEventById(event.getObjectForBean().getId());
+//			if (localEvent != null) {
+//
+//				returnCollection.add(localEvent);
+//			}
+//		}
+//		return returnCollection;
+//	}
 
-				returnCollection.add(localEvent);
-			}
-		}
-		return returnCollection;
-	}
-
-	public static Collection<LocalEventObject> convertToLocalEvent(Collection<EventObject> events) {
-		Collection<EventObjectForBean> beanEvents = new ArrayList<EventObjectForBean>();
-		Collection<LocalEventObject> returnEvents = new ArrayList<LocalEventObject>();
-
-		for (EventObject event : events) {
-			EventObjectForBean newObject = new EventObjectForBean();
-			LocalEventObject localObject = new LocalEventObject();
-			newObject.setObjectForBean(event);
-			localObject.setEventFromEventObjectForBean(newObject);
-			returnEvents.add(localObject);
-		}
-
-		return returnEvents;
-	}
+//	public static Collection<LocalEventObject> convertToLocalEvent(Collection<EventObject> events) {
+//		Collection<EventObjectForBean> beanEvents = new ArrayList<EventObjectForBean>();
+//		Collection<LocalEventObject> returnEvents = new ArrayList<LocalEventObject>();
+//
+//		for (EventObject event : events) {
+//			EventObjectForBean newObject = new EventObjectForBean();
+//			LocalEventObject localObject = new LocalEventObject();
+//			newObject.setObjectForBean(event);
+//			localObject.setEventFromEventObjectForBean(newObject);
+//			returnEvents.add(localObject);
+//		}
+//
+//		return returnEvents;
+//	}
 
 	public static List<LatLng> decodePolyline(String encoded) {
 		List<LatLng> polyline = new ArrayList<LatLng>();
@@ -195,7 +166,7 @@ public class Utils {
 	 * @param event
 	 * @return
 	 */
-	public static String getEventShortAddress(LocalEventObject event) {
+	public static String getEventShortAddress(EventObject event) {
 		if (event.getCustomData() != null && event.getCustomData().get("place")!=null) {
 			return event.getCustomData().get("place").toString();
 		} else {
@@ -272,15 +243,15 @@ public class Utils {
 	}
 
 
-	public static Map<String, List<LocalEventObject>> createFakeEventCollection(List<String> dateGroupList ) {
+	public static Map<String, List<EventObject>> createFakeEventCollection(List<String> dateGroupList ) {
 
-		List<LocalEventObject> eventList = getFakeLocalEventObjects();
-		Map<String, List<LocalEventObject>> eventCollection = new LinkedHashMap<String, List<LocalEventObject>>();
-		List<LocalEventObject> childList = new ArrayList<LocalEventObject>();
+		List<EventObject> eventList = getFakeEventObjects();
+		Map<String, List<EventObject>> eventCollection = new LinkedHashMap<String, List<EventObject>>();
+		List<EventObject> childList = new ArrayList<EventObject>();
 
 		// preparing laptops collection(child)
 		for (String event_date : dateGroupList) {
-			childList = new ArrayList<LocalEventObject>();
+			childList = new ArrayList<EventObject>();
 			if (event_date.equals("Oggi 29/10/2013")) {
 				childList.add(eventList.get(0));
 				childList.add(eventList.get(1));
@@ -298,19 +269,19 @@ public class Utils {
 		return eventCollection;
 	}
 
-	private static List<LocalEventObject> loadChild(LocalEventObject[] eventsByDate) {
-		List<LocalEventObject> childList = new ArrayList<LocalEventObject>();
-		for (LocalEventObject event : eventsByDate)
+	private static List<EventObject> loadChild(EventObject[] eventsByDate) {
+		List<EventObject> childList = new ArrayList<EventObject>();
+		for (EventObject event : eventsByDate)
 			childList.add(event);
 		return childList;
 	}
 
 
 
-	public static List<LocalEventObject> getFakeLocalEventObjects(){
+	public static List<EventObject> getFakeEventObjects(){
 
-		List<LocalEventObject> fake_events = new ArrayList<LocalEventObject>();
-		LocalEventObject fake_event;  new LocalEventObject(); 
+		List<EventObject> fake_events = new ArrayList<EventObject>();
+		EventObject fake_event;  new EventObject(); 
 		Map<String, Object> customData =  new HashMap<String, Object>(); 
 		CommunityData communityData = new CommunityData(); 
 		try {
@@ -335,7 +306,7 @@ public class Utils {
 			customData.put("Lingua principale ", "Italiano");
 			customData.put("Abbigliamento consigliato", "sportivo");
 
-			fake_event = new LocalEventObject("Roverunning training", 3, 5, customData);
+			fake_event = new EventObject("Roverunning training", 3, 5, customData);
 			fake_event.setFromTime(Utils.toDateTimeLong(DATE_FORMAT, "17/12/2013"));
 			fake_event.setId("1");
 			
@@ -362,7 +333,7 @@ public class Utils {
 			customData.put("Lingua principale ", "Italiano");
 			customData.put("Abbigliamento consigliato", "sportivo");
 
-			fake_event = new LocalEventObject("24esimo TORNEO DI NATALE Pallavolo Femminile", 5, 50, customData);
+			fake_event = new EventObject("24esimo TORNEO DI NATALE Pallavolo Femminile", 5, 50, customData);
 			fake_event.setFromTime(Utils.toDateTimeLong(DATE_FORMAT, "27/12/2013"));
 			fake_event.setToTime(Utils.toDateTimeLong(DATE_FORMAT, "29/12/2013"));
 			fake_event.setId("2");
@@ -388,7 +359,7 @@ public class Utils {
 			customData.put("Lingua principale ", "Italiano");
 			customData.put("Abbigliamento consigliato", "sportivo");
 
-			fake_event = new LocalEventObject("9 Torneo Passamani di lotta grecoromana e ", 4, 35, customData);
+			fake_event = new EventObject("9 Torneo Passamani di lotta grecoromana e ", 4, 35, customData);
 			fake_event.setFromTime(Utils.toDateTimeLong(DATE_FORMAT, "30/12/2013"));
 			fake_event.setToTime(Utils.toDateTimeLong(DATE_FORMAT, "31/12/2013"));
 			fake_event.setId("3");
@@ -397,7 +368,7 @@ public class Utils {
 			//create fake event object 4 
 			customData = new HashMap<String, Object>(); 
 			customData.put("where_name", "Palasport e palestre");
-			fake_event = new LocalEventObject("Torneo della Pace", 2, 15, customData);
+			fake_event = new EventObject("Torneo della Pace", 2, 15, customData);
 			fake_event.setFromTime(Utils.toDateTimeLong(DATE_FORMAT, "27/12/2013"));
 			fake_event.setToTime(Utils.toDateTimeLong(DATE_FORMAT, "29/12/2013"));
 			fake_event.setId("4");
@@ -405,7 +376,7 @@ public class Utils {
 			//create fake event object 5 
 			customData = new HashMap<String, Object>(); 
 			customData.put("where_name", "Teatro Rosmini");
-			fake_event = new LocalEventObject("Saggio di danza", 1, 30, customData);
+			fake_event = new EventObject("Saggio di danza", 1, 30, customData);
 			fake_event.setFromTime(Utils.toDateTimeLong(DATE_FORMAT, "27/12/2013"));
 			fake_event.setToTime(Utils.toDateTimeLong(DATE_FORMAT, "29/12/2013"));
 			fake_event.setId("5");
@@ -413,7 +384,7 @@ public class Utils {
 			//create fake event object 6 
 			customData = new HashMap<String, Object>(); 
 			customData.put("where_name", "Palasport");
-			fake_event = new LocalEventObject("Hockey su ghiaccio", 0, 15, customData);
+			fake_event = new EventObject("Hockey su ghiaccio", 0, 15, customData);
 			fake_event.setFromTime(Utils.toDateTimeLong(DATE_FORMAT, "27/12/2013"));
 			fake_event.setToTime(Utils.toDateTimeLong(DATE_FORMAT, "29/12/2013"));
 			fake_event.setId("6");
@@ -427,10 +398,10 @@ public class Utils {
 	}	
 
 
-	public static LocalEventObject getFakeLocalEventObject(List<LocalEventObject> events, String id){
+	public static EventObject getFakeLocalEventObject(List<EventObject> events, String id){
 
-		LocalEventObject fake_event = null;
-		for (LocalEventObject event: events){
+		EventObject fake_event = null;
+		for (EventObject event: events){
 			if (event.getId()==id) {
 				return event;
 			} 

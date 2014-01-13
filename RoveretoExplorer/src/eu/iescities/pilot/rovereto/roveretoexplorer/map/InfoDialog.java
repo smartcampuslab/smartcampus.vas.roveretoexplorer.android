@@ -29,30 +29,25 @@ import android.widget.TextView;
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.CategoryHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.Utils;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.DTHelper;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.LocalEventObject;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.BaseDTObject;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.EventObject;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.EventDetailsFragment;
-import eu.trentorise.smartcampus.territoryservice.model.BaseDTObject;
-import eu.trentorise.smartcampus.territoryservice.model.POIObject;
 
 public class InfoDialog extends DialogFragment {
 	public static final String PARAM = "DTO_OBJECT";
 	private BaseDTObject data;
 
-	
-	 public InfoDialog() {
-	 }
+	public InfoDialog() {
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		if (this.data == null) {
 			this.data = (BaseDTObject) getArguments().getSerializable(PARAM);
 		}
-		if (data instanceof POIObject) {
-			getDialog().setTitle(getString(R.string.info_dialog_title_poi));
-		} else if (data instanceof LocalEventObject) {
+		if (data instanceof EventObject) {
 			getDialog().setTitle(R.string.info_dialog_title_event);
-		} 
+		}
 		return inflater.inflate(R.layout.mapdialog, container, false);
 	}
 
@@ -61,12 +56,8 @@ public class InfoDialog extends DialogFragment {
 		super.onStart();
 		TextView msg = (TextView) getDialog().findViewById(R.id.mapdialog_msg);
 
-		if (data instanceof POIObject) {
-			msg.setText(Html.fromHtml("<h2>" + ((POIObject) data).getTitle() + "</h2><br/><p>"
-					+ Utils.getPOIshortAddress(((POIObject) data)) + "</p>"));
-		} else if (data instanceof LocalEventObject) {
-			LocalEventObject event = (LocalEventObject) data;
-			POIObject poi = new POIObject();
+		if (data instanceof EventObject) {
+			EventObject event = (EventObject) data;
 			String msgText = "";
 			msgText += "<h2>";
 			msgText += event.getTitle();
@@ -77,20 +68,17 @@ public class InfoDialog extends DialogFragment {
 						CategoryHelper.CATEGORY_TYPE_EVENTS, event.getType()).description);
 				msgText += "</p><br/>";
 			}
-			msgText += "<p>" + event.eventDatesString() + "</p>";
+			msgText += "<p>" + event.dateTimeString() + "</p>";
 			if (event.getTiming() != null) {
 				msgText += "<p>" + event.getTiming() + "</p>";
 			}
-			if (poi != null) {
-				msgText += "<p>" + Utils.getPOIshortAddress(poi) + "</p>";
-			} else {
+
 				String place = Utils.getEventShortAddress(event);
 				if (place != null) {
 					msgText += "<p>" + place + "</p>";
-				}
 			}
 			msg.setText(Html.fromHtml(msgText));
-		} 
+		}
 
 		msg.setMovementMethod(new ScrollingMovementMethod());
 
@@ -106,18 +94,17 @@ public class InfoDialog extends DialogFragment {
 		b.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager()
-						.beginTransaction();
+				FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
 				Bundle args = new Bundle();
 
-				if (data instanceof LocalEventObject) {
+				if (data instanceof EventObject) {
 					EventDetailsFragment fragment = new EventDetailsFragment();
 					args.putString(EventDetailsFragment.ARG_EVENT_ID, (data.getId()));
 					fragment.setArguments(args);
 					fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
 					fragmentTransaction.replace(R.id.content_frame, fragment, "me");
 					fragmentTransaction.addToBackStack(fragment.getTag());
-				} 
+				}
 				fragmentTransaction.commit();
 				getDialog().dismiss();
 			}

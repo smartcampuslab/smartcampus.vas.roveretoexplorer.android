@@ -16,7 +16,6 @@
 package eu.iescities.pilot.rovereto.roveretoexplorer.custom.data;
 
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.EventObjectForBean;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.LocalEventObject;
 import eu.trentorise.smartcampus.storage.BasicObject;
 import eu.trentorise.smartcampus.storage.StorageConfigurationException;
 import eu.trentorise.smartcampus.storage.db.BeanStorageHelper;
@@ -26,7 +25,7 @@ public class DTStorageConfiguration implements StorageConfiguration {
 	private static final long serialVersionUID = 906503482979452854L;
 
 	@SuppressWarnings("unchecked")
-	private static Class<? extends BasicObject>[] classes = (Class<? extends BasicObject>[])new Class<?>[]{LocalEventObject.class};												
+	private static Class<? extends BasicObject>[] classes = (Class<? extends BasicObject>[])new Class<?>[]{EventObject.class};												
 	private static BeanStorageHelper<EventObjectForBean> eventHelper = new EventStorageHelper();
 	@Override
 	public Class<? extends BasicObject>[] getClasses() {
@@ -36,7 +35,7 @@ public class DTStorageConfiguration implements StorageConfiguration {
 	@Override
 	public String getTableName(Class<? extends BasicObject> cls) throws StorageConfigurationException {
 
-		if (cls.equals(EventObjectForBean.class)||cls.equals(LocalEventObject.class)) {
+		if (cls.equals(EventObjectForBean.class)||cls.equals(EventObject.class)) {
 			return "events";
 		}
 
@@ -47,7 +46,7 @@ public class DTStorageConfiguration implements StorageConfiguration {
 	@Override
 	public <T extends BasicObject> BeanStorageHelper<T> getStorageHelper(Class<T> cls) throws StorageConfigurationException {
 
-		if (cls.equals(LocalEventObject.class)||(cls.equals(EventObjectForBean.class))) {
+		if (cls.equals(EventObject.class)||(cls.equals(EventObjectForBean.class))) {
 			return (BeanStorageHelper<T>) eventHelper;
 		}
 

@@ -20,6 +20,7 @@ import android.widget.Toast;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.AbstractAsyncTaskProcessor;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.DrawerItemOld;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.HackActionBarToggle;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.BaseDTObject;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.DTHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.map.MapFragment;
 import eu.iescities.pilot.rovereto.roveretoexplorer.ui.navdrawer.NavDrawerAdapter;
@@ -28,7 +29,6 @@ import eu.iescities.pilot.rovereto.roveretoexplorer.ui.navdrawer.NavMenuItem;
 import eu.trentorise.smartcampus.android.common.GlobalConfig;
 import eu.trentorise.smartcampus.android.common.SCAsyncTask;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
-import eu.trentorise.smartcampus.territoryservice.model.BaseDTObject;
 
 public class MainActivityOld extends ActionBarActivity{
 
