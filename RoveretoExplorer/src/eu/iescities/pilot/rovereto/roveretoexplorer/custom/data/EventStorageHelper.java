@@ -36,7 +36,6 @@ public class EventStorageHelper implements BeanStorageHelper<EventObjectForBean>
 		EventObject event = new EventObject();
 		BaseDTStorageHelper.setCommonFields(cursor, event);
 		
-		event.setPoiId(cursor.getString(cursor.getColumnIndex("poiId")));
 		event.setFromTime(cursor.getLong(cursor.getColumnIndex("fromTime")));
 		event.setToTime(cursor.getLong(cursor.getColumnIndex("toTime")));
 		event.setTiming(cursor.getString(cursor.getColumnIndex("timing")));
@@ -55,7 +54,7 @@ public class EventStorageHelper implements BeanStorageHelper<EventObjectForBean>
 
 		ContentValues values = BaseDTStorageHelper.toCommonContent(event);
 		
-		values.put("poiId", event.getPoiId());
+//		values.put("poiId", event.getPoiId());
 		values.put("fromTime", event.getFromTime());
 		values.put("toTime", event.getToTime());
 //		values.put("timing", bean.getTimingFormatted());
