@@ -1,4 +1,4 @@
-package eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event;
+package eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.community;
 
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
 import android.os.Bundle;

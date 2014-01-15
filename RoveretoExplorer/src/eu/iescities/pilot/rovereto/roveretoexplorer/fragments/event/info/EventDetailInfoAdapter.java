@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-package eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event;
+package eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info;
 
 import java.io.IOException;
 import java.net.URL;
@@ -60,9 +60,12 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 	private LocalEventObject event = null;
 	//private EventPlaceholder eventPlaceHolder = null;
 	private TextView txtView = null;
-	
+
 	private View row = null;
-	
+
+	String attrName = null;
+	Long groupPos;
+	String dateLabel  = null;
 
 
 	public EventDetailInfoAdapter(Context context, int layoutResourceId, List<String> events_attr_names,
@@ -73,8 +76,8 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 		this.layoutResourceId = layoutResourceId;
 
 	}
-	
-	
+
+
 
 	@Override
 	public View getChildView(final int groupPosition, final int childPosition,
@@ -151,14 +154,24 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 		return attrNameGroupList.size();
 	}
 
+	//Call when parent row clicked
 	public long getGroupId(int groupPosition) {
+		
+		Log.i("Parent", groupPosition+"=  getGroupId ");
+
 		return groupPosition;
 	}
+
 
 	public View getGroupView(int groupPosition, boolean isExpanded,
 			View convertView, ViewGroup parent) {
 
-		String dateLabel = (String) getGroup(groupPosition);
+		dateLabel = (String) getGroup(groupPosition);
+
+		Log.i("GROUPVIEW", "ATTR LABEL: " + dateLabel + "!!");
+		Log.i("GROUPVIEW", "ATTR POS: " + groupPosition + "!!");
+
+
 		if (convertView == null) {
 			LayoutInflater infalInflater = (LayoutInflater) context
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -166,11 +179,46 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 					null);
 		}
 
+
+
+
 		convertView.setBackgroundResource(getBackgroundColor(groupPosition));
 
 		TextView item = (TextView) convertView.findViewById(R.id.event_info_attribute_names);
 		item.setTypeface(null, Typeface.BOLD);
 		item.setText(dateLabel);
+
+		ImageView image = (ImageView)convertView.findViewById(R.id.event_info_action_edit);
+
+		//detect which row it is
+
+		groupPos = getGroupId(groupPosition);
+		if (groupPos==0){
+			attrName="Dove";
+		}
+		else if (groupPos==1)
+			attrName="Quando";
+		else if (groupPos==2)
+			attrName="Cosa";
+		else if (groupPos==3)
+			attrName="Contatti";
+		else if (groupPos==4)
+			attrName="Tags";
+
+		image.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Log.i("GROUPVIEW", "CLICK LABEL: " + groupPos + "!!");
+				Log.i("GROUPVIEW", "CLICK POS: " + attrName + "!!");
+				Log.i("GROUPVIEW", "CLICK POS: " + dateLabel + "!!");
+
+
+				Toast.makeText(context, "modify the field " + attrName + "," + groupPos, Toast.LENGTH_SHORT).show(); 
+			}
+
+		});
+
 
 		return convertView;
 
@@ -191,6 +239,13 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 		return true;
 	}
 
+	private static class ViewHolder
+	{
+		TextView[] textView;        
+		ImageView editIcon;
+
+		int position;
+	}
 
 
 }

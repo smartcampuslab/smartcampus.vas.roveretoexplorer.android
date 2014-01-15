@@ -18,11 +18,13 @@
         android:textColor="@android:color/white" />
 
     <ImageView
-        android:id="@+id/event_action_edit"
+        android:id="@+id/event_info_action_edit"
         android:layout_width="25dp"
         android:layout_height="25dp"
-        android:layout_marginLeft="60dp"
-        android:layout_toRightOf="@+id/event_info_attribute_names"
+        android:layout_alignParentRight="true"
+        android:layout_gravity="right"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
         android:contentDescription="@string/empty"
         android:scaleType="fitXY"
         android:src="@drawable/ic_action_edit_white"

@@ -329,6 +329,7 @@ public class Utils {
 			customData.put("Email", email);
 			customData.put("Tags", tags);
 			customData.put("Sito web", site_url);
+			
 			customData.put("Tipo di luogo", "aperto");
 			customData.put("Accesso", "libero");
 			customData.put("Propabilita dell'evento", "confermato");

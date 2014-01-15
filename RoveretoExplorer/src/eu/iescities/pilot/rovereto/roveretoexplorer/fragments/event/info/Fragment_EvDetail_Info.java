@@ -1,7 +1,6 @@
-package eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event;
+package eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info;
 
-import java.io.IOException;
-import java.net.URL;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -14,17 +13,12 @@ import java.util.Map;
 
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.Utils;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.DTHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.LocalEventObject;
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -37,7 +31,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -65,6 +58,12 @@ public class Fragment_EvDetail_Info extends Fragment {
 	private static final DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 	private static final DateFormat extDateFormat = new SimpleDateFormat("EEEEEE dd/MM/yyyy");
 
+	//Initialize variables
+	private static final String STR_CHECKED = " has Checked!";
+	private static final String STR_UNCHECKED = " has unChecked!";
+	private int ParentClickStatus=-1;
+	private int ChildClickStatus=-1;
+	private ArrayList<EventInfoParent> parents;
 
 
 
@@ -129,7 +128,7 @@ public class Fragment_EvDetail_Info extends Fragment {
 		ImageSpan span = new ImageSpan(d, ImageSpan.ALIGN_BASELINE); 
 		int start = text.length() - 1;
 		ss.setSpan(span,start, start + 1, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
-	    ss.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), start, start+1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+		ss.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), start, start+1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 		ss.setSpan(new ClickableSpan() {
 
 			@Override
@@ -163,25 +162,25 @@ public class Fragment_EvDetail_Info extends Fragment {
 
 		//display the event category plus the "promoted by" attribute 
 		TextView categoryTextView = (TextView) getActivity().findViewById(R.id.event_placeholder_category);
-        String category = "Evento sportivo";  // to be modified!
+		String category = "Evento sportivo";  // to be modified!
 
-        if (mEvent.getCustomData().containsKey("PromossoDa")){
-   		text = new String(category + ", promosso da " + (String) mEvent.getCustomData().get("PromossoDa") + " ") ;
-   		ss = new SpannableString(text); 
-   		start = text.length() - 1;
-   		ss.setSpan(span,start, start + 1, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
-   		ss.setSpan(new ClickableSpan() {
+		if (mEvent.getCustomData().containsKey("PromossoDa")){
+			text = new String(category + ", promosso da " + (String) mEvent.getCustomData().get("PromossoDa") + " ") ;
+			ss = new SpannableString(text); 
+			start = text.length() - 1;
+			ss.setSpan(span,start, start + 1, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+			ss.setSpan(new ClickableSpan() {
 
-   			@Override
-   			public void onClick(View v) {  
-   				Log.d("main", "link clicked");
-   				Toast.makeText(context, "modify promoted by", Toast.LENGTH_SHORT).show(); 
-   			} }, start, start + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-   		categoryTextView.setText(ss); 
-   		categoryTextView.setMovementMethod(LinkMovementMethod.getInstance());
-      }
-       else 
-    	   categoryTextView.setText(category + "."); 
+				@Override
+				public void onClick(View v) {  
+					Log.d("main", "link clicked");
+					Toast.makeText(context, "modify promoted by", Toast.LENGTH_SHORT).show(); 
+				} }, start, start + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+			categoryTextView.setText(ss); 
+			categoryTextView.setMovementMethod(LinkMovementMethod.getInstance());
+		}
+		else 
+			categoryTextView.setText(category + "."); 
 
 
 		//display the event attributes 
@@ -401,5 +400,34 @@ public class Fragment_EvDetail_Info extends Fragment {
 			newdateformatted = extDateFormat.format(new Date(fromTime));
 		return newdateformatted;
 	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }
