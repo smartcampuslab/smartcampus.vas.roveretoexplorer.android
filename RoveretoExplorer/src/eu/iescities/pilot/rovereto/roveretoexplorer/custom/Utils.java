@@ -93,12 +93,12 @@ public class Utils {
 	 */
 
 
-	public static boolean isCreatedByUser(BaseDTObject obj) {
-		if (obj.getDomainType() == null || userPoiObject.equals(obj.getDomainType())) {
-			return true;
-		} else
-			return false;
-	}
+//	public static boolean isCreatedByUser(BaseDTObject obj) {
+//		if (obj.getDomainType() == null || userPoiObject.equals(obj.getDomainType())) {
+//			return true;
+//		} else
+//			return false;
+//	}
 
 //	public static Collection<LocalEventObject> convertToLocalEventFromBean(
 //			Collection<EventObjectForBean> searchInGeneral) {

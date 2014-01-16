@@ -32,8 +32,7 @@ public class EventObject extends BaseDTObject {
 	private String origin = null;
 	private String category = null;
 	private Map<String, Object> contacts = null;
-	private List<String> attending = null;
-	private Integer attendees = 0;
+
 
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
 
@@ -128,14 +127,10 @@ public CharSequence toDateTimeString() {
 		o.setCreatorName(getCreatorName());
 		o.setCustomData(getCustomData());
 		o.setDescription(getDescription());
-		o.setDomainId(getDomainId());
-		o.setDomainType(getDomainType());
-		o.setEntityId(getEntityId());
 		o.setFromTime(getFromTime());
 		o.setId(getId());
 		o.setLocation(getLocation());
 		o.setSource(getSource());
-		o.setTiming(getTiming());
 		o.setTitle(getTitle());
 		o.setToTime(getToTime());
 		o.setType(getType());
@@ -158,21 +153,7 @@ public CharSequence toDateTimeString() {
 		this.whenWhere = whenWhere;
 	}
 
-	public List<String> getAttending() {
-		return attending;
-	}
 
-	public void setAttending(List<String> attending) {
-		this.attending = attending;
-	}
-
-	public Integer getAttendees() {
-		return attendees;
-	}
-
-	public void setAttendees(Integer attendees) {
-		this.attendees = attendees;
-	}
 	
 	
 }

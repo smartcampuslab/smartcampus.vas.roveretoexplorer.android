@@ -26,21 +26,15 @@ import eu.trentorise.smartcampus.android.common.Utils;
 public class BaseDTStorageHelper {
 
 	public static void setCommonFields(Cursor cursor, BaseDTObject o) {
-		if (cursor != null ) {
-
+		if (cursor != null) {
 			o.setId(cursor.getString(cursor.getColumnIndex("id")));
-			o.setTitle(cursor.getString(cursor.getColumnIndex("title")));
 			o.setDescription(cursor.getString(cursor.getColumnIndex("description")));
-			o.setDomainType(cursor.getString(cursor.getColumnIndex("domainType")));
-			o.setDomainId(cursor.getString(cursor.getColumnIndex("domainId")));
+			o.setTitle(cursor.getString(cursor.getColumnIndex("title")));
 			o.setSource(cursor.getString(cursor.getColumnIndex("source")));
-			o.setType(cursor.getString(cursor.getColumnIndex("type")));
 			o.setCreatorId(cursor.getString(cursor.getColumnIndex("creatorId")));
 			o.setCreatorName(cursor.getString(cursor.getColumnIndex("creatorName")));
-			o.setEntityId(cursor.getLong(cursor.getColumnIndex("entityId")));
-			o.setLocation(new double[] { cursor.getDouble(cursor.getColumnIndex("latitude")),
-					cursor.getDouble(cursor.getColumnIndex("longitude")) });
 
+			// set community data
 			o.setCommunityData(new CommunityData());
 			o.getCommunityData().setAverageRating(cursor.getInt(cursor.getColumnIndex("averageRating")));
 			o.getCommunityData().setFollowing(
@@ -49,8 +43,17 @@ public class BaseDTStorageHelper {
 					Utils.convertJSONToObjects(cursor.getString(cursor.getColumnIndex("ratings")), Rating.class));
 			o.getCommunityData().setRatingsCount(cursor.getInt(cursor.getColumnIndex("ratingsCount")));
 			o.getCommunityData().setFollowsCount(cursor.getInt(cursor.getColumnIndex("followsCount")));
+			o.getCommunityData().setAttendees(cursor.getInt(cursor.getColumnIndex("attendees")));
+			o.getCommunityData().setAttending(
+					Utils.convertJSONToObject(cursor.getString(cursor.getColumnIndex("attending")), List.class));
 			o.getCommunityData().setTags(
 					Utils.convertJSONToObjects(cursor.getString(cursor.getColumnIndex("tags")), String.class));
+
+			o.setType(cursor.getString(cursor.getColumnIndex("type")));
+			o.setLocation(new double[] { cursor.getDouble(cursor.getColumnIndex("latitude")),
+					cursor.getDouble(cursor.getColumnIndex("longitude")) });
+			o.setFromTime(cursor.getLong(cursor.getColumnIndex("fromTime")));
+			o.setToTime(cursor.getLong(cursor.getColumnIndex("toTime")));
 
 			@SuppressWarnings("unchecked")
 			Map<String, Object> map = Utils.convertJSONToObject(cursor.getString(cursor.getColumnIndex("customData")),
@@ -63,31 +66,37 @@ public class BaseDTStorageHelper {
 	public static ContentValues toCommonContent(BaseDTObject bean) {
 		ContentValues values = new ContentValues();
 		values.put("id", bean.getId());
-		values.put("title", bean.getTitle());
 		values.put("description", bean.getDescription());
-		values.put("domainType", bean.getDomainType());
-		values.put("domainId", bean.getDomainId());
-		values.put("type", bean.getType());
+
+		values.put("title", bean.getTitle());
 		values.put("source", bean.getSource());
 		values.put("creatorId", bean.getCreatorId());
 		values.put("creatorName", bean.getCreatorName());
-		values.put("entityId", bean.getEntityId());
+
+		if (bean.getCommunityData() != null) {
+			if (bean.getCommunityData().getTags() != null) {
+				values.put("tags", Utils.convertToJSON(bean.getCommunityData().getTags()));
+			}
+			values.put("notes", bean.getCommunityData().getNotes());
+			values.put("averageRating", bean.getCommunityData().getAverageRating());
+			values.put("ratings", Utils.convertToJSON(bean.getCommunityData().getAverageRating()));
+			values.put("following", Utils.convertToJSON(bean.getCommunityData().getFollowing()));
+			values.put("attending", Utils.convertToJSON(bean.getCommunityData().getAttending()));
+			values.put("attendees", bean.getCommunityData().getAttendees());
+			values.put("ratingsCount", bean.getCommunityData().getRatingsCount());
+			values.put("followsCount", bean.getCommunityData().getFollowsCount());
+
+		}
+
+		values.put("type", bean.getType());
+
 		if (bean.getLocation() != null) {
 			values.put("latitude", bean.getLocation()[0]);
 			values.put("longitude", bean.getLocation()[1]);
 		}
+		values.put("fromTime", bean.getFromTime());
+		values.put("toTime", bean.getToTime());
 
-		if (bean.getCommunityData() != null) {
-			values.put("averageRating", bean.getCommunityData().getAverageRating());
-			values.put("following", Utils.convertToJSON(bean.getCommunityData().getFollowing()));
-			values.put("ratings", Utils.convertToJSON(bean.getCommunityData().getAverageRating()));
-			
-			values.put("ratingsCount", bean.getCommunityData().getRatingsCount());
-			values.put("followsCount", bean.getCommunityData().getFollowsCount());
-			if (bean.getCommunityData().getTags() != null) {
-				values.put("tags", Utils.convertToJSON(bean.getCommunityData().getTags()));
-			}
-		}
 		if (bean.getCustomData() != null && !bean.getCustomData().isEmpty()) {
 			values.put("customData", Utils.convertToJSON(bean.getCustomData()));
 		}
@@ -96,24 +105,27 @@ public class BaseDTStorageHelper {
 
 	public static Map<String, String> getCommonColumnDefinitions() {
 		Map<String, String> defs = new HashMap<String, String>();
-		defs.put("title", "TEXT");
-		defs.put("averageRating", "TEXT");
 		defs.put("description", "TEXT");
-		defs.put("domainType", "TEXT");
-		defs.put("domainId", "TEXT");
-		defs.put("type", "TEXT");
+		defs.put("title", "TEXT");
 		defs.put("source", "TEXT");
 		defs.put("creatorId", "TEXT");
 		defs.put("creatorName", "TEXT");
-		defs.put("latitude", "DOUBLE");
-		defs.put("longitude", "DOUBLE");
-		defs.put("entityId", "STRING");
 		defs.put("tags", "TEXT");
-		defs.put("following", "TEXT");
-		defs.put("customData", "TEXT");
+		defs.put("notes", "TEXT");
+		defs.put("averageRating", "TEXT");
 		defs.put("ratings", "TEXT");
+		defs.put("following", "TEXT");
+		defs.put("attending", "TEXT");
+		defs.put("attendees", "INTEGER");
 		defs.put("ratingsCount", "INTEGER");
 		defs.put("followsCount", "INTEGER");
+		defs.put("type", "TEXT");
+		defs.put("latitude", "DOUBLE");
+		defs.put("longitude", "DOUBLE");
+		defs.put("fromTime", "DOUBLE");
+		defs.put("toTime", "DOUBLE");
+		defs.put("customData", "TEXT");
+
 		return defs;
 	}
 

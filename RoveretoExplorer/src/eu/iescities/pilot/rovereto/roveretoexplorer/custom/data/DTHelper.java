@@ -85,7 +85,7 @@ public class DTHelper {
 	/**
 	 * 
 	 */
-	private static final String SERVICE_TRENTINOFAMIGLIA = "trentinofamiglia";
+	private static final String SERVICE_ESPLORAROVERETO = "esplorarovereto";
 	public static final int SYNC_REQUIRED = 2;
 	public static final int SYNC_NOT_REQUIRED = 0;
 	public static final int SYNC_REQUIRED_FIRST_TIME = 3;
@@ -790,7 +790,7 @@ public class DTHelper {
 			ProtocolException, SecurityException, DataException, RemoteException, StorageConfigurationException,
 			AACException, java.lang.SecurityException, eu.trentorise.smartcampus.network.RemoteException {
 		String string = RemoteConnector
-				.postJSON(getAppUrl(), SERVICE_TRENTINOFAMIGLIA + "/social/review/" + object.getId(),
+				.postJSON(getAppUrl(), SERVICE_ESPLORAROVERETO + "/social/review/" + object.getId(),
 						JsonUtils.toJSON(review), getAuthToken());
 		synchronize();
 
@@ -799,7 +799,7 @@ public class DTHelper {
 
 	public static List<Review> loadReviews(String id) throws java.lang.SecurityException,
 			eu.trentorise.smartcampus.network.RemoteException {
-		String string = RemoteConnector.getJSON(getAppUrl(), SERVICE_TRENTINOFAMIGLIA + "/social/readReviews/" + id,
+		String string = RemoteConnector.getJSON(getAppUrl(), SERVICE_ESPLORAROVERETO + "/social/readReviews/" + id,
 				getAuthToken());
 		return JsonUtils.toObject(string, ReviewObject.class).getReviews();
 	}

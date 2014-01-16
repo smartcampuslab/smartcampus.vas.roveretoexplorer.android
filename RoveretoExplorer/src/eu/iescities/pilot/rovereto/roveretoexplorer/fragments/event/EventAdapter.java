@@ -115,7 +115,7 @@ public class EventAdapter extends BaseExpandableListAdapter {
 		//Log.i("EVENT", "image: " + e.event.getCustomData().get("event_img").toString() + "!!");
 
 		eventPlaceHolder.title.setText(eventPlaceHolder.event.getTitle());
-		eventPlaceHolder.attendees.setText(eventPlaceHolder.event.getAttendees().toString());
+		eventPlaceHolder.attendees.setText(eventPlaceHolder.event.getCommunityData().getAttendees().toString());
 
 		String place =  (String) eventPlaceHolder.event.getCustomData().get("where_name");
 		eventPlaceHolder.location.setText(place);

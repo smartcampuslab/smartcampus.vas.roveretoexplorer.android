@@ -26,14 +26,10 @@ public class BaseDTObject extends BasicObject {
 	private static final long serialVersionUID = 3589900794339644582L;
 
 	// common fields
-	private String domainType;
-	private String domainId;
 	private String description = null;
 	private String title = null;
 	private String source = null; // service 'source' of the object
 
-	// semantic entity
-	private Long entityId = null;
 
 	// only for user-created objects
 	private String creatorId = null;
@@ -44,13 +40,11 @@ public class BaseDTObject extends BasicObject {
 
 	// categorization
 	private String type = null;
-	private boolean typeUserDefined = false; // category set by users
 
 	// common data
 	private double[] location;
 	private Long fromTime;
 	private Long toTime;
-	private String timing;
 
 	private Map<String, Object> customData;
 
@@ -125,21 +119,7 @@ public class BaseDTObject extends BasicObject {
 		this.toTime = toTime;
 	}
 
-	public String getDomainType() {
-		return domainType;
-	}
 
-	public void setDomainType(String domainType) {
-		this.domainType = domainType;
-	}
-
-	public String getDomainId() {
-		return domainId;
-	}
-
-	public void setDomainId(String domainId) {
-		this.domainId = domainId;
-	}
 
 	public String getCreatorId() {
 		return creatorId;
@@ -157,21 +137,6 @@ public class BaseDTObject extends BasicObject {
 		this.creatorName = creatorName;
 	}
 
-	public Long getEntityId() {
-		return entityId;
-	}
-
-	public void setEntityId(Long entityId) {
-		this.entityId = entityId;
-	}
-
-	public boolean isTypeUserDefined() {
-		return typeUserDefined;
-	}
-
-	public void setTypeUserDefined(boolean typeUserDefined) {
-		this.typeUserDefined = typeUserDefined;
-	}
 
 	public CommunityData getCommunityData() {
 		return communityData;
@@ -192,18 +157,5 @@ public class BaseDTObject extends BasicObject {
 	public void setCustomData(Map<String, Object> customData) {
 		this.customData = customData;
 	}
-
-	public String getTiming() {
-		return timing;
-	}
-
-	public String getTimingFormatted() {
-		if (this.timing != null)
-			return timing.replace("\\n", "\n").replace("\t", "").replaceAll("(\n)+", "\n");
-		return null;
-	}
-
-	public void setTiming(String timing) {
-		this.timing = timing;
-	}
+	
 }

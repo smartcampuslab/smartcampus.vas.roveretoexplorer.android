@@ -235,13 +235,7 @@ public class EventDetailsFragment extends Fragment {
 				((LinearLayout) this.getView().findViewById(R.id.eventdetails)).removeView(tv);
 			}
 
-			// timing
-			tv = (TextView) this.getView().findViewById(R.id.event_timing);
-			if (getEvent().getTiming() != null && mEvent.getTiming().length() > 0) {
-				tv.setText(mEvent.getTimingFormatted());
-			} else {
-				((LinearLayout) this.getView().findViewById(R.id.eventdetails)).removeView(tv);
-			}
+
 
 			// description, optional
 			tv = (TextView) this.getView().findViewById(R.id.event_details_descr);

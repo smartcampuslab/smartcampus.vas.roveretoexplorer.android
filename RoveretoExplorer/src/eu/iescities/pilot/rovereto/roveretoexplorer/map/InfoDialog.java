@@ -69,9 +69,7 @@ public class InfoDialog extends DialogFragment {
 				msgText += "</p><br/>";
 			}
 			msgText += "<p>" + event.dateTimeString() + "</p>";
-			if (event.getTiming() != null) {
-				msgText += "<p>" + event.getTiming() + "</p>";
-			}
+
 
 				String place = Utils.getEventShortAddress(event);
 				if (place != null) {

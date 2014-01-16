@@ -76,33 +76,17 @@ public class DTSyncStorage extends SyncStorageWithPaging {
 			@Override
 			public SyncData fetchSyncData(Long version, SyncData in) throws SecurityException, ConnectionException,
 					ProtocolException {
-				//TO DO
-				
-//				try {
-//					eu.trentorise.smartcampus.territoryservice.model.SyncData data = tService.synchronize(version,
-//							include, exclude, token);
-//					SyncData data = super.synchronize(ctx, mProtocolCarrier, authToken, appToken, host, service);
-//					SyncData dbData = new SyncData();
-//					dbData.setVersion(data.getVersion());
-//
-//					dbData.setInclude(data.getInclude());
-//
-//					dbData.setExclude(data.getExclude());
-//
-//					dbData.setDeleted(convertToBasicObjectDeleted(data.getDeleted()));
-//
-//					dbData.setUpdated(convertToBasicObject(data.getUpdated()));
-//
-//					((DTSyncStorageHelper) helper).removeOld();
-//					return dbData;
-//				} catch (TerritoryServiceException e) {
-//					throw new ProtocolException(e.getMessage());
-//				}
-				return in;
+					SyncData dbData = remoteSynchronize();
+					((DTSyncStorageHelper) helper).removeOld();
+					return dbData;
 
 			}
 		});
 
+	}
+
+	protected SyncData remoteSynchronize() {
+		return null;
 	}
 
 	protected Map<String, List<String>> convertToBasicObjectDeleted(Map<String, List<String>> deleted) {
