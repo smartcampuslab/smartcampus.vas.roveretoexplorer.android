@@ -301,11 +301,11 @@ public class Utils {
 			customData.put("Propabilita dell'evento", "confermato");
 			customData.put("Lingua principale ", "Italiano");
 			customData.put("Abbigliamento consigliato", "sportivo");
-
-			
-			
+	
 			fake_event = new EventObject();
 			fake_event.setAddress(address);
+			double[] loc = {45.890960000000000000,11.040139899999986};
+			fake_event.setLocation(loc);
 			fake_event.setWhenWhere("whenwhere a");
 			fake_event.setFromTime(Utils.toDateTimeLong(DATE_FORMAT, "17/1/2014"));
 			fake_event.setToTime(Utils.toDateTimeLong(DATE_FORMAT, "17/1/2014"));
@@ -343,6 +343,8 @@ public class Utils {
 			
 			fake_event = new EventObject();
 			fake_event.setAddress(address);
+			fake_event.setAddress(address);
+
 			fake_event.setWhenWhere("whenwhere a");
 			fake_event.setFromTime(Utils.toDateTimeLong(DATE_FORMAT, "27/12/2013"));
 			fake_event.setToTime(Utils.toDateTimeLong(DATE_FORMAT, "28/12/2013"));
@@ -379,6 +381,8 @@ public class Utils {
 			
 			fake_event = new EventObject();
 			fake_event.setAddress(address);
+			fake_event.setAddress(address);
+
 			fake_event.setWhenWhere("whenwhere a");
 			fake_event.setFromTime(Utils.toDateTimeLong(DATE_FORMAT, "27/12/2013"));
 			fake_event.setToTime(Utils.toDateTimeLong(DATE_FORMAT, "28/12/2013"));
@@ -415,6 +419,8 @@ public class Utils {
 			
 			fake_event = new EventObject();
 			fake_event.setAddress(address);
+			fake_event.setAddress(address);
+
 			fake_event.setWhenWhere("whenwhere a");
 			fake_event.setFromTime(Utils.toDateTimeLong(DATE_FORMAT, "27/12/2013"));
 			fake_event.setToTime(Utils.toDateTimeLong(DATE_FORMAT, "28/12/2013"));
@@ -451,6 +457,8 @@ public class Utils {
 			
 			fake_event = new EventObject();
 			fake_event.setAddress(address);
+			fake_event.setAddress(address);
+
 			fake_event.setWhenWhere("whenwhere a");
 			fake_event.setFromTime(Utils.toDateTimeLong(DATE_FORMAT, "27/12/2013"));
 			fake_event.setToTime(Utils.toDateTimeLong(DATE_FORMAT, "29/12/2013"));
