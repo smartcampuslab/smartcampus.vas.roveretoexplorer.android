@@ -15,21 +15,12 @@
  ******************************************************************************/
 package eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.SortedMap;
-import java.util.TreeMap;
-import android.app.Activity;
+
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
@@ -37,44 +28,22 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.ViewPager;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.AdapterView;
 import android.widget.ExpandableListView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.ViewSwitcher;
-import android.widget.AbsListView.OnScrollListener;
 import android.widget.ExpandableListView.OnChildClickListener;
-import eu.trentorise.smartcampus.android.common.SCAsyncTask.SCAsyncTaskProcessor;
-import eu.trentorise.smartcampus.android.common.listing.AbstractLstingFragment;
-import eu.trentorise.smartcampus.android.common.tagging.SemanticSuggestion;
-import eu.trentorise.smartcampus.android.common.tagging.TaggingDialog.TagProvider;
-import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
-import eu.trentorise.smartcampus.territoryservice.model.BaseDTObject;
-import eu.trentorise.smartcampus.territoryservice.model.CommunityData;
+import android.widget.ListView;
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.AbstractAsyncTaskProcessor;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.CategoryHelper;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.CategoryHelper.CategoryDescriptor;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.Utils;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.ViewHelper;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.BaseDTObject;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.DTHelper;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.EventObjectForBean;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.LocalEventObject;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.EventObject;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.search.SearchFragment;
-import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.search.WhenForSearch;
-import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.search.WhereForSearch;
 import eu.iescities.pilot.rovereto.roveretoexplorer.map.MapFragment;
 import eu.iescities.pilot.rovereto.roveretoexplorer.map.MapManager;
 
@@ -108,8 +77,8 @@ public class EventsListingFragment extends Fragment  {
 
 	//For the expandable list view 
 	List<String> dateGroupList;
-	private List<LocalEventObject> listEvents = new ArrayList<LocalEventObject>();
-	Map<String, List<LocalEventObject>> eventCollection;
+	private List<EventObject> listEvents = new ArrayList<EventObject>();
+	Map<String, List<EventObject>> eventCollection;
 	ExpandableListView expListView;
 
 
@@ -121,7 +90,7 @@ public class EventsListingFragment extends Fragment  {
 		super.onResume();
 		if (!idEvent.equals("")) {
 			// get info of the event
-			LocalEventObject event = DTHelper.findEventById(idEvent);
+			EventObject event = DTHelper.findEventById(idEvent);
 			// notify
 			eventsAdapter.notifyDataSetChanged();
 			idEvent = "";
@@ -199,7 +168,7 @@ public class EventsListingFragment extends Fragment  {
 
                 Log.i("LISTENER", "I should toast 1 ");
 
-            	final LocalEventObject selected = (LocalEventObject) eventsAdapter.getChild(
+            	final EventObject selected = (EventObject) eventsAdapter.getChild(
                         groupPosition, childPosition);
                 
                 
@@ -262,7 +231,7 @@ public class EventsListingFragment extends Fragment  {
 	}
 
 	private void setStoreEventId(View v, int position) {
-		final LocalEventObject event = ((EventPlaceholder) v.getTag()).event;
+		final EventObject event = ((EventPlaceholder) v.getTag()).event;
 		idEvent = event.getId();
 		indexAdapter = position;
 	}
@@ -278,8 +247,8 @@ public class EventsListingFragment extends Fragment  {
 
 	
 	
-	private static class EventComparator implements Comparator<LocalEventObject> {
-		public int compare(LocalEventObject c1, LocalEventObject c2) {
+	private static class EventComparator implements Comparator<EventObject> {
+		public int compare(EventObject c1, EventObject c2) {
 			if (c1.getFromTime() == c2.getFromTime())
 				return 0;
 			if (c1.getFromTime() < c2.getFromTime())

@@ -18,7 +18,7 @@ package eu.iescities.pilot.rovereto.roveretoexplorer.map;
 
 import java.util.Collection;
 
-import eu.trentorise.smartcampus.territoryservice.model.BaseDTObject;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.BaseDTObject;
 
 /**
  * @author raman

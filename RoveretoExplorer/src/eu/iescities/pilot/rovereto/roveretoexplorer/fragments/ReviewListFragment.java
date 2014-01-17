@@ -25,13 +25,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import eu.trentorise.smartcampus.android.common.SCAsyncTask;
-import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
-import eu.trentorise.smartcampus.territoryservice.model.BaseDTObject;
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.AbstractAsyncTaskProcessor;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.BaseDTObject;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.DTHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.Review;
+import eu.trentorise.smartcampus.android.common.SCAsyncTask;
+import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 
 /**
  * @author raman

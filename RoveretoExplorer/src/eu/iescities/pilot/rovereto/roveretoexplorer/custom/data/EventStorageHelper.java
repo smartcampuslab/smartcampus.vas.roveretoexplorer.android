@@ -20,9 +20,8 @@ import java.util.Map;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import eu.trentorise.smartcampus.storage.db.BeanStorageHelper;
-import eu.trentorise.smartcampus.territoryservice.model.EventObject;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.EventObjectForBean;
+import eu.trentorise.smartcampus.storage.db.BeanStorageHelper;
 
 public class EventStorageHelper implements BeanStorageHelper<EventObjectForBean> {
 

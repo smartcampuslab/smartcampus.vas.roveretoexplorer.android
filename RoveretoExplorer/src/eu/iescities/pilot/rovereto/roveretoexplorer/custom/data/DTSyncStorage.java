@@ -39,10 +39,7 @@ import eu.trentorise.smartcampus.storage.sync.SyncData;
 import eu.trentorise.smartcampus.storage.sync.SyncStorageHelper;
 import eu.trentorise.smartcampus.storage.sync.SyncStorageHelperWithPaging;
 import eu.trentorise.smartcampus.storage.sync.SyncStorageWithPaging;
-import eu.trentorise.smartcampus.territoryservice.TerritoryService;
-import eu.trentorise.smartcampus.territoryservice.TerritoryServiceException;
-import eu.trentorise.smartcampus.territoryservice.model.EventObject;
-import eu.trentorise.smartcampus.territoryservice.model.POIObject;
+
 
 /**
  * Specific storage that deletes the old data upon sync complete
@@ -72,33 +69,37 @@ public class DTSyncStorage extends SyncStorageWithPaging {
 		return new DTSyncStorageHelper(context, dbName, dbVersion, config);
 	}
 
-	public void synchronize(final String token, final TerritoryService tService) throws StorageConfigurationException,
+	public void synchronize(final String token) throws StorageConfigurationException,
 			DataException, SecurityException, ConnectionException, ProtocolException {
 		synchronize(new ISynchronizer() {
 
 			@Override
 			public SyncData fetchSyncData(Long version, SyncData in) throws SecurityException, ConnectionException,
 					ProtocolException {
-				try {
-					eu.trentorise.smartcampus.territoryservice.model.SyncData data = tService.synchronize(version,
-							include, exclude, token);
+				//TO DO
+				
+//				try {
+//					eu.trentorise.smartcampus.territoryservice.model.SyncData data = tService.synchronize(version,
+//							include, exclude, token);
+//					SyncData data = super.synchronize(ctx, mProtocolCarrier, authToken, appToken, host, service);
+//					SyncData dbData = new SyncData();
+//					dbData.setVersion(data.getVersion());
+//
+//					dbData.setInclude(data.getInclude());
+//
+//					dbData.setExclude(data.getExclude());
+//
+//					dbData.setDeleted(convertToBasicObjectDeleted(data.getDeleted()));
+//
+//					dbData.setUpdated(convertToBasicObject(data.getUpdated()));
+//
+//					((DTSyncStorageHelper) helper).removeOld();
+//					return dbData;
+//				} catch (TerritoryServiceException e) {
+//					throw new ProtocolException(e.getMessage());
+//				}
+				return in;
 
-					SyncData dbData = new SyncData();
-					dbData.setVersion(data.getVersion());
-
-					dbData.setInclude(data.getInclude());
-
-					dbData.setExclude(data.getExclude());
-
-					dbData.setDeleted(convertToBasicObjectDeleted(data.getDeleted()));
-
-					dbData.setUpdated(convertToBasicObject(data.getUpdated()));
-
-					((DTSyncStorageHelper) helper).removeOld();
-					return dbData;
-				} catch (TerritoryServiceException e) {
-					throw new ProtocolException(e.getMessage());
-				}
 			}
 		});
 

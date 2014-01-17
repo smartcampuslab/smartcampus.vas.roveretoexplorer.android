@@ -38,20 +38,20 @@ import android.widget.Toast;
 
 import com.google.android.maps.GeoPoint;
 
-import eu.trentorise.smartcampus.territoryservice.model.BaseDTObject;
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.CategoryHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.CommentsHandler;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.Utils;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.BaseDTObject;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.DTHelper;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.LocalEventObject;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.EventObject;
 import eu.iescities.pilot.rovereto.roveretoexplorer.map.MapManager;
 
 public class EventDetailsFragment extends Fragment {
 	public static final String ARG_EVENT_ID = "event_id";
 
 
-	private LocalEventObject mEvent = null;
+	private EventObject mEvent = null;
 	private String mEventId;
 
 	private Fragment mFragment = this;
@@ -81,7 +81,7 @@ public class EventDetailsFragment extends Fragment {
 //		return mPoi;
 //	}
 
-	private LocalEventObject getEvent() {
+	private EventObject getEvent() {
 		if (mEventId == null) {
 			mEventId = getArguments().getString(ARG_EVENT_ID);
 		}
@@ -245,7 +245,7 @@ public class EventDetailsFragment extends Fragment {
 
 			// description, optional
 			tv = (TextView) this.getView().findViewById(R.id.event_details_descr);
-			String customDesc = mEvent.customDescription(getActivity());
+			String customDesc = mEvent.getDescription();
 			if (customDesc != null && customDesc.length() > 0) {
 				tv.setText(Html.fromHtml(customDesc));
 			} else {
@@ -267,7 +267,12 @@ public class EventDetailsFragment extends Fragment {
 			tv = (TextView) this.getView().findViewById(R.id.event_details_tags);
 			if (mEvent.getCommunityData() != null && mEvent.getCommunityData().getTags() != null
 					&& mEvent.getCommunityData().getTags().size() > 0) {
-				tv.setText(Utils.conceptToSimpleString(mEvent.getCommunityData().getTags()));
+				String tags = new String();
+				for (String s : mEvent.getCommunityData().getTags())
+				{
+					tags += s + "\t";
+				}
+				tv.setText(tags);
 			} else {
 				((LinearLayout) this.getView().findViewById(R.id.eventdetails)).removeView(tv);
 			}
@@ -291,7 +296,7 @@ public class EventDetailsFragment extends Fragment {
 	}
 
 
-	private boolean isCertified(LocalEventObject event) {
+	private boolean isCertified(EventObject event) {
 		if (event.getCustomData() != null && (Boolean) event.getCustomData().get("certified"))
 			return true;
 		else
@@ -353,7 +358,7 @@ public class EventDetailsFragment extends Fragment {
 		super.onResume();
 	}
 
-	private void bringMeThere(LocalEventObject eventObject) {
+	private void bringMeThere(EventObject eventObject) {
 		AlertDialog.Builder builder;
 
 		builder = new AlertDialog.Builder(getActivity());

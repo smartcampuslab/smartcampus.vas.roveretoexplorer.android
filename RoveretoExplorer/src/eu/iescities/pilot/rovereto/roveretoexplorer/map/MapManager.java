@@ -49,10 +49,8 @@ import com.google.android.maps.MapView;
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.CategoryHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.DTParamsHelper;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.BaseDTObject;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.DTHelper;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.LocalEventObject;
-import eu.trentorise.smartcampus.territoryservice.model.BaseDTObject;
-import eu.trentorise.smartcampus.territoryservice.model.POIObject;
 
 public class MapManager {
 
@@ -299,9 +297,9 @@ public class MapManager {
 			LatLng latLng = getLatLngFromBasicObject(item);
 
 			int markerIcon = CategoryHelper.getMapIconByType(item.getType());
-			if (CategoryHelper.FAMILY_CATEGORY_POI.equals(item.getType())
-					|| (CategoryHelper.FAMILY_CATEGORY_EVENT.equals(item.getType())))
-				markerIcon = objectCertified(item);
+//			if (CategoryHelper.FAMILY_CATEGORY_POI.equals(item.getType())
+//					|| (CategoryHelper.FAMILY_CATEGORY_EVENT.equals(item.getType())))
+//				markerIcon = objectCertified(item);
 
 			MarkerOptions marker = new MarkerOptions().position(latLng)
 					.icon(BitmapDescriptorFactory.fromResource(markerIcon)).title(x + ":" + y);
@@ -387,23 +385,23 @@ public class MapManager {
 
 	}
 
-	private static int objectCertified(BaseDTObject o) {
-		if (o.getCustomData() != null) {
-			if ((o instanceof LocalEventObject) && ((Boolean) o.getCustomData().get("certified"))) {
-				/* se ceretificato e evento */
-				return R.drawable.ic_marker_e_family_certified;
-			}
-
-			/* se certificato e poi */
-			String status = (String) o.getCustomData().get("status");
-			if ((o instanceof POIObject)
-					&& (("Certificato finale").equals(status) || ("Certificato base").equals(status))) {
-				return R.drawable.ic_marker_p_family_certified;
-			}
-		}
-
-		return CategoryHelper.getMapIconByType(o.getType());
-	}
+//	private static int objectCertified(BaseDTObject o) {
+//		if (o.getCustomData() != null) {
+//			if ((o instanceof LocalEventObject) && ((Boolean) o.getCustomData().get("certified"))) {
+//				/* se ceretificato e evento */
+//				return R.drawable.ic_marker_e_family_certified;
+//			}
+//
+//			/* se certificato e poi */
+//			String status = (String) o.getCustomData().get("status");
+//			if ((o instanceof POIObject)
+//					&& (("Certificato finale").equals(status) || ("Certificato base").equals(status))) {
+//				return R.drawable.ic_marker_p_family_certified;
+//			}
+//		}
+//
+//		return CategoryHelper.getMapIconByType(o.getType());
+//	}
 
 	private static Bitmap writeOnMarker(Context mContext, int drawableId, String text) {
 		float scale = mContext.getResources().getDisplayMetrics().density;
