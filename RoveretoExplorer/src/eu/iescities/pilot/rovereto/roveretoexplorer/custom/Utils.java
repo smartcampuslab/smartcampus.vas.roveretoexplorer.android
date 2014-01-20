@@ -333,6 +333,7 @@ public class Utils {
 		customData.put("Lingua principale ", "Italiano");
 		customData.put("Abbigliamento consigliato", "sportivo");
 		customData.put("Abbigliamento consigliato", "sportivo");
+		fake_event.setCustomData(customData);
 		
 		fake_events.add(fake_event);
 
