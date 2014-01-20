@@ -18,7 +18,7 @@
         android:textColor="@android:color/white" />
 
     <ImageView
-        android:id="@+id/event_info_action_edit"
+        android:id="@+id/event_info_action"
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:layout_alignParentRight="true"
@@ -26,8 +26,6 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:contentDescription="@string/empty"
-        android:scaleType="fitXY"
-        android:src="@drawable/ic_action_edit_white"
-        android:visibility="visible" />
+        android:scaleType="fitXY" />
 
 </RelativeLayout>

@@ -5,6 +5,8 @@ import java.util.ArrayList;
 public class EventInfoParent
 {
 	private String name;
+	private String text;
+
 	private String checkedtype;
 	
 	private boolean checked;
@@ -19,6 +21,17 @@ public class EventInfoParent
 	{
 		this.name = name;
 	}
+	
+	public String getText1()
+	{
+		return text;
+	}
+	
+	public void setText1(String text1)
+	{
+		this.text = text1;
+	}
+	
 	
 	public String getCheckedType()
 	{

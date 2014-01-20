@@ -1,9 +1,16 @@
 package eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info;
 
-public class EventInfoChild
-{
+public class EventInfoChild{
+	
 	private String name;
-	private String text1;
+	
+	private String text;
+	
+	private int type; 
+	
+	private int leftIconId = -1;
+	
+	private int[] rightIconIds = null;
 	
 	
 	public String getName()
@@ -16,15 +23,46 @@ public class EventInfoChild
 		this.name = name;
 	}
 	
-	public String getText1()
+	public String getText()
 	{
-		return text1;
+		return text;
 	}
 	
-	public void setText1(String text1)
+	public void setText(String text)
 	{
-		this.text1 = text1;
+		this.text = text;
 	}
 	
+	
+	public int getType()
+	{
+		return type;
+	}
+	
+	public void setType(int type)
+	{
+		this.type= type;
+	}
+	
+	
+	public int getLeftIconId()
+	{
+		return leftIconId;
+	}
+	
+	public void setLeftIconId(int leftIconId)
+	{
+		this.leftIconId = leftIconId;
+	}
+	
+	public int[] getRightIconIds()
+	{
+		return rightIconIds;
+	}
+	
+	public void setRightIconIds(int[] rightIconIds)
+	{
+		this.rightIconIds = rightIconIds;
+	}
 	
 }
