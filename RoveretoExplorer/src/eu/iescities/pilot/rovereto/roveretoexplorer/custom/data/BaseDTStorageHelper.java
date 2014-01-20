@@ -37,12 +37,9 @@ public class BaseDTStorageHelper {
 			// set community data
 			o.setCommunityData(new CommunityData());
 			o.getCommunityData().setAverageRating(cursor.getInt(cursor.getColumnIndex("averageRating")));
-			o.getCommunityData().setFollowing(
-					Utils.convertJSONToObject(cursor.getString(cursor.getColumnIndex("following")), Map.class));
 			o.getCommunityData().setRatings(
 					Utils.convertJSONToObjects(cursor.getString(cursor.getColumnIndex("ratings")), Rating.class));
 			o.getCommunityData().setRatingsCount(cursor.getInt(cursor.getColumnIndex("ratingsCount")));
-			o.getCommunityData().setFollowsCount(cursor.getInt(cursor.getColumnIndex("followsCount")));
 			o.getCommunityData().setAttendees(cursor.getInt(cursor.getColumnIndex("attendees")));
 			o.getCommunityData().setAttending(
 					Utils.convertJSONToObject(cursor.getString(cursor.getColumnIndex("attending")), List.class));
@@ -80,11 +77,9 @@ public class BaseDTStorageHelper {
 			values.put("notes", bean.getCommunityData().getNotes());
 			values.put("averageRating", bean.getCommunityData().getAverageRating());
 			values.put("ratings", Utils.convertToJSON(bean.getCommunityData().getAverageRating()));
-			values.put("following", Utils.convertToJSON(bean.getCommunityData().getFollowing()));
 			values.put("attending", Utils.convertToJSON(bean.getCommunityData().getAttending()));
 			values.put("attendees", bean.getCommunityData().getAttendees());
 			values.put("ratingsCount", bean.getCommunityData().getRatingsCount());
-			values.put("followsCount", bean.getCommunityData().getFollowsCount());
 
 		}
 
@@ -114,11 +109,9 @@ public class BaseDTStorageHelper {
 		defs.put("notes", "TEXT");
 		defs.put("averageRating", "TEXT");
 		defs.put("ratings", "TEXT");
-		defs.put("following", "TEXT");
 		defs.put("attending", "TEXT");
 		defs.put("attendees", "INTEGER");
 		defs.put("ratingsCount", "INTEGER");
-		defs.put("followsCount", "INTEGER");
 		defs.put("type", "TEXT");
 		defs.put("latitude", "DOUBLE");
 		defs.put("longitude", "DOUBLE");

@@ -29,11 +29,9 @@ public class CommunityData implements Serializable {
 	private String notes;
 	private int averageRating;
 	private List<Rating> ratings;
-	private Map<String, String> following = new HashMap<String, String>();
 	private List<String> attending = null;
 	private Integer attendees = 0;
 	private int ratingsCount;
-	private int followsCount;
 
 	public CommunityData() {
 		super();
@@ -71,13 +69,6 @@ public class CommunityData implements Serializable {
 		this.ratings = ratings;
 	}
 
-	public Map<String, String> getFollowing() {
-		return following;
-	}
-
-	public void setFollowing(Map<String, String> following) {
-		this.following = following;
-	}
 
 	public int getRatingsCount() {
 		return ratingsCount;
@@ -87,13 +78,6 @@ public class CommunityData implements Serializable {
 		this.ratingsCount = ratingsCount;
 	}
 
-	public int getFollowsCount() {
-		return followsCount;
-	}
-
-	public void setFollowsCount(int followsCount) {
-		this.followsCount = followsCount;
-	}
 
 	public List<String> getAttending() {
 		return attending;
