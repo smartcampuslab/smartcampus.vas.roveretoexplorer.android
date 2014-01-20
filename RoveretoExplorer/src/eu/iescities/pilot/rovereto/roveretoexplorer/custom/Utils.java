@@ -6,6 +6,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -93,40 +94,40 @@ public class Utils {
 	 */
 
 
-//	public static boolean isCreatedByUser(BaseDTObject obj) {
-//		if (obj.getDomainType() == null || userPoiObject.equals(obj.getDomainType())) {
-//			return true;
-//		} else
-//			return false;
-//	}
+	//	public static boolean isCreatedByUser(BaseDTObject obj) {
+	//		if (obj.getDomainType() == null || userPoiObject.equals(obj.getDomainType())) {
+	//			return true;
+	//		} else
+	//			return false;
+	//	}
 
-//	public static Collection<LocalEventObject> convertToLocalEventFromBean(
-//			Collection<EventObjectForBean> searchInGeneral) {
-//		Collection<LocalEventObject> returnCollection = new ArrayList<LocalEventObject>();
-//		for (EventObjectForBean event : searchInGeneral) {
-//			LocalEventObject localEvent = DTHelper.findEventById(event.getObjectForBean().getId());
-//			if (localEvent != null) {
-//
-//				returnCollection.add(localEvent);
-//			}
-//		}
-//		return returnCollection;
-//	}
+	//	public static Collection<LocalEventObject> convertToLocalEventFromBean(
+	//			Collection<EventObjectForBean> searchInGeneral) {
+	//		Collection<LocalEventObject> returnCollection = new ArrayList<LocalEventObject>();
+	//		for (EventObjectForBean event : searchInGeneral) {
+	//			LocalEventObject localEvent = DTHelper.findEventById(event.getObjectForBean().getId());
+	//			if (localEvent != null) {
+	//
+	//				returnCollection.add(localEvent);
+	//			}
+	//		}
+	//		return returnCollection;
+	//	}
 
-//	public static Collection<LocalEventObject> convertToLocalEvent(Collection<EventObject> events) {
-//		Collection<EventObjectForBean> beanEvents = new ArrayList<EventObjectForBean>();
-//		Collection<LocalEventObject> returnEvents = new ArrayList<LocalEventObject>();
-//
-//		for (EventObject event : events) {
-//			EventObjectForBean newObject = new EventObjectForBean();
-//			LocalEventObject localObject = new LocalEventObject();
-//			newObject.setObjectForBean(event);
-//			localObject.setEventFromEventObjectForBean(newObject);
-//			returnEvents.add(localObject);
-//		}
-//
-//		return returnEvents;
-//	}
+	//	public static Collection<LocalEventObject> convertToLocalEvent(Collection<EventObject> events) {
+	//		Collection<EventObjectForBean> beanEvents = new ArrayList<EventObjectForBean>();
+	//		Collection<LocalEventObject> returnEvents = new ArrayList<LocalEventObject>();
+	//
+	//		for (EventObject event : events) {
+	//			EventObjectForBean newObject = new EventObjectForBean();
+	//			LocalEventObject localObject = new LocalEventObject();
+	//			newObject.setObjectForBean(event);
+	//			localObject.setEventFromEventObjectForBean(newObject);
+	//			returnEvents.add(localObject);
+	//		}
+	//
+	//		return returnEvents;
+	//	}
 
 	public static List<LatLng> decodePolyline(String encoded) {
 		List<LatLng> polyline = new ArrayList<LatLng>();
@@ -265,7 +266,7 @@ public class Utils {
 
 			eventCollection.put(event_date, childList);
 		}
-		
+
 		return eventCollection;
 	}
 
@@ -284,197 +285,210 @@ public class Utils {
 		EventObject fake_event;  new EventObject(); 
 		Map<String, Object> customData =  new HashMap<String, Object>(); 
 		Map<String,Object> contacts = new HashMap<String, Object>();
-		CommunityData communityData = new CommunityData(); 
+		CommunityData communityData = new CommunityData();
 
-			String[] telefono = new String[]{"0461235678", "3345678910"};
-			String[] email = new String[]{"xxx@comune.rovereto.it"};
-			String[] tags = new String[]{"sport", "calcio"};
-			String site_url = new String("http://www.comune.rovereto.tn.it/Vivi-la-citta/Sport/Calendario-eventi-sportivi/Roverunning-training6");
-			String img_url = new String("http://www.comune.rovereto.tn.it/var/rovereto/storage/images/vivi-la-citta/sport/calendario-eventi-sportivi/roverunning-training6/124779-4-ita-IT/Roverunning-training_medium.jpg");
-			Address address = new Address();
-			address.setCitta("Rovereto");
-			address.setLuogo("Palasport Marchetti");
-			address.setVia("Corso Bettini, 52");
+		//create fake event object 1 
+		fake_event = new EventObject("Roverunning training", 3, 5, customData);
+
+
+		//set basic info
+		fake_event.setWhenWhere("tutti i martedì con inizio il 14 - 21 - 28 gennaio, 4 - 11 - 18 - 25 febbraio, 4 - 11 - 18 - 25 marzo, ritrovo nella piazza del Mart ore 18.00");
+		fake_event.setOrigin("Assessorato allo Sport, US Quercia, NW Arcobaleno");  //the source
+		fake_event.setFromTime(Utils.toDateTimeLong(DATE_FORMAT, "17/1/2014"));
+		fake_event.setToTime(Utils.toDateTimeLong(DATE_FORMAT, "17/1/2014"));
+		fake_event.setId("1");
+		fake_event.setDescription("percorrerovereto. Vuoi imparare a correre? A camminare? Vuoi migliorare la tua attività di runner? Cerchi un'opportunità percorrere/camminare in compagnia? " +
+				"La partecipazione è gratuita e aperta a tutti i principianti, amatori e agonisti");
+		String site_url = new String("http://www.comune.rovereto.tn.it/Vivi-la-citta/Sport/Calendario-eventi-sportivi/Roverunning-training6");
+		String img_url = new String("http://www.comune.rovereto.tn.it/var/rovereto/storage/images/vivi-la-citta/sport/calendario-eventi-sportivi/roverunning-training6/124779-4-ita-IT/Roverunning-training_medium.jpg");
+		fake_event.setImage(img_url);
+		fake_event.setUrl(site_url);
+		
+		//set location and address
+		double[] loc = {45.890960000000000000,11.040139899999986};
+		fake_event.setLocation(loc);
+		Address address = new Address();
+		address.setCitta("Rovereto");
+		address.setLuogo("Palasport Marchetti");
+		address.setVia("Corso Bettini, 52");
+		fake_event.setAddress(address);
+
+		//set contacts
+		String[] telefono = new String[]{"0461235678", "3345678910"};
+		String[] email = new String[]{"xxx@comune.rovereto.it"};
+		contacts.put("telefono", telefono);
+		contacts.put("email", email);
+		fake_event.setContacts(contacts);
 	
+		//set community data
+		List<String> tags  = Arrays.asList(new String[]{"sport", "calcio"});
+		communityData.setTags(tags);
+		fake_event.setCommunityData(communityData);
+		
 
-			customData.put("Tipo di luogo", "aperto");
-			customData.put("Accesso", "libero");
-			customData.put("Propabilita dell'evento", "confermato");
-			customData.put("Lingua principale ", "Italiano");
-			customData.put("Abbigliamento consigliato", "sportivo");
-	
-			fake_event = new EventObject();
-			fake_event.setAddress(address);
-			double[] loc = {45.890960000000000000,11.040139899999986};
-			fake_event.setLocation(loc);
-			fake_event.setWhenWhere("whenwhere a");
-			fake_event.setFromTime(Utils.toDateTimeLong(DATE_FORMAT, "17/1/2014"));
-			fake_event.setToTime(Utils.toDateTimeLong(DATE_FORMAT, "17/1/2014"));
+		//set custom data
+		customData.put("Tipo di luogo", "aperto");
+		customData.put("Accesso", "libero");
+		customData.put("Propabilita dell'evento", "confermato");
+		customData.put("Lingua principale ", "Italiano");
+		customData.put("Abbigliamento consigliato", "sportivo");
+		customData.put("Abbigliamento consigliato", "sportivo");
+		
+		fake_events.add(fake_event);
 
-			fake_event.setId("1");
-			fake_event.setDescription("description 1");
-			fake_event.setTitle("24esimo TORNEO DI NATALE Pallavolo Femminile");
-			fake_event.setCustomData(customData);
-			fake_event.setImage(img_url);
-			fake_event.setUrl(site_url);
-			contacts.put("telefono", telefono);
-			contacts.put("email", email);
-			contacts.put("tags", tags);
-			fake_event.setContacts(contacts);
-			fake_events.add(fake_event);
+		//create fake event object 2 
+		telefono = new String[]{"0464565880"};
+		email = new String[]{"xxx@comune.rovereto.it"};
+		tags =  Arrays.asList(new String[]{"sport", "pallavolo"});
+		site_url = new String("http://www.comune.rovereto.tn.it/Vivi-la-citta/Sport/Calendario-eventi-sportivi/24-TORNEO-DI-NATALE-Pallavolo-Femminile");
+		img_url = new String("http://www.comune.rovereto.tn.it/var/rovereto/storage/images/vivi-la-citta/sport/calendario-eventi-sportivi/24-torneo-di-natale-pallavolo-femminile/123469-1-ita-IT/24-TORNEO-DI-NATALE-Pallavolo-Femminile_medium.jpg");
 
-			//create fake event object 2 
-			
-			 telefono = new String[]{"0464565880"};
-			 email = new String[]{"xxx@comune.rovereto.it"};
-			 tags = new String[]{"sport", "pallavolo"};
-			 site_url = new String("http://www.comune.rovereto.tn.it/Vivi-la-citta/Sport/Calendario-eventi-sportivi/24-TORNEO-DI-NATALE-Pallavolo-Femminile");
-			 img_url = new String("http://www.comune.rovereto.tn.it/var/rovereto/storage/images/vivi-la-citta/sport/calendario-eventi-sportivi/24-torneo-di-natale-pallavolo-femminile/123469-1-ita-IT/24-TORNEO-DI-NATALE-Pallavolo-Femminile_medium.jpg");
-			 address = new Address();
-			address.setCitta("Rovereto");
-			address.setLuogo("Palasport e palestre");
-			address.setVia("Corso Bettini, 52");
-	
-			customData.put("Tipo di luogo", "chiuso");
-			customData.put("Accesso", "a pagamento");
-			customData.put("Propabilita dell'evento", "confermato");
-			customData.put("Lingua principale ", "Italiano");
-			customData.put("Abbigliamento consigliato", "sportivo");
+		
+		address = new Address();
+		address.setCitta("Rovereto");
+		address.setLuogo("Palasport e palestre");
+		address.setVia("Corso Bettini, 52");
 
-			
-			
-			fake_event = new EventObject();
-			fake_event.setAddress(address);
-			fake_event.setAddress(address);
+		customData.put("Tipo di luogo", "chiuso");
+		customData.put("Accesso", "a pagamento");
+		customData.put("Propabilita dell'evento", "confermato");
+		customData.put("Lingua principale ", "Italiano");
+		customData.put("Abbigliamento consigliato", "sportivo");
 
-			fake_event.setWhenWhere("whenwhere a");
-			fake_event.setFromTime(Utils.toDateTimeLong(DATE_FORMAT, "27/12/2013"));
-			fake_event.setToTime(Utils.toDateTimeLong(DATE_FORMAT, "28/12/2013"));
-			fake_event.setId("2");
-			fake_event.setDescription("description 1");
-			fake_event.setTitle("Titolo 2");
-			fake_event.setCustomData(customData);
-			fake_event.setImage(img_url);
-			fake_event.setUrl(site_url);
-			contacts.put("telefono", telefono);
-			contacts.put("email", email);
-			contacts.put("tags", tags);
-			fake_event.setContacts(contacts);
-			fake_events.add(fake_event);
 
-			//create fake event object 3 
-			 telefono = new String[]{"0464565880"};
-			 email = new String[]{"xxx@comune.rovereto.it"};
-			 tags = new String[]{"sport", "pallavolo"};
-			 site_url = new String("http://www.comune.rovereto.tn.it/Vivi-la-citta/Sport/Calendario-eventi-sportivi/24-TORNEO-DI-NATALE-Pallavolo-Femminile");
-			 img_url = new String("http://www.comune.rovereto.tn.it/var/rovereto/storage/images/vivi-la-citta/sport/calendario-eventi-sportivi/24-torneo-di-natale-pallavolo-femminile/123469-1-ita-IT/24-TORNEO-DI-NATALE-Pallavolo-Femminile_medium.jpg");
-			 address = new Address();
-			address.setCitta("Rovereto");
-			address.setLuogo("Palasport e palestre");
-			address.setVia("Corso Bettini, 52");
-	
-			customData.put("Tipo di luogo", "chiuso");
-			customData.put("Accesso", "a pagamento");
-			customData.put("Propabilita dell'evento", "confermato");
-			customData.put("Lingua principale ", "Italiano");
-			customData.put("Abbigliamento consigliato", "sportivo");
 
-			
-			
-			fake_event = new EventObject();
-			fake_event.setAddress(address);
-			fake_event.setAddress(address);
+		fake_event = new EventObject();
+		fake_event.setAddress(address);
+		fake_event.setAddress(address);
 
-			fake_event.setWhenWhere("whenwhere a");
-			fake_event.setFromTime(Utils.toDateTimeLong(DATE_FORMAT, "27/12/2013"));
-			fake_event.setToTime(Utils.toDateTimeLong(DATE_FORMAT, "28/12/2013"));
-			fake_event.setId("3");
-			fake_event.setDescription("description 1");
-			fake_event.setTitle("titolo 3");
-			fake_event.setCustomData(customData);
-			fake_event.setImage(img_url);
-			fake_event.setUrl(site_url);
-			contacts.put("telefono", telefono);
-			contacts.put("email", email);
-			contacts.put("tags", tags);
-			fake_event.setContacts(contacts);
-			fake_events.add(fake_event);
+		fake_event.setWhenWhere("whenwhere a");
+		fake_event.setFromTime(Utils.toDateTimeLong(DATE_FORMAT, "27/12/2013"));
+		fake_event.setToTime(Utils.toDateTimeLong(DATE_FORMAT, "28/12/2013"));
+		fake_event.setId("2");
+		fake_event.setDescription("description 1");
+		fake_event.setTitle("24esimo TORNEO DI NATALE Pallavolo Femminile");
+		fake_event.setCustomData(customData);
+		fake_event.setImage(img_url);
+		fake_event.setUrl(site_url);
+		contacts.put("telefono", telefono);
+		contacts.put("email", email);
+		contacts.put("tags", tags);
+		fake_event.setContacts(contacts);
+		fake_events.add(fake_event);
 
-			//create fake event object 4 
-			 telefono = new String[]{"0464565880"};
-			 email = new String[]{"xxx@comune.rovereto.it"};
-			 tags = new String[]{"sport", "pallavolo"};
-			 site_url = new String("http://www.comune.rovereto.tn.it/Vivi-la-citta/Sport/Calendario-eventi-sportivi/24-TORNEO-DI-NATALE-Pallavolo-Femminile");
-			 img_url = new String("http://www.comune.rovereto.tn.it/var/rovereto/storage/images/vivi-la-citta/sport/calendario-eventi-sportivi/24-torneo-di-natale-pallavolo-femminile/123469-1-ita-IT/24-TORNEO-DI-NATALE-Pallavolo-Femminile_medium.jpg");
-			 address = new Address();
-			address.setCitta("Rovereto");
-			address.setLuogo("Palasport e palestre");
-			address.setVia("Corso Bettini, 52");
-	
-			customData.put("Tipo di luogo", "chiuso");
-			customData.put("Accesso", "a pagamento");
-			customData.put("Propabilita dell'evento", "confermato");
-			customData.put("Lingua principale ", "Italiano");
-			customData.put("Abbigliamento consigliato", "sportivo");
+		//create fake event object 3 
+		telefono = new String[]{"0464565880"};
+		email = new String[]{"xxx@comune.rovereto.it"};
+		tags =  Arrays.asList(new String[]{"sport", "pallavolo"});
+		site_url = new String("http://www.comune.rovereto.tn.it/Vivi-la-citta/Sport/Calendario-eventi-sportivi/24-TORNEO-DI-NATALE-Pallavolo-Femminile");
+		img_url = new String("http://www.comune.rovereto.tn.it/var/rovereto/storage/images/vivi-la-citta/sport/calendario-eventi-sportivi/24-torneo-di-natale-pallavolo-femminile/123469-1-ita-IT/24-TORNEO-DI-NATALE-Pallavolo-Femminile_medium.jpg");
+		address = new Address();
+		address.setCitta("Rovereto");
+		address.setLuogo("Palasport e palestre");
+		address.setVia("Corso Bettini, 52");
 
-			
-			
-			fake_event = new EventObject();
-			fake_event.setAddress(address);
-			fake_event.setAddress(address);
+		customData.put("Tipo di luogo", "chiuso");
+		customData.put("Accesso", "a pagamento");
+		customData.put("Propabilita dell'evento", "confermato");
+		customData.put("Lingua principale ", "Italiano");
+		customData.put("Abbigliamento consigliato", "sportivo");
 
-			fake_event.setWhenWhere("whenwhere a");
-			fake_event.setFromTime(Utils.toDateTimeLong(DATE_FORMAT, "27/12/2013"));
-			fake_event.setToTime(Utils.toDateTimeLong(DATE_FORMAT, "28/12/2013"));
-			fake_event.setId("4");
-			fake_event.setDescription("description 1");
-			fake_event.setTitle("saggio di danza");
-			fake_event.setCustomData(customData);
-			fake_event.setImage(img_url);
-			fake_event.setUrl(site_url);
-			contacts.put("telefono", telefono);
-			contacts.put("email", email);
-			contacts.put("tags", tags);
-			fake_event.setContacts(contacts);
-			fake_events.add(fake_event);
 
-//			//create fake event object 5
-			 telefono = new String[]{"0464565880"};
-			 email = new String[]{"xxx@comune.rovereto.it"};
-			 tags = new String[]{"sport", "pallavolo"};
-			 site_url = new String("http://www.comune.rovereto.tn.it/Vivi-la-citta/Sport/Calendario-eventi-sportivi/24-TORNEO-DI-NATALE-Pallavolo-Femminile");
-			 img_url = new String("http://www.comune.rovereto.tn.it/var/rovereto/storage/images/vivi-la-citta/sport/calendario-eventi-sportivi/24-torneo-di-natale-pallavolo-femminile/123469-1-ita-IT/24-TORNEO-DI-NATALE-Pallavolo-Femminile_medium.jpg");
-			 address = new Address();
-			address.setCitta("Rovereto");
-			address.setLuogo("Palasport e palestre");
-			address.setVia("Corso Bettini, 52");
-	
-			customData.put("Tipo di luogo", "chiuso");
-			customData.put("Accesso", "a pagamento");
-			customData.put("Propabilita dell'evento", "confermato");
-			customData.put("Lingua principale ", "Italiano");
-			customData.put("Abbigliamento consigliato", "sportivo");
 
-			
-			
-			fake_event = new EventObject();
-			fake_event.setAddress(address);
-			fake_event.setAddress(address);
+		fake_event = new EventObject();
+		fake_event.setAddress(address);
+		fake_event.setAddress(address);
 
-			fake_event.setWhenWhere("whenwhere a");
-			fake_event.setFromTime(Utils.toDateTimeLong(DATE_FORMAT, "27/12/2013"));
-			fake_event.setToTime(Utils.toDateTimeLong(DATE_FORMAT, "29/12/2013"));
-			fake_event.setId("5");
-			fake_event.setDescription("description 1");
-			fake_event.setTitle("Hockey su ghiaccio");
-			fake_event.setCustomData(customData);
-			fake_event.setImage(img_url);
-			fake_event.setUrl(site_url);
-			contacts.put("telefono", telefono);
-			contacts.put("email", email);
-			contacts.put("tags", tags);
-			fake_event.setContacts(contacts);
-			fake_events.add(fake_event);
+		fake_event.setWhenWhere("whenwhere a");
+		fake_event.setFromTime(Utils.toDateTimeLong(DATE_FORMAT, "27/12/2013"));
+		fake_event.setToTime(Utils.toDateTimeLong(DATE_FORMAT, "28/12/2013"));
+		fake_event.setId("3");
+		fake_event.setDescription("description 1");
+		fake_event.setTitle("titolo 3");
+		fake_event.setCustomData(customData);
+		fake_event.setImage(img_url);
+		fake_event.setUrl(site_url);
+		contacts.put("telefono", telefono);
+		contacts.put("email", email);
+		contacts.put("tags", tags);
+		fake_event.setContacts(contacts);
+		fake_events.add(fake_event);
+
+		//create fake event object 4 
+		telefono = new String[]{"0464565880"};
+		email = new String[]{"xxx@comune.rovereto.it"};
+		tags =  Arrays.asList(new String[]{"sport", "pallavolo"});
+		site_url = new String("http://www.comune.rovereto.tn.it/Vivi-la-citta/Sport/Calendario-eventi-sportivi/24-TORNEO-DI-NATALE-Pallavolo-Femminile");
+		img_url = new String("http://www.comune.rovereto.tn.it/var/rovereto/storage/images/vivi-la-citta/sport/calendario-eventi-sportivi/24-torneo-di-natale-pallavolo-femminile/123469-1-ita-IT/24-TORNEO-DI-NATALE-Pallavolo-Femminile_medium.jpg");
+		address = new Address();
+		address.setCitta("Rovereto");
+		address.setLuogo("Palasport e palestre");
+		address.setVia("Corso Bettini, 52");
+
+		customData.put("Tipo di luogo", "chiuso");
+		customData.put("Accesso", "a pagamento");
+		customData.put("Propabilita dell'evento", "confermato");
+		customData.put("Lingua principale ", "Italiano");
+		customData.put("Abbigliamento consigliato", "sportivo");
+
+
+
+		fake_event = new EventObject();
+		fake_event.setAddress(address);
+		fake_event.setAddress(address);
+
+		fake_event.setWhenWhere("whenwhere a");
+		fake_event.setFromTime(Utils.toDateTimeLong(DATE_FORMAT, "27/12/2013"));
+		fake_event.setToTime(Utils.toDateTimeLong(DATE_FORMAT, "28/12/2013"));
+		fake_event.setId("4");
+		fake_event.setDescription("description 1");
+		fake_event.setTitle("saggio di danza");
+		fake_event.setCustomData(customData);
+		fake_event.setImage(img_url);
+		fake_event.setUrl(site_url);
+		contacts.put("telefono", telefono);
+		contacts.put("email", email);
+		contacts.put("tags", tags);
+		fake_event.setContacts(contacts);
+		fake_events.add(fake_event);
+
+		//			//create fake event object 5
+		telefono = new String[]{"0464565880"};
+		email = new String[]{"xxx@comune.rovereto.it"};
+		tags =  Arrays.asList(new String[]{"sport", "pallavolo"});
+		site_url = new String("http://www.comune.rovereto.tn.it/Vivi-la-citta/Sport/Calendario-eventi-sportivi/24-TORNEO-DI-NATALE-Pallavolo-Femminile");
+		img_url = new String("http://www.comune.rovereto.tn.it/var/rovereto/storage/images/vivi-la-citta/sport/calendario-eventi-sportivi/24-torneo-di-natale-pallavolo-femminile/123469-1-ita-IT/24-TORNEO-DI-NATALE-Pallavolo-Femminile_medium.jpg");
+		address = new Address();
+		address.setCitta("Rovereto");
+		address.setLuogo("Palasport e palestre");
+		address.setVia("Corso Bettini, 52");
+
+		customData.put("Tipo di luogo", "chiuso");
+		customData.put("Accesso", "a pagamento");
+		customData.put("Propabilita dell'evento", "confermato");
+		customData.put("Lingua principale ", "Italiano");
+		customData.put("Abbigliamento consigliato", "sportivo");
+
+
+
+		fake_event = new EventObject();
+		fake_event.setAddress(address);
+		fake_event.setAddress(address);
+
+		fake_event.setWhenWhere("whenwhere a");
+		fake_event.setFromTime(Utils.toDateTimeLong(DATE_FORMAT, "27/12/2013"));
+		fake_event.setToTime(Utils.toDateTimeLong(DATE_FORMAT, "29/12/2013"));
+		fake_event.setId("5");
+		fake_event.setDescription("description 1");
+		fake_event.setTitle("Hockey su ghiaccio");
+		fake_event.setCustomData(customData);
+		fake_event.setImage(img_url);
+		fake_event.setUrl(site_url);
+		contacts.put("telefono", telefono);
+		contacts.put("email", email);
+		contacts.put("tags", tags);
+		fake_event.setContacts(contacts);
+		fake_events.add(fake_event);
 
 		return fake_events;  
 	}	

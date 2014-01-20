@@ -28,7 +28,7 @@ public class EventObject extends BaseDTObject {
 	private Address address = null;
 
 	private String image = null;
-	private String url = null;
+	private String siteUrl = null;
 	private String origin = null;
 	private String category = null;
 	private Map<String, Object> contacts = null;
@@ -82,11 +82,11 @@ public class EventObject extends BaseDTObject {
 	}
 
 	public String getUrl() {
-		return url;
+		return siteUrl;
 	}
 
 	public void setUrl(String url) {
-		this.url = url;
+		this.siteUrl = url;
 	}
 
 	public Integer getRating() {
@@ -108,6 +108,15 @@ public class EventObject extends BaseDTObject {
 		this.setCustomData(customData);
 		this.getCommunityData().setAverageRating(averageRating);
 		
+	}
+	
+	public EventObject(String title, int averageRating, int participants, Map<String, Object> customData) {
+		//TO DO
+		super();
+		this.setTitle(title);
+		this.getCommunityData().setAverageRating(averageRating);
+		this.getCommunityData().setAttendees(participants);
+		this.setCustomData(customData);
 	}
 
     public CharSequence dateTimeString() {
