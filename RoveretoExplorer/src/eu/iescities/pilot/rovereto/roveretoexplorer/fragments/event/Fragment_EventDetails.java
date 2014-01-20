@@ -2,6 +2,14 @@ package eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event;
 
 import java.util.List;
 
+import eu.iescities.pilot.rovereto.roveretoexplorer.R;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.CommentsHandler;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.PagerSlidingTabStrip;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.Utils;
+import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.community.Fragment_EvDetail_Community;
+import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.dasapere.Fragment_EvDetail_DaSapere;
+import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info.Fragment_EvDetail_Info;
+import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.multimedia.Fragment_EvDetail_Multimedia;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -14,10 +22,6 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
-import eu.iescities.pilot.rovereto.roveretoexplorer.R;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.CommentsHandler;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.PagerSlidingTabStrip;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.Utils;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.EventObject;
 
 public class Fragment_EventDetails extends Fragment {

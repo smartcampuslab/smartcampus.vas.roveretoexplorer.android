@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/rl_first_row"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="8dp" >
+
+        <ImageView
+            android:id="@+id/event_placeholder_photo"
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:layout_weight="0.35"
+            android:contentDescription="@string/empty"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_placeholder_photo" />
+
+        <RelativeLayout
+            android:id="@+id/rl_second_col"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:layout_toRightOf="@+id/event_placeholder_photo"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:id="@+id/pencil_icon"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignTop="@+id/event_placeholder_title"
+                android:layout_toRightOf="@+id/event_placeholder_title"
+                android:contentDescription="@string/empty"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_action_place" />
+
+            <TextView
+                android:id="@+id/event_placeholder_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:paddingLeft="4dp"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_second_row"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rl_first_row"
+        android:layout_marginTop="18dp"
+        android:orientation="horizontal" >
+
+        <ImageView
+            android:id="@+id/pencil_icon"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignTop="@+id/event_placeholder_category"
+            android:layout_toRightOf="@+id/event_placeholder_category"
+            android:contentDescription="@string/empty"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_action_place" />
+
+        <TextView
+            android:id="@+id/event_placeholder_category"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:paddingLeft="4dp"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+    </RelativeLayout>
+
+    <ExpandableListView
+        android:id="@+id/event_details_info"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent" >
+    </ExpandableListView>
+
+</LinearLayout>

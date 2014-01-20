@@ -296,6 +296,7 @@ public class Utils {
 			address.setLuogo("Palasport Marchetti");
 			address.setVia("Corso Bettini, 52");
 	
+
 			customData.put("Tipo di luogo", "aperto");
 			customData.put("Accesso", "libero");
 			customData.put("Propabilita dell'evento", "confermato");
@@ -309,6 +310,7 @@ public class Utils {
 			fake_event.setWhenWhere("whenwhere a");
 			fake_event.setFromTime(Utils.toDateTimeLong(DATE_FORMAT, "17/1/2014"));
 			fake_event.setToTime(Utils.toDateTimeLong(DATE_FORMAT, "17/1/2014"));
+
 			fake_event.setId("1");
 			fake_event.setDescription("description 1");
 			fake_event.setTitle("24esimo TORNEO DI NATALE Pallavolo Femminile");
