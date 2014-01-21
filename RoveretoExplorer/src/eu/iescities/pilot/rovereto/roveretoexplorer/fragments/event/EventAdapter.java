@@ -39,6 +39,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.Address;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.EventObject;
 
 
@@ -61,12 +62,12 @@ public class EventAdapter extends BaseExpandableListAdapter {
 	private View row = null;
 	private String rightTextViewTitle = null;
 	private ArrayList<String> loadedImgs  = new ArrayList();
-    private int count=0;
-	
+	private int count=0;
+
 	private EventPlaceholder eventPlaceHolderForImg = null;
 
 
-	
+
 
 	public EventAdapter(Context context, int layoutResourceId, List<String> events_dates,
 			Map<String, List<EventObject>> eventCollections) {
@@ -107,9 +108,9 @@ public class EventAdapter extends BaseExpandableListAdapter {
 
 		//****  EVENT INFO   ***** //
 		Log.i("EVENT", "EVENT ID: " + eventPlaceHolder.event.getId() + "!!");
-		//Log.i("EVENT", "title: " + e.event.getTitle() + "!!");
-		//Log.i("EVENT", "rating: " + e.event.getCommunityData().getAverageRating() + "!!");
-		//Log.i("EVENT", "participants: " + e.event.getAttendees() + "!!");
+		Log.i("EVENT", "title: " + eventPlaceHolder.event.getTitle() + "!!");
+		Log.i("EVENT", "rating: " + eventPlaceHolder.event.getCommunityData().getAverageRating() + "!!");
+		Log.i("EVENT", "participants: " + eventPlaceHolder.event.getCommunityData().getAttendees() + "!!");
 		//Log.i("EVENT", "location: " + (String) e.event.getCustomData().get("where_name") + "!!");
 		//Log.i("EVENT", "when: " + e.event.eventDatesString() + "!!");
 		//Log.i("EVENT", "image: " + e.event.getCustomData().get("event_img").toString() + "!!");
@@ -117,17 +118,23 @@ public class EventAdapter extends BaseExpandableListAdapter {
 		eventPlaceHolder.title.setText(eventPlaceHolder.event.getTitle());
 		eventPlaceHolder.attendees.setText(eventPlaceHolder.event.getCommunityData().getAttendees().toString());
 
-		String place =  (String) eventPlaceHolder.event.getCustomData().get("where_name");
-		eventPlaceHolder.location.setText(place);
+		
+		Address address = eventPlaceHolder.event.getAddress();
+		if (address != null){
 
-
+			String place = (address.getLuogo() !=null)? (String) address.getLuogo() : null;
+			eventPlaceHolder.location.setText(place);
+		}
+		
+		
+		
 		//load the event image
 		Log.i("IMAGE", "START ADAPTER, EVENT TITLE: " + eventPlaceHolder.event.getTitle() + "!!");
 		//Log.i("IMAGE", "loaded: " + loadedImgs.toString() + "!!");
 
 
 		if ((loadedImgs==null) || (!loadedImgs.contains(eventPlaceHolder.event.getTitle()))){
-			if (eventPlaceHolder.event.getCustomData().containsKey("event_img")){
+			if (eventPlaceHolder.event.getImage()!=null){
 				RetreiveImageTask getImgTask  = new RetreiveImageTask();
 				getImgTask.execute(eventPlaceHolder);
 			}
@@ -138,7 +145,9 @@ public class EventAdapter extends BaseExpandableListAdapter {
 		Calendar previousEvent = null;
 		Calendar currentEvent = Calendar.getInstance();
 		;
-		currentEvent.setTimeInMillis(event.getFromTime());
+
+		if (event.getFromTime()!=null)
+			currentEvent.setTimeInMillis(event.getFromTime());
 
 
 		return row;
@@ -236,17 +245,12 @@ public class EventAdapter extends BaseExpandableListAdapter {
 			eventPlaceHolderForImg = ev;
 
 			try {
-				//if (ev.event.getCustomData().containsKey("event_img")){
-					img_url = (URL) ev.event.getCustomData().get("event_img");
-					//Log.i("IMAGE", "image for event " + ev.event.getTitle());
-					Log.i("IMAGE", "image url: " + img_url.toString() + "!!");
-					if (img_url!=null){ 
-						bmp = BitmapFactory.decodeStream(img_url.openConnection().getInputStream());
-					}
-				//}
-				/*else{
-					bmp = BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_placeholder_photo);
-				} */
+				img_url = new URL(ev.event.getImage());
+				//Log.i("IMAGE", "image for event " + ev.event.getTitle());
+				Log.i("IMAGE", "image url: " + img_url.toString() + "!!");
+				if (img_url!=null){ 
+					bmp = BitmapFactory.decodeStream(img_url.openConnection().getInputStream());
+				}
 			} catch (IOException e1) {
 				e1.printStackTrace();
 				return null;
@@ -264,8 +268,8 @@ public class EventAdapter extends BaseExpandableListAdapter {
 			if (bmp!=null){
 				Log.i("IMAGE", "set image icon " + rightTextViewTitle);
 				Log.i("IMAGE", "event place holder title " + eventPlaceHolderForImg.title.getText());
-				
-				
+
+
 				eventPlaceHolderForImg.icon.setImageBitmap(bmp);
 				loadedImgs.add((String)eventPlaceHolderForImg.title.getText());
 				Log.i("IMAGE", "loaded 2: " + loadedImgs.toString() + "!!");

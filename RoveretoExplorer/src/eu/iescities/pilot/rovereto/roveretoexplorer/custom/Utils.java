@@ -31,7 +31,7 @@ import eu.trentorise.smartcampus.android.common.tagging.SemanticSuggestion.TYPE;
 public class Utils {
 	public static final String userPoiObject = "eu.trentorise.smartcampus.dt.model.UserPOIObject";
 	public static final String servicePoiObject = "eu.trentorise.smartcampus.dt.model.ServicePOIObject";
-	private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
+	private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy hh:mm aa");
 
 	private static final DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 	private static final DateFormat extDateFormat = new SimpleDateFormat("EEEEEE dd/MM/yyyy");
@@ -288,21 +288,22 @@ public class Utils {
 		CommunityData communityData = new CommunityData();
 
 		//create fake event object 1 
-		fake_event = new EventObject("Roverunning training", 3, 5, customData);
+		fake_event = new EventObject();
 
-
+	
 		//set basic info
+		fake_event.setTitle("Roverunning training");
 		fake_event.setWhenWhere("tutti i martedì con inizio il 14 - 21 - 28 gennaio, 4 - 11 - 18 - 25 febbraio, 4 - 11 - 18 - 25 marzo, ritrovo nella piazza del Mart ore 18.00");
 		fake_event.setOrigin("Assessorato allo Sport, US Quercia, NW Arcobaleno");  //the source
-		fake_event.setFromTime(Utils.toDateTimeLong(DATE_FORMAT, "17/1/2014"));
-		fake_event.setToTime(Utils.toDateTimeLong(DATE_FORMAT, "17/1/2014"));
+		fake_event.setFromTime(Utils.toDateTimeLong(DATE_FORMAT, "17/1/2014 08:30 PM"));
+		fake_event.setToTime(Utils.toDateTimeLong(DATE_FORMAT, "17/1/2014 10:30 PM"));
 		fake_event.setId("1");
-		fake_event.setDescription("percorrerovereto. Vuoi imparare a correre? A camminare? Vuoi migliorare la tua attività di runner? Cerchi un'opportunità percorrere/camminare in compagnia? " +
+		fake_event.setDescription("percorrerovereto. Vuoi imparare a correre? A camminare? Vuoi migliorare la tua attività di runner? Cerchi un'opportunità per correre/camminare in compagnia? " +
 				"La partecipazione è gratuita e aperta a tutti i principianti, amatori e agonisti");
 		String site_url = new String("http://www.comune.rovereto.tn.it/Vivi-la-citta/Sport/Calendario-eventi-sportivi/Roverunning-training6");
 		String img_url = new String("http://www.comune.rovereto.tn.it/var/rovereto/storage/images/vivi-la-citta/sport/calendario-eventi-sportivi/roverunning-training6/124779-4-ita-IT/Roverunning-training_medium.jpg");
 		fake_event.setImage(img_url);
-		fake_event.setUrl(site_url);
+		fake_event.setWebsiteUrl(site_url);
 		
 		//set location and address
 		double[] loc = {45.890960000000000000,11.040139899999986};
@@ -323,6 +324,8 @@ public class Utils {
 		//set community data
 		List<String> tags  = Arrays.asList(new String[]{"sport", "calcio"});
 		communityData.setTags(tags);
+		communityData.setAttendees(5);
+		communityData.setAverageRating(3);
 		fake_event.setCommunityData(communityData);
 		
 
@@ -370,7 +373,7 @@ public class Utils {
 		fake_event.setTitle("24esimo TORNEO DI NATALE Pallavolo Femminile");
 		fake_event.setCustomData(customData);
 		fake_event.setImage(img_url);
-		fake_event.setUrl(site_url);
+		fake_event.setWebsiteUrl(site_url);
 		contacts.put("telefono", telefono);
 		contacts.put("email", email);
 		contacts.put("tags", tags);
@@ -408,7 +411,7 @@ public class Utils {
 		fake_event.setTitle("titolo 3");
 		fake_event.setCustomData(customData);
 		fake_event.setImage(img_url);
-		fake_event.setUrl(site_url);
+		fake_event.setWebsiteUrl(site_url);
 		contacts.put("telefono", telefono);
 		contacts.put("email", email);
 		contacts.put("tags", tags);
@@ -446,7 +449,7 @@ public class Utils {
 		fake_event.setTitle("saggio di danza");
 		fake_event.setCustomData(customData);
 		fake_event.setImage(img_url);
-		fake_event.setUrl(site_url);
+		fake_event.setWebsiteUrl(site_url);
 		contacts.put("telefono", telefono);
 		contacts.put("email", email);
 		contacts.put("tags", tags);
@@ -484,7 +487,7 @@ public class Utils {
 		fake_event.setTitle("Hockey su ghiaccio");
 		fake_event.setCustomData(customData);
 		fake_event.setImage(img_url);
-		fake_event.setUrl(site_url);
+		fake_event.setWebsiteUrl(site_url);
 		contacts.put("telefono", telefono);
 		contacts.put("email", email);
 		contacts.put("tags", tags);

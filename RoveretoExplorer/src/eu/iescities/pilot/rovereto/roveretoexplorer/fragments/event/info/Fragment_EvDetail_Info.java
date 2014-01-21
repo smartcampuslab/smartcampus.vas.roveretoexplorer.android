@@ -14,12 +14,17 @@ import java.util.Map;
 
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.Utils;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.Address;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.EventObject;
+import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.EventPlaceholder;
+import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.Fragment_EventDetails;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -39,7 +44,7 @@ import android.widget.Toast;
 public class Fragment_EvDetail_Info extends Fragment {
 
 
-	
+
 	protected Context context;
 
 	//For the expandable list view 
@@ -70,6 +75,8 @@ public class Fragment_EvDetail_Info extends Fragment {
 	protected HashMap<Integer, List<Integer>> childType2Images;
 	protected HashMap<Integer, Integer> childType1Images;
 
+
+	private View _lastColored;
 
 
 	public static Fragment_EvDetail_Info newInstance(String event_id) {
@@ -258,7 +265,7 @@ public class Fragment_EvDetail_Info extends Fragment {
 
 		//Creating static data in arraylist
 		ArrayList<EventInfoParent> dummyList = getEventDetailData(mEvent);
-		setGroupChildImages();
+		setGroupImages();
 
 
 		//		attributeGroupList =  createAttributeGroupList();
@@ -279,49 +286,47 @@ public class Fragment_EvDetail_Info extends Fragment {
 
 		expListView.setAdapter(eventDetailInfoAdapter);
 		
+		
+//		expListView
+//         .setOnChildClickListener(new OnChildClickListener() {
+//
+//             @Override
+//             public boolean onChildClick(ExpandableListView parent,
+//                     View v, int groupPosition, int childPosition,
+//                     long id) {
+//
+//            	 if(_lastColored != null)
+//            	    {
+//            	    _lastColored.setBackgroundColor(Color.WHITE);
+//            	    _lastColored.invalidate();
+//            	    }
+//            	    _lastColored = v;
+//            	    
+//                 v.setBackgroundColor(Color.BLUE);
+//
+//
+//            	    return false;
+//
+//                 }
+//         });
 
 	}
 
 
-	private void setGroupChildImages()
+	private void setGroupImages()
 	{
-		
+
 		groupImages= new ArrayList<Integer>();
 		groupImages.add(R.drawable.ic_action_edit_white);
-        groupImages.add(R.drawable.ic_action_edit_white);
-        groupImages.add(R.drawable.ic_action_edit_white);
-        groupImages.add(R.drawable.ic_action_edit_white);
-        groupImages.add(R.drawable.ic_action_labels);
+		groupImages.add(R.drawable.ic_action_edit_white);
+		groupImages.add(R.drawable.ic_action_edit_white);
+		groupImages.add(R.drawable.ic_action_edit_white);
+		groupImages.add(R.drawable.ic_action_new_label);
 
-        childType1Images = new HashMap<Integer, Integer>();
-        childType2Images = new HashMap<Integer, List<Integer>>();
 
-        
-//        List<Integer> where = new ArrayList<Integer>();
-//        where.add(R.drawable.ic_action_place);
-        
-//        List<Integer> when = new ArrayList<Integer>();
-//        when.add(R.drawable.ic_action_time);
-        
-        List<Integer> contacts = new ArrayList<Integer>();
-        contacts.add(R.drawable.ic_action_phone);
-        contacts.add(R.drawable.ic_action_email);
-        contacts.add(R.drawable.ic_action_web_site);
-        
-        List<Integer> tags = new ArrayList<Integer>();
-        tags.add(R.drawable.ic_action_labels_dark);
-        
-        childType1Images.put(groupImages.get(0), R.drawable.ic_action_place);
-        childType1Images.put(groupImages.get(1), R.drawable.ic_action_time);
-        childType1Images.put(groupImages.get(4), R.drawable.ic_action_labels_dark);
-
-        childType2Images.put(groupImages.get(3), contacts);
-       		
-        int imageId = groupImages.get(0);
-		Log.i("GROUPVIEW", "FRAGMENT IMAGE ID: " + imageId);
 	}
-	
-	
+
+
 	private void setAdapter(final ArrayList<EventInfoParent> newParents)
 	{
 		if (newParents == null)
@@ -366,7 +371,6 @@ public class Fragment_EvDetail_Info extends Fragment {
 	private ArrayList<EventInfoParent> getEventDetailData(EventObject event)
 	{
 
-		Log.i("DummyList", "dummylist start");
 
 		// Creating ArrayList of type parent class to store parent class objects
 		ArrayList<EventInfoParent> list = new ArrayList<EventInfoParent>();
@@ -381,32 +385,39 @@ public class Fragment_EvDetail_Info extends Fragment {
 				parent.setText1("Dove");
 				parent.setChildren(new ArrayList<EventInfoChild>());
 
-				String place = event.getCustomData().containsKey("where_name") ? (String) event.getCustomData().get("where_name") : null;
-				String city = event.getCustomData().containsKey("where_city") ? (String) event.getCustomData().get("where_city") : null;
-				String street = event.getCustomData().containsKey("where_street") ? (String) event.getCustomData().get("where_street") : null;
-				if (place != null){
-					// Create Child class object 
-					EventInfoChild child = new EventInfoChild();
-					child.setName("0");
-					child.setText(place);
-					child.setType(0);
-					parent.getChildren().add(child);
-				}
-				if (city != null){
-					// Create Child class object 
-					EventInfoChild child = new EventInfoChild();
-					child.setName("1");
-					child.setText(city);
-					child.setType(0);
-					parent.getChildren().add(child);
-				}
-				if (street != null){
-					// Create Child class object 
-					EventInfoChild child = new EventInfoChild();
-					child.setName("2");
-					child.setText(street);
-					child.setType(0);
-					parent.getChildren().add(child);
+				Address address = event.getAddress();
+				if (address != null){
+
+					String place = (address.getLuogo() !=null)? (String) address.getLuogo() : null;
+
+					String street = (address.getVia() !=null)? (String) address.getVia() : null;
+
+					String city = (address.getCitta() !=null)? (String) address.getCitta() : null;
+
+					if (place != null){
+						// Create Child class object 
+						EventInfoChild child = new EventInfoChild();
+						child.setName("0");
+						child.setText(place);
+						child.setType(0);
+						parent.getChildren().add(child);
+					}
+					if (city != null){
+						// Create Child class object 
+						EventInfoChild child = new EventInfoChild();
+						child.setName("1");
+						child.setText(city);
+						child.setType(0);
+						parent.getChildren().add(child);
+					}
+					if (street != null){
+						// Create Child class object 
+						EventInfoChild child = new EventInfoChild();
+						child.setName("2");
+						child.setText(street);
+						child.setType(0);
+						parent.getChildren().add(child);
+					}
 				}
 
 			}
@@ -423,13 +434,17 @@ public class Fragment_EvDetail_Info extends Fragment {
 					child.setType(0);
 					parent.getChildren().add(child);
 				}
-				String duration = event.getCustomData().containsKey("Durata") ? (String) event.getCustomData().get("Durata") : null;
-				if (duration!=null){
-					EventInfoChild child = new EventInfoChild();
-					child.setName("1");
-					child.setText(duration);
-					child.setType(0);
-					parent.getChildren().add(child);
+
+				if (event.getToTime()!= null){
+					//compute duration
+					String duration = "3 ore";
+					if (duration!=null){
+						EventInfoChild child = new EventInfoChild();
+						child.setName("1");
+						child.setText("Durata: " + duration);
+						child.setType(0);
+						parent.getChildren().add(child);
+					}
 				}
 			}
 			else if(i==3){ //field COSA
@@ -453,58 +468,76 @@ public class Fragment_EvDetail_Info extends Fragment {
 
 				//set the Phone item of type 1
 				EventInfoChild telChildLabel = new EventInfoChild();
-				telChildLabel.setName("Telefono");
+				telChildLabel.setName("Phones");
 				telChildLabel.setText("Telefono");
 				telChildLabel.setType(1);
 				telChildLabel.setLeftIconId( R.drawable.ic_action_phone);
-				int[] rightIconIds = new int[]{R.drawable.ic_action_new};
-				telChildLabel.setRightIconIds(rightIconIds);
+				
+				//to be added again when it will be possible to add more numbers
+//				int[] rightIconIds = new int[]{R.drawable.ic_action_new};
+//				telChildLabel.setRightIconIds(rightIconIds);
+				
 				parent.getChildren().add(telChildLabel);
-				
-				
+
+
 				//set the list of phone numbers
-				if (event.getCustomData().containsKey("Telefono")){
-					telList = (String[]) event.getCustomData().get("Telefono"); 
+				if (event.getContacts().containsKey("telefono")){
+					telList = (String[]) event.getContacts().get("telefono"); 
 					for (String tel : telList){
 						EventInfoChild child1 = new EventInfoChild();
 						child1.setName("tel");
 						child1.setText(tel);
 						child1.setType(0);
-						int[] rightIconIds1 = new int[]{R.drawable.ic_action_edit, R.drawable.ic_action_cancel, R.drawable.ic_action_call};
+						
+						//to be added when it will be possible to cancel/edit the single item
+						//int[] rightIconIds1 = new int[]{R.drawable.ic_action_edit, R.drawable.ic_action_cancel, R.drawable.ic_action_call};
+						int[] rightIconIds1 = new int[]{R.drawable.ic_action_call};
+						
 						child1.setRightIconIds(rightIconIds1);
 						parent.getChildren().add(child1);
 					}
 				}
-	
-				//set the Email item of type 2
+
+				//set the Email item of type 1
 				EventInfoChild emailChildLabel = new EventInfoChild();
-				emailChildLabel.setName("Email");
+				emailChildLabel.setName("Emails");
 				emailChildLabel.setText("Email");
 				emailChildLabel.setType(1);
 				emailChildLabel.setLeftIconId( R.drawable.ic_action_email);
-				int[] rightIconIdsEmail = new int[]{R.drawable.ic_action_new_email};
-				emailChildLabel.setRightIconIds(rightIconIdsEmail);
-				parent.getChildren().add(emailChildLabel);
+		
 				
-			
+				//to be added again when it will be possible to add more emails
+//				int[] rightIconIdsEmail = new int[]{R.drawable.ic_action_new_email};
+//				emailChildLabel.setRightIconIds(rightIconIdsEmail);
+				
+				parent.getChildren().add(emailChildLabel);
+
+
 				String[] emails = null;
-				if (event.getCustomData().containsKey("Email")){
-					emails = (String[]) event.getCustomData().get("Email"); 
+				if (event.getContacts().containsKey("email")){
+					emails = (String[]) event.getContacts().get("email"); 
 					for (String email : emails){
 						EventInfoChild child = new EventInfoChild();
 						child.setName("email");
 						child.setText(email);
 						child.setType(0);
-						int[] rightIconIds2 = new int[]{R.drawable.ic_action_edit, R.drawable.ic_action_cancel, R.drawable.ic_action_email};
+
+						//to be added when it will be possible to cancel/edit the single item
+						//int[] rightIconIds2 = new int[]{R.drawable.ic_action_edit, R.drawable.ic_action_cancel, R.drawable.ic_action_email};
+						int[] rightIconIds2 = new int[]{R.drawable.ic_compose_email};
 						child.setRightIconIds(rightIconIds2);
 						parent.getChildren().add(child);						
 					}
 				}
-				
+
 				//set the Web Site item of type 0
 				EventInfoChild siteChildLabel = new EventInfoChild();
 				siteChildLabel.setName("Site");
-				siteChildLabel.setText("Web Site");
+				if (event.getWebsiteUrl()!=null){
+					siteChildLabel.setText("<a href=\"" + event.getWebsiteUrl() + "\">Website</a>");
+				}
+				else
+					siteChildLabel.setText("Web Site");
 				siteChildLabel.setType(0);
 				siteChildLabel.setLeftIconId( R.drawable.ic_action_web_site);
 				parent.getChildren().add(siteChildLabel);
@@ -512,28 +545,37 @@ public class Fragment_EvDetail_Info extends Fragment {
 				//set Facebook item of type 0
 				EventInfoChild fbChildLabel = new EventInfoChild();
 				fbChildLabel.setName("FB");
-				fbChildLabel.setText("Facebook");
+				if (event.getFacebookUrl()!=null){
+					siteChildLabel.setText("<a href=\"" + event.getFacebookUrl() + "\">Facebook</a>");
+				}
+				else
+					siteChildLabel.setText("Facebook");
 				fbChildLabel.setType(0);
-				fbChildLabel.setLeftIconId( R.drawable.ic_action_web_site); //to substitute with the right icon
+				fbChildLabel.setLeftIconId( R.drawable.ic_facebook); //to substitute with the right icon
 				parent.getChildren().add(fbChildLabel);
 
 				//set Twitter item of type 0
 				EventInfoChild twitterChildLabel = new EventInfoChild();
 				twitterChildLabel.setName("Twitter");
-				twitterChildLabel.setText("Twitter");
+				if (event.getTwitterUrl()!=null){
+					siteChildLabel.setText("<a href=\"" + event.getTwitterUrl() + "\">Twitter</a>");
+				}
+				else
+					siteChildLabel.setText("Twitter");
+
 				twitterChildLabel.setType(0);
-				twitterChildLabel.setLeftIconId( R.drawable.ic_action_web_site); //to substitute with the right icon
+				twitterChildLabel.setLeftIconId( R.drawable.ic_twitter); //to substitute with the right icon
 				parent.getChildren().add(twitterChildLabel);
 
-				
+
 			}
 			else if(i==5){ //field TAGS
 				parent.setName("" + i);
 				parent.setText1("Tags");
 				parent.setChildren(new ArrayList<EventInfoChild>());
-				String[] tags = null;
-				if (event.getCustomData().containsKey("Tags")){
-					tags = (String[]) event.getCustomData().get("Tags"); 
+				List<String> tags = null;
+				if (event.getCommunityData().getTags()!=null){
+					tags = event.getCommunityData().getTags(); 
 					for (String tag : tags){
 						EventInfoChild child = new EventInfoChild();
 						child.setName("tag");

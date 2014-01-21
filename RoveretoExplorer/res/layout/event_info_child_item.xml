@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:gravity="center_vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
     android:paddingRight="10dp" >
 
-  
     <ImageView
         android:id="@+id/event_info_attribute_value_icon"
         android:layout_width="wrap_content"
@@ -16,35 +14,40 @@
 
     <TextView
         android:id="@+id/event_info_attribute_values"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/event_info_action1"
+        android:gravity="center_vertical"
         android:layout_toRightOf="@+id/event_info_attribute_value_icon"
-        android:gravity="center_vertical" />
+        android:layout_toLeftOf="@+id/event_info_action1"
+        android:minHeight="50dp" />
 
     <ImageView
         android:id="@+id/event_info_action1"
-        android:layout_width="30dp"
+        android:layout_width="wrap_content"
         android:layout_height="30dp"
         android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:layout_gravity="right"
+        android:layout_centerVertical="true"
         android:contentDescription="@string/empty"
-        android:scaleType="fitXY" />
+        android:scaleType="centerInside" />
 
-    <ImageView
+    <!--
+ the 2 image views will be added when it will possible to cancel/edit the single item
+    
+       <ImageView
         android:id="@+id/event_info_action2"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_alignParentTop="true" 
-        android:contentDescription="@string/empty"
-        android:layout_toLeftOf="@+id/event_info_action1" />
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/event_info_action1"
+        android:contentDescription="@string/empty" />
 
     <ImageView
         android:id="@+id/event_info_action3"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@+id/event_info_action2"/>
-    
+        android:layout_toLeftOf="@+id/event_info_action2" />    
+    -->
 
 </RelativeLayout>

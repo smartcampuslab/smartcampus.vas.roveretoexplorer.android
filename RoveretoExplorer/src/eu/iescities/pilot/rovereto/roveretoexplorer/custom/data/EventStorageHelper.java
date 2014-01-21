@@ -64,7 +64,7 @@ public class EventStorageHelper implements BeanStorageHelper<EventObjectForBean>
 			values.put("citta", event.getAddress().getCitta());
 		}
 		values.put("image", event.getImage());
-		values.put("url", event.getUrl());
+		values.put("url", event.getWebsiteUrl());
 		values.put("origin", event.getOrigin());
 		values.put("category", event.getCategory());
 		if (event.getContacts()!= null) {

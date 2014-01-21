@@ -28,7 +28,12 @@ public class EventObject extends BaseDTObject {
 	private Address address = null;
 
 	private String image = null;
-	private String siteUrl = null;
+	
+	private String websiteUrl = null;
+	private String facebookUrl = null;
+	private String twitterUrl = null;
+	
+	
 	private String origin = null;
 	private String category = null;
 	private Map<String, Object> contacts = null;
@@ -81,13 +86,31 @@ public class EventObject extends BaseDTObject {
 		this.address = address;
 	}
 
-	public String getUrl() {
-		return siteUrl;
+	public String getWebsiteUrl() {
+		return websiteUrl;
 	}
 
-	public void setUrl(String url) {
-		this.siteUrl = url;
+	public void setWebsiteUrl(String url) {
+		this.websiteUrl = url;
 	}
+	
+	public String getFacebookUrl() {
+		return facebookUrl;
+	}
+
+	public void setFacebookUrl(String url) {
+		this.facebookUrl = url;
+	}
+
+	public String getTwitterUrl() {
+		return twitterUrl;
+	}
+
+	public void setTwitterUrl(String url) {
+		this.twitterUrl = url;
+	}
+	
+	
 
 	public Integer getRating() {
 		return rating;
@@ -101,23 +124,7 @@ public class EventObject extends BaseDTObject {
 		super();
 	}
 
-	public EventObject(String title, int averageRating,  Map<String, Object> customData) {
-		//TO DO
-		super();
-		this.setTitle(title);
-		this.setCustomData(customData);
-		this.getCommunityData().setAverageRating(averageRating);
-		
-	}
 	
-	public EventObject(String title, int averageRating, int participants, Map<String, Object> customData) {
-		//TO DO
-		super();
-		this.setTitle(title);
-		this.getCommunityData().setAverageRating(averageRating);
-		this.getCommunityData().setAttendees(participants);
-		this.setCustomData(customData);
-	}
 
     public CharSequence dateTimeString() {
         return DATE_FORMAT.format(new Date(getFromTime()));
@@ -147,7 +154,7 @@ public CharSequence toDateTimeString() {
 		o.setVersion(getVersion());
 		o.setImage(getImage());
 		o.setAddress(getAddress());
-		o.setUrl(getUrl());
+		o.setWebsiteUrl(getWebsiteUrl());
 		o.setOrigin(getOrigin());
 		o.setCategory(getCategory());
 		o.setContacts(getContacts());

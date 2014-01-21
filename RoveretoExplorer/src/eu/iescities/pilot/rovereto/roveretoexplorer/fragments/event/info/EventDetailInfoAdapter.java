@@ -24,12 +24,17 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -105,6 +110,9 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 	//
 	// }
 
+
+
+
 	public EventDetailInfoAdapter(Fragment_EvDetail_Info fragment) {
 		this.fragment = fragment;
 
@@ -147,10 +155,12 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 					.findViewById(R.id.event_info_attribute_value_icon);
 			eventChildViewHolder.imgsDx1 = (ImageView) row
 					.findViewById(R.id.event_info_action1);
-			eventChildViewHolder.imgsDx2 = (ImageView) row
-					.findViewById(R.id.event_info_action2);
-			eventChildViewHolder.imgsDx3 = (ImageView) row
-					.findViewById(R.id.event_info_action3);
+
+			//this will be added again when it will be possible to cancel/edit the single items
+			//			eventChildViewHolder.imgsDx2 = (ImageView) row
+			//					.findViewById(R.id.event_info_action2);
+			//			eventChildViewHolder.imgsDx3 = (ImageView) row
+			//					.findViewById(R.id.event_info_action3);
 
 			row.setTag(eventChildViewHolder);
 		} else {
@@ -158,7 +168,13 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 		}
 
 		// Get event_info_child_item.xml file elements and set values
-		eventChildViewHolder.text.setText(child.getText());
+		if (!child.getText().contains("href")){
+			eventChildViewHolder.text.setText(child.getText());
+		}
+		else{
+			eventChildViewHolder.text.setText(Html.fromHtml(child.getText()));
+			eventChildViewHolder.text.setMovementMethod(LinkMovementMethod.getInstance());
+		}
 
 		// set icon on the left side
 		if (child.getLeftIconId() != -1) {
@@ -179,8 +195,8 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 			eventChildViewHolder.imgsDx1.setImageResource(child
 					.getRightIconIds()[0]);
 			eventChildViewHolder.imgsDx1
-					.setOnClickListener(new ChildIconClickListener(
-							this.fragment.context, child));
+			.setOnClickListener(new ChildAddIconClickListener(
+					this.fragment.context, child));
 		} else {
 			Log.i("GROUPVIEW", "CHILD DX1 ICON NULL");
 			eventChildViewHolder.imgsDx1.setVisibility(View.INVISIBLE);
@@ -193,20 +209,27 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 			int iconsNumb = child.getRightIconIds().length;
 			Log.i("GROUPVIEW", "ICON NUMMBER: " + iconsNumb);
 			eventChildViewHolder.imgsDx1.setVisibility(View.VISIBLE);
-			eventChildViewHolder.imgsDx2.setVisibility(View.VISIBLE);
 			eventChildViewHolder.imgsDx1.setImageResource(child
 					.getRightIconIds()[0]);
-			eventChildViewHolder.imgsDx2.setImageResource(child
-					.getRightIconIds()[1]);
-			if (iconsNumb == 3)
-				eventChildViewHolder.imgsDx3.setVisibility(View.VISIBLE);
-			eventChildViewHolder.imgsDx3.setImageResource(child
-					.getRightIconIds()[2]);
+			eventChildViewHolder.imgsDx1
+			.setOnClickListener(new ChildActionIconClickListener(
+					this.fragment.context, child));
+			//this will be added when cancel/edit for single item will be possible
+			//			eventChildViewHolder.imgsDx2.setVisibility(View.VISIBLE);
+			//			eventChildViewHolder.imgsDx2.setImageResource(child
+			//					.getRightIconIds()[1]);
+			//			if (iconsNumb == 3)
+			//				eventChildViewHolder.imgsDx3.setVisibility(View.VISIBLE);
+			//			eventChildViewHolder.imgsDx3.setImageResource(child
+			//					.getRightIconIds()[2]);
+
 		} else {
 			Log.i("GROUPVIEW", "CHILD DX1 ICON NULL");
 			eventChildViewHolder.imgsDx1.setVisibility(View.INVISIBLE);
-			eventChildViewHolder.imgsDx2.setVisibility(View.INVISIBLE);
-			eventChildViewHolder.imgsDx3.setVisibility(View.INVISIBLE);
+
+			//this will be added when cancel/edit for single item will be possible
+			//			eventChildViewHolder.imgsDx2.setVisibility(View.INVISIBLE);
+			//			eventChildViewHolder.imgsDx3.setVisibility(View.INVISIBLE);
 		}
 
 		Log.i("GROUPVIEW", "child view: group  POS: " + groupPosition + "!!");
@@ -227,6 +250,8 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 		// }
 
 		countChildViewCall++;
+
+
 
 		return row;
 	}
@@ -303,6 +328,9 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 
 		Log.i("Noise", "parent == " + groupPosition + "=  child : =="
 				+ childPosition);
+
+
+
 		if (fragment.ChildClickStatus != childPosition) {
 			fragment.ChildClickStatus = childPosition;
 
@@ -324,7 +352,7 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 		int size = 0;
 		if (this.fragment.parents.get(groupPosition).getChildren() != null)
 			size = this.fragment.parents.get(groupPosition).getChildren()
-					.size();
+			.size();
 		return size;
 	}
 
@@ -393,6 +421,10 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 			convertView = infalInflater.inflate(R.layout.event_info_group_item,
 					null);
 		}
+
+
+
+
 		convertView.setBackgroundResource(getBackgroundColor(groupPosition));
 
 		// Get grouprow.xml file elements and set values
@@ -464,7 +496,7 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 			parent.setChecked(true);
 
 			((EventDetailInfoAdapter) fragment.getExpandableListAdapter())
-					.notifyDataSetChanged();
+			.notifyDataSetChanged();
 
 			// final Boolean checked = parent.isChecked();
 			Toast.makeText(context, "Parent : " + parent.getText1(),
@@ -480,11 +512,11 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 
 	/******************* Checkbox Checked Change Listener ********************/
 
-	private final class ChildIconClickListener implements OnClickListener {
+	private final class ChildAddIconClickListener implements OnClickListener {
 		private final EventInfoChild child;
 		private Context context;
 
-		private ChildIconClickListener(Context context, EventInfoChild child) {
+		private ChildAddIconClickListener(Context context, EventInfoChild child) {
 			this.child = child;
 			this.context = context;
 		}
@@ -494,12 +526,68 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 			Log.i("GROUPVIEW", "Right Icon Pressed!");
 
 			((EventDetailInfoAdapter) fragment.getExpandableListAdapter())
-					.notifyDataSetChanged();
+			.notifyDataSetChanged();
 
 			Toast.makeText(context,
 					"Add a new child of type: " + child.getText(),
 					Toast.LENGTH_LONG).show();
 
+		}
+
+	}
+
+	/***********************************************************************/
+
+
+	/******************* Checkbox Checked Change Listener ********************/
+
+	private final class ChildActionIconClickListener implements OnClickListener {
+		private final EventInfoChild child;
+		private Context context;
+
+		private ChildActionIconClickListener(Context context, EventInfoChild child) {
+			this.child = child;
+			this.context = context;
+		}
+
+		@Override
+		public void onClick(View v) {
+
+			Log.i("GROUPVIEW", "Right Icon Pressed!");
+
+			((EventDetailInfoAdapter) fragment.getExpandableListAdapter())
+			.notifyDataSetChanged();
+
+			if (child.getName()=="tel") {
+				Log.i("GROUPVIEW", "Call number:" + child.getText());
+				//				Toast.makeText(context,
+				//						"Call number: " + child.getText(),
+				//						Toast.LENGTH_LONG).show();
+				try {
+					Intent my_callIntent = new Intent(Intent.ACTION_CALL);
+					my_callIntent.setData(Uri.parse("tel:" + child.getText()));
+					//here the word 'tel' is important for making a call...
+					this.context.startActivity(my_callIntent);
+				} catch (ActivityNotFoundException e) {
+					Toast.makeText(this.context, "Error in your phone call"+e.getMessage(), Toast.LENGTH_LONG).show();
+				}
+
+			}else if (child.getName()=="email"){
+				Log.i("GROUPVIEW", "Write email to:" + child.getText());
+				//				Toast.makeText(this.context,
+				//						"Write email to: " + child.getText(),
+				//						Toast.LENGTH_LONG).show();
+				Intent i = new Intent(Intent.ACTION_SEND);
+				i.setType("message/rfc822");
+				i.putExtra(Intent.EXTRA_EMAIL  , new String[]{child.getText()});
+				i.putExtra(Intent.EXTRA_SUBJECT, "subject of email");
+				i.putExtra(Intent.EXTRA_TEXT   , "body of email");
+				try {
+					this.context.startActivity(Intent.createChooser(i, "Send mail..."));
+				} catch (android.content.ActivityNotFoundException ex) {
+					Toast.makeText(this.context, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+				}
+			}
 		}
 
 	}
