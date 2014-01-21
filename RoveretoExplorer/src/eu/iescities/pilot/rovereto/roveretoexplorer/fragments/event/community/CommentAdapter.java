@@ -1,4 +1,4 @@
-package eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event;
+package eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.community;
 
 import java.util.HashMap;
 import java.util.List;
@@ -46,7 +46,10 @@ public class CommentAdapter extends BaseExpandableListAdapter {
 	        if (convertView == null) {
 	            LayoutInflater infalInflater = (LayoutInflater) this._context
 	                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-	            convertView = infalInflater.inflate(R.layout.event_comment_item, null);
+	            convertView = infalInflater.inflate(R.layout.event_comment_item, parent,false);
+//	            convertView = inflater.inflate(R.layout.forum_list_child_item_row,parent, false);
+
+
 	        }
 	 
 	        TextView txtListChild = (TextView) convertView

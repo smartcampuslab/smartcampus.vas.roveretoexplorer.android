@@ -2,13 +2,13 @@
 
     <!--
         Base application theme, dependent on API level. This theme is replaced
-        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
+        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
     -->
     <style name="AppBaseTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar">
         <!--
             Theme customizations available in newer API levels can go in
             res/values-vXX/styles.xml, while customizations related to
-            backward-compatibility can go here.
+            backward-compatibility can go here.
         -->
     </style>
 
@@ -24,8 +24,8 @@
         <item name="android:background">#111</item>
         <item name="android:titleTextStyle">@style/TitleTextStyle</item>
     </style>
-    
-     <style name="ActionButtonStyle" parent="@android:style/Widget.Holo.Light.ActionButton">
+
+    <style name="ActionButtonStyle" parent="@android:style/Widget.Holo.Light.ActionButton">
         <item name="android:minWidth">0dip</item>
         <item name="android:paddingLeft">0dip</item>
         <item name="android:paddingRight">0dip</item>
@@ -37,6 +37,7 @@
 
     <style name="ratingBar" parent="@android:style/Widget.RatingBar">
         <item name="android:progressDrawable">@drawable/ratingstars</item>
+        <item name="android:gravity">center</item>
         <item name="android:minHeight">50dip</item>
         <item name="android:maxHeight">50dip</item>
         <item name="android:thumb">@null</item>
@@ -56,10 +57,27 @@
         <item name="android:minHeight">70dip</item>
         <item name="android:maxHeight">70dip</item>
     </style>
-	<style name="label_header" parent="@android:style/Widget.TextView">
+
+    <style name="label_header" parent="@android:style/Widget.TextView">
         <item name="android:textColor">@color/label_header</item>
         <item name="android:textSize">17sp</item>
         <item name="android:gravity">center_vertical</item>
+    </style>
+
+    <style name="row_community">
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:maxHeight">50dp</item>
+        <item name="android:minHeight">50dp</item>
+        <item name="android:padding">5dp</item>
+        <item name="android:layout_marginLeft">15dp</item>
+        <item name="android:layout_marginRight">15dp</item>
+        <item name="android:layout_marginTop">5dp</item>
+        <item name="android:layout_marginBottom">5dp</item>
+    </style>
+
+    <style name="community_number" parent="@android:style/Widget.TextView">
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textSize">30sp</item>
     </style>
 
 </resources>

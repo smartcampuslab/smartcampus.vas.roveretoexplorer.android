@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
+import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.community.CommentAdapter;
 
 public class Fragment_EvDetail_Community extends Fragment {
 	ExpandableListAdapter listAdapter;
