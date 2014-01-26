@@ -11,20 +11,11 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-
-import eu.iescities.pilot.rovereto.roveretoexplorer.R;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.Utils;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.Address;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.EventObject;
-import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.EventPlaceholder;
-import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.Fragment_EventDetails;
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -36,9 +27,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
-import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.TextView;
 import android.widget.Toast;
+import eu.iescities.pilot.rovereto.roveretoexplorer.R;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.Utils;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.Address;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.DTHelper;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ExplorerObject;
 
 
 public class Fragment_EvDetail_Info extends Fragment {
@@ -49,10 +44,10 @@ public class Fragment_EvDetail_Info extends Fragment {
 
 	//For the expandable list view 
 	List<String> attributeGroupList;
-	//private List<LocalEventObject> listEvents = new ArrayList<LocalEventObject>();
+	//private List<LocalExplorerObject> listEvents = new ArrayList<LocalExplorerObject>();
 	Map<String, List<String>> eventAttributeCollection;
 	ExpandableListView expListView;
-	public EventObject mEvent = null;
+	public ExplorerObject mEvent = null;
 	private EventDetailInfoAdapter eventDetailInfoAdapter;
 
 
@@ -107,9 +102,9 @@ public class Fragment_EvDetail_Info extends Fragment {
 			if (getArguments() != null) {
 				mEventId = getArguments().getString(ARG_EVENT_ID);
 				//now it will be always null so I load the fake data
-				//mEvent = DTHelper.findEventById(mEventId);
-				List<EventObject> eventList = Utils.getFakeEventObjects();
-				mEvent = Utils.getFakeLocalEventObject(eventList,mEventId);
+				mEvent = DTHelper.findEventById(mEventId);
+				List<ExplorerObject> eventList = Utils.getFakeExplorerObjects();
+//				mEvent = Utils.getFakeLocalExplorerObject(eventList,mEventId);
 			}
 		}
 		else
@@ -176,7 +171,7 @@ public class Fragment_EvDetail_Info extends Fragment {
 		TextView categoryTextView = (TextView) getActivity().findViewById(R.id.event_placeholder_category);
 		String category = "Evento sportivo";  // to be modified!
 
-		if (mEvent.getCustomData().containsKey("PromossoDa")){
+		if (mEvent.getCustomData()!=null && mEvent.getCustomData().containsKey("PromossoDa")){
 			text = new String(category + ", promosso da " + (String) mEvent.getCustomData().get("PromossoDa") + " ") ;
 			ss = new SpannableString(text); 
 			start = text.length() - 1;
@@ -368,7 +363,7 @@ public class Fragment_EvDetail_Info extends Fragment {
 	 * here should come your data service implementation
 	 * @return
 	 */
-	private ArrayList<EventInfoParent> getEventDetailData(EventObject event)
+	private ArrayList<EventInfoParent> getEventDetailData(ExplorerObject event)
 	{
 
 
@@ -512,23 +507,23 @@ public class Fragment_EvDetail_Info extends Fragment {
 				
 				parent.getChildren().add(emailChildLabel);
 
-
-				String[] emails = null;
-				if (event.getContacts().containsKey("email")){
-					emails = (String[]) event.getContacts().get("email"); 
-					for (String email : emails){
-						EventInfoChild child = new EventInfoChild();
-						child.setName("email");
-						child.setText(email);
-						child.setType(0);
-
-						//to be added when it will be possible to cancel/edit the single item
-						//int[] rightIconIds2 = new int[]{R.drawable.ic_action_edit, R.drawable.ic_action_cancel, R.drawable.ic_action_email};
-						int[] rightIconIds2 = new int[]{R.drawable.ic_compose_email};
-						child.setRightIconIds(rightIconIds2);
-						parent.getChildren().add(child);						
-					}
-				}
+				//TO DO
+//				String[] emails = null;
+//				if (event.getContacts().containsKey("email")){
+//					emails = (String[]) event.getContacts().get("email"); 
+//					for (String email : emails){
+//						EventInfoChild child = new EventInfoChild();
+//						child.setName("email");
+//						child.setText(email);
+//						child.setType(0);
+//
+//						//to be added when it will be possible to cancel/edit the single item
+//						//int[] rightIconIds2 = new int[]{R.drawable.ic_action_edit, R.drawable.ic_action_cancel, R.drawable.ic_action_email};
+//						int[] rightIconIds2 = new int[]{R.drawable.ic_compose_email};
+//						child.setRightIconIds(rightIconIds2);
+//						parent.getChildren().add(child);						
+//					}
+//				}
 
 				//set the Web Site item of type 0
 				EventInfoChild siteChildLabel = new EventInfoChild();
@@ -596,7 +591,7 @@ public class Fragment_EvDetail_Info extends Fragment {
 
 
 
-	private  Map<String, List<String>> getEventDetailCollection(List<String> attrGroupList, EventObject event) {
+	private  Map<String, List<String>> getEventDetailCollection(List<String> attrGroupList, ExplorerObject event) {
 
 		Map<String, List<String>> eventCollection = new LinkedHashMap<String, List<String>>();
 		List<String> childList = new ArrayList<String>();

@@ -60,7 +60,7 @@
             android:value="eu.iescities.pilot.rovereto.roveretoexplorer" />
         <meta-data
             android:name="eu.trentorise.smartcampus.account.ACCOUNT_NAME"
-            android:value="Trentino Famiglia" />
+            android:value="Rovereto Explorer" />
 
 
         <!-- Uses feedback metadata -->

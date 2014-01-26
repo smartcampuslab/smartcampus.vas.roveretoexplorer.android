@@ -40,8 +40,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.Address;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.EventObject;
-
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ExplorerObject;
 
 // in EventsListingFragment
 public class EventAdapter extends BaseExpandableListAdapter {
@@ -52,25 +51,21 @@ public class EventAdapter extends BaseExpandableListAdapter {
 	private int elementSelected = -1;
 	private boolean postProcAndHeader = true;
 
-	//for expandable list 
-	private Map<String, List<EventObject>> eventCollections;
+	// for expandable list
+	private Map<String, List<ExplorerObject>> eventCollections;
 	private List<String> dateGroupList;
 	private int layoutResourceId;
-
 
 	private EventPlaceholder eventPlaceHolder = null;
 	private View row = null;
 	private String rightTextViewTitle = null;
-	private ArrayList<String> loadedImgs  = new ArrayList();
-	private int count=0;
+	private ArrayList<String> loadedImgs = new ArrayList();
+	private int count = 0;
 
 	private EventPlaceholder eventPlaceHolderForImg = null;
 
-
-
-
 	public EventAdapter(Context context, int layoutResourceId, List<String> events_dates,
-			Map<String, List<EventObject>> eventCollections) {
+			Map<String, List<ExplorerObject>> eventCollections) {
 		this.context = context;
 		this.eventCollections = eventCollections;
 		this.dateGroupList = events_dates;
@@ -78,12 +73,11 @@ public class EventAdapter extends BaseExpandableListAdapter {
 
 	}
 
-
 	@Override
-	public View getChildView(final int groupPosition, final int childPosition,
-			boolean isLastChild, View convertView, ViewGroup parent) {
+	public View getChildView(final int groupPosition, final int childPosition, boolean isLastChild, View convertView,
+			ViewGroup parent) {
 
-		final EventObject event = (EventObject) getChild(groupPosition, childPosition);
+		final ExplorerObject event = (ExplorerObject) getChild(groupPosition, childPosition);
 
 		row = convertView;
 		if (row == null) {
@@ -91,51 +85,52 @@ public class EventAdapter extends BaseExpandableListAdapter {
 			row = inflater.inflate(layoutResourceId, parent, false);
 			eventPlaceHolder = new EventPlaceholder();
 			eventPlaceHolder.title = (TextView) row.findViewById(R.id.event_placeholder_title);
-			eventPlaceHolder.title.setTag(eventPlaceHolder.title); 
+			eventPlaceHolder.title.setTag(eventPlaceHolder.title);
 			eventPlaceHolder.location = (TextView) row.findViewById(R.id.event_placeholder_loc);
-			//e.hour = (TextView) row.findViewById(R.id.event_placeholder_hour);
+			// e.hour = (TextView)
+			// row.findViewById(R.id.event_placeholder_hour);
 			eventPlaceHolder.icon = (ImageView) row.findViewById(R.id.event_placeholder_photo);
 			eventPlaceHolder.attendees = (TextView) row.findViewById(R.id.event_placeholder_participants);
 			eventPlaceHolder.rating = (RatingBar) row.findViewById(R.id.rating_bar);
-			//e.dateSeparator = (TextView) row.findViewById(R.id.date_separator);
+			// e.dateSeparator = (TextView)
+			// row.findViewById(R.id.date_separator);
 			row.setTag(eventPlaceHolder);
-		} else
-		{
+		} else {
 			eventPlaceHolder = (EventPlaceholder) row.getTag();
 		}
 
 		eventPlaceHolder.event = event;
 
-		//****  EVENT INFO   ***** //
-		Log.i("EVENT", "EVENT ID: " + eventPlaceHolder.event.getId() + "!!");
-		Log.i("EVENT", "title: " + eventPlaceHolder.event.getTitle() + "!!");
-		Log.i("EVENT", "rating: " + eventPlaceHolder.event.getCommunityData().getAverageRating() + "!!");
-		Log.i("EVENT", "participants: " + eventPlaceHolder.event.getCommunityData().getAttendees() + "!!");
-		//Log.i("EVENT", "location: " + (String) e.event.getCustomData().get("where_name") + "!!");
-		//Log.i("EVENT", "when: " + e.event.eventDatesString() + "!!");
-		//Log.i("EVENT", "image: " + e.event.getCustomData().get("event_img").toString() + "!!");
+		// **** EVENT INFO ***** //
+		// Log.i("EVENT", "EVENT ID: " + eventPlaceHolder.event.getId() + "!!");
+		// Log.i("EVENT", "title: " + eventPlaceHolder.event.getTitle() + "!!");
+		// Log.i("EVENT", "rating: " +
+		// eventPlaceHolder.event.getCommunityData().getAverageRating() + "!!");
+		// Log.i("EVENT", "participants: " +
+		// eventPlaceHolder.event.getCommunityData().getAttendees() + "!!");
+		// Log.i("EVENT", "location: " + (String)
+		// e.event.getCustomData().get("where_name") + "!!");
+		// Log.i("EVENT", "when: " + e.event.eventDatesString() + "!!");
+		// Log.i("EVENT", "image: " +
+		// e.event.getCustomData().get("event_img").toString() + "!!");
 
 		eventPlaceHolder.title.setText(eventPlaceHolder.event.getTitle());
 		eventPlaceHolder.attendees.setText(eventPlaceHolder.event.getCommunityData().getAttendees().toString());
 
-		
 		Address address = eventPlaceHolder.event.getAddress();
-		if (address != null){
+		if (address != null) {
 
-			String place = (address.getLuogo() !=null)? (String) address.getLuogo() : null;
+			String place = (address.getLuogo() != null) ? (String) address.getLuogo() : null;
 			eventPlaceHolder.location.setText(place);
 		}
-		
-		
-		
-		//load the event image
+
+		// load the event image
 		Log.i("IMAGE", "START ADAPTER, EVENT TITLE: " + eventPlaceHolder.event.getTitle() + "!!");
-		//Log.i("IMAGE", "loaded: " + loadedImgs.toString() + "!!");
+		// Log.i("IMAGE", "loaded: " + loadedImgs.toString() + "!!");
 
-
-		if ((loadedImgs==null) || (!loadedImgs.contains(eventPlaceHolder.event.getTitle()))){
-			if (eventPlaceHolder.event.getImage()!=null){
-				RetreiveImageTask getImgTask  = new RetreiveImageTask();
+		if ((loadedImgs == null) || (!loadedImgs.contains(eventPlaceHolder.event.getTitle()))) {
+			if (eventPlaceHolder.event.getImage() != null) {
+				RetreiveImageTask getImgTask = new RetreiveImageTask();
 				getImgTask.execute(eventPlaceHolder);
 			}
 		}
@@ -146,22 +141,18 @@ public class EventAdapter extends BaseExpandableListAdapter {
 		Calendar currentEvent = Calendar.getInstance();
 		;
 
-		if (event.getFromTime()!=null)
+		if (event.getFromTime() != null)
 			currentEvent.setTimeInMillis(event.getFromTime());
-
 
 		return row;
 	}
 
-
-	/*public int getElementSelected() {
-		return elementSelected;
-	}
-
-	public void setElementSelected(int elementSelected) {
-		this.elementSelected = elementSelected;
-	}*/
-
+	/*
+	 * public int getElementSelected() { return elementSelected; }
+	 * 
+	 * public void setElementSelected(int elementSelected) {
+	 * this.elementSelected = elementSelected; }
+	 */
 
 	// Methods needed for the Expandable adapter
 	public Object getChild(int groupPosition, int childPosition) {
@@ -172,9 +163,6 @@ public class EventAdapter extends BaseExpandableListAdapter {
 		return childPosition;
 	}
 
-
-
-
 	public int getChildrenCount(int groupPosition) {
 		return eventCollections.get(dateGroupList.get(groupPosition)).size();
 	}
@@ -184,22 +172,21 @@ public class EventAdapter extends BaseExpandableListAdapter {
 	}
 
 	public int getGroupCount() {
-		return dateGroupList.size();
+		if (dateGroupList != null)
+			return dateGroupList.size();
+		else return 0;
 	}
 
 	public long getGroupId(int groupPosition) {
 		return groupPosition;
 	}
 
-	public View getGroupView(int groupPosition, boolean isExpanded,
-			View convertView, ViewGroup parent) {
+	public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
 
 		String dateLabel = (String) getGroup(groupPosition);
 		if (convertView == null) {
-			LayoutInflater infalInflater = (LayoutInflater) context
-					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			convertView = infalInflater.inflate(R.layout.group_item,
-					null);
+			LayoutInflater infalInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			convertView = infalInflater.inflate(R.layout.group_item, null);
 		}
 
 		convertView.setBackgroundResource(getBackgroundColor(groupPosition));
@@ -218,7 +205,6 @@ public class EventAdapter extends BaseExpandableListAdapter {
 
 	}
 
-
 	public boolean hasStableIds() {
 		return true;
 	}
@@ -227,11 +213,10 @@ public class EventAdapter extends BaseExpandableListAdapter {
 		return true;
 	}
 
-
-	//class to handle the network connection to rietrieve the image
+	// class to handle the network connection to rietrieve the image
 	class RetreiveImageTask extends AsyncTask<EventPlaceholder, String, Bitmap> {
 
-		protected Bitmap doInBackground(EventPlaceholder... e ) {
+		protected Bitmap doInBackground(EventPlaceholder... e) {
 
 			count++;
 			EventPlaceholder ev = e[0];
@@ -246,9 +231,9 @@ public class EventAdapter extends BaseExpandableListAdapter {
 
 			try {
 				img_url = new URL(ev.event.getImage());
-				//Log.i("IMAGE", "image for event " + ev.event.getTitle());
+				// Log.i("IMAGE", "image for event " + ev.event.getTitle());
 				Log.i("IMAGE", "image url: " + img_url.toString() + "!!");
-				if (img_url!=null){ 
+				if (img_url != null) {
 					bmp = BitmapFactory.decodeStream(img_url.openConnection().getInputStream());
 				}
 			} catch (IOException e1) {
@@ -259,47 +244,30 @@ public class EventAdapter extends BaseExpandableListAdapter {
 			return bmp;
 		}
 
-
 		protected void onPostExecute(Bitmap bmp) {
 			Log.i("IMAGE", "on post execute!" + rightTextViewTitle);
 			Log.i("IMAGE", "Right Title: " + rightTextViewTitle);
 			Log.i("IMAGE", "Current Title: " + eventPlaceHolder.event.getTitle());
 
-			if (bmp!=null){
+			if (bmp != null) {
 				Log.i("IMAGE", "set image icon " + rightTextViewTitle);
 				Log.i("IMAGE", "event place holder title " + eventPlaceHolderForImg.title.getText());
 
-
 				eventPlaceHolderForImg.icon.setImageBitmap(bmp);
-				loadedImgs.add((String)eventPlaceHolderForImg.title.getText());
+				loadedImgs.add((String) eventPlaceHolderForImg.title.getText());
 				Log.i("IMAGE", "loaded 2: " + loadedImgs.toString() + "!!");
-
 
 			}
 
 		}
 
-
 		@Override
 		protected void onProgressUpdate(String... text) {
 			// Things to be done while execution of long running operation is in
 			// progress. For example updating ProgessDialog
-			Toast.makeText(context, "loading image...", Toast.LENGTH_LONG)
-			.show();
+			Toast.makeText(context, "loading image...", Toast.LENGTH_LONG).show();
 		}
 
-
-
-
-
-
-
-
-
-
-
 	}
-
-
 
 }

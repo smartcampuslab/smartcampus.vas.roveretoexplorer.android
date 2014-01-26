@@ -15,31 +15,31 @@
  ******************************************************************************/
 package eu.iescities.pilot.rovereto.roveretoexplorer.custom.data;
 
-import java.util.Collections;
 import java.util.Map;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.EventObjectForBean;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ExplorerObject;
 import eu.trentorise.smartcampus.android.common.Utils;
 import eu.trentorise.smartcampus.storage.db.BeanStorageHelper;
 
-public class EventStorageHelper implements BeanStorageHelper<EventObjectForBean> {
+public class EventStorageHelper implements BeanStorageHelper<ExplorerObject> {
 
 	@Override
-	public EventObjectForBean toBean(Cursor cursor) {
+	public ExplorerObject toBean(Cursor cursor) {
 
-		EventObjectForBean returnEventObjectForBean = new EventObjectForBean();
-		EventObject event = new EventObject();
+		ExplorerObject event = new ExplorerObject();
 		BaseDTStorageHelper.setCommonFields(cursor, event);
 
 		event.setWhenWhere(cursor.getString(cursor.getColumnIndex("whenWhere")));
 		event.setAddress(new Address());
-		event.getAddress().setCitta(cursor.getString(cursor.getColumnIndex("luogo")));
+		event.getAddress().setLuogo(cursor.getString(cursor.getColumnIndex("luogo")));
 		event.getAddress().setCitta(cursor.getString(cursor.getColumnIndex("citta")));
-		event.getAddress().setCitta(cursor.getString(cursor.getColumnIndex("via")));
+		event.getAddress().setVia(cursor.getString(cursor.getColumnIndex("via")));
 		event.setImage(cursor.getString(cursor.getColumnIndex("image")));
-		event.setImage(cursor.getString(cursor.getColumnIndex("url")));
+		event.setWebsiteUrl(cursor.getString(cursor.getColumnIndex("websiteurl")));
+		event.setFacebookUrl(cursor.getString(cursor.getColumnIndex("facebookurl")));
+		event.setTwitterUrl(cursor.getString(cursor.getColumnIndex("twitterurl")));
 		event.setImage(cursor.getString(cursor.getColumnIndex("origin")));
 		event.setImage(cursor.getString(cursor.getColumnIndex("category")));
 		@SuppressWarnings("unchecked")
@@ -48,13 +48,12 @@ public class EventStorageHelper implements BeanStorageHelper<EventObjectForBean>
 		if (map != null && !map.isEmpty())
 			event.setContacts(map);
 
-		returnEventObjectForBean.setObjectForBean(event);
-		return returnEventObjectForBean;
+		return event;
 	}
 
 	@Override
-	public ContentValues toContent(EventObjectForBean bean) {
-		EventObject event = bean.getObjectForBean();
+	public ContentValues toContent(ExplorerObject bean) {
+		ExplorerObject event = bean;
 		ContentValues values = BaseDTStorageHelper.toCommonContent(event);
 
 		values.put("whenWhere", event.getWhenWhere());
@@ -64,7 +63,9 @@ public class EventStorageHelper implements BeanStorageHelper<EventObjectForBean>
 			values.put("citta", event.getAddress().getCitta());
 		}
 		values.put("image", event.getImage());
-		values.put("url", event.getWebsiteUrl());
+		values.put("websiteurl", event.getWebsiteUrl());
+		values.put("twitterurl", event.getWebsiteUrl());
+		values.put("facebookurl", event.getWebsiteUrl());
 		values.put("origin", event.getOrigin());
 		values.put("category", event.getCategory());
 		if (event.getContacts()!= null) {
@@ -83,20 +84,12 @@ public class EventStorageHelper implements BeanStorageHelper<EventObjectForBean>
 		defs.put("via", "TEXT");
 		defs.put("citta", "TEXT");
 		defs.put("image", "TEXT");
-		defs.put("url", "TEXT");
+		defs.put("websiteurl", "TEXT");
+		defs.put("twitterurl", "TEXT");
+		defs.put("facebookurl", "TEXT");
 		defs.put("origin", "TEXT");
 		defs.put("category", "TEXT");
 		defs.put("contacts", "TEXT");
-
-		// defs.put("fromTime", "INTEGER");
-		// defs.put("toTime", "INTEGER");
-		// defs.put("timing", "TEXT");
-		// defs.put("attendees", "INTEGER");
-		// defs.put("attending", "TEXT");
-
-		// defs.put("poiIdUserDefined", "INTEGER");
-		// defs.put("fromTimeUserDefined", "INTEGER");
-		// defs.put("toTimeUserDefined", "INTEGER");
 
 		return defs;
 	}

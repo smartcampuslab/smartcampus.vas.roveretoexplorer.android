@@ -1,7 +1,5 @@
 package eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info;
 
-import java.io.IOException;
-import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -11,21 +9,11 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-
-
-import eu.iescities.pilot.rovereto.roveretoexplorer.R;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.Utils;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.DTHelper;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.EventObject;
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -38,9 +26,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import eu.iescities.pilot.rovereto.roveretoexplorer.R;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.Utils;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ExplorerObject;
 
 
 public class Fragment_EvDetail_InfoOLD extends Fragment {
@@ -49,10 +39,10 @@ public class Fragment_EvDetail_InfoOLD extends Fragment {
 
 	//For the expandable list view 
 	List<String> attributeGroupList;
-	//private List<LocalEventObject> listEvents = new ArrayList<LocalEventObject>();
+	//private List<LocalExplorerObject> listEvents = new ArrayList<LocalExplorerObject>();
 	Map<String, List<String>> eventAttributeCollection;
 	ExpandableListView expListView;
-	public EventObject mEvent = null;
+	public ExplorerObject mEvent = null;
 	private EventDetailInfoAdapter eventDetailInfoAdapter;
 
 
@@ -97,8 +87,8 @@ public class Fragment_EvDetail_InfoOLD extends Fragment {
 				mEventId = getArguments().getString(ARG_EVENT_ID);
 				//now it will be always null so I load the fake data
 				//mEvent = DTHelper.findEventById(mEventId);
-				List<EventObject> eventList = Utils.getFakeEventObjects();
-				mEvent = Utils.getFakeLocalEventObject(eventList,mEventId);
+				List<ExplorerObject> eventList = Utils.getFakeExplorerObjects();
+				mEvent = Utils.getFakeLocalExplorerObject(eventList,mEventId);
 			}
 		}
 		else
@@ -286,7 +276,7 @@ public class Fragment_EvDetail_InfoOLD extends Fragment {
 
 				Log.i("LISTENER", "I should toast 1 ");
 
-				//final LocalEventObject selected = (LocalEventObject) eventsAdapter.getChild(groupPosition, childPosition);
+				//final LocalExplorerObject selected = (LocalExplorerObject) eventsAdapter.getChild(groupPosition, childPosition);
 
 
 				Log.i("SCROLLTABS", "Load the scroll tabs!!");
@@ -313,7 +303,7 @@ public class Fragment_EvDetail_InfoOLD extends Fragment {
 
 
 
-	private  Map<String, List<String>> getEventDetailCollection(List<String> attrGroupList, EventObject event) {
+	private  Map<String, List<String>> getEventDetailCollection(List<String> attrGroupList, ExplorerObject event) {
 
 		Map<String, List<String>> eventCollection = new LinkedHashMap<String, List<String>>();
 		List<String> childList = new ArrayList<String>();

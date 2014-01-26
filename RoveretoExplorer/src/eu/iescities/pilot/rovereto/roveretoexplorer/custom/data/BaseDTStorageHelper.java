@@ -18,9 +18,12 @@ package eu.iescities.pilot.rovereto.roveretoexplorer.custom.data;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.BaseDTObject;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.CommunityData;
 import eu.trentorise.smartcampus.android.common.Utils;
 
 public class BaseDTStorageHelper {
@@ -31,8 +34,6 @@ public class BaseDTStorageHelper {
 			o.setDescription(cursor.getString(cursor.getColumnIndex("description")));
 			o.setTitle(cursor.getString(cursor.getColumnIndex("title")));
 			o.setSource(cursor.getString(cursor.getColumnIndex("source")));
-			o.setCreatorId(cursor.getString(cursor.getColumnIndex("creatorId")));
-			o.setCreatorName(cursor.getString(cursor.getColumnIndex("creatorName")));
 
 			// set community data
 			o.setCommunityData(new CommunityData());
@@ -42,7 +43,7 @@ public class BaseDTStorageHelper {
 			o.getCommunityData().setRatingsCount(cursor.getInt(cursor.getColumnIndex("ratingsCount")));
 			o.getCommunityData().setAttendees(cursor.getInt(cursor.getColumnIndex("attendees")));
 			o.getCommunityData().setAttending(
-					Utils.convertJSONToObject(cursor.getString(cursor.getColumnIndex("attending")), List.class));
+					Utils.convertJSONToObject(cursor.getString(cursor.getColumnIndex("attending")), Set.class));
 			o.getCommunityData().setTags(
 					Utils.convertJSONToObjects(cursor.getString(cursor.getColumnIndex("tags")), String.class));
 
@@ -67,8 +68,6 @@ public class BaseDTStorageHelper {
 
 		values.put("title", bean.getTitle());
 		values.put("source", bean.getSource());
-		values.put("creatorId", bean.getCreatorId());
-		values.put("creatorName", bean.getCreatorName());
 
 		if (bean.getCommunityData() != null) {
 			if (bean.getCommunityData().getTags() != null) {

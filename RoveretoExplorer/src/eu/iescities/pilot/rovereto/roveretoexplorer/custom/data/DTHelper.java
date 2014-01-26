@@ -51,8 +51,9 @@ import com.google.android.maps.GeoPoint;
 
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.CategoryHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.DTParamsHelper;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.EventObjectForBean;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.GenericObjectForBean;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.BaseDTObject;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.CommunityData;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ExplorerObject;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ObjectFilter;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.Review;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ReviewObject;
@@ -69,8 +70,6 @@ import eu.trentorise.smartcampus.android.common.tagging.SuggestionHelper;
 import eu.trentorise.smartcampus.network.JsonUtils;
 import eu.trentorise.smartcampus.network.RemoteConnector;
 import eu.trentorise.smartcampus.network.RemoteConnector.CLIENT_TYPE;
-import eu.trentorise.smartcampus.protocolcarrier.common.Constants.Method;
-import eu.trentorise.smartcampus.protocolcarrier.custom.MessageRequest;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.ConnectionException;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.ProtocolException;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
@@ -85,7 +84,7 @@ public class DTHelper {
 	/**
 	 * 
 	 */
-	private static final String SERVICE_ESPLORAROVERETO = "esplorarovereto";
+	private static final String SERVICE_ESPLORAROVERETO = " roveretoexplorer";
 	public static final int SYNC_REQUIRED = 2;
 	public static final int SYNC_NOT_REQUIRED = 0;
 	public static final int SYNC_REQUIRED_FIRST_TIME = 3;
@@ -94,10 +93,12 @@ public class DTHelper {
 
 	// tutorial's stuff
 
+
 	private static final String TUT_PREFS = "dt_tut_prefs";
 	private static final String TOUR_PREFS = "dt_wantTour";
 	private static final String FIRST_LAUNCH_PREFS = "dt_firstLaunch";
 	private static SCAccessProvider accessProvider = null;
+	private static String serviceUrl;
 	// private static TerritoryService tService;
 	//
 	// public static TerritoryService gettService() {
@@ -131,8 +132,11 @@ public class DTHelper {
 	public static void init(final Context mContext) {
 		if (instance == null)
 			instance = new DTHelper(mContext);
-		// tService = new TerritoryService(getAppUrl() +
-		// SERVICE_TRENTINOFAMIGLIA);
+
+ 		serviceUrl = getAppUrl() + SERVICE_ESPLORAROVERETO;
+		if (!serviceUrl.endsWith("/")) {
+			serviceUrl += '/';
+		}
 
 		// new AsyncTask<Void, Void, BasicProfile>() {
 		// @Override
@@ -305,12 +309,12 @@ public class DTHelper {
 
 			getInstance().syncInProgress = true;
 			// TO DO
-			getInstance().storage.synchronize(getAuthToken(), "", "");
+			getInstance().storage.synchronize(getAuthToken(), getAppUrl(), Constants.SYNC_SERVICE);
 			// activateAutoSync();
 
 			// getInstance().storage.synchronize(getAuthToken(),
 			// GlobalConfig.getAppUrl(mContext),
-			// Constants.SYNC_SERVICE);
+//			 Constants.SYNC_SERVICE);
 
 		} finally {
 			getInstance().syncInProgress = false;
@@ -321,7 +325,7 @@ public class DTHelper {
 	public static void synchronize() throws RemoteException, DataException, StorageConfigurationException,
 			SecurityException, ConnectionException, ProtocolException, AACException {
 		// TO DO
-		getInstance().storage.synchronize(getAuthToken(), "", "");
+		getInstance().storage.synchronize(getAuthToken(), getAppUrl(), serviceUrl);
 		// getInstance().storage.synchronize(getAuthToken(),
 		// GlobalConfig.getAppUrl(mContext),
 		// Constants.SYNC_SERVICE);
@@ -399,17 +403,16 @@ public class DTHelper {
 	 * @throws TerritoryServiceException
 	 * @throws AACException
 	 */
-	public static Boolean saveEvent(EventObject event) throws RemoteException, DataException,
+	public static Boolean saveEvent(ExplorerObject event) throws RemoteException, DataException,
 			StorageConfigurationException, ConnectionException, ProtocolException, SecurityException, AACException {
 		Boolean result = null;
 		if (event.getId() == null) {
 			// TO DO
-			// event = tService.createEvent(event, getAuthToken());
+			event = createEvent(event, getAuthToken());
 			result = true;
 		} else {
 			// TO DO
-			// event = tService.updateEvent(event.getId(), event,
-			// getAuthToken());
+			event = updateEvent(event.getId(), event, getAuthToken());
 			result = false;
 		}
 		// String requestService = null;
@@ -418,7 +421,7 @@ public class DTHelper {
 		// if (event.getId() == null) {
 		// if (event.createdByUser())
 		// requestService = Constants.SERVICE +
-		// "/eu.trentorise.smartcampus.dt.model.UserEventObject";
+		// "/eu.trentorise.smartcampus.dt.model.UserExplorerObject";
 		// else
 		// throw new DataException("cannot create service object");
 		// method = Method.POST;
@@ -426,11 +429,11 @@ public class DTHelper {
 		// } else {
 		// if (event.createdByUser())
 		// requestService = Constants.SERVICE +
-		// "/eu.trentorise.smartcampus.dt.model.UserEventObject/"
+		// "/eu.trentorise.smartcampus.dt.model.UserExplorerObject/"
 		// + event.getId();
 		// else
 		// requestService = Constants.SERVICE +
-		// "/eu.trentorise.smartcampus.dt.model.ServiceEventObject/"
+		// "/eu.trentorise.smartcampus.dt.model.ServiceExplorerObject/"
 		// + event.getId();
 		// method = Method.PUT;
 		// result = false;
@@ -448,17 +451,45 @@ public class DTHelper {
 		// DTParamsHelper.getAppToken(),
 		// getAuthToken());
 		// // getRemote(instance.mContext, instance.token).create(poi);
-		// EventObject eventreturn =
+		// ExplorerObject eventreturn =
 		// eu.trentorise.smartcampus.android.common.Utils.convertJSONToObject(msg.getBody(),
-		// EventObject.class);
+		// ExplorerObject.class);
 		synchronize();
 		return result;
 	}
 
-	public static Collection<EventObject> searchEventsByCategory(int position, int size, String text,
+	private static ExplorerObject updateEvent(String id, ExplorerObject event, String authToken) {
+		if (event != null) {
+			try {
+				String json = RemoteConnector.putJSON(serviceUrl, String.format(Constants.EVENTS_P, id), JsonUtils.toJSON(event)
+						.toString(), authToken);
+				return JsonUtils.toObject(json, ExplorerObject.class);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return null;
+	}
+
+	private static ExplorerObject createEvent(ExplorerObject event, String authToken) {
+		if (event != null) {
+			try {
+				String json = RemoteConnector.postJSON(serviceUrl, Constants.EVENTS, JsonUtils.toJSON(event).toString(),
+						authToken);
+				return JsonUtils.toObject(json, ExplorerObject.class);
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return null;
+
+	}
+
+	public static Collection<ExplorerObject> searchEventsByCategory(int position, int size, String text,
 			String... inCategories) throws DataException, StorageConfigurationException, ConnectionException,
 			ProtocolException, SecurityException, AACException {
-		ArrayList<EventObject> returnlist = new ArrayList<EventObject>();
+		ArrayList<ExplorerObject> returnlist = new ArrayList<ExplorerObject>();
 
 		if (inCategories == null || inCategories.length == 0)
 			return Collections.emptyList();
@@ -487,10 +518,10 @@ public class DTHelper {
 				where += "AND ( events MATCH ? ) AND fromTime > " + getCurrentDateTimeForSearching();
 				parameters.add(text);
 			}
-			Collection<EventObjectForBean> events = getInstance().storage.query(EventObjectForBean.class, where,
+			Collection<ExplorerObject> events = getInstance().storage.query(ExplorerObject.class, where,
 					parameters.toArray(new String[parameters.size()]), position, size, "fromTime ASC");
-			for (EventObjectForBean eventBean : events) {
-				returnlist.add(eventBean.getObjectForBean());
+			for (ExplorerObject event : events) {
+				returnlist.add(event);
 			}
 			return returnlist;
 		} else {
@@ -500,11 +531,26 @@ public class DTHelper {
 				filter.setSkip(position);
 				filter.setLimit(size);
 				// TO DO
-				// returnlist.addAll(tService.getEvents(filter,
-				// getAuthToken()));
+				returnlist.addAll(getEventsRemote(filter, getAuthToken()));
 			}
 			return returnlist;
 		}
+	}
+
+	private static List<ExplorerObject> getEventsRemote(ObjectFilter filter, String authToken) {
+		try {
+			Map<String, Object> params = null;
+			if (filter == null)
+				params = Collections.<String, Object> emptyMap();
+			else
+				params = Collections.<String, Object> singletonMap("filter", JsonUtils.toJSON(filter));
+			String json = RemoteConnector.getJSON(serviceUrl,Constants.EVENTS, authToken, params);
+			return JsonUtils.toObjectList(json, ExplorerObject.class);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	public static long getCurrentDateTimeForSearching() {
@@ -515,7 +561,7 @@ public class DTHelper {
 		return c.getTimeInMillis();
 	}
 
-	public static Collection<EventObject> getEventsByCategories(int position, int size, String... inCategories)
+	public static Collection<ExplorerObject> getEvents(int position, int size, String... inCategories)
 			throws DataException, StorageConfigurationException, ConnectionException, ProtocolException,
 			SecurityException {
 
@@ -532,7 +578,7 @@ public class DTHelper {
 					where += " or ";
 				if (categories[i] != null) {
 					nonNullCategories.add(categories[i]);
-					where += " type = ?";
+					where += " category = ?";
 				} else {
 					where += " type is null";
 				}
@@ -541,29 +587,74 @@ public class DTHelper {
 				where = "(" + where + ")";
 			}
 			where += "AND fromTime > " + getCurrentDateTimeForSearching();
-			return getInstance().storage.query(EventObject.class, where,
-					nonNullCategories.toArray(new String[nonNullCategories.size()]), position, size, "fromTime ASC");
+			return getInstance().storage.query(ExplorerObject.class, "",
+					null, position, size, "fromTime ASC");
 		} else {
-			ArrayList<EventObject> result = new ArrayList<EventObject>();
+			// ArrayList<ExplorerObject> result = new ArrayList<ExplorerObject>();
+			List<ExplorerObject> result = null;
 			for (int c = 0; c < categories.length; c++) {
 				ObjectFilter filter = new ObjectFilter();
 				filter.setTypes(Arrays.asList(categories));
 				filter.setSkip(position);
 				filter.setLimit(size);
 				// TO DO
-				// result.addAll(getRemote(instance.mContext, getAuthToken())
-				// .searchObjects(filter, EventObject.class));
+				result = getEventsRemote(filter, getAuthToken());
+				// returnlist.addAll(eu.trentorise.smartcampus.trentinofamiglia.custom.Utils.convertToLocalEvent(events));
+			}
+			return result;
+		}
+	}
+	
+	public static Collection<ExplorerObject> getEventsByCategories(int position, int size, String... inCategories)
+			throws DataException, StorageConfigurationException, ConnectionException, ProtocolException,
+			SecurityException {
+
+ 		if (inCategories == null || inCategories.length == 0)
+			return Collections.emptyList();
+
+		String[] categories = CategoryHelper.getAllCategories(new HashSet<String>(Arrays.asList(inCategories)));
+
+		if (Utils.getObjectVersion(instance.mContext, DTParamsHelper.getAppToken(), Constants.SYNC_DB_NAME) > 0) {
+			List<String> nonNullCategories = new ArrayList<String>();
+			String where = "";
+			for (int i = 0; i < categories.length; i++) {
+				if (where.length() > 0)
+					where += " or ";
+				if (categories[i] != null) {
+					nonNullCategories.add(categories[i]);
+					where += " category = ?";
+				} else {
+					where += " category is null";
+				}
+			}
+			if (where.length() > 0) {
+				where = "(" + where + ")";
+			}
+			where += " AND fromTime > " + getCurrentDateTimeForSearching();
+			return getInstance().storage.query(ExplorerObject.class, where,
+					nonNullCategories.toArray(new String[nonNullCategories.size()]), position, size, "fromTime ASC");
+		} else {
+			// ArrayList<ExplorerObject> result = new ArrayList<ExplorerObject>();
+			List<ExplorerObject> result = null;
+			for (int c = 0; c < categories.length; c++) {
+				ObjectFilter filter = new ObjectFilter();
+				filter.setTypes(Arrays.asList(categories));
+				filter.setSkip(position);
+				filter.setLimit(size);
+				// TO DO
+				result = getEventsRemote(filter, getAuthToken());
+				// returnlist.addAll(eu.trentorise.smartcampus.trentinofamiglia.custom.Utils.convertToLocalEvent(events));
 			}
 			return result;
 		}
 	}
 
-	// public static Collection<EventObject> getEventsByCategories(int position,
+	// public static Collection<ExplorerObject> getEventsByCategories(int position,
 	// int size, String... inCategories)
 	// throws DataException, StorageConfigurationException, ConnectionException,
 	// ProtocolException,
 	// SecurityException, AACException {
-	// ArrayList<EventObject> returnlist = new ArrayList<EventObject>();
+	// ArrayList<ExplorerObject> returnlist = new ArrayList<ExplorerObject>();
 	//
 	// if (inCategories == null || inCategories.length == 0)
 	// return Collections.emptyList();
@@ -595,7 +686,7 @@ public class DTHelper {
 	// nonNullCategories.toArray(new String[nonNullCategories.size()]),
 	// position, size, "fromTime ASC");
 	// for (EventObjectForBean eventBean : events) {
-	// LocalEventObject event = new LocalEventObject();
+	// LocalExplorerObject event = new LocalExplorerObject();
 	// event.setEventFromEventObjectForBean(eventBean);
 	// returnlist.add(event);
 	// }
@@ -606,7 +697,7 @@ public class DTHelper {
 	// filter.setTypes(Arrays.asList(categories));
 	// filter.setSkip(position);
 	// filter.setLimit(size);
-	// List<EventObject> events = tService.getEvents(filter, getAuthToken());
+	// List<ExplorerObject> events = tService.getEvents(filter, getAuthToken());
 	// returnlist
 	// .addAll(eu.iescities.pilot.rovereto.roveretoexplorer.custom.Utils.convertToLocalEvent(events));
 	//
@@ -616,11 +707,11 @@ public class DTHelper {
 	// }
 	// }
 
-	// public static Collection<EventObject> searchTodayEvents(int position, int
+	// public static Collection<ExplorerObject> searchTodayEvents(int position, int
 	// size, String text) throws DataException,
 	// StorageConfigurationException, ConnectionException, ProtocolException,
 	// SecurityException, AACException {
-	// ArrayList<EventObject> returnlist = new ArrayList<EventObject>();
+	// ArrayList<ExplorerObject> returnlist = new ArrayList<ExplorerObject>();
 	//
 	// // Date now = new Date();
 	// Calendar cal = Calendar.getInstance();
@@ -642,7 +733,7 @@ public class DTHelper {
 	// position, size, "fromTime ASC");
 	// /* convert from eventobj to localeventobj */
 	// for (EventObjectForBean eventBean : events) {
-	// EventObject event = new EventObject();
+	// ExplorerObject event = new ExplorerObject();
 	// event.setEventFromEventObjectForBean(eventBean);
 	// returnlist.add(event);
 	// }
@@ -654,12 +745,12 @@ public class DTHelper {
 	// filter.setCriteria(criteria);
 	// filter.setSkip(position);
 	// filter.setLimit(size);
-	// List<EventObject> events = tService.getEvents(filter, getAuthToken());
+	// List<ExplorerObject> events = tService.getEvents(filter, getAuthToken());
 	// returnlist.addAll(eu.iescities.pilot.rovereto.roveretoexplorer.custom.Utils.convertToLocalEvent(events));
 	// return returnlist;
 	// }
 	// }
-	public static Collection<EventObject> searchTodayEvents(int position, int size, String text) throws DataException,
+	public static Collection<ExplorerObject> searchTodayEvents(int position, int size, String text) throws DataException,
 			StorageConfigurationException, ConnectionException, ProtocolException, SecurityException {
 		// Date now = new Date();
 		Calendar cal = Calendar.getInstance();
@@ -673,7 +764,7 @@ public class DTHelper {
 		Date tomorrow = cal.getTime();
 
 		if (Utils.getObjectVersion(instance.mContext, DTParamsHelper.getAppToken(), Constants.SYNC_DB_NAME) > 0) {
-			return getInstance().storage.query(EventObject.class, "( toTime > " + getCurrentDateTimeForSearching()
+			return getInstance().storage.query(ExplorerObject.class, "( toTime > " + getCurrentDateTimeForSearching()
 					+ " AND fromTime < " + tomorrow.getTime() + " ) ", null, position, size, "fromTime ASC");
 		} else {
 			ObjectFilter filter = new ObjectFilter();
@@ -683,23 +774,21 @@ public class DTHelper {
 			filter.setSkip(position);
 			filter.setLimit(size);
 			// TO DO
-			// return getRemote(instance.mContext,
-			// getAuthToken()).searchObjects(
-			// filter, EventObject.class);
-			return Collections.emptyList();
+			List<ExplorerObject> events = getEventsRemote(filter, getAuthToken());
+			return events;
 		}
 	}
 
-	public static Collection<EventObject> getEventsByPOI(int position, int size, String poiId) throws DataException,
+	public static Collection<ExplorerObject> getEventsByPOI(int position, int size, String poiId) throws DataException,
 			StorageConfigurationException, ConnectionException, ProtocolException, SecurityException, AACException {
-		ArrayList<EventObject> returnlist = new ArrayList<EventObject>();
+		ArrayList<ExplorerObject> returnlist = new ArrayList<ExplorerObject>();
 
 		if (Utils.getObjectVersion(mContext, DTParamsHelper.getAppToken(), Constants.SYNC_DB_NAME) > 0) {
-			Collection<EventObjectForBean> events = getInstance().storage.query(EventObjectForBean.class,
+			Collection<ExplorerObject> events = getInstance().storage.query(ExplorerObject.class,
 					"poiId = ? AND fromTime > " + getCurrentDateTimeForSearching(), new String[] { poiId }, position,
 					size, "fromTime ASC");
-			for (EventObjectForBean eventBean : events) {
-				returnlist.add(eventBean.getObjectForBean());
+			for (ExplorerObject event : events) {
+				returnlist.add(event);
 			}
 			return returnlist;
 		} else {
@@ -710,9 +799,9 @@ public class DTHelper {
 			filter.setSkip(position);
 			filter.setLimit(size);
 			// TO DO
-			// return tService.getEvents(filter, getAuthToken());
+			return getEventsRemote(filter, getAuthToken());
 
-			return Collections.emptyList();
+			// return Collections.emptyList();
 		}
 	}
 
@@ -742,15 +831,26 @@ public class DTHelper {
 		Toast.makeText(activity, activity.getResources().getString(id), Toast.LENGTH_LONG).show();
 	}
 
-	public static boolean deleteEvent(EventObject eventObject) throws DataException, ConnectionException,
+	public static boolean deleteEvent(ExplorerObject ExplorerObject) throws DataException, ConnectionException,
 			ProtocolException, SecurityException, RemoteException, StorageConfigurationException, AACException {
-		if (eventObject.getId() != null) {
+		if (ExplorerObject.getId() != null) {
 			// TO DO
-			// deleteEvent(eventObject.getId(), getAuthToken());
+			deleteEvent(ExplorerObject.getId(), getAuthToken());
 			synchronize();
 			return true;
 		}
 		return false;
+	}
+
+	private static void deleteEvent(String id, String authToken) {
+		if (id != null) {
+			try {
+				RemoteConnector.deleteJSON(serviceUrl, String.format(Constants.EVENTS_P, id), authToken);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
 	}
 
 	// public static int rate(BaseDTObject event, int rating) throws
@@ -772,26 +872,31 @@ public class DTHelper {
 	// return returnValue;
 	// }
 	public static int rate(BaseDTObject event, int rating) throws ConnectionException, ProtocolException,
-			SecurityException, DataException, RemoteException, StorageConfigurationException {
+			SecurityException, DataException, RemoteException, StorageConfigurationException, AACException {
 		// TO DO
-//		MessageRequest request = new MessageRequest(GlobalConfig.getAppUrl(getInstance().mContext), Constants.SERVICE
-//				+ "/objects/" + event.getId() + "/rate");
-//		request.setMethod(Method.PUT);
-//		String query = "rating=" + rating;
-//		request.setQuery(query);
-//		String response = getInstance().mProtocolCarrier.invokeSync(request, DTParamsHelper.getAppToken(),
-//				getAuthToken()).getBody();
-//		synchronize();
-//		return Integer.parseInt(response);
+		int returnValue = rate(event.getId(), rating, getAuthToken());
+		synchronize();
+		return returnValue;
+	}
+
+	private static int rate(String id, int rating, String authToken) {
+		if (id != null) {
+			try {
+				Map<String, Object> params = Collections.<String, Object> singletonMap("rating", rating);
+				String json = RemoteConnector.putJSON(serviceUrl, String.format(Constants.RATE, id), null, authToken, params);
+				return Integer.parseInt(json);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 		return 3;
 	}
 
 	public static CommunityData review(BaseDTObject object, Review review) throws ConnectionException,
 			ProtocolException, SecurityException, DataException, RemoteException, StorageConfigurationException,
 			AACException, java.lang.SecurityException, eu.trentorise.smartcampus.network.RemoteException {
-		String string = RemoteConnector
-				.postJSON(getAppUrl(), SERVICE_ESPLORAROVERETO + "/social/review/" + object.getId(),
-						JsonUtils.toJSON(review), getAuthToken());
+		String string = RemoteConnector.postJSON(getAppUrl(),
+				SERVICE_ESPLORAROVERETO + "/social/review/" + object.getId(), JsonUtils.toJSON(review), getAuthToken());
 		synchronize();
 
 		return JsonUtils.toObject(string, CommunityData.class);
@@ -804,144 +909,182 @@ public class DTHelper {
 		return JsonUtils.toObject(string, ReviewObject.class).getReviews();
 	}
 
-//	public static BaseDTObject follow(BaseDTObject object) throws ConnectionException, ProtocolException,
-//			SecurityException, DataException, RemoteException, StorageConfigurationException, AACException {
-//		BaseDTObject returnObj = null;
-//
-//		// try {
-//		// if (object instanceof EventObject) {
-//		// returnObj = DTHelper.followEvent(object.getId(), getAuthToken());
-//		//
-//		//
-//		// }
-//		// // catch (TerritoryServiceException e) {
-//		// // e.printStackTrace();
-//		// // }
-//		MessageRequest request = new MessageRequest(GlobalConfig.getAppUrl(mContext), Constants.SERVICE + "/objects/"
-//				+ object.getId() + "/follow");
-//		request.setMethod(Method.PUT);
-//		String query = "idTopic=" + idTopic;
-//		request.setQuery(query);
-//		getInstance().mProtocolCarrier.invokeSync(request, DTParamsHelper.getAppToken(), getAuthToken());
-//		synchronize();
-//		return returnObj;
-//	}
-//
-//	private static BaseDTObject followEvent(String id, String authToken) {
-//		return null;
-//	}
-//
-//	public static void unfollow(BaseDTObject object) throws ConnectionException, ProtocolException, SecurityException,
-//			DataException, RemoteException, StorageConfigurationException, AACException {
-//		// try {
-//		// if (object instanceof EventObject) {
-//		// DTHelper.unfollowEvent(object.getId(), getAuthToken());
-//		//
-//		// }
-//		// }
-//		// // catch (TerritoryServiceException e) {
-//		// // e.printStackTrace();
-//		// // }
-//		MessageRequest request = new MessageRequest(GlobalConfig.getAppUrl(mContext), Constants.SERVICE + "/objects/"
-//				+ object.getId() + "/unfollow");
-//		request.setMethod(Method.PUT);
-//		getInstance().mProtocolCarrier.invokeSync(request, DTParamsHelper.getAppToken(), getAuthToken());
-//		synchronize();
-//	}
-    public static void follow(BaseDTObject event, String idTopic)
-            throws ConnectionException, ProtocolException, SecurityException,
-            DataException, RemoteException, StorageConfigurationException {
-    	//TO DO
-//    MessageRequest request = new MessageRequest(
-//                    GlobalConfig.getAppUrl(getInstance().mContext),
-//                    Constants.SERVICE + "/objects/" + event.getId() + "/follow");
-//    request.setMethod(Method.PUT);
-//    String query = "idTopic=" + idTopic;
-//    request.setQuery(query);
-//    getInstance().mProtocolCarrier.invokeSync(request,
-//                    DTParamsHelper.getAppToken(), getAuthToken());
-//    synchronize();
-}
+	// public static BaseDTObject follow(BaseDTObject object) throws
+	// ConnectionException, ProtocolException,
+	// SecurityException, DataException, RemoteException,
+	// StorageConfigurationException, AACException {
+	// BaseDTObject returnObj = null;
+	//
+	// // try {
+	// // if (object instanceof ExplorerObject) {
+	// // returnObj = DTHelper.followEvent(object.getId(), getAuthToken());
+	// //
+	// //
+	// // }
+	// // // catch (TerritoryServiceException e) {
+	// // // e.printStackTrace();
+	// // // }
+	// MessageRequest request = new
+	// MessageRequest(GlobalConfig.getAppUrl(mContext), Constants.SERVICE +
+	// "/objects/"
+	// + object.getId() + "/follow");
+	// request.setMethod(Method.PUT);
+	// String query = "idTopic=" + idTopic;
+	// request.setQuery(query);
+	// getInstance().mProtocolCarrier.invokeSync(request,
+	// DTParamsHelper.getAppToken(), getAuthToken());
+	// synchronize();
+	// return returnObj;
+	// }
+	//
+	// private static BaseDTObject followEvent(String id, String authToken) {
+	// return null;
+	// }
+	//
+	// public static void unfollow(BaseDTObject object) throws
+	// ConnectionException, ProtocolException, SecurityException,
+	// DataException, RemoteException, StorageConfigurationException,
+	// AACException {
+	// // try {
+	// // if (object instanceof ExplorerObject) {
+	// // DTHelper.unfollowEvent(object.getId(), getAuthToken());
+	// //
+	// // }
+	// // }
+	// // // catch (TerritoryServiceException e) {
+	// // // e.printStackTrace();
+	// // // }
+	// MessageRequest request = new
+	// MessageRequest(GlobalConfig.getAppUrl(mContext), Constants.SERVICE +
+	// "/objects/"
+	// + object.getId() + "/unfollow");
+	// request.setMethod(Method.PUT);
+	// getInstance().mProtocolCarrier.invokeSync(request,
+	// DTParamsHelper.getAppToken(), getAuthToken());
+	// synchronize();
+	// }
+	public static BaseDTObject follow(BaseDTObject event, String idTopic) throws ConnectionException,
+			ProtocolException, SecurityException, DataException, RemoteException, StorageConfigurationException,
+			AACException {
+		// TO DO
+		BaseDTObject returnObj = null;
 
-public static void unfollow(BaseDTObject event) throws ConnectionException,
-            ProtocolException, SecurityException, DataException,
-            RemoteException, StorageConfigurationException {
-	//TO DO
-//    MessageRequest request = new MessageRequest(
-//                    GlobalConfig.getAppUrl(getInstance().mContext),
-//                    Constants.SERVICE + "/objects/" + event.getId() + "/unfollow");
-//    request.setMethod(Method.PUT);
-//    getInstance().mProtocolCarrier.invokeSync(request,
-//                    DTParamsHelper.getAppToken(), getAuthToken());
-//    synchronize();
-}
-	private static void unfollowEvent(String id, String authToken) {
-		// TODO Auto-generated method stub
+		try {
+			returnObj = followEvent(event.getId(), getAuthToken(), true);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		synchronize();
+		return returnObj;
+	}
+
+	private static ExplorerObject followEvent(String id, String authToken, boolean add) {
+		if (id != null) {
+			try {
+
+				String json = RemoteConnector
+						.putJSON(serviceUrl, String.format(add ? Constants.FOLLOW : Constants.UNFOLLOW, id), authToken);
+				return JsonUtils.toObject(json, ExplorerObject.class);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return null;
+	}
+
+	public static void unfollow(BaseDTObject event) throws ConnectionException, ProtocolException, SecurityException,
+			DataException, RemoteException, StorageConfigurationException, AACException {
+		// TO DO
+		try {
+
+			unfollowEvent(event.getId(), getAuthToken(), false);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		synchronize();
+	}
+
+	private static void unfollowEvent(String id, String authToken, boolean add) {
+		if (id != null) {
+			try {
+
+				String json = RemoteConnector
+						.putJSON(serviceUrl, String.format(add ? Constants.FOLLOW : Constants.UNFOLLOW, id), authToken);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 
 	}
 
-//	public static EventObject attend(BaseDTObject event) throws ConnectionException, ProtocolException,
-//			SecurityException, DataException, RemoteException, StorageConfigurationException, AACException {
-//		LocalEventObject returnEvent = new LocalEventObject();
-//		EventObject newEvent = tService.myEvent(event.getId(), true, getAuthToken());
-//		EventObjectForBean newEventBean = new EventObjectForBean();
-//		newEventBean.setObjectForBean(newEvent);
-//		returnEvent.setEventFromEventObjectForBean(newEventBean);
-//		synchronize();
-//		return returnEvent;
-//	}
-//
-//	public static LocalEventObject notAttend(BaseDTObject event) throws ConnectionException, ProtocolException,
-//			SecurityException, DataException, RemoteException, StorageConfigurationException, AACException {
-//		LocalEventObject returnEvent = new LocalEventObject();
-//		EventObject newEvent = tService.myEvent(event.getId(), false, getAuthToken());
-//		EventObjectForBean newEventBean = new EventObjectForBean();
-//		newEventBean.setObjectForBean(newEvent);
-//		returnEvent.setEventFromEventObjectForBean(newEventBean);
-//		synchronize();
-//		return returnEvent;
-//	}
-    public static EventObject attend(BaseDTObject event)
-            throws ConnectionException, ProtocolException, SecurityException,
-            DataException, RemoteException, StorageConfigurationException {
-    	//TO DO
-//    MessageRequest request = new MessageRequest(
-//                    GlobalConfig.getAppUrl(getInstance().mContext),
-//                    Constants.SERVICE + "/objects/" + event.getId() + "/attend");
-//    request.setMethod(Method.PUT);
-//    String response = getInstance().mProtocolCarrier.invokeSync(request,
-//                    DTParamsHelper.getAppToken(), getAuthToken()).getBody();
-//    synchronize();
-//    EventObject result = eu.trentorise.smartcampus.android.common.Utils
-//                    .convertJSONToObject(response, EventObject.class);
-    return (EventObject) event;
-}
+	// public static ExplorerObject attend(BaseDTObject event) throws
+	// ConnectionException, ProtocolException,
+	// SecurityException, DataException, RemoteException,
+	// StorageConfigurationException, AACException {
+	// LocalExplorerObject returnEvent = new LocalExplorerObject();
+	// ExplorerObject newEvent = tService.myEvent(event.getId(), true,
+	// getAuthToken());
+	// EventObjectForBean newEventBean = new EventObjectForBean();
+	// newEventBean.setObjectForBean(newEvent);
+	// returnEvent.setEventFromEventObjectForBean(newEventBean);
+	// synchronize();
+	// return returnEvent;
+	// }
+	//
+	// public static LocalExplorerObject notAttend(BaseDTObject event) throws
+	// ConnectionException, ProtocolException,
+	// SecurityException, DataException, RemoteException,
+	// StorageConfigurationException, AACException {
+	// LocalExplorerObject returnEvent = new LocalExplorerObject();
+	// ExplorerObject newEvent = tService.myEvent(event.getId(), false,
+	// getAuthToken());
+	// EventObjectForBean newEventBean = new EventObjectForBean();
+	// newEventBean.setObjectForBean(newEvent);
+	// returnEvent.setEventFromEventObjectForBean(newEventBean);
+	// synchronize();
+	// return returnEvent;
+	// }
+	public static ExplorerObject attend(BaseDTObject event) throws ConnectionException, ProtocolException,
+			SecurityException, DataException, RemoteException, StorageConfigurationException, AACException {
+		// TO DO
+		ExplorerObject newEvent = myEvent(event.getId(), true, getAuthToken());
 
-public static EventObject notAttend(BaseDTObject event)
-            throws ConnectionException, ProtocolException, SecurityException,
-            DataException, RemoteException, StorageConfigurationException {
-	//TO DO
+		synchronize();
+		return newEvent;
+	}
 
-//    MessageRequest request = new MessageRequest(
-//                    GlobalConfig.getAppUrl(getInstance().mContext),
-//                    Constants.SERVICE + "/objects/" + event.getId() + "/notAttend");
-//    request.setMethod(Method.PUT);
-//    String response = getInstance().mProtocolCarrier.invokeSync(request,
-//                    DTParamsHelper.getAppToken(), getAuthToken()).getBody();
-//    synchronize();
-//    EventObject result = eu.trentorise.smartcampus.android.common.Utils
-//                    .convertJSONToObject(response, EventObject.class);
-//    return result;
-	return (EventObject) event;
-}
+	public static ExplorerObject notAttend(BaseDTObject event) throws ConnectionException, ProtocolException,
+			SecurityException, DataException, RemoteException, StorageConfigurationException {
+		// TO DO
 
-	public static EventObjectForBean findEventByEntityId(String entityId) throws DataException,
+		ExplorerObject newEvent = myEvent(event.getId(), false, getAuthToken());
+
+		return newEvent;
+	}
+
+	private static ExplorerObject myEvent(String id, boolean add, String authToken) {
+		if (id != null) {
+			try {
+				String json = RemoteConnector.putJSON(serviceUrl, String.format(add ? Constants.ATTEND : Constants.NOT_ATTEND, id),
+						authToken);
+				return JsonUtils.toObject(json, ExplorerObject.class);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return null;
+	}
+
+	public static ExplorerObject findEventByEntityId(String entityId) throws DataException,
 			StorageConfigurationException, ConnectionException, ProtocolException, SecurityException {
-		return findDTObjectByEntityId(EventObjectForBean.class, entityId);
+		return findDTObjectByEntityId(ExplorerObject.class, entityId);
 	}
 
 	@SuppressWarnings("rawtypes")
-	private static <T extends GenericObjectForBean> T findDTObjectByEntityId(Class<T> cls, String entityId)
+	private static <T extends BaseDTObject> T findDTObjectByEntityId(Class<T> cls, String entityId)
 			throws DataException, StorageConfigurationException, ConnectionException, ProtocolException,
 			SecurityException {
 		T returnObject = null;
@@ -956,7 +1099,7 @@ public static EventObject notAttend(BaseDTObject event)
 	}
 
 	@SuppressWarnings("rawtypes")
-	private static <T extends GenericObjectForBean> T findLocalDTOObjectByEntityId(Class<T> cls, String entityId) {
+	private static <T extends BaseDTObject> T findLocalDTOObjectByEntityId(Class<T> cls, String entityId) {
 		try {
 			DTHelper.synchronize();
 			T returnObject = null;
@@ -971,47 +1114,51 @@ public static EventObject notAttend(BaseDTObject event)
 
 	}
 
-//	public static Boolean saveStory(StoryObject storyObject) throws RemoteException, DataException,
-//			StorageConfigurationException, ConnectionException, ProtocolException, SecurityException, AACException {
-//		boolean returnvalue = true;
-//		if (storyObject.getId() == null) {
-//			tService.createStory(storyObject, getAuthToken());
-//			returnvalue = true;
-//		} else {
-//			storyObject = tService.updateStory(storyObject.getId(), storyObject, getAuthToken());
-//			returnvalue = false;
-//		}
-//		// String requestService = null;
-//		// Method method = null;
-//		// Boolean result = null;
-//		// if (storyObject.getId() == null) {
-//		// // create
-//		// requestService = Constants.SERVICE +
-//		// "/eu.trentorise.smartcampus.dt.model.UserStoryObject";
-//		// method = Method.POST;
-//		// result = true;
-//		// } else {
-//		// // update
-//		// requestService = Constants.SERVICE +
-//		// "/eu.trentorise.smartcampus.dt.model.UserStoryObject/"
-//		// + storyObject.getId();
-//		// method = Method.PUT;
-//		// result = false;
-//		// }
-//		// MessageRequest request = new
-//		// MessageRequest(GlobalConfig.getAppUrl(mContext),
-//		// requestService);
-//		// request.setMethod(method);
-//		// String json =
-//		// eu.trentorise.smartcampus.android.common.Utils.convertToJSON(storyObject);
-//		// request.setBody(json);
-//		//
-//		// getInstance().mProtocolCarrier.invokeSync(request,
-//		// DTParamsHelper.getAppToken(), getAuthToken());
-//		// getRemote(mContext, instance.token).create(poi);
-//		synchronize();
-//		return returnvalue;
-//	}
+	// public static Boolean saveStory(StoryObject storyObject) throws
+	// RemoteException, DataException,
+	// StorageConfigurationException, ConnectionException, ProtocolException,
+	// SecurityException, AACException {
+	// boolean returnvalue = true;
+	// if (storyObject.getId() == null) {
+	// tService.createStory(storyObject, getAuthToken());
+	// returnvalue = true;
+	// } else {
+	// storyObject = tService.updateStory(storyObject.getId(), storyObject,
+	// getAuthToken());
+	// returnvalue = false;
+	// }
+	// // String requestService = null;
+	// // Method method = null;
+	// // Boolean result = null;
+	// // if (storyObject.getId() == null) {
+	// // // create
+	// // requestService = Constants.SERVICE +
+	// // "/eu.trentorise.smartcampus.dt.model.UserStoryObject";
+	// // method = Method.POST;
+	// // result = true;
+	// // } else {
+	// // // update
+	// // requestService = Constants.SERVICE +
+	// // "/eu.trentorise.smartcampus.dt.model.UserStoryObject/"
+	// // + storyObject.getId();
+	// // method = Method.PUT;
+	// // result = false;
+	// // }
+	// // MessageRequest request = new
+	// // MessageRequest(GlobalConfig.getAppUrl(mContext),
+	// // requestService);
+	// // request.setMethod(method);
+	// // String json =
+	// //
+	// eu.trentorise.smartcampus.android.common.Utils.convertToJSON(storyObject);
+	// // request.setBody(json);
+	// //
+	// // getInstance().mProtocolCarrier.invokeSync(request,
+	// // DTParamsHelper.getAppToken(), getAuthToken());
+	// // getRemote(mContext, instance.token).create(poi);
+	// synchronize();
+	// return returnvalue;
+	// }
 
 	// public static Collection<StoryObject> getStoryByCategory(int position,
 	// int size, String... inCategories)
@@ -1099,15 +1246,17 @@ public static EventObject notAttend(BaseDTObject event)
 	// }
 	// }
 
-//	public static Boolean deleteStory(StoryObject storyObject) throws DataException, ConnectionException,
-//			ProtocolException, SecurityException, RemoteException, StorageConfigurationException, AACException {
-//		if (storyObject.getId() != null) {
-//			tService.deleteStory(storyObject.getId(), getAuthToken());
-//			synchronize();
-//			return true;
-//		}
-//		return false;
-//	}
+	// public static Boolean deleteStory(StoryObject storyObject) throws
+	// DataException, ConnectionException,
+	// ProtocolException, SecurityException, RemoteException,
+	// StorageConfigurationException, AACException {
+	// if (storyObject.getId() != null) {
+	// tService.deleteStory(storyObject.getId(), getAuthToken());
+	// synchronize();
+	// return true;
+	// }
+	// return false;
+	// }
 
 	// public static StoryObjectForBean findStoryByEntityId(String storyId)
 	// throws DataException,
@@ -1154,8 +1303,8 @@ public static EventObject notAttend(BaseDTObject event)
 	// SecurityException, DataException, RemoteException,
 	// StorageConfigurationException,
 	// AACException {
-	// // LocalEventObject returnEvent = new LocalEventObject();
-	// // EventObject newEvent = tService.myEvent(event.getId(), true,
+	// // LocalExplorerObject returnEvent = new LocalExplorerObject();
+	// // ExplorerObject newEvent = tService.myEvent(event.getId(), true,
 	// // getAuthToken());
 	// // EventObjectForBean newEventBean = new EventObjectForBean();
 	// // newEventBean.setObjectForBean(newEvent);
@@ -1284,7 +1433,7 @@ public static EventObject notAttend(BaseDTObject event)
 	// else
 	// args.add(what);
 	// }
-	// if (EventObject.class.getCanonicalName().equals(cls.getCanonicalName()))
+	// if (ExplorerObject.class.getCanonicalName().equals(cls.getCanonicalName()))
 	// {
 	// if (when != null)
 	// where = addWhenToWhere(where, when.getFrom(), when.getTo());
@@ -1371,7 +1520,7 @@ public static EventObject notAttend(BaseDTObject event)
 				else
 					args.add(what);
 			}
-			if (EventObject.class.getCanonicalName().equals(cls.getCanonicalName())) {
+			if (ExplorerObject.class.getCanonicalName().equals(cls.getCanonicalName())) {
 				if (when != null)
 					where = addWhenToWhere(where, when.getFrom(), when.getTo());
 
@@ -1387,7 +1536,7 @@ public static EventObject notAttend(BaseDTObject event)
 			 * se evento metti in ordine di data ma se place metti in ordine
 			 * alfabetico
 			 */
-			if (EventObject.class.getCanonicalName().equals(cls.getCanonicalName())) {
+			if (ExplorerObject.class.getCanonicalName().equals(cls.getCanonicalName())) {
 				return getInstance().storage.query(cls, where, argsArray, position, size, "fromTime ASC");
 			} else {
 				return getInstance().storage.query(cls, where, argsArray, position, size, "title ASC");
@@ -1398,118 +1547,127 @@ public static EventObject notAttend(BaseDTObject event)
 	}
 
 	@SuppressWarnings("unchecked")
-	 private static <T extends BasicObject> Collection<T> getObjectsFromServer(
-             int position, int size, String what, WhereForSearch distance,
-             WhenForSearch when, boolean myevent, Class<T> cls,
-             String[] inCategories, SortedMap<String, Integer> sort) {
-     try {
+	private static <T extends BasicObject> Collection<T> getObjectsFromServer(int position, int size, String what,
+			WhereForSearch distance, WhenForSearch when, boolean myevent, Class<T> cls, String[] inCategories,
+			SortedMap<String, Integer> sort) {
+		try {
 
-             ObjectFilter filter = new ObjectFilter();
+			ObjectFilter filter = new ObjectFilter();
 
-             /* get position */
-             // long currentDate = getCurrentDateTimeForSearching();
-             if (when != null)
-                     filter.setFromTime(when.getFrom());
-             if ((when != null) && (when.getTo() != 0))
-                     filter.setToTime(when.getTo());
+			/* get position */
+			// long currentDate = getCurrentDateTimeForSearching();
+			if (when != null)
+				filter.setFromTime(when.getFrom());
+			if ((when != null) && (when.getTo() != 0))
+				filter.setToTime(when.getTo());
 
-             if (distance != null) {
-                     GeoPoint mypos = MapManager
-                                     .requestMyLocation(getInstance().mContext);
-                     filter.setCenter(new double[] {
-                                     (double) mypos.getLatitudeE6() / 1000000,
-                                     (double) mypos.getLongitudeE6() / 1000000 });
-                     filter.setRadius(distance.getFilter());
-             }
-             if (what != null && what.length() > 0) {
-                     filter.setText(what);
-             }
-             if (inCategories[0] != null) {
-                     filter.setTypes(Arrays.asList(CategoryHelper
-                                     .getAllCategories(new HashSet<String>(Arrays
-                                                     .asList(inCategories)))));
-             }
-             filter.setSkip(position);
-             filter.setLimit(size);
-             filter.setClassName(cls.getCanonicalName());
-             if (sort != null)
-                     filter.setSort(sort);
-             //TO DO
-//             Collection<T> result = getRemote(instance.mContext, getAuthToken())
-//                             .searchObjects(filter, cls);
-             Collection<T> result =null;
-             if (result != null) {
-                     synchronize();
-             }
-             return result;
-             // List<T> returnevents =
-             // eu.trentorise.smartcampus.android.common.Utils.convertJSONToObjects(eventsReturn,
-             // cls);
-             // return returnevents;
+			if (distance != null) {
+				GeoPoint mypos = MapManager.requestMyLocation(getInstance().mContext);
+				filter.setCenter(new double[] { (double) mypos.getLatitudeE6() / 1000000,
+						(double) mypos.getLongitudeE6() / 1000000 });
+				filter.setRadius(distance.getFilter());
+			}
+			if (what != null && what.length() > 0) {
+				filter.setText(what);
+			}
+			if (inCategories[0] != null) {
+				filter.setTypes(Arrays.asList(CategoryHelper.getAllCategories(new HashSet<String>(Arrays
+						.asList(inCategories)))));
+			}
+			filter.setSkip(position);
+			filter.setLimit(size);
+			filter.setClassName(cls.getCanonicalName());
+			if (sort != null)
+				filter.setSort(sort);
+			// TO DO
+			Collection<T> result = new ArrayList<T>();
+			Collection<ExplorerObject> events = null;
+			events = getEventsRemote(filter, null);
 
-     } catch (Exception e) {
-             return null;
-     }
-}
-//	private static <T extends BasicObject> Collection<T> getObjectsFromServer(int position, int size, String what,
-//			WhereForSearch distance, WhenForSearch when, boolean myevent, Class<?> cls, String[] inCategories,
-//			SortedMap<String, Integer> sort) {
-//		try {
-//
-//			ObjectFilter filter = new ObjectFilter();
-//
-//			/* get position */
-//			// long currentDate = getCurrentDateTimeForSearching();
-//			if (when != null)
-//				filter.setFromTime(when.getFrom());
-//			if ((when != null) && (when.getTo() != 0))
-//				filter.setToTime(when.getTo());
-//
-//			GeoPoint mypos = MapManager.requestMyLocation(mContext);
-//			if (distance != null) {
-//				filter.setCenter(new double[] { (double) mypos.getLatitudeE6() / 1000000,
-//						(double) mypos.getLongitudeE6() / 1000000 });
-//				filter.setRadius(distance.getFilter());
+//			for (ExplorerObject poi : events) {
+//				ExplorerObject eventBean = new ExplorerObject();
+//				eventBean.setObjectForBean(poi);
+//				eventsbean.add(eventBean);
 //			}
-//			if (what != null && what.length() > 0) {
-//				filter.setText(what);
-//			}
-//			if (inCategories[0] != null) {
-//				filter.setTypes(Arrays.asList(CategoryHelper.getAllCategories(new HashSet<String>(Arrays
-//						.asList(inCategories)))));
-//			}
-//			filter.setSkip(position);
-//			filter.setLimit(size);
-//			// filter.setClassName(cls.getCanonicalName());
-//			if (sort != null)
-//				filter.setSort(sort);
-//			// Collection<T> result = getRemote(mContext,
-//			// getAuthToken()).searchObjects(filter, cls);
-//			Collection<T> result = new ArrayList<T>();
-//
-//			if (cls == EventObjectForBean.class) {
-//				Collection<EventObject> events = null;
-//				Collection<EventObjectForBean> eventsbean = new ArrayList<EventObjectForBean>();
-//				events = tService.getEvents(filter, null);
-//
-//				for (EventObject poi : events) {
-//					EventObjectForBean eventBean = new EventObjectForBean();
-//					eventBean.setObjectForBean(poi);
-//					eventsbean.add(eventBean);
-//				}
-//				result = (Collection<T>) eventsbean;
-//
-//			}
-//
-//			if (result != null) {
-//				synchronize();
-//			}
-//			return result;
-//
-//		} catch (Exception e) {
-//			return null;
-//		}
-//	}
+//			result = (Collection<T>) eventsbean;
+
+			if (result != null) {
+				synchronize();
+			}
+			return result;
+			// List<T> returnevents =
+			// eu.trentorise.smartcampus.android.common.Utils.convertJSONToObjects(eventsReturn,
+			// cls);
+			// return returnevents;
+
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	// private static <T extends BasicObject> Collection<T>
+	// getObjectsFromServer(int position, int size, String what,
+	// WhereForSearch distance, WhenForSearch when, boolean myevent, Class<?>
+	// cls, String[] inCategories,
+	// SortedMap<String, Integer> sort) {
+	// try {
+	//
+	// ObjectFilter filter = new ObjectFilter();
+	//
+	// /* get position */
+	// // long currentDate = getCurrentDateTimeForSearching();
+	// if (when != null)
+	// filter.setFromTime(when.getFrom());
+	// if ((when != null) && (when.getTo() != 0))
+	// filter.setToTime(when.getTo());
+	//
+	// GeoPoint mypos = MapManager.requestMyLocation(mContext);
+	// if (distance != null) {
+	// filter.setCenter(new double[] { (double) mypos.getLatitudeE6() / 1000000,
+	// (double) mypos.getLongitudeE6() / 1000000 });
+	// filter.setRadius(distance.getFilter());
+	// }
+	// if (what != null && what.length() > 0) {
+	// filter.setText(what);
+	// }
+	// if (inCategories[0] != null) {
+	// filter.setTypes(Arrays.asList(CategoryHelper.getAllCategories(new
+	// HashSet<String>(Arrays
+	// .asList(inCategories)))));
+	// }
+	// filter.setSkip(position);
+	// filter.setLimit(size);
+	// // filter.setClassName(cls.getCanonicalName());
+	// if (sort != null)
+	// filter.setSort(sort);
+	// // Collection<T> result = getRemote(mContext,
+	// // getAuthToken()).searchObjects(filter, cls);
+	// Collection<T> result = new ArrayList<T>();
+	//
+	// if (cls == EventObjectForBean.class) {
+	// Collection<ExplorerObject> events = null;
+	// Collection<EventObjectForBean> eventsbean = new
+	// ArrayList<EventObjectForBean>();
+	// events = tService.getEvents(filter, null);
+	//
+	// for (ExplorerObject poi : events) {
+	// EventObjectForBean eventBean = new EventObjectForBean();
+	// eventBean.setObjectForBean(poi);
+	// eventsbean.add(eventBean);
+	// }
+	// result = (Collection<T>) eventsbean;
+	//
+	// }
+	//
+	// if (result != null) {
+	// synchronize();
+	// }
+	// return result;
+	//
+	// } catch (Exception e) {
+	// return null;
+	// }
+	// }
 
 	private static String addMyEventToWhere(String where) {
 		String whereReturns = new String(" attending IS NOT NULL ");
@@ -1573,9 +1731,9 @@ public static EventObject notAttend(BaseDTObject event)
 				whereReturns += " or ";
 			if (categories[i] != null) {
 				nonNullCategories.add(categories[i]);
-				whereReturns += " type = ?";
+				whereReturns += " category = ?";
 			} else {
-				whereReturns += " type is null";
+				whereReturns += " category is null";
 			}
 		}
 		if (where.length() > 0) {
@@ -1597,26 +1755,27 @@ public static EventObject notAttend(BaseDTObject event)
 		}
 	}
 
-//	public static EventObject findEventById(String eventId) {
-//		EventObject returnEvent = new EventObject();
-//		try {
-//			EventObjectForBean event = getInstance().storage.getObjectById(eventId, EventObjectForBean.class);
-//			returnEvent.setEventFromEventObjectForBean(event);
-//			return returnEvent;
-//		} catch (Exception e) {
-//			return null;
-//		}
-//	}
-	 public static EventObject findEventById(String eventId) {
+	// public static ExplorerObject findEventById(String eventId) {
+	// ExplorerObject returnEvent = new ExplorerObject();
+	// try {
+	// EventObjectForBean event = getInstance().storage.getObjectById(eventId,
+	// EventObjectForBean.class);
+	// returnEvent.setEventFromEventObjectForBean(event);
+	// return returnEvent;
+	// } catch (Exception e) {
+	// return null;
+	// }
+	// }
+	public static ExplorerObject findEventById(String eventId) {
 
-         try {
-                 EventObject event = getInstance().storage.getObjectById(eventId,
-                                 EventObject.class);
-                 return event;
-         } catch (Exception e) {
-                 return null;
-         }
- }
+		try {
+			ExplorerObject event = getInstance().storage.getObjectById(eventId, ExplorerObject.class);
+			return event;
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
 	public static SharedPreferences getTutorialPreferences(Context ctx) {
 		SharedPreferences out = ctx.getSharedPreferences(TUT_PREFS, Context.MODE_PRIVATE);
 		return out;

@@ -172,26 +172,7 @@ public class SearchFragment extends Fragment {
 		if (bundle != null && bundle.containsKey(CategoryHelper.CATEGORY_TYPE_EVENTS)) {
 			type = CategoryHelper.CATEGORY_TYPE_EVENTS;
 
-		} else if (bundle != null && bundle.containsKey(CategoryHelper.CATEGORY_TYPE_POIS)) {
-			type = CategoryHelper.CATEGORY_TYPE_POIS;
-			whenSearchSpinner.setVisibility(View.GONE);
-			whenLabel.setVisibility(View.GONE);
-
-		} else if (bundle != null && bundle.containsKey(CategoryHelper.CATEGORY_TYPE_TRACKS)) {
-			type = CategoryHelper.CATEGORY_TYPE_TRACKS;
-			whenSearchSpinner.setVisibility(View.GONE);
-			whenLabel.setVisibility(View.GONE);
-			whereSearchSpinner.setVisibility(View.GONE);
-			whereLabel.setVisibility(View.GONE);
-
-		} else if (bundle != null && bundle.containsKey(CategoryHelper.CATEGORY_TYPE_INFOS)) {
-			type = CategoryHelper.CATEGORY_TYPE_INFOS;
-			whenSearchSpinner.setVisibility(View.GONE);
-			whenLabel.setVisibility(View.GONE);
-			whereSearchSpinner.setVisibility(View.GONE);
-			whereLabel.setVisibility(View.GONE);
-
-		}
+		} 
 
 	}
 

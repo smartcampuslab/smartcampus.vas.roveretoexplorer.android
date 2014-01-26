@@ -13,14 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-package eu.iescities.pilot.rovereto.roveretoexplorer.custom.data;
+package eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-public class EventObject extends BaseDTObject {
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.Address;
+
+public class ExplorerObject extends BaseDTObject {
 	
 
 	private static final long serialVersionUID = 388550207183035548L;
@@ -120,7 +122,7 @@ public class EventObject extends BaseDTObject {
 		this.rating = rating;
 	}
 
-	public EventObject() {
+	public ExplorerObject() {
 		super();
 	}
 
@@ -135,12 +137,10 @@ public CharSequence toDateTimeString() {
                 return dateTimeString();        
         return DATE_FORMAT.format(new Date(getToTime()));
 }
-	public EventObject copy() {
-		EventObject o = new EventObject();
+	public ExplorerObject copy() {
+		ExplorerObject o = new ExplorerObject();
 		o.setCommunityData(getCommunityData());
 		o.setCommunityData(getCommunityData());
-		o.setCreatorId(getCreatorId());
-		o.setCreatorName(getCreatorName());
 		o.setCustomData(getCustomData());
 		o.setDescription(getDescription());
 		o.setFromTime(getFromTime());

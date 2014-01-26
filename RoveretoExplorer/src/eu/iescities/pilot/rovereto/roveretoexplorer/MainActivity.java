@@ -3,6 +3,8 @@ package eu.iescities.pilot.rovereto.roveretoexplorer;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Resources.NotFoundException;
@@ -18,8 +20,8 @@ import android.view.MenuInflater;
 import android.widget.Toast;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.AbstractAsyncTaskProcessor;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.CategoryHelper;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.BaseDTObject;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.DTHelper;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.BaseDTObject;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.EventsListingFragment;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.search.SearchFragment;
 import eu.iescities.pilot.rovereto.roveretoexplorer.map.MapFragment;
@@ -29,6 +31,8 @@ import eu.iescities.pilot.rovereto.roveretoexplorer.ui.navdrawer.NavDrawerAdapte
 import eu.iescities.pilot.rovereto.roveretoexplorer.ui.navdrawer.NavDrawerItem;
 import eu.iescities.pilot.rovereto.roveretoexplorer.ui.navdrawer.NavMenuItem;
 import eu.iescities.pilot.rovereto.roveretoexplorer.ui.navdrawer.NavMenuSection;
+import eu.trentorise.smartcampus.ac.AACException;
+import eu.trentorise.smartcampus.ac.SCAccessProvider;
 import eu.trentorise.smartcampus.android.common.GlobalConfig;
 import eu.trentorise.smartcampus.android.common.SCAsyncTask;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
@@ -36,10 +40,10 @@ import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 public class MainActivity extends AbstractNavDrawerActivity{
 
 	public static final String TAG_FRAGMENT_MAP = "fragmap";
-	public static final String TAG_FRAGMENT_POI_LIST = "fragpopi";
+//	public static final String TAG_FRAGMENT_POI_LIST = "fragpopi";
 	public static final String TAG_FRAGMENT_EVENT_LIST = "fragewent";
-	public static final String TAG_FRAGMENT_TRACK_LIST = "fragtrack";
-	public static final String TAG_FRAGMENT_INFO_LIST = "fraginfo";
+//	public static final String TAG_FRAGMENT_TRACK_LIST = "fragtrack";
+//	public static final String TAG_FRAGMENT_INFO_LIST = "fraginfo";
 
 	private FragmentManager mFragmentManager;
 
@@ -50,13 +54,60 @@ public class MainActivity extends AbstractNavDrawerActivity{
 		super.onCreate(savedInstanceState);
 		//Log.i("AB TITLE", "MainActivity start on create!!!");
 		mFragmentManager = getSupportFragmentManager();
+		if (!signedIn()) {
+			return;
+		}
 		initDataManagement(savedInstanceState);
 
 	}
 
+	protected boolean signedIn() {
+		SCAccessProvider provider = SCAccessProvider.getInstance(this);
+		try {
+			if (provider.isLoggedIn(this)) {
+				return true;
+			}
+			showLoginDialog(provider);
+		} catch (AACException e) {
+			e.printStackTrace();
+			return false;
+		}
+		
+		return false;
+	}
+	
+	private void showLoginDialog(final SCAccessProvider accessprovider) {
+		// dialogbox for registration
+		DialogInterface.OnClickListener updateDialogClickListener;
 
+		updateDialogClickListener = new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				switch (which) {
+				case DialogInterface.BUTTON_POSITIVE:
+					try {
+//						accessprovider.login(this, null);
+						accessprovider.login(MainActivity.this, null);
+
+					} catch (AACException e) {
+						
+						e.printStackTrace();
+					}
+					break;
+				case DialogInterface.BUTTON_NEGATIVE:
+					break;
+				}
+			}
+		};
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setCancelable(false);
+		builder.setMessage(getString(R.string.auth_required))
+				.setPositiveButton(android.R.string.yes, updateDialogClickListener)
+				.setNegativeButton(android.R.string.no, updateDialogClickListener).show();
+	}
 	private void initDataManagement(Bundle savedInstanceState) {
 		try {
+			
 			initGlobalConstants();
 
 			try {
@@ -253,7 +304,7 @@ public class MainActivity extends AbstractNavDrawerActivity{
 
 		switch (pos_in_list) {
 		case 1: // click on "I miei eventi" item 
-			cat = CategoryHelper.CAT_EVENT_ESTATE_GIOVANI_E_FAMIGLIA;
+			cat = CategoryHelper.CATEGORY_MY;
 			args = new Bundle();
 			elf = new EventsListingFragment();
 			args.putString(SearchFragment.ARG_CATEGORY, cat);
@@ -262,7 +313,7 @@ public class MainActivity extends AbstractNavDrawerActivity{
 			out[1] = TAG_FRAGMENT_EVENT_LIST;
 			break;
 		case 2: // click on "Oggi" item 
-			cat = CategoryHelper.CAT_EVENT_ESTATE_GIOVANI_E_FAMIGLIA;
+			cat = CategoryHelper.CATEGORY_TODAY;
 			args = new Bundle();
 			elf = new EventsListingFragment();
 			args.putString(SearchFragment.ARG_CATEGORY, cat);
@@ -271,7 +322,7 @@ public class MainActivity extends AbstractNavDrawerActivity{
 			out[1] = TAG_FRAGMENT_EVENT_LIST;
 			break;
 		case 3: // click on "Cultura" item 
-			cat = CategoryHelper.CAT_EVENT_ESTATE_GIOVANI_E_FAMIGLIA;
+			cat = CategoryHelper.CAT_CULTURA;
 			args = new Bundle();
 			elf = new EventsListingFragment();
 			args.putString(SearchFragment.ARG_CATEGORY, cat);
@@ -280,7 +331,7 @@ public class MainActivity extends AbstractNavDrawerActivity{
 			out[1] = TAG_FRAGMENT_EVENT_LIST;
 			break;
 		case 4: // click on "Sport" item 
-			cat = CategoryHelper.CAT_EVENT_ESTATE_GIOVANI_E_FAMIGLIA;
+			cat = CategoryHelper.CAT_SPORT;
 			args = new Bundle();
 			elf = new EventsListingFragment();
 			args.putString(SearchFragment.ARG_CATEGORY, cat);
@@ -289,7 +340,7 @@ public class MainActivity extends AbstractNavDrawerActivity{
 			out[1] = TAG_FRAGMENT_EVENT_LIST;
 			break;
 		case 5: // click on "Svago" item 
-			cat = CategoryHelper.CAT_EVENT_ESTATE_GIOVANI_E_FAMIGLIA;
+			cat = CategoryHelper.CAT_SOCIALE;
 			args = new Bundle();
 			elf = new EventsListingFragment();
 			args.putString(SearchFragment.ARG_CATEGORY, cat);
@@ -298,7 +349,7 @@ public class MainActivity extends AbstractNavDrawerActivity{
 			out[1] = TAG_FRAGMENT_EVENT_LIST;
 			break;
 		case 6: // click on "Altri eventi" item 
-			cat = CategoryHelper.CAT_EVENT_ESTATE_GIOVANI_E_FAMIGLIA;
+			cat = CategoryHelper.EVENT_NONCATEGORIZED;
 			args = new Bundle();
 			elf = new EventsListingFragment();
 			args.putString(SearchFragment.ARG_CATEGORY, cat);

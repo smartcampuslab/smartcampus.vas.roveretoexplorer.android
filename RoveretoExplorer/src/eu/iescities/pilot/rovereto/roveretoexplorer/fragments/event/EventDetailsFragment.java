@@ -42,16 +42,16 @@ import eu.iescities.pilot.rovereto.roveretoexplorer.R;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.CategoryHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.CommentsHandler;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.Utils;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.BaseDTObject;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.DTHelper;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.EventObject;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.BaseDTObject;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ExplorerObject;
 import eu.iescities.pilot.rovereto.roveretoexplorer.map.MapManager;
 
 public class EventDetailsFragment extends Fragment {
 	public static final String ARG_EVENT_ID = "event_id";
 
 
-	private EventObject mEvent = null;
+	private ExplorerObject mEvent = null;
 	private String mEventId;
 
 	private Fragment mFragment = this;
@@ -81,7 +81,7 @@ public class EventDetailsFragment extends Fragment {
 //		return mPoi;
 //	}
 
-	private EventObject getEvent() {
+	private ExplorerObject getEvent() {
 		if (mEventId == null) {
 			mEventId = getArguments().getString(ARG_EVENT_ID);
 		}
@@ -101,12 +101,7 @@ public class EventDetailsFragment extends Fragment {
 	public void onStart() {
 		super.onStart();
 		if (mEvent != null) {
-			ImageView certifiedBanner = (ImageView) this.getView().findViewById(R.id.banner_certified);
-			if (CategoryHelper.FAMILY_CATEGORY_EVENT.equals(mEvent.getType()) && isCertified(mEvent))
-				certifiedBanner.setVisibility(View.VISIBLE);
-			else
-				certifiedBanner.setVisibility(View.GONE);
-
+		
 			// title
 			TextView tv = (TextView) this.getView().findViewById(R.id.event_details_title);
 			tv.setText(mEvent.getTitle());
@@ -183,7 +178,7 @@ public class EventDetailsFragment extends Fragment {
 			// // UserRegistration.upgradeuser(getActivity());
 			// // } else
 			// {
-			// new SCAsyncTask<Boolean, Void, LocalEventObject>(getActivity(),
+			// new SCAsyncTask<Boolean, Void, LocalExplorerObject>(getActivity(),
 			// new AttendProcessor(
 			// getActivity(), buttonView)).execute(getEvent().getAttending() ==
 			// null
@@ -290,7 +285,7 @@ public class EventDetailsFragment extends Fragment {
 	}
 
 
-	private boolean isCertified(EventObject event) {
+	private boolean isCertified(ExplorerObject event) {
 		if (event.getCustomData() != null && (Boolean) event.getCustomData().get("certified"))
 			return true;
 		else
@@ -352,44 +347,15 @@ public class EventDetailsFragment extends Fragment {
 		super.onResume();
 	}
 
-	private void bringMeThere(EventObject eventObject) {
+	private void bringMeThere(ExplorerObject ExplorerObject) {
 		AlertDialog.Builder builder;
 
 		builder = new AlertDialog.Builder(getActivity());
 		/* check event Object */
-		if (!CategoryHelper.FAMILY_CATEGORY_EVENT.equals(eventObject.getType())) {
 			/* if it's not a family event, no problem */
 			callBringMeThere();
 			return;
-		} else {
-			/* if it is, show the dialog box */
-			/* press true return true, press false return false */
-			DialogInterface.OnClickListener updateDialogClickListener;
 
-			updateDialogClickListener = new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-
-					switch (which) {
-					case DialogInterface.BUTTON_POSITIVE:
-						// upgrade the user
-						callBringMeThere();
-						break;
-
-					case DialogInterface.BUTTON_NEGATIVE:
-						// CLOSE
-
-						break;
-
-					}
-
-				}
-			};
-			builder.setCancelable(false).setMessage(getActivity().getString(R.string.warning_for_direction))
-					.setPositiveButton(android.R.string.yes, updateDialogClickListener)
-					.setNegativeButton(R.string.cancel, updateDialogClickListener).show();
-		}
-		return;
 	}
 
 	/**

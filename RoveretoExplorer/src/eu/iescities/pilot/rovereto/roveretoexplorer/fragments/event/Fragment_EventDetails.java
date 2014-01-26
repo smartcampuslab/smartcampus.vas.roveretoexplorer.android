@@ -2,14 +2,6 @@ package eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event;
 
 import java.util.List;
 
-import eu.iescities.pilot.rovereto.roveretoexplorer.R;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.CommentsHandler;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.PagerSlidingTabStrip;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.Utils;
-import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.community.Fragment_EvDetail_Community;
-import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.dasapere.Fragment_EvDetail_DaSapere;
-import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info.Fragment_EvDetail_Info;
-import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.multimedia.Fragment_EvDetail_Multimedia;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -22,7 +14,16 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.EventObject;
+import eu.iescities.pilot.rovereto.roveretoexplorer.R;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.CommentsHandler;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.PagerSlidingTabStrip;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.Utils;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.DTHelper;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ExplorerObject;
+import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.community.Fragment_EvDetail_Community;
+import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.dasapere.Fragment_EvDetail_DaSapere;
+import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info.Fragment_EvDetail_Info;
+import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.multimedia.Fragment_EvDetail_Multimedia;
 
 public class Fragment_EventDetails extends Fragment {
 	
@@ -33,7 +34,7 @@ public class Fragment_EventDetails extends Fragment {
 	private MyPagerAdapter adapter;
 	private int currentColor = 0xFF96AA39;
 	
-	public EventObject mEvent = null;
+	public ExplorerObject mEvent = null;
 	private String mEventId;
 
 	private Fragment mFragment = this;
@@ -59,9 +60,9 @@ public class Fragment_EventDetails extends Fragment {
     		if (getArguments() != null) {
     			mEventId = getArguments().getString(ARG_EVENT_ID);
     			//now it will be always null so I load the fake data
-    			//mEvent = DTHelper.findEventById(mEventId);
-    			List<EventObject> eventList = Utils.getFakeEventObjects();
-    			mEvent = Utils.getFakeLocalEventObject(eventList,mEventId);
+    			mEvent = DTHelper.findEventById(mEventId);
+    			List<ExplorerObject> eventList = Utils.getFakeExplorerObjects();
+//    			mEvent = Utils.getFakeLocalExplorerObject(eventList,mEventId);
     		}
 
         }

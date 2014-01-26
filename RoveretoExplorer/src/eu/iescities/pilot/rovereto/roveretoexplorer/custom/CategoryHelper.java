@@ -26,63 +26,30 @@ import android.util.Log;
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
 
 public class CategoryHelper {
-	
-	public static final String CAT_TRACK_PISTA_CICLABILE = "Pista ciclabile";
-	public static final String CAT_TRACK_PASSEGGIATE = "Passeggiate";
-	public static final String CAT_TRACK_PISTE_CICLOPEDONALI = "Piste ciclopedonali";
-	
-	public static final String CAT_INFO_DISTRETTI_E_ORGANIZZAZIONI = "Distretti e organizzazioni";
-	public static final String CAT_INFO_POLITICHE_DEI_DISTRETTI = "Politiche dei distretti";
-	public static final String CAT_INFO_VALUTATORI_AUDIT = "Valutatori \"Audit\"";
-	public static final String CAT_INFO_CERTIFICATORI_AUDIT = "Certificatori \"Audit\"";
-	public static final String CAT_INFO_POLITICHE_PROVINCIALI = "Politiche provinciali";
-	public static final String CAT_INFO_NOTIZIE = "Notizie";
 
-	public static final String CAT_POI_FAMILY_IN_TRENTINO = "\"Family in Trentino\"";
-	public static final String CAT_POI_TAVOLO_NUOVI_MEDIA = "Tavolo \"Nuovi Media\"";
-	public static final String CAT_POI_PUNTI_ALLATTAMENTO = "Punti allattamento";
-	public static final String CAT_POI_VACANZE_AL_MARE = "Vacanze al mare";
-	public static final String CAT_POI_FAMILY_AUDIT = "\"Family Audit\"";
+	public static final String CAT_CULTURA = "Cultura";
+	public static final String CAT_SOCIALE = "Sociale";
+	public static final String CAT_SPORT = "Sport";
 
-	public static final String CAT_EVENT_ALTO_GARDA = "Alto Garda";
-	public static final String CAT_EVENT_ESTATE_GIOVANI_E_FAMIGLIA = "Estate giovani e famiglia";
-	public static final String CAT_EVENT_CULTURA = "Cultura";
-	public static final String CAT_EVENT_SPORT = "Sport";
-	public static final String CAT_EVENT_SVAGO = "Svago";
-	public static final String CAT_EVENT_ALTRI_EVENTI = "Altri eventi";
-	
 	private final static String TAG = "CategoryHelper";
-	// private static final String POI_NONCATEGORIZED = "Other place";
-	// private static final String EVENT_NONCATEGORIZED = "Other event";
-	// private static final String STORY_NONCATEGORIZED = "Other story";
+	public static final String EVENT_NONCATEGORIZED = "Other event";
 
-	public static final String CATEGORY_TYPE_POIS = "pois";
 	public static final String CATEGORY_TYPE_EVENTS = "events";
-	public static final String CATEGORY_TYPE_INFOS = "infos";
-	public static final String CATEGORY_TYPE_TRACKS = "tracks";
-
-	public static final String FAMILY_CATEGORY_POI = "Family - Organizations";
-	public static final String FAMILY_CATEGORY_EVENT = "Family";
 
 	public static final String CATEGORY_TODAY = "Today";
 	public static final String CATEGORY_MY = "My";
 
 	public static CategoryDescriptor[] EVENT_CATEGORIES = new CategoryDescriptor[] {
-		   /* 1 */ new CategoryDescriptor(R.drawable.ic_estate_map, R.drawable.ic_summer,
-					CAT_EVENT_ESTATE_GIOVANI_E_FAMIGLIA, R.string.categories_event_summer_family),
-		   /* 2 */ new CategoryDescriptor(R.drawable.ic_altogarda_map, R.drawable.ic_altogarda, 
-					CAT_EVENT_ALTO_GARDA, R.string.categories_event_alto_garda),
-		  /* 3 */ new CategoryDescriptor(R.drawable.ic_altogarda_map, R.drawable.ic_altogarda, 
-				  CAT_EVENT_ALTO_GARDA, R.string.categories_event_cultura),
-          /* 4 */ new CategoryDescriptor(R.drawable.ic_altogarda_map, R.drawable.ic_altogarda, 
-        		  CAT_EVENT_ALTO_GARDA, R.string.categories_event_sport),
-          /* 5 */ new CategoryDescriptor(R.drawable.ic_altogarda_map, R.drawable.ic_altogarda, 
-        		  CAT_EVENT_ALTO_GARDA, R.string.categories_event_svago),
-		 /* 6 */new CategoryDescriptor(R.drawable.ic_altogarda_map, R.drawable.ic_altogarda, 
-				 CAT_EVENT_ALTO_GARDA, R.string.categories_event_altri_eventi),
+			/* 1 */new CategoryDescriptor(R.drawable.ic_cultura, R.drawable.ic_cultura, CAT_CULTURA,
+					R.string.categories_event_cultura),
+			/* 2 */new CategoryDescriptor(R.drawable.ic_svago, R.drawable.ic_svago, CAT_SOCIALE,
+					R.string.categories_event_social),
+			/* 3 */new CategoryDescriptor(R.drawable.ic_sport, R.drawable.ic_sport, CAT_SPORT,
+					R.string.categories_event_sport),
+			/* 4 */new CategoryDescriptor(R.drawable.ic_marker_e_generic, R.drawable.ic_e_other, EVENT_NONCATEGORIZED,
+					R.string.categories_event_altri_eventi),
+
 	};
-
-
 
 	private static Map<String, String> categoryMapping = new HashMap<String, String>();
 
@@ -91,8 +58,6 @@ public class CategoryHelper {
 		for (CategoryDescriptor event : EVENT_CATEGORIES) {
 			descriptorMap.put(event.category, event);
 		}
-
-		
 
 		for (String s : descriptorMap.keySet()) {
 			categoryMapping.put(s, s);
@@ -104,12 +69,10 @@ public class CategoryHelper {
 		List<String> result = new ArrayList<String>();
 		for (String key : categoryMapping.keySet()) {
 			if (set.contains(categoryMapping.get(key))) {
-				// if (key.equals(EVENT_NONCATEGORIZED) ||
-				// key.equals(POI_NONCATEGORIZED) ||
-				// key.equals(STORY_NONCATEGORIZED)) {
-				//
-				// result.add(null);
-				// }
+				if (key.equals(EVENT_NONCATEGORIZED)) {
+
+					result.add(null);
+				}
 				result.add(key);
 				// set.remove(categoryMapping.get(key));
 			}
@@ -148,39 +111,27 @@ public class CategoryHelper {
 		}
 	}
 
-
-
 	public static CategoryDescriptor[] getEventCategoryDescriptors() {
 		return EVENT_CATEGORIES;
 	}
-
-
-
-
 
 	public static String[] getEventCategories() {
 		String[] res = new String[EVENT_CATEGORIES.length];
 		for (int i = 0; i < EVENT_CATEGORIES.length; i++) {
 			res[i] = EVENT_CATEGORIES[i].category;
 		}
-		
+
 		Log.i("MENU", "EVENT CATEGORIES: " + res.toString() + "\n--- lenght: " + res.length);
 		return res;
 	}
 
-
-	
-
-
-	
 	public static CategoryDescriptor[] getEventCategoryDescriptorsFiltered() {
 		return DTParamsHelper.getInstance().getFilteredArrayByParams(EVENT_CATEGORIES, CATEGORY_TYPE_EVENTS);
 	}
 
-
 	public static CategoryDescriptor getCategoryDescriptorByCategoryFiltered(String type, String cat) {
 		return descriptorMap.get(cat);
-		
+
 	}
 
 }

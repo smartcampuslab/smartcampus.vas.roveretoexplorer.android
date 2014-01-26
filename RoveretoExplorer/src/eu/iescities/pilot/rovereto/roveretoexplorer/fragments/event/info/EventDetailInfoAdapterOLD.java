@@ -40,7 +40,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.EventObject;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ExplorerObject;
 
 
 //in Fragment_EvDetail_Info
@@ -58,7 +58,7 @@ public class EventDetailInfoAdapterOLD extends BaseExpandableListAdapter {
 	private int layoutResourceId;
 
 
-	private EventObject event = null;
+	private ExplorerObject event = null;
 	//private EventPlaceholder eventPlaceHolder = null;
 	private TextView txtView = null;
 

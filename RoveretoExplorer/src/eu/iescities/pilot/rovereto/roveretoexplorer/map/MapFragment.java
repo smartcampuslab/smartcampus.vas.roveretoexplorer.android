@@ -41,9 +41,9 @@ import eu.iescities.pilot.rovereto.roveretoexplorer.custom.AbstractAsyncTaskProc
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.CategoryHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.CategoryHelper.CategoryDescriptor;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.DTParamsHelper;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.BaseDTObject;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.DTHelper;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.EventObject;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.BaseDTObject;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ExplorerObject;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.EventDetailsFragment;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.EventsListingFragment;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.search.SearchFragment;
@@ -201,14 +201,7 @@ public class MapFragment extends Fragment implements MapItemsHandler, OnCameraCh
 			eventsCategories = Arrays.asList(eventCategory.toArray()).toArray(
 					new String[eventCategory.toArray().length]);
 		}
-		CategoryDescriptor[] poisDefault = DTParamsHelper.getDefaultArrayByParams(CategoryHelper.CATEGORY_TYPE_POIS);
-		if (poisDefault != null) {
-			List<String> poisCategory = new ArrayList<String>();
-			for (CategoryDescriptor poi : poisDefault)
-				poisCategory.add(poi.category);
-			poiCategories = Arrays.asList(poisCategory.toArray()).toArray(new String[poisCategory.toArray().length]);
-
-		}
+		
 
 		setHasOptionsMenu(true);
 	}
@@ -372,7 +365,7 @@ public class MapFragment extends Fragment implements MapItemsHandler, OnCameraCh
 		FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
 		Fragment fragment = null;
 		Bundle args = new Bundle();
-		if (list.get(0) instanceof EventObject) {
+		if (list.get(0) instanceof ExplorerObject) {
 			fragment = new EventsListingFragment();
 			args.putSerializable(SearchFragment.ARG_LIST, new ArrayList(list));
 		}
@@ -406,18 +399,18 @@ public class MapFragment extends Fragment implements MapItemsHandler, OnCameraCh
 					/*
 					 * check if todays is checked and cat with searchTodayEvents
 					 */
-					Collection<EventObject> newList;
+					Collection<ExplorerObject> newList;
 					if (isTodayIncluded()) {
-						newList = new ArrayList<EventObject>();
+						newList = new ArrayList<ExplorerObject>();
 						newList.addAll(DTHelper.searchTodayEvents(0, -1, ""));
 						if (categories != null)
 							newList.addAll(DTHelper.getEventsByCategories(0, -1, eventsNotTodayCategories));
 
 					} else
 						newList = DTHelper.getEventsByCategories(0, -1, categories);
-					Iterator<EventObject> i = newList.iterator();
+					Iterator<ExplorerObject> i = newList.iterator();
 					while (i.hasNext()) {
-						EventObject obj = i.next();
+						ExplorerObject obj = i.next();
 						obj.getLocation();
 						if (obj.getLocation()[0] == 0 && obj.getLocation()[1] == 0)
 							i.remove();
@@ -515,7 +508,7 @@ public class MapFragment extends Fragment implements MapItemsHandler, OnCameraCh
 
 			if (entityId != null && type != null) {
 				if ("event".equals(type))
-					return DTHelper.findEventByEntityId(entityId).getObjectForBean();
+					return DTHelper.findEventByEntityId(entityId);
 				
 			}
 			return null;
@@ -536,7 +529,7 @@ public class MapFragment extends Fragment implements MapItemsHandler, OnCameraCh
 
 				Fragment fragment = null;
 				Bundle args = new Bundle();
-				if (result instanceof EventObject) {
+				if (result instanceof ExplorerObject) {
 					fragment = new EventDetailsFragment();
 					args.putString(EventDetailsFragment.ARG_EVENT_ID, (result.getId()));
 				}

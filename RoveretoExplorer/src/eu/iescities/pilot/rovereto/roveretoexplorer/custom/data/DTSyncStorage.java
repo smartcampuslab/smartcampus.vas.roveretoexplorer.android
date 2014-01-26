@@ -25,8 +25,8 @@ import java.util.Map;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.DTParamsHelper;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.EventObjectForBean;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.GenericObjectForBean;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.BaseDTObject;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ExplorerObject;
 import eu.trentorise.smartcampus.android.common.Utils;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.ConnectionException;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.ProtocolException;
@@ -97,9 +97,9 @@ public class DTSyncStorage extends SyncStorageWithPaging {
 			{
 				Map.Entry pairs = (Map.Entry) it.next();
 				String key = (String) pairs.getKey();
-				Class<? extends GenericObjectForBean> cls = null;
+				Class<? extends BaseDTObject> cls = null;
 				if ("eu.trentorise.smartcampus.dt.model.EventObject".equals(key)) {
-					cls = EventObjectForBean.class;
+					cls = BaseDTObject.class;
 
 				}
 
@@ -126,19 +126,19 @@ public class DTSyncStorage extends SyncStorageWithPaging {
 			{
 				Map.Entry pairs = (Map.Entry) it.next();
 				String key = (String) pairs.getKey();
-				Class<? extends GenericObjectForBean> cls = null;
+				Class<? extends BaseDTObject> cls = null;
 				if ("eu.trentorise.smartcampus.dt.model.EventObject".equals(key)) {
-					cls = EventObjectForBean.class;
+					cls = ExplorerObject.class;
 
 				}
 
 				List<Object> dtoObjects = (List<Object>) pairs.getValue();
 				List<Object> basicobjects = new ArrayList<Object>();
 				for (Object object : dtoObjects) {
-					GenericObjectForBean newObject = null;
-					if (EventObjectForBean.class.equals(cls)) {
-						newObject = new EventObjectForBean();
-						newObject.setObjectForBean(Utils.convertObjectToData(EventObject.class, object));
+					BaseDTObject newObject = null;
+					if (ExplorerObject.class.equals(cls)) {
+						newObject = new ExplorerObject();
+						newObject = Utils.convertObjectToData(ExplorerObject.class, object);
 					}
 
 					// convert the single element

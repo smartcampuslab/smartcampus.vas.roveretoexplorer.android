@@ -18,13 +18,12 @@ package eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.ViewSwitcher;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.EventObject;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ExplorerObject;
 
 // contains all info about the event. To be passed to the listing and details fragments.
 public class EventInfoPlaceholder {
 
-	public EventObject event;
+	public ExplorerObject event;
 	public TextView dateSeparator;
 	public int displayChild=0;
 	public TextView title, description, notes, location, hour, tags, source, attendees;

@@ -26,8 +26,16 @@ public class Constants {
 	public static final String DT_SYNC_AUTHORITY = "dt-sync-authority";
 
 //	public static final String APP_TOKEN = "discovertrento";
-	public static final String SERVICE = "/smartcampus.vas.discovertrento.web";
-	public static final String SYNC_SERVICE = "/smartcampus.vas.discovertrento.web/sync";
+	public static final String EVENTS = "events";
+	public static final String EVENTS_P = "events/%s";
+	public static final String RATE = "objects/%s/rate";
+	public static final String ATTEND = "objects/%s/attend";
+	public static final String NOT_ATTEND = "objects/%s/notAttend";
+	public static final String FOLLOW = "objects/%s/follow";
+	public static final String UNFOLLOW = "objects/%s/unfollow";
+	public static final String SYNC_SERVICE = "sync";
+	public static final String SERVICE = "/roveretoexplorer";
+//	public static final String SYNC_SERVICE = "/smartcampus.vas.discovertrento.web/sync";
 	public static final int SYNC_INTERVAL = 5;
 	public static final String SYNC_DB_NAME = "discovertrentodb";
 	public static final String PREFS = "eu.trentorise.smartcampus.dt.preferences";

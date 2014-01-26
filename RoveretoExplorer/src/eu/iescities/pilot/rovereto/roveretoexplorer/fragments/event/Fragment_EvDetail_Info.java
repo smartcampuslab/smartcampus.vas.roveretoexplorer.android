@@ -31,7 +31,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.Utils;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.EventObject;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ExplorerObject;
 
 
 public class Fragment_EvDetail_Info extends Fragment {
@@ -40,10 +40,10 @@ public class Fragment_EvDetail_Info extends Fragment {
 
 	//For the expandable list view 
 	List<String> attributeGroupList;
-	//private List<LocalEventObject> listEvents = new ArrayList<LocalEventObject>();
+	//private List<LocalExplorerObject> listEvents = new ArrayList<LocalExplorerObject>();
 	Map<String, List<String>> eventAttributeCollection;
 	ExpandableListView expListView;
-	public EventObject mEvent = null;
+	public ExplorerObject mEvent = null;
 	private EventDetailInfoAdapter eventDetailInfoAdapter;
 
 
@@ -97,8 +97,8 @@ public class Fragment_EvDetail_Info extends Fragment {
 				mEventId = getArguments().getString(ARG_EVENT_ID);
 				//now it will be always null so I load the fake data
 				//mEvent = DTHelper.findEventById(mEventId);
-				List<EventObject> eventList = Utils.getFakeEventObjects();
-				mEvent = Utils.getFakeLocalEventObject(eventList,mEventId);
+				List<ExplorerObject> eventList = Utils.getFakeExplorerObjects();
+				mEvent = Utils.getFakeLocalExplorerObject(eventList,mEventId);
 			}
 		}
 		else
@@ -359,7 +359,7 @@ public class Fragment_EvDetail_Info extends Fragment {
 	 * here should come your data service implementation
 	 * @return
 	 */
-	private ArrayList<EventInfoParent> buildDummyData(EventObject event)
+	private ArrayList<EventInfoParent> buildDummyData(ExplorerObject event)
 	{
 
 		Log.i("DummyList", "dummylist start");
@@ -489,7 +489,7 @@ public class Fragment_EvDetail_Info extends Fragment {
 
 
 
-	private  Map<String, List<String>> getEventDetailCollection(List<String> attrGroupList, EventObject event) {
+	private  Map<String, List<String>> getEventDetailCollection(List<String> attrGroupList, ExplorerObject event) {
 
 		Map<String, List<String>> eventCollection = new LinkedHashMap<String, List<String>>();
 		List<String> childList = new ArrayList<String>();

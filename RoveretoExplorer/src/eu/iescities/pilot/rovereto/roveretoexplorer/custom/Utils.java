@@ -1,7 +1,5 @@
 package eu.iescities.pilot.rovereto.roveretoexplorer.custom;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -21,12 +19,17 @@ import com.google.android.gms.maps.model.LatLng;
 
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.Address;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.BaseDTObject;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.CommunityData;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.EventObject;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.DTHelper;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.CommunityData;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ExplorerObject;
 import eu.trentorise.smartcampus.android.common.follow.model.Concept;
 import eu.trentorise.smartcampus.android.common.tagging.SemanticSuggestion;
 import eu.trentorise.smartcampus.android.common.tagging.SemanticSuggestion.TYPE;
+import eu.trentorise.smartcampus.protocolcarrier.exceptions.ConnectionException;
+import eu.trentorise.smartcampus.protocolcarrier.exceptions.ProtocolException;
+import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
+import eu.trentorise.smartcampus.storage.DataException;
+import eu.trentorise.smartcampus.storage.StorageConfigurationException;
 
 public class Utils {
 	public static final String userPoiObject = "eu.trentorise.smartcampus.dt.model.UserPOIObject";
@@ -101,11 +104,11 @@ public class Utils {
 	//			return false;
 	//	}
 
-	//	public static Collection<LocalEventObject> convertToLocalEventFromBean(
-	//			Collection<EventObjectForBean> searchInGeneral) {
-	//		Collection<LocalEventObject> returnCollection = new ArrayList<LocalEventObject>();
-	//		for (EventObjectForBean event : searchInGeneral) {
-	//			LocalEventObject localEvent = DTHelper.findEventById(event.getObjectForBean().getId());
+	//	public static Collection<LocalExplorerObject> convertToLocalEventFromBean(
+	//			Collection<ExplorerObjectForBean> searchInGeneral) {
+	//		Collection<LocalExplorerObject> returnCollection = new ArrayList<LocalExplorerObject>();
+	//		for (ExplorerObjectForBean event : searchInGeneral) {
+	//			LocalExplorerObject localEvent = DTHelper.findEventById(event.getObjectForBean().getId());
 	//			if (localEvent != null) {
 	//
 	//				returnCollection.add(localEvent);
@@ -114,15 +117,15 @@ public class Utils {
 	//		return returnCollection;
 	//	}
 
-	//	public static Collection<LocalEventObject> convertToLocalEvent(Collection<EventObject> events) {
-	//		Collection<EventObjectForBean> beanEvents = new ArrayList<EventObjectForBean>();
-	//		Collection<LocalEventObject> returnEvents = new ArrayList<LocalEventObject>();
+	//	public static Collection<LocalExplorerObject> convertToLocalEvent(Collection<ExplorerObject> events) {
+	//		Collection<ExplorerObjectForBean> beanEvents = new ArrayList<ExplorerObjectForBean>();
+	//		Collection<LocalExplorerObject> returnEvents = new ArrayList<LocalExplorerObject>();
 	//
-	//		for (EventObject event : events) {
-	//			EventObjectForBean newObject = new EventObjectForBean();
-	//			LocalEventObject localObject = new LocalEventObject();
+	//		for (ExplorerObject event : events) {
+	//			ExplorerObjectForBean newObject = new ExplorerObjectForBean();
+	//			LocalExplorerObject localObject = new LocalExplorerObject();
 	//			newObject.setObjectForBean(event);
-	//			localObject.setEventFromEventObjectForBean(newObject);
+	//			localObject.setEventFromExplorerObjectForBean(newObject);
 	//			returnEvents.add(localObject);
 	//		}
 	//
@@ -168,7 +171,7 @@ public class Utils {
 	 * @param event
 	 * @return
 	 */
-	public static String getEventShortAddress(EventObject event) {
+	public static String getEventShortAddress(ExplorerObject event) {
 		if (event.getCustomData() != null && event.getCustomData().get("place")!=null) {
 			return event.getCustomData().get("place").toString();
 		} else {
@@ -245,15 +248,22 @@ public class Utils {
 	}
 
 
-	public static Map<String, List<EventObject>> createFakeEventCollection(List<String> dateGroupList ) {
+	public static Map<String, List<ExplorerObject>> createFakeEventCollection(List<String> dateGroupList ) {
 
-		List<EventObject> eventList = getFakeEventObjects();
-		Map<String, List<EventObject>> eventCollection = new LinkedHashMap<String, List<EventObject>>();
-		List<EventObject> childList = new ArrayList<EventObject>();
+		List<ExplorerObject> eventList = getFakeExplorerObjects();
+		Map<String, List<ExplorerObject>> eventCollection = new LinkedHashMap<String, List<ExplorerObject>>();
+		List<ExplorerObject> childList;
+		try {
+			eventList = new ArrayList<ExplorerObject>(DTHelper.getEventsByCategories(0, 10, CategoryHelper.CAT_SOCIALE));
+//			eventList = new ArrayList<ExplorerObject>(DTHelper.getEvents(0, 10, CategoryHelper.CAT_SOCIALE));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
 
 		// preparing laptops collection(child)
 		for (String event_date : dateGroupList) {
-			childList = new ArrayList<EventObject>();
+			childList = new ArrayList<ExplorerObject>();
 			if (event_date.equals("Oggi 29/10/2013")) {
 				childList.add(eventList.get(0));
 				childList.add(eventList.get(1));
@@ -270,36 +280,36 @@ public class Utils {
 		return eventCollection;
 	}
 
-	private static List<EventObject> loadChild(EventObject[] eventsByDate) {
-		List<EventObject> childList = new ArrayList<EventObject>();
-		for (EventObject event : eventsByDate)
+	private static List<ExplorerObject> loadChild(ExplorerObject[] eventsByDate) {
+		List<ExplorerObject> childList = new ArrayList<ExplorerObject>();
+		for (ExplorerObject event : eventsByDate)
 			childList.add(event);
 		return childList;
 	}
 
 
 
-	public static List<EventObject> getFakeEventObjects(){
+	public static List<ExplorerObject> getFakeExplorerObjects(){
 
-		List<EventObject> fake_events = new ArrayList<EventObject>();
-		EventObject fake_event;  new EventObject(); 
+		List<ExplorerObject> fake_events = new ArrayList<ExplorerObject>();
+		ExplorerObject fake_event;  new ExplorerObject(); 
 		Map<String, Object> customData =  new HashMap<String, Object>(); 
 		Map<String,Object> contacts = new HashMap<String, Object>();
 		CommunityData communityData = new CommunityData();
 
 		//create fake event object 1 
-		fake_event = new EventObject();
+		fake_event = new ExplorerObject();
 
 	
 		//set basic info
 		fake_event.setTitle("Roverunning training");
-		fake_event.setWhenWhere("tutti i martedì con inizio il 14 - 21 - 28 gennaio, 4 - 11 - 18 - 25 febbraio, 4 - 11 - 18 - 25 marzo, ritrovo nella piazza del Mart ore 18.00");
+		fake_event.setWhenWhere("tutti i martedï¿½ con inizio il 14 - 21 - 28 gennaio, 4 - 11 - 18 - 25 febbraio, 4 - 11 - 18 - 25 marzo, ritrovo nella piazza del Mart ore 18.00");
 		fake_event.setOrigin("Assessorato allo Sport, US Quercia, NW Arcobaleno");  //the source
 		fake_event.setFromTime(Utils.toDateTimeLong(DATE_FORMAT, "17/1/2014 08:30 PM"));
 		fake_event.setToTime(Utils.toDateTimeLong(DATE_FORMAT, "17/1/2014 10:30 PM"));
 		fake_event.setId("1");
-		fake_event.setDescription("percorrerovereto. Vuoi imparare a correre? A camminare? Vuoi migliorare la tua attività di runner? Cerchi un'opportunità per correre/camminare in compagnia? " +
-				"La partecipazione è gratuita e aperta a tutti i principianti, amatori e agonisti");
+		fake_event.setDescription("percorrerovereto. Vuoi imparare a correre? A camminare? Vuoi migliorare la tua attivitï¿½ di runner? Cerchi un'opportunitï¿½ per correre/camminare in compagnia? " +
+				"La partecipazione ï¿½ gratuita e aperta a tutti i principianti, amatori e agonisti");
 		String site_url = new String("http://www.comune.rovereto.tn.it/Vivi-la-citta/Sport/Calendario-eventi-sportivi/Roverunning-training6");
 		String img_url = new String("http://www.comune.rovereto.tn.it/var/rovereto/storage/images/vivi-la-citta/sport/calendario-eventi-sportivi/roverunning-training6/124779-4-ita-IT/Roverunning-training_medium.jpg");
 		fake_event.setImage(img_url);
@@ -359,9 +369,14 @@ public class Utils {
 		customData.put("Lingua principale ", "Italiano");
 		customData.put("Abbigliamento consigliato", "sportivo");
 
+		//set community data
+		 tags  = Arrays.asList(new String[]{"sport", "calcio"});
+		communityData.setTags(tags);
+		communityData.setAttendees(5);
+		communityData.setAverageRating(3);
+		fake_event.setCommunityData(communityData);
 
-
-		fake_event = new EventObject();
+		fake_event = new ExplorerObject();
 		fake_event.setAddress(address);
 		fake_event.setAddress(address);
 
@@ -397,9 +412,14 @@ public class Utils {
 		customData.put("Lingua principale ", "Italiano");
 		customData.put("Abbigliamento consigliato", "sportivo");
 
+		//set community data
+		 tags  = Arrays.asList(new String[]{"sport", "calcio"});
+		communityData.setTags(tags);
+		communityData.setAttendees(5);
+		communityData.setAverageRating(3);
+		fake_event.setCommunityData(communityData);
 
-
-		fake_event = new EventObject();
+		fake_event = new ExplorerObject();
 		fake_event.setAddress(address);
 		fake_event.setAddress(address);
 
@@ -436,8 +456,13 @@ public class Utils {
 		customData.put("Abbigliamento consigliato", "sportivo");
 
 
-
-		fake_event = new EventObject();
+		//set community data
+		 tags  = Arrays.asList(new String[]{"sport", "calcio"});
+		communityData.setTags(tags);
+		communityData.setAttendees(5);
+		communityData.setAverageRating(3);
+		fake_event.setCommunityData(communityData);
+		fake_event = new ExplorerObject();
 		fake_event.setAddress(address);
 		fake_event.setAddress(address);
 
@@ -473,9 +498,14 @@ public class Utils {
 		customData.put("Lingua principale ", "Italiano");
 		customData.put("Abbigliamento consigliato", "sportivo");
 
+		//set community data
+		 tags  = Arrays.asList(new String[]{"sport", "calcio"});
+		communityData.setTags(tags);
+		communityData.setAttendees(5);
+		communityData.setAverageRating(3);
+		fake_event.setCommunityData(communityData);
 
-
-		fake_event = new EventObject();
+		fake_event = new ExplorerObject();
 		fake_event.setAddress(address);
 		fake_event.setAddress(address);
 
@@ -498,10 +528,10 @@ public class Utils {
 	}	
 
 
-	public static EventObject getFakeLocalEventObject(List<EventObject> events, String id){
+	public static ExplorerObject getFakeLocalExplorerObject(List<ExplorerObject> events, String id){
 
-		EventObject fake_event = null;
-		for (EventObject event: events){
+		ExplorerObject fake_event = null;
+		for (ExplorerObject event: events){
 			if (event.getId()==id) {
 				return event;
 			} 

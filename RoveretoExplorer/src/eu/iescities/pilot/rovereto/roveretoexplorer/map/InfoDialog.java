@@ -29,8 +29,8 @@ import android.widget.TextView;
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.CategoryHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.Utils;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.BaseDTObject;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.EventObject;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.BaseDTObject;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ExplorerObject;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.EventDetailsFragment;
 
 public class InfoDialog extends DialogFragment {
@@ -45,7 +45,7 @@ public class InfoDialog extends DialogFragment {
 		if (this.data == null) {
 			this.data = (BaseDTObject) getArguments().getSerializable(PARAM);
 		}
-		if (data instanceof EventObject) {
+		if (data instanceof ExplorerObject) {
 			getDialog().setTitle(R.string.info_dialog_title_event);
 		}
 		return inflater.inflate(R.layout.mapdialog, container, false);
@@ -56,8 +56,8 @@ public class InfoDialog extends DialogFragment {
 		super.onStart();
 		TextView msg = (TextView) getDialog().findViewById(R.id.mapdialog_msg);
 
-		if (data instanceof EventObject) {
-			EventObject event = (EventObject) data;
+		if (data instanceof ExplorerObject) {
+			ExplorerObject event = (ExplorerObject) data;
 			String msgText = "";
 			msgText += "<h2>";
 			msgText += event.getTitle();
@@ -95,7 +95,7 @@ public class InfoDialog extends DialogFragment {
 				FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
 				Bundle args = new Bundle();
 
-				if (data instanceof EventObject) {
+				if (data instanceof ExplorerObject) {
 					EventDetailsFragment fragment = new EventDetailsFragment();
 					args.putString(EventDetailsFragment.ARG_EVENT_ID, (data.getId()));
 					fragment.setArguments(args);

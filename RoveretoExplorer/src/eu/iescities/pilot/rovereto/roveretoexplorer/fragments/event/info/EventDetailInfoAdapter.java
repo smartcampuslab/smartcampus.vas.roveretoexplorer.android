@@ -48,7 +48,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.EventObject;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ExplorerObject;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.EventPlaceholder;
 
 //in Fragment_EvDetail_Info
@@ -66,7 +66,7 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 	private List<String> attrNameGroupList;
 	private int layoutResourceId;
 
-	private EventObject event = null;
+	private ExplorerObject event = null;
 	// private EventPlaceholder eventPlaceHolder = null;
 	private TextView txtView = null;
 

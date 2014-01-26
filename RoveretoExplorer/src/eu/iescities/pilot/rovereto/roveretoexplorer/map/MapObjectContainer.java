@@ -18,7 +18,7 @@ package eu.iescities.pilot.rovereto.roveretoexplorer.map;
 
 import java.util.Collection;
 
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.BaseDTObject;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.BaseDTObject;
 
 /**
  * @author raman
