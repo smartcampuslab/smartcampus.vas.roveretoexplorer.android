@@ -375,16 +375,19 @@ public class EventsListingFragment extends Fragment implements OnScrollListener 
 		}
 
 		private void updateCollection(List<ExplorerObject> result) {
+			SimpleDateFormat sdf = new SimpleDateFormat("MMM dd,yyyy HH:mm");		 
+			Date resultdate = null;
 			for (ExplorerObject expObj : result) {
-				//check se e' contenuto in dategrouplist
-				//se no->
+				resultdate =  new Date(expObj.getFromTime());
 				if (!dateGroupList.contains(expObj.getFromTime().toString()))
 				{
-					dateGroupList.add(expObj.getFromTime().toString());
-					eventCollection.put(expObj.getFromTime().toString(), new ArrayList<ExplorerObject>() );
+
+					dateGroupList.add(sdf.format(resultdate));
+
+					eventCollection.put(sdf.format(resultdate), new ArrayList<ExplorerObject>() );
 				}
 				//aggiungi 
-				eventCollection.get(expObj.getFromTime().toString()).add(expObj);
+				eventCollection.get(sdf.format(resultdate)).add(expObj);
 			}
 			
 
