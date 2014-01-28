@@ -106,7 +106,7 @@ public class Fragment_EventDetails extends Fragment {
 		// parent.
 		actionBar.setHomeButtonEnabled(false);
 
-		getActivity().getSupportFragmentManager().addOnBackStackChangedListener(getListener());
+		//getFragmentManager().addOnBackStackChangedListener(getListener());
 
 
 		tabs = (PagerSlidingTabStrip) getActivity().findViewById(R.id.tabs);
@@ -115,9 +115,6 @@ public class Fragment_EventDetails extends Fragment {
 		adapter = new MyPagerAdapter(getActivity().getSupportFragmentManager());
 
 		pager.setAdapter(adapter);
-
-
-
 
 
 		final int pageMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, getResources()
@@ -303,41 +300,41 @@ public class Fragment_EventDetails extends Fragment {
 
 
 
-	private OnBackStackChangedListener getListener()
-	{
-		OnBackStackChangedListener result = new OnBackStackChangedListener()
-		{
-			public void onBackStackChanged() 
-			{                   
-
-				Log.d("FRAGMENT LC","Fragment_evDetail --> onBackStackChanged");
-
-				FragmentManager manager = getFragmentManager();
-
-				if (manager != null) {
-					int backStackEntryCount = manager.getBackStackEntryCount();
-					if (backStackEntryCount != 0) {
-						Fragment fragment = manager.getFragments()
-								.get(backStackEntryCount-1);
-
-						if (fragment!=null){
-							Log.d("FRAGMENT LC","Fragment_evDetail --> current fragment: " + 
-									fragment.getId() +"!");
-						}
-
-						if (fragment.getClass().isInstance(Fragment_EvDetail_Info.class)){
-							Log.d("FRAGMENT LC","Fragment_evDetail --> is istance of Info!!!!");
-						}
-
-						Log.d("FRAGMENT LC","Fragment_evDetail --> fragment class name: " + fragment.getClass().getName());
-
-						fragment.onResume();
-					}
-
-				}                  
-			}
-		};
-	return result;
-	}
+//	private OnBackStackChangedListener getListener()
+//	{
+//		OnBackStackChangedListener result = new OnBackStackChangedListener()
+//		{
+//			public void onBackStackChanged() 
+//			{                   
+//
+//				Log.d("FRAGMENT LC","Fragment_evDetail --> onBackStackChanged");
+//
+//				FragmentManager manager = getFragmentManager();
+//
+//				if (manager != null) {
+//					int backStackEntryCount = manager.getBackStackEntryCount();
+//					if (backStackEntryCount != 0) {
+//						Fragment fragment = manager.getFragments()
+//								.get(backStackEntryCount);
+//
+//						if (fragment!=null){
+//							Log.d("FRAGMENT LC","Fragment_evDetail --> current fragment: " + 
+//									fragment.getId() +"!");
+//						}
+//
+//						if (fragment.getClass().isInstance(Fragment_EvDetail_Info.class)){
+//							Log.d("FRAGMENT LC","Fragment_evDetail --> is istance of Info!!!!");
+//						}
+//
+//						Log.d("FRAGMENT LC","Fragment_evDetail --> fragment class name: " + fragment.getClass().getName());
+//
+//						fragment.onResume();
+//					}
+//
+//				}                  
+//			}
+//		};
+//	return result;
+//	}
 
 }
