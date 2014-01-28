@@ -201,7 +201,7 @@ public class EventAdapter extends BaseExpandableListAdapter {
 
 	public int getBackgroundColor(int groupPosition) {
 
-		return R.color.orange_rovereto;
+		return R.color.app_green;
 
 	}
 

@@ -60,7 +60,7 @@
                 android:text="@string/community_attendees" />
 
             <TextView
-                android:id="@+id/textView3"
+                android:id="@+id/attending_number"
                 style="@style/community_number"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -87,7 +87,7 @@
                 android:text="@string/community_attending" />
 
             <ToggleButton
-                android:id="@+id/its_monitor"
+                android:id="@+id/attending_my"
                 android:layout_width="60dp"
                 android:layout_height="25dp"
                 android:layout_weight="0"

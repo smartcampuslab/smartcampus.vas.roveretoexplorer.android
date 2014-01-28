@@ -15,6 +15,20 @@
  ******************************************************************************/
 package eu.iescities.pilot.rovereto.roveretoexplorer.custom.data;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.Socket;
+import java.net.URI;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.net.UnknownHostException;
+import java.security.KeyManagementException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -26,6 +40,31 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
+
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLException;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.conn.ClientConnectionManager;
+import org.apache.http.conn.params.ConnManagerParams;
+import org.apache.http.conn.scheme.PlainSocketFactory;
+import org.apache.http.conn.scheme.Scheme;
+import org.apache.http.conn.scheme.SchemeRegistry;
+import org.apache.http.conn.ssl.AbstractVerifier;
+import org.apache.http.conn.ssl.SSLSocketFactory;
+import org.apache.http.conn.ssl.X509HostnameVerifier;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
+import org.apache.http.util.EntityUtils;
 
 import android.accounts.Account;
 import android.app.Activity;
@@ -69,7 +108,6 @@ import eu.trentorise.smartcampus.android.common.tagging.SemanticSuggestion;
 import eu.trentorise.smartcampus.android.common.tagging.SuggestionHelper;
 import eu.trentorise.smartcampus.network.JsonUtils;
 import eu.trentorise.smartcampus.network.RemoteConnector;
-import eu.trentorise.smartcampus.network.RemoteConnector.CLIENT_TYPE;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.ConnectionException;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.ProtocolException;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
@@ -84,7 +122,18 @@ public class DTHelper {
 	/**
 	 * 
 	 */
-	private static final String SERVICE_ESPLORAROVERETO = " roveretoexplorer";
+
+	public static final String EVENTS = "events";
+	public static final String EVENTS_P = "events/%s";
+	public static final String RATE = "objects/%s/rate";
+	public static final String ATTEND = "social/attend";
+	public static final String NOT_ATTEND = "social/attend";
+	public static final String FOLLOW = "objects/%s/follow";
+	public static final String UNFOLLOW = "objects/%s/unfollow";
+	public static final String SYNC_SERVICE = "sync";
+	public static final String SERVICE = "/roveretoexplorer";
+
+	private static final String SERVICE_ESPLORAROVERETO = "roveretoexplorer";
 	public static final int SYNC_REQUIRED = 2;
 	public static final int SYNC_NOT_REQUIRED = 0;
 	public static final int SYNC_REQUIRED_FIRST_TIME = 3;
@@ -92,7 +141,6 @@ public class DTHelper {
 	private static final int CURR_DB = 4;
 
 	// tutorial's stuff
-
 
 	private static final String TUT_PREFS = "dt_tut_prefs";
 	private static final String TOUR_PREFS = "dt_wantTour";
@@ -133,7 +181,8 @@ public class DTHelper {
 		if (instance == null)
 			instance = new DTHelper(mContext);
 
- 		serviceUrl = getAppUrl() + SERVICE_ESPLORAROVERETO;
+		// serviceUrl = getAppUrl() + SERVICE_ESPLORAROVERETO;
+		serviceUrl = getAppUrl();
 		if (!serviceUrl.endsWith("/")) {
 			serviceUrl += '/';
 		}
@@ -218,7 +267,7 @@ public class DTHelper {
 
 		DTHelper.mContext = mContext;
 		if (android.os.Build.VERSION.SDK_INT <= android.os.Build.VERSION_CODES.FROYO) {
-			RemoteConnector.setClientType(CLIENT_TYPE.CLIENT_WILDCARD);
+			RemoteConnector.setClientType(RemoteConnector.CLIENT_TYPE.CLIENT_WILDCARD);
 		}
 		accessProvider = SCAccessProvider.getInstance(mContext);
 		DTParamsHelper.init(mContext);
@@ -309,12 +358,12 @@ public class DTHelper {
 
 			getInstance().syncInProgress = true;
 			// TO DO
-			getInstance().storage.synchronize(getAuthToken(), getAppUrl(), Constants.SYNC_SERVICE);
+			getInstance().storage.synchronize(getAuthToken(), getAppUrl(), SYNC_SERVICE);
 			// activateAutoSync();
 
 			// getInstance().storage.synchronize(getAuthToken(),
 			// GlobalConfig.getAppUrl(mContext),
-//			 Constants.SYNC_SERVICE);
+			// Constants.SYNC_SERVICE);
 
 		} finally {
 			getInstance().syncInProgress = false;
@@ -461,7 +510,7 @@ public class DTHelper {
 	private static ExplorerObject updateEvent(String id, ExplorerObject event, String authToken) {
 		if (event != null) {
 			try {
-				String json = RemoteConnector.putJSON(serviceUrl, String.format(Constants.EVENTS_P, id), JsonUtils.toJSON(event)
+				String json = RemoteConnector.putJSON(serviceUrl, String.format(EVENTS_P, id), JsonUtils.toJSON(event)
 						.toString(), authToken);
 				return JsonUtils.toObject(json, ExplorerObject.class);
 			} catch (Exception e) {
@@ -474,7 +523,7 @@ public class DTHelper {
 	private static ExplorerObject createEvent(ExplorerObject event, String authToken) {
 		if (event != null) {
 			try {
-				String json = RemoteConnector.postJSON(serviceUrl, Constants.EVENTS, JsonUtils.toJSON(event).toString(),
+				String json = RemoteConnector.postJSON(serviceUrl, EVENTS, JsonUtils.toJSON(event).toString(),
 						authToken);
 				return JsonUtils.toObject(json, ExplorerObject.class);
 
@@ -544,7 +593,7 @@ public class DTHelper {
 				params = Collections.<String, Object> emptyMap();
 			else
 				params = Collections.<String, Object> singletonMap("filter", JsonUtils.toJSON(filter));
-			String json = RemoteConnector.getJSON(serviceUrl,Constants.EVENTS, authToken, params);
+			String json = RemoteConnector.getJSON(serviceUrl, EVENTS, authToken, params);
 			return JsonUtils.toObjectList(json, ExplorerObject.class);
 
 		} catch (Exception e) {
@@ -587,10 +636,10 @@ public class DTHelper {
 				where = "(" + where + ")";
 			}
 			where += "AND fromTime > " + getCurrentDateTimeForSearching();
-			return getInstance().storage.query(ExplorerObject.class, "",
-					null, position, size, "fromTime ASC");
+			return getInstance().storage.query(ExplorerObject.class, "", null, position, size, "fromTime ASC");
 		} else {
-			// ArrayList<ExplorerObject> result = new ArrayList<ExplorerObject>();
+			// ArrayList<ExplorerObject> result = new
+			// ArrayList<ExplorerObject>();
 			List<ExplorerObject> result = null;
 			for (int c = 0; c < categories.length; c++) {
 				ObjectFilter filter = new ObjectFilter();
@@ -604,12 +653,12 @@ public class DTHelper {
 			return result;
 		}
 	}
-	
+
 	public static Collection<ExplorerObject> getEventsByCategories(int position, int size, String... inCategories)
 			throws DataException, StorageConfigurationException, ConnectionException, ProtocolException,
 			SecurityException {
 
- 		if (inCategories == null || inCategories.length == 0)
+		if (inCategories == null || inCategories.length == 0)
 			return Collections.emptyList();
 
 		String[] categories = CategoryHelper.getAllCategories(new HashSet<String>(Arrays.asList(inCategories)));
@@ -634,7 +683,8 @@ public class DTHelper {
 			return getInstance().storage.query(ExplorerObject.class, where,
 					nonNullCategories.toArray(new String[nonNullCategories.size()]), position, size, "fromTime ASC");
 		} else {
-			// ArrayList<ExplorerObject> result = new ArrayList<ExplorerObject>();
+			// ArrayList<ExplorerObject> result = new
+			// ArrayList<ExplorerObject>();
 			List<ExplorerObject> result = null;
 			for (int c = 0; c < categories.length; c++) {
 				ObjectFilter filter = new ObjectFilter();
@@ -649,7 +699,8 @@ public class DTHelper {
 		}
 	}
 
-	// public static Collection<ExplorerObject> getEventsByCategories(int position,
+	// public static Collection<ExplorerObject> getEventsByCategories(int
+	// position,
 	// int size, String... inCategories)
 	// throws DataException, StorageConfigurationException, ConnectionException,
 	// ProtocolException,
@@ -707,7 +758,8 @@ public class DTHelper {
 	// }
 	// }
 
-	// public static Collection<ExplorerObject> searchTodayEvents(int position, int
+	// public static Collection<ExplorerObject> searchTodayEvents(int position,
+	// int
 	// size, String text) throws DataException,
 	// StorageConfigurationException, ConnectionException, ProtocolException,
 	// SecurityException, AACException {
@@ -750,8 +802,9 @@ public class DTHelper {
 	// return returnlist;
 	// }
 	// }
-	public static Collection<ExplorerObject> searchTodayEvents(int position, int size, String text) throws DataException,
-			StorageConfigurationException, ConnectionException, ProtocolException, SecurityException {
+	public static Collection<ExplorerObject> searchTodayEvents(int position, int size, String text)
+			throws DataException, StorageConfigurationException, ConnectionException, ProtocolException,
+			SecurityException {
 		// Date now = new Date();
 		Calendar cal = Calendar.getInstance();
 		// cal.setTime(now);
@@ -845,7 +898,7 @@ public class DTHelper {
 	private static void deleteEvent(String id, String authToken) {
 		if (id != null) {
 			try {
-				RemoteConnector.deleteJSON(serviceUrl, String.format(Constants.EVENTS_P, id), authToken);
+				RemoteConnector.deleteJSON(serviceUrl, String.format(EVENTS_P, id), authToken);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -883,7 +936,7 @@ public class DTHelper {
 		if (id != null) {
 			try {
 				Map<String, Object> params = Collections.<String, Object> singletonMap("rating", rating);
-				String json = RemoteConnector.putJSON(serviceUrl, String.format(Constants.RATE, id), null, authToken, params);
+				String json = RemoteConnector.putJSON(serviceUrl, String.format(RATE, id), null, authToken, params);
 				return Integer.parseInt(json);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -985,7 +1038,7 @@ public class DTHelper {
 			try {
 
 				String json = RemoteConnector
-						.putJSON(serviceUrl, String.format(add ? Constants.FOLLOW : Constants.UNFOLLOW, id), authToken);
+						.putJSON(serviceUrl, String.format(add ? FOLLOW : UNFOLLOW, id), authToken);
 				return JsonUtils.toObject(json, ExplorerObject.class);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -1012,7 +1065,7 @@ public class DTHelper {
 			try {
 
 				String json = RemoteConnector
-						.putJSON(serviceUrl, String.format(add ? Constants.FOLLOW : Constants.UNFOLLOW, id), authToken);
+						.putJSON(serviceUrl, String.format(add ? FOLLOW : UNFOLLOW, id), authToken);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -1068,14 +1121,275 @@ public class DTHelper {
 	private static ExplorerObject myEvent(String id, boolean add, String authToken) {
 		if (id != null) {
 			try {
-				String json = RemoteConnector.putJSON(serviceUrl, String.format(add ? Constants.ATTEND : Constants.NOT_ATTEND, id),
-						authToken);
+				String json = postJSON(getAppUrl(), "social/attend/" + id+"/"+JsonUtils.toJSON(add),
+						"", getAuthToken());
+
 				return JsonUtils.toObject(json, ExplorerObject.class);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
 		return null;
+	}
+
+	public static String postJSON(String host, String service, String body, String token) throws SecurityException,
+			RemoteException {
+		return postJSON(host, service, body, token, null);
+	}
+
+	public enum CLIENT_TYPE {
+		CLIENT_NORMAL, CLIENT_WILDCARD, CLIENT_ACCEPTALL
+	};
+
+	private static CLIENT_TYPE clientType = CLIENT_TYPE.CLIENT_NORMAL;
+
+	private static final String DEFAULT_CHARSET = "UTF-8";
+	/** */
+	protected static final String RH_ACCEPT = "Accept";
+	/** */
+	protected static final String RH_AUTH_TOKEN = "Authorization";
+	public static int HTTP_REQUEST_TIMEOUT_MS = 30 * 1000;
+
+	public static String postJSON(String host, String service, String body, String token, Map<String, Object> parameters)
+			throws SecurityException, RemoteException {
+
+		String queryString = generateQueryString(parameters);
+		final HttpResponse resp;
+		final HttpPost post = new HttpPost(normalizeURL(host + service) + queryString);
+
+		post.setHeader(RH_ACCEPT, "application/json");
+		post.setHeader(RH_AUTH_TOKEN, bearer(token));
+
+		try {
+			StringEntity input = new StringEntity(body, DEFAULT_CHARSET);
+			input.setContentType("application/json");
+			post.setEntity(input);
+
+			resp = getHttpClient().execute(post);
+			String response = EntityUtils.toString(resp.getEntity(), DEFAULT_CHARSET);
+			if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+				return response;
+			}
+			if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_FORBIDDEN
+					|| resp.getStatusLine().getStatusCode() == HttpStatus.SC_UNAUTHORIZED) {
+				throw new Exception();
+			}
+
+			String msg = "";
+			try {
+				msg = response.substring(response.indexOf("<h1>") + 4,
+						response.indexOf("</h1>", response.indexOf("<h1>")));
+			} catch (Exception e) {
+				msg = resp.getStatusLine().toString();
+			}
+			throw new RemoteException(msg);
+		} catch (Exception e) {
+
+			e.printStackTrace();
+			return "";
+
+		}
+	}
+
+	protected static HttpClient getHttpClient() {
+		HttpClient httpClient = null;
+		switch (clientType) {
+		case CLIENT_WILDCARD:
+			httpClient = getWildcartHttpClient(null);
+			break;
+		case CLIENT_ACCEPTALL:
+			httpClient = getAcceptAllHttpClient(null);
+			break;
+		default:
+			httpClient = getDefaultHttpClient(null);
+		}
+
+		final HttpParams params = httpClient.getParams();
+		HttpConnectionParams.setConnectionTimeout(params, HTTP_REQUEST_TIMEOUT_MS);
+		HttpConnectionParams.setSoTimeout(params, HTTP_REQUEST_TIMEOUT_MS);
+		ConnManagerParams.setTimeout(params, HTTP_REQUEST_TIMEOUT_MS);
+		return httpClient;
+	}
+
+	private static HttpClient getDefaultHttpClient(HttpParams inParams) {
+		if (inParams != null) {
+			return new DefaultHttpClient(inParams);
+		} else {
+			return new DefaultHttpClient();
+		}
+	}
+
+	private static HttpClient getAcceptAllHttpClient(HttpParams inParams) {
+		HttpClient client = null;
+
+		HttpParams params = inParams != null ? inParams : new BasicHttpParams();
+
+		try {
+			KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
+			trustStore.load(null, null);
+
+			SchemeRegistry registry = new SchemeRegistry();
+			registry.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
+
+			// IMPORTANT: use CustolSSLSocketFactory for 2.2
+			SSLSocketFactory sslSocketFactory = new CustomSSLSocketFactory(trustStore);
+			sslSocketFactory.setHostnameVerifier(SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
+			registry.register(new Scheme("https", sslSocketFactory, 443));
+
+			ClientConnectionManager ccm = new ThreadSafeClientConnManager(params, registry);
+
+			client = new DefaultHttpClient(ccm, params);
+		} catch (Exception e) {
+			client = new DefaultHttpClient(params);
+		}
+
+		return client;
+	}
+
+	private static class CustomSSLSocketFactory extends SSLSocketFactory {
+		SSLContext sslContext = SSLContext.getInstance("TLS");
+
+		public CustomSSLSocketFactory(KeyStore truststore) throws NoSuchAlgorithmException, KeyManagementException,
+				KeyStoreException, UnrecoverableKeyException {
+			super(truststore);
+
+			TrustManager tm = new X509TrustManager() {
+				public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+				}
+
+				public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+				}
+
+				public X509Certificate[] getAcceptedIssuers() {
+					return null;
+				}
+			};
+
+			sslContext.init(null, new TrustManager[] { tm }, null);
+		}
+
+		@Override
+		public Socket createSocket(Socket socket, String host, int port, boolean autoClose) throws IOException,
+				UnknownHostException {
+			return sslContext.getSocketFactory().createSocket(socket, host, port, autoClose);
+		}
+
+		@Override
+		public Socket createSocket() throws IOException {
+			return sslContext.getSocketFactory().createSocket();
+		}
+	}
+
+	private static HttpClient getWildcartHttpClient(HttpParams inParams) {
+		HttpClient client = null;
+
+		HttpParams params = inParams != null ? inParams : new BasicHttpParams();
+
+		try {
+			KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
+			trustStore.load(null, null);
+
+			SchemeRegistry registry = new SchemeRegistry();
+			registry.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
+
+			SSLSocketFactory sslSocketFactory = new CustomSSLSocketFactory(trustStore);
+			final X509HostnameVerifier delegate = sslSocketFactory.getHostnameVerifier();
+			if (!(delegate instanceof WildcardVerifier)) {
+				sslSocketFactory.setHostnameVerifier(new WildcardVerifier(delegate));
+			}
+			registry.register(new Scheme("https", sslSocketFactory, 443));
+
+			ClientConnectionManager ccm = new ThreadSafeClientConnManager(params, registry);
+
+			client = new DefaultHttpClient(ccm, params);
+		} catch (Exception e) {
+			client = new DefaultHttpClient(params);
+		}
+
+		return client;
+	}
+
+	private static class WildcardVerifier extends AbstractVerifier {
+		private final X509HostnameVerifier delegate;
+
+		public WildcardVerifier(final X509HostnameVerifier delegate) {
+			this.delegate = delegate;
+		}
+
+		@Override
+		public void verify(String host, String[] cns, String[] subjectAlts) throws SSLException {
+			boolean ok = false;
+			try {
+				delegate.verify(host, cns, subjectAlts);
+			} catch (SSLException e) {
+				for (String cn : cns) {
+					if (cn.startsWith("*.")) {
+						try {
+							delegate.verify(host, new String[] { cn.substring(2) }, subjectAlts);
+							ok = true;
+						} catch (Exception e1) {
+							throw new SSLException(e1);
+						}
+					}
+				}
+				if (!ok) {
+					throw e;
+				}
+			}
+		}
+	}
+
+	private static String normalizeURL(String uriString) throws RemoteException {
+		try {
+			URL url = new URL(uriString);
+			URI uri = new URI(url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(), url.getPath(),
+					url.getQuery(), url.getRef());
+			uriString = uri.toURL().toString();
+		} catch (Exception e) {
+			throw new RemoteException(e.getMessage());
+		}
+		return uriString;
+	}
+
+	protected static String bearer(String token) {
+		return "Bearer " + token;
+	}
+
+	protected static String generateQueryString(Map<String, Object> parameters) {
+		String queryString = "?";
+		if (parameters != null) {
+			for (String param : parameters.keySet()) {
+				Object value = parameters.get(param);
+				if (value == null) {
+					if (queryString.length() > 1) {
+						queryString += "&";
+					}
+					queryString += param + "=";
+				} else if (value instanceof List) {
+					for (Object v : ((List<?>) value)) {
+						if (queryString.length() > 1) {
+							queryString += "&";
+						}
+						queryString += param + "=" + encodeValue(v.toString());
+					}
+				} else {
+					if (queryString.length() > 1) {
+						queryString += "&";
+					}
+					queryString += param + "=" + encodeValue(value.toString());
+				}
+
+			}
+		}
+		return queryString.length() > 1 ? queryString : "";
+	}
+
+	protected static String encodeValue(String value) {
+		try {
+			return URLEncoder.encode(value, "utf8");
+		} catch (UnsupportedEncodingException e) {
+			return value;
+		}
 	}
 
 	public static ExplorerObject findEventByEntityId(String entityId) throws DataException,
@@ -1433,7 +1747,8 @@ public class DTHelper {
 	// else
 	// args.add(what);
 	// }
-	// if (ExplorerObject.class.getCanonicalName().equals(cls.getCanonicalName()))
+	// if
+	// (ExplorerObject.class.getCanonicalName().equals(cls.getCanonicalName()))
 	// {
 	// if (when != null)
 	// where = addWhenToWhere(where, when.getFrom(), when.getTo());
@@ -1584,12 +1899,12 @@ public class DTHelper {
 			Collection<ExplorerObject> events = null;
 			events = getEventsRemote(filter, null);
 
-//			for (ExplorerObject poi : events) {
-//				ExplorerObject eventBean = new ExplorerObject();
-//				eventBean.setObjectForBean(poi);
-//				eventsbean.add(eventBean);
-//			}
-//			result = (Collection<T>) eventsbean;
+			// for (ExplorerObject poi : events) {
+			// ExplorerObject eventBean = new ExplorerObject();
+			// eventBean.setObjectForBean(poi);
+			// eventsbean.add(eventBean);
+			// }
+			// result = (Collection<T>) eventsbean;
 
 			if (result != null) {
 				synchronize();

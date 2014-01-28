@@ -75,4 +75,7 @@
     <string name="community_my_rate">Il mio giudizio</string>
     <string name="community_avg_rate">Giudizio medio</string>
     <string name="community_tot_rate">Giudizio totale</string>
+
+    <string name="attend_success">Aggiunto alla tua lista di partecipazioni!</string>
+    <string name="not_attend_success">Rimosso dalla tua lista di partecipazioni!</string>
 </resources>

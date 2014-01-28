@@ -168,4 +168,6 @@
     <string name="community_my_rate">My rate</string>
     <string name="community_avg_rate">Average rate</string>
     <string name="community_tot_rate">Total rate</string>
+    <string name="attend_success">Added to your attending list!</string>
+    <string name="not_attend_success">Removed from your attending list!</string>
 </resources>
