@@ -33,8 +33,14 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.text.Html;
+import android.text.Spannable;
 import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
+import android.text.util.Linkify;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,11 +51,16 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.TextView.BufferType;
 import android.widget.Toast;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ExplorerObject;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.EventPlaceholder;
+import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.Fragment_EventDetails;
+import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info.edit.Fragment_EvDetail_Info_Contacts;
+import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info.edit.Fragment_EvDetail_Info_When;
+import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info.edit.Fragment_EvDetail_Info_Where;
 
 //in Fragment_EvDetail_Info
 public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
@@ -112,7 +123,6 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 
 
 
-
 	public EventDetailInfoAdapter(Fragment_EvDetail_Info fragment) {
 		this.fragment = fragment;
 
@@ -168,12 +178,46 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 		}
 
 		// Get event_info_child_item.xml file elements and set values
-		if (!child.getText().contains("href")){
+		if (!child.getText().contains("http")){
 			eventChildViewHolder.text.setText(child.getText());
 		}
 		else{
-			eventChildViewHolder.text.setText(Html.fromHtml(child.getText()));
+			//make the text part clickable
+			int i1 = 0;
+			int i2 = child.getName().length()-1;
 			eventChildViewHolder.text.setMovementMethod(LinkMovementMethod.getInstance());
+			eventChildViewHolder.text.setText(child.getName(), BufferType.SPANNABLE);
+			//eventChildViewHolder.text.setAutoLinkMask(Linkify.WEB_URLS);
+			//Linkify.addLinks(eventChildViewHolder.text, Linkify.WEB_URLS);
+			//String s = "<a href=\" + child.getText() + \">Website</a>";
+			//eventChildViewHolder.text.setText(Html.fromHtml(s));
+
+			Spannable mySpannable = (Spannable)eventChildViewHolder.text.getText();
+			ClickableSpan myClickableSpan = new ClickableSpan()
+			{
+				@Override
+				public void onClick(View widget) { 
+					/* do something */
+					Toast.makeText(fragment.context,
+							"Open browser ofr url: " + child.getText(),
+							Toast.LENGTH_LONG).show(); 
+
+					//					String url = child.getText();
+					//					Intent i = new Intent(Intent.ACTION_VIEW);
+					//					i.setData(Uri.parse(url)); 
+					//					fragment.context.startActivity(i); 
+
+				}
+			};
+
+			//			row.setFocusable(true);
+			//			row.setFocusableInTouchMode(true);
+
+			mySpannable.setSpan(myClickableSpan, i1, i2 , Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+
+			//			eventChildViewHolder.text.setText(Html.fromHtml(child.getText()));
+			//			eventChildViewHolder.text.setMovementMethod(LinkMovementMethod.getInstance());
 		}
 
 		// set icon on the left side
@@ -331,13 +375,13 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 
 
 
-		if (fragment.ChildClickStatus != childPosition) {
-			fragment.ChildClickStatus = childPosition;
-
-			Toast.makeText(this.fragment.context,
-					"Parent :" + groupPosition + " Child :" + childPosition,
-					Toast.LENGTH_LONG).show();
-		}
+		//		if (fragment.ChildClickStatus != childPosition) {
+		//			fragment.ChildClickStatus = childPosition;
+		//
+		//			Toast.makeText(this.fragment.context,
+		//					"Parent :" + groupPosition + " Child :" + childPosition,
+		//					Toast.LENGTH_LONG).show();
+		//		}
 
 		return childPosition;
 	}
@@ -423,8 +467,6 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 		}
 
 
-
-
 		convertView.setBackgroundResource(getBackgroundColor(groupPosition));
 
 		// Get grouprow.xml file elements and set values
@@ -492,7 +534,7 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 
 		@Override
 		public void onClick(View v) {
-			Log.i("onCheckedChanged", "Edit button pressed!");
+			Log.i("FRAGMENT LC", "EventDetailInfoAdapter --> Edit button pressed!");
 			parent.setChecked(true);
 
 			((EventDetailInfoAdapter) fragment.getExpandableListAdapter())
@@ -501,8 +543,45 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 			// final Boolean checked = parent.isChecked();
 			Toast.makeText(context, "Parent : " + parent.getText1(),
 					Toast.LENGTH_LONG).show();
-			// Toast.makeText(context, "modify the field " + attrName + "," +
-			// groupPos, Toast.LENGTH_SHORT).show();
+
+			FragmentTransaction fragmentTransaction = fragment.getActivity().getSupportFragmentManager().beginTransaction();
+			Fragment edit_fragment=null;
+			Bundle args = new Bundle();
+			String frag_description=null;
+			
+			if (parent.getText1()=="Contatti"){
+				edit_fragment = new Fragment_EvDetail_Info_Contacts();
+				//Fragment_EvDetail_Info_Contacts fragment_contacts = new Fragment_EvDetail_Info_Contacts();
+				Log.i("CONTACTS", "EventDetailInfoAdapter --> event selected ID: " + fragment.mEventId + "!!");
+				args.putString(Fragment_EvDetail_Info_Contacts.ARG_EVENT_ID, fragment.mEventId);
+				frag_description = "event_details_info_edit_contacts";
+			} else if(parent.getText1()=="Dove"){
+				edit_fragment = new Fragment_EvDetail_Info_Where();
+				//Fragment_EvDetail_Info_Contacts fragment_contacts = new Fragment_EvDetail_Info_Contacts();
+				Log.i("CONTACTS", "EventDetailInfoAdapter --> event selected ID: " + fragment.mEventId + "!!");
+				args.putString(Fragment_EvDetail_Info_Where.ARG_EVENT_ID, fragment.mEventId);
+				frag_description = "event_details_info_edit_where";
+			}else if(parent.getText1()=="Quando"){
+				edit_fragment = new Fragment_EvDetail_Info_When();
+				//Fragment_EvDetail_Info_Contacts fragment_contacts = new Fragment_EvDetail_Info_Contacts();
+				Log.i("CONTACTS", "EventDetailInfoAdapter --> event selected ID: " + fragment.mEventId + "!!");
+				args.putString(Fragment_EvDetail_Info_When.ARG_EVENT_ID, fragment.mEventId);
+				frag_description = "event_details_info_edit_when";
+			}
+
+			if (edit_fragment!=null){
+				edit_fragment.setArguments(args);
+				fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+				// fragmentTransaction.detach(this);
+				fragmentTransaction.replace(R.id.content_frame, edit_fragment, frag_description);
+				fragmentTransaction.addToBackStack(edit_fragment.getTag());
+				fragmentTransaction.commit();
+				//reset event and event id
+				fragment.mEvent=null;
+				fragment.mEventId=null;
+			}
+
+
 
 		}
 

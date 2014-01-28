@@ -16,6 +16,8 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -27,6 +29,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
+import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.TextView;
 import android.widget.Toast;
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
@@ -47,7 +50,7 @@ public class Fragment_EvDetail_Info extends Fragment {
 	//private List<LocalExplorerObject> listEvents = new ArrayList<LocalExplorerObject>();
 	Map<String, List<String>> eventAttributeCollection;
 	ExpandableListView expListView;
-	public ExplorerObject mEvent = null;
+	protected ExplorerObject mEvent = null;
 	private EventDetailInfoAdapter eventDetailInfoAdapter;
 
 
@@ -56,14 +59,14 @@ public class Fragment_EvDetail_Info extends Fragment {
 	public static final String ARG_INDEX = "index_adapter";
 
 	private Integer indexAdapter;
-	private String mEventId;
+	protected String mEventId;
 
 	private static final DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 	private static final DateFormat extDateFormat = new SimpleDateFormat("EEEEEE dd/MM/yyyy");
 
 	//Initialize variables
 	protected int ParentClickStatus=-1;
-	protected int ChildClickStatus=-1;
+	protected int childClickStatus=-1;
 	protected ArrayList<EventInfoParent> parents;
 	protected List<Integer> groupImages;
 	//private HashMap<Integer, List<Integer>> childImages;
@@ -87,13 +90,15 @@ public class Fragment_EvDetail_Info extends Fragment {
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
-		Log.d("SCROLLTABS","onAttach");
+		Log.d("FRAGMENT LC","Fragment_evDetail_Info --> onAttach");
 
 	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		Log.d("FRAGMENT LC","Fragment_evDetail_Info --> onCreate");
+			
 		this.context = this.getActivity();
 
 		if(savedInstanceState==null)
@@ -103,7 +108,7 @@ public class Fragment_EvDetail_Info extends Fragment {
 				mEventId = getArguments().getString(ARG_EVENT_ID);
 				//now it will be always null so I load the fake data
 				mEvent = DTHelper.findEventById(mEventId);
-				List<ExplorerObject> eventList = Utils.getFakeExplorerObjects();
+//				List<ExplorerObject> eventList = Utils.getFakeExplorerObjects();
 //				mEvent = Utils.getFakeLocalExplorerObject(eventList,mEventId);
 			}
 		}
@@ -117,14 +122,16 @@ public class Fragment_EvDetail_Info extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		super.onCreateView(inflater,container,savedInstanceState);
-		Log.d("SCROLLTABS","onCreateView");
+		Log.d("FRAGMENT LC","Fragment_evDetail_Info --> onCreateView");
 		return inflater.inflate(R.layout.frag_ev_detail_info, container, false);
 	}
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		Log.d("SCROLLTABS","onActivityCreated");
+		Log.d("FRAGMENT LC","Fragment_evDetail_Info --> onActivityCreated");
+
+		mEvent = getEvent();
 
 		//display the event title
 		TextView titleTextView = (TextView) getActivity().findViewById(R.id.event_placeholder_title);
@@ -200,63 +207,59 @@ public class Fragment_EvDetail_Info extends Fragment {
 	@Override
 	public void onStart() {
 		super.onStart();
-		Log.d("SCROLLTABS","onStart");
-
+		Log.d("FRAGMENT LC","Fragment_evDetail_Info --> onStart");
+		//mEvent = getEvent();
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-		Log.d("SCROLLTABS","onResume");
-
+		Log.d("FRAGMENT LC","Fragment_evDetail_Info --> onResume");
 	}
 
 	@Override
 	public void onPause() {
 		super.onPause();
-		Log.d("SCROLLTABS","onPause");
+		Log.d("FRAGMENT LC","Fragment_evDetail_Info --> onPause");
 
 	}
 
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
-		Log.d("SCROLLTABS","onSaveInstanceState");
+		Log.d("FRAGMENT LC","Fragment_evDetail_Info --> onSaveInstanceState");
 
 	}
 
 	@Override
 	public void onStop() {
 		super.onStop();
-		Log.d("SCROLLTABS","onStop");
-
+		Log.d("FRAGMENT LC","Fragment_evDetail_Info --> onStop");
 	}
 
 	@Override
 	public void onDestroyView() {
 		super.onDestroyView();
-		Log.d("SCROLLTABS","onDestroyView");
-
+		Log.d("FRAGMENT LC","Fragment_evDetail_Info --> onDestroyView");
 	}
 
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		Log.d("SCROLLTABS","onDestroy");
+		Log.d("FRAGMENT LC","Fragment_evDetail_Info --> onDestroy");
 
 	}
 
 	@Override
 	public void onDetach() {
 		super.onDetach();
-		Log.d("SCROLLTABS","onDetach");
-
+		Log.d("FRAGMENT LC","Fragment_evDetail_Info --> onDetach");
 	}
 
 
 	private void setExpandableListView(Bundle savedInstanceState){
 
-		Log.d("SCROLLTABS","setExpandable list view");
+		Log.d("FRAGMENT LC","Fragment_evDetail_Info --> setExpandableListView");
 
 		//Creating static data in arraylist
 		ArrayList<EventInfoParent> dummyList = getEventDetailData(mEvent);
@@ -280,30 +283,74 @@ public class Fragment_EvDetail_Info extends Fragment {
 		setAdapter(dummyList);
 
 		expListView.setAdapter(eventDetailInfoAdapter);
-		
-		
-//		expListView
-//         .setOnChildClickListener(new OnChildClickListener() {
-//
-//             @Override
-//             public boolean onChildClick(ExpandableListView parent,
-//                     View v, int groupPosition, int childPosition,
-//                     long id) {
-//
-//            	 if(_lastColored != null)
-//            	    {
-//            	    _lastColored.setBackgroundColor(Color.WHITE);
-//            	    _lastColored.invalidate();
-//            	    }
-//            	    _lastColored = v;
-//            	    
-//                 v.setBackgroundColor(Color.BLUE);
-//
-//
-//            	    return false;
-//
-//                 }
-//         });
+
+
+		expListView
+		.setOnChildClickListener(new OnChildClickListener() {
+
+			@Override
+			public boolean onChildClick(ExpandableListView parent,
+					View v, int groupPosition, int childPosition,
+					long id) {
+
+				//            	 if(_lastColored != null)
+				//            	    {
+				//            	    _lastColored.setBackgroundColor(Color.WHITE);
+				//            	    _lastColored.invalidate();
+				//            	    }
+				//            	    _lastColored = v;
+				//            	    
+				//                 v.setBackgroundColor(Color.BLUE);
+
+				Log.i("GROUPVIEW", "parent == " + groupPosition + "=  child : =="
+						+ childPosition);
+
+				if (childClickStatus != childPosition) {
+					childClickStatus = childPosition;
+
+					Toast.makeText(context,
+							"Parent :" + groupPosition + " Child :" + childPosition,
+							Toast.LENGTH_LONG).show();
+				}
+
+
+				int iCount;
+				int iIdx;
+				EventInfoChild childItem;
+
+				EventDetailInfoAdapter adapter = (EventDetailInfoAdapter) parent.getExpandableListAdapter();
+
+				iCount = adapter.getChildrenCount(groupPosition);
+				for ( iIdx = 0; iIdx < iCount; ++iIdx )
+				{
+					childItem = (EventInfoChild) adapter.getChild(groupPosition, iIdx);
+					if ( childItem != null )
+					{
+						Log.i("GROUPVIEW", "child item not null");
+
+
+						if ( iIdx == childPosition )
+						{
+							// Here you would toggle checked state in the data for this item
+						}
+						else
+						{
+							// Here you would clear checked state in the data for this item
+						}
+					}
+				}
+
+				parent.invalidateViews(); // Update the list view
+
+
+
+
+
+
+				return false;
+
+			}
+		});
 
 	}
 
@@ -346,6 +393,13 @@ public class Fragment_EvDetail_Info extends Fragment {
 			((EventDetailInfoAdapter)getExpandableListAdapter()).notifyDataSetChanged();
 		}	
 	}
+
+
+	protected void resetEvent() {
+		mEvent = null;
+		mEventId = null;
+	}
+
 
 
 	private  static ArrayList<String> createAttributeGroupList(){
@@ -422,20 +476,27 @@ public class Fragment_EvDetail_Info extends Fragment {
 				parent.setChildren(new ArrayList<EventInfoChild>());
 
 				if (event.getFromTime()!= null){
-					String when = getDateString(event.getFromTime());
+					String fromTime = Utils.getDateString(this.context, event.getFromTime());
 					EventInfoChild child = new EventInfoChild();
-					child.setName("0");
-					child.setText(when);
+					child.setName(getResources().getString(R.string.start_date));
+					child.setText(getResources().getString(R.string.start_date) + ": " + fromTime);
 					child.setType(0);
 					parent.getChildren().add(child);
 				}
 
 				if (event.getToTime()!= null){
-					//compute duration
+					String toTime = Utils.getDateString(this.context, event.getToTime());
+					EventInfoChild child = new EventInfoChild();
+					child.setName(getResources().getString(R.string.end_date));
+					child.setText(getResources().getString(R.string.end_date) + ": " + toTime);
+					child.setType(0);
+					parent.getChildren().add(child);
+					
+					//compute duration!!!
 					String duration = "3 ore";
 					if (duration!=null){
-						EventInfoChild child = new EventInfoChild();
-						child.setName("1");
+						child = new EventInfoChild();
+						child.setName(getResources().getString(R.string.duration));
 						child.setText("Durata: " + duration);
 						child.setType(0);
 						parent.getChildren().add(child);
@@ -467,11 +528,11 @@ public class Fragment_EvDetail_Info extends Fragment {
 				telChildLabel.setText("Telefono");
 				telChildLabel.setType(1);
 				telChildLabel.setLeftIconId( R.drawable.ic_action_phone);
-				
+
 				//to be added again when it will be possible to add more numbers
-//				int[] rightIconIds = new int[]{R.drawable.ic_action_new};
-//				telChildLabel.setRightIconIds(rightIconIds);
-				
+				//				int[] rightIconIds = new int[]{R.drawable.ic_action_new};
+				//				telChildLabel.setRightIconIds(rightIconIds);
+
 				parent.getChildren().add(telChildLabel);
 
 
@@ -483,11 +544,11 @@ public class Fragment_EvDetail_Info extends Fragment {
 						child1.setName("tel");
 						child1.setText(tel);
 						child1.setType(0);
-						
+
 						//to be added when it will be possible to cancel/edit the single item
 						//int[] rightIconIds1 = new int[]{R.drawable.ic_action_edit, R.drawable.ic_action_cancel, R.drawable.ic_action_call};
 						int[] rightIconIds1 = new int[]{R.drawable.ic_action_call};
-						
+
 						child1.setRightIconIds(rightIconIds1);
 						parent.getChildren().add(child1);
 					}
@@ -499,12 +560,12 @@ public class Fragment_EvDetail_Info extends Fragment {
 				emailChildLabel.setText("Email");
 				emailChildLabel.setType(1);
 				emailChildLabel.setLeftIconId( R.drawable.ic_action_email);
-		
-				
+
+
 				//to be added again when it will be possible to add more emails
-//				int[] rightIconIdsEmail = new int[]{R.drawable.ic_action_new_email};
-//				emailChildLabel.setRightIconIds(rightIconIdsEmail);
-				
+				//				int[] rightIconIdsEmail = new int[]{R.drawable.ic_action_new_email};
+				//				emailChildLabel.setRightIconIds(rightIconIdsEmail);
+
 				parent.getChildren().add(emailChildLabel);
 
 				//TO DO
@@ -527,36 +588,36 @@ public class Fragment_EvDetail_Info extends Fragment {
 
 				//set the Web Site item of type 0
 				EventInfoChild siteChildLabel = new EventInfoChild();
-				siteChildLabel.setName("Site");
+				siteChildLabel.setName("Web Site ");
 				if (event.getWebsiteUrl()!=null){
-					siteChildLabel.setText("<a href=\"" + event.getWebsiteUrl() + "\">Website</a>");
+					siteChildLabel.setText(event.getWebsiteUrl());
 				}
 				else
-					siteChildLabel.setText("Web Site");
+					siteChildLabel.setText("Web Site ");
 				siteChildLabel.setType(0);
 				siteChildLabel.setLeftIconId( R.drawable.ic_action_web_site);
 				parent.getChildren().add(siteChildLabel);
 
 				//set Facebook item of type 0
 				EventInfoChild fbChildLabel = new EventInfoChild();
-				fbChildLabel.setName("FB");
+				fbChildLabel.setName("Facebook ");
 				if (event.getFacebookUrl()!=null){
-					siteChildLabel.setText("<a href=\"" + event.getFacebookUrl() + "\">Facebook</a>");
+					fbChildLabel.setText("<a href=\"" + event.getFacebookUrl() + "\">Facebook</a>");
 				}
 				else
-					siteChildLabel.setText("Facebook");
+					fbChildLabel.setText("Facebook ");
 				fbChildLabel.setType(0);
 				fbChildLabel.setLeftIconId( R.drawable.ic_facebook); //to substitute with the right icon
 				parent.getChildren().add(fbChildLabel);
 
 				//set Twitter item of type 0
 				EventInfoChild twitterChildLabel = new EventInfoChild();
-				twitterChildLabel.setName("Twitter");
+				twitterChildLabel.setName("Twitter ");
 				if (event.getTwitterUrl()!=null){
-					siteChildLabel.setText("<a href=\"" + event.getTwitterUrl() + "\">Twitter</a>");
+					twitterChildLabel.setText("<a href=\"" + event.getTwitterUrl() + "\">Twitter</a>");
 				}
 				else
-					siteChildLabel.setText("Twitter");
+					twitterChildLabel.setText("Twitter ");
 
 				twitterChildLabel.setType(0);
 				twitterChildLabel.setLeftIconId( R.drawable.ic_twitter); //to substitute with the right icon
@@ -591,97 +652,36 @@ public class Fragment_EvDetail_Info extends Fragment {
 
 
 
-	private  Map<String, List<String>> getEventDetailCollection(List<String> attrGroupList, ExplorerObject event) {
-
-		Map<String, List<String>> eventCollection = new LinkedHashMap<String, List<String>>();
-		List<String> childList = new ArrayList<String>();
-
-		// get attribute values collection(child)
-		for (String event_attrName : attrGroupList) {
-			childList = new ArrayList<String>();
-			if (event_attrName.equals("Dove")) {
-				String place = event.getCustomData().containsKey("where_name") ? (String) event.getCustomData().get("where_name") : null;
-				String city = event.getCustomData().containsKey("where_city") ? (String) event.getCustomData().get("where_city") : null;
-				String street = event.getCustomData().containsKey("where_street") ? (String) event.getCustomData().get("where_street") : null;
-				if (place != null)
-					childList.add(place);
-				if (city != null)
-					childList.add(city);
-				if (street != null)
-					childList.add(street);
-			} else if (event_attrName.equals("Quando")){
-
-				if (event.getFromTime()!= null){
-					String when = getDateString(event.getFromTime());
-					childList.add(when);
-				}
-				String duration = event.getCustomData().containsKey("Durata") ? (String) event.getCustomData().get("Durata") : null;
-				if (duration!=null)
-					childList.add("Durata: " + duration);
-			}
-			else if (event_attrName.equals("Cosa")){
-				if (event.getDescription()!=null){
-					String desc = event.getDescription();
-					childList.add(desc);
-				}
-			}
-			else if (event_attrName.equals("Contatti")){
-				String[] telList = null;
-				if (event.getCustomData().containsKey("Telefono")){
-					telList = (String[]) event.getCustomData().get("Telefono"); 
-					for (String tel : telList)
-						childList.add(tel);
-				}
-				String[] emails = null;
-				if (event.getCustomData().containsKey("Email")){
-					emails = (String[]) event.getCustomData().get("Email"); 
-					for (String email : emails)
-						childList.add(email);
-				}
-			}
-			else if (event_attrName.equals("Tags")){
-				String[] tags = null;
-				if (event.getCustomData().containsKey("Tags")){
-					tags = (String[]) event.getCustomData().get("Tags"); 
-					for (String tag : tags)
-						childList.add(tag);
-				}
-			}
-			eventCollection.put(event_attrName, childList);
-		}
-		return eventCollection;
-	}
 
 
 
-
-	private String getDateString(Long fromTime) {
-		String newdateformatted = new String("");
-
-		Date dateToday = new Date();
-		String stringToday = (dateFormat.format(dateToday));
-		String stringEvent = (dateFormat.format(new Date(fromTime)));
-
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(dateToday);
-		cal.add(Calendar.DAY_OF_YEAR, 1); // <--
-		Date tomorrow = cal.getTime();
-		String stringTomorrow = (dateFormat.format(tomorrow));
-		// check actual date
-		if (stringToday.equals(stringEvent)) {
-			// if equal put the Today string
-			newdateformatted = stringToday;
-			newdateformatted = this.context.getString(R.string.list_event_today) + " " + newdateformatted;
-		} else if (stringTomorrow.equals(stringEvent)) {
-			// else if it's tomorrow, cat that string
-			newdateformatted = stringTomorrow;
-			newdateformatted = this.context.getString(R.string.list_event_tomorrow) + " " + newdateformatted;
-		}
-		// else put the day's name
-		else
-			newdateformatted = extDateFormat.format(new Date(fromTime));
-		return newdateformatted;
-	}
+//	private String getDateString(Long fromTime) {
+//		String newdateformatted = new String("");
+//
+//		Date dateToday = new Date();
+//		String stringToday = (dateFormat.format(dateToday));
+//		String stringEvent = (dateFormat.format(new Date(fromTime)));
+//
+//		Calendar cal = Calendar.getInstance();
+//		cal.setTime(dateToday);
+//		cal.add(Calendar.DAY_OF_YEAR, 1); // <--
+//		Date tomorrow = cal.getTime();
+//		String stringTomorrow = (dateFormat.format(tomorrow));
+//		// check actual date
+//		if (stringToday.equals(stringEvent)) {
+//			// if equal put the Today string
+//			newdateformatted = stringToday;
+//			newdateformatted = this.context.getString(R.string.list_event_today) + " " + newdateformatted;
+//		} else if (stringTomorrow.equals(stringEvent)) {
+//			// else if it's tomorrow, cat that string
+//			newdateformatted = stringTomorrow;
+//			newdateformatted = this.context.getString(R.string.list_event_tomorrow) + " " + newdateformatted;
+//		}
+//		// else put the day's name
+//		else
+//			newdateformatted = extDateFormat.format(new Date(fromTime));
+//		return newdateformatted;
+//	}
 
 
 
@@ -702,15 +702,27 @@ public class Fragment_EvDetail_Info extends Fragment {
 
 
 
+	private ExplorerObject getEvent() {
+		if (mEventId == null) {
+			mEventId = getArguments().getString(ARG_EVENT_ID);
+		}
+
+		if (mEvent == null) {
+			mEvent = DTHelper.findEventById(mEventId);
+			//List<ExplorerObject> eventList = Utils.getFakeExplorerObjects();
+//			mEvent = Utils.getFakeLocalExplorerObject(Utils.appEvents,mEventId);
+		}
+
+
+		return mEvent;
+	}
 
 
 
 
 
 
-
-
-
+	
 
 
 

@@ -14,12 +14,14 @@
 
     <TextView
         android:id="@+id/event_info_attribute_values"
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/event_info_action1"
         android:gravity="center_vertical"
         android:layout_toRightOf="@+id/event_info_attribute_value_icon"
         android:layout_toLeftOf="@+id/event_info_action1"
+        android:autoLink="web"
+        android:linksClickable="true"
         android:minHeight="50dp" />
 
     <ImageView

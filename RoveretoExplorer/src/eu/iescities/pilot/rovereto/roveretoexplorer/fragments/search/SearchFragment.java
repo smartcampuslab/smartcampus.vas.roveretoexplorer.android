@@ -152,6 +152,7 @@ public class SearchFragment extends Fragment {
 				fragmentTransaction.commit();
 			}
 		});
+		
 		Button cancelBtn = (Button) getView().findViewById(R.id.search_cancel_button);
 		cancelBtn.setOnClickListener(new OnClickListener() {
 

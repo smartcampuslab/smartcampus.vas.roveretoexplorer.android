@@ -15,6 +15,8 @@ import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.Utils;
+import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.dasapere.Fragment_EvDetail_DaSapere;
 
 public class Fragment_EvDetail_Community extends Fragment {
 	ExpandableListAdapter listAdapter;
@@ -25,10 +27,24 @@ public class Fragment_EvDetail_Community extends Fragment {
 	boolean rating_is_open = true;
 	boolean attending_is_open = true;
 
+	
+	
+	 public static Fragment_EvDetail_Community newInstance(String event_id) {
+		 Fragment_EvDetail_Community  f = new Fragment_EvDetail_Community();
+		  Bundle b = new Bundle();
+		  b.putString(Utils.ARG_EVENT_ID, event_id);
+		  f.setArguments(b);
+		  return f;
+		 }
+	
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		return inflater.inflate(R.layout.frag_ev_detail_community, container, false);
 	}
+	
+	
+	
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
