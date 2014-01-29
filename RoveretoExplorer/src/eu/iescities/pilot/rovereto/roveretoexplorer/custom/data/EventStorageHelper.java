@@ -71,7 +71,6 @@ public class EventStorageHelper implements BeanStorageHelper<ExplorerObject> {
 		if (event.getContacts()!= null) {
 			values.put("contacts", Utils.convertToJSON(event.getContacts()));
 		}
-
 		return values;
 	}
 

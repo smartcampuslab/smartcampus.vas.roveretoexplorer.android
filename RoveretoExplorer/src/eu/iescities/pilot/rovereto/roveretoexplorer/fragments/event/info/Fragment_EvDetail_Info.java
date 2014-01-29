@@ -4,10 +4,8 @@ package eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.Arrays;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,8 +14,6 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -569,22 +565,22 @@ public class Fragment_EvDetail_Info extends Fragment {
 				parent.getChildren().add(emailChildLabel);
 
 				//TO DO
-//				String[] emails = null;
-//				if (event.getContacts().containsKey("email")){
-//					emails = (String[]) event.getContacts().get("email"); 
-//					for (String email : emails){
-//						EventInfoChild child = new EventInfoChild();
-//						child.setName("email");
-//						child.setText(email);
-//						child.setType(0);
-//
-//						//to be added when it will be possible to cancel/edit the single item
-//						//int[] rightIconIds2 = new int[]{R.drawable.ic_action_edit, R.drawable.ic_action_cancel, R.drawable.ic_action_email};
-//						int[] rightIconIds2 = new int[]{R.drawable.ic_compose_email};
-//						child.setRightIconIds(rightIconIds2);
-//						parent.getChildren().add(child);						
-//					}
-//				}
+				String[] emails = null;
+				if (event.getContacts().containsKey("email")){
+					emails = Arrays.copyOf(event.bringEmails().toArray(), event.bringEmails().toArray().length, String[].class);
+					for (String email : emails){
+						EventInfoChild child = new EventInfoChild();
+						child.setName("email");
+						child.setText(email);
+						child.setType(0);
+
+						//to be added when it will be possible to cancel/edit the single item
+						//int[] rightIconIds2 = new int[]{R.drawable.ic_action_edit, R.drawable.ic_action_cancel, R.drawable.ic_action_email};
+						int[] rightIconIds2 = new int[]{R.drawable.ic_compose_email};
+						child.setRightIconIds(rightIconIds2);
+						parent.getChildren().add(child);						
+					}
+				}
 
 				//set the Web Site item of type 0
 				EventInfoChild siteChildLabel = new EventInfoChild();

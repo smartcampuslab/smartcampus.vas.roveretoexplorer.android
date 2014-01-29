@@ -51,21 +51,23 @@ public class ExplorerObject extends BaseDTObject {
 	}
 
 	public List<String> bringEmails() {
-		String[] parts = ((String) getContacts().get("email")).split(",");
-		List<String> returnList = new ArrayList<String>();
-		for (int i = 0; i < parts.length; i++) {
-			try{
-			returnList.add(parts[i].substring(1, parts[i].length() - 2));
-			} catch (Exception e) {
-				returnList.add("");
-			}
-		}
-		return returnList;
-
+		if (getContacts().containsKey("email")) {
+			String[] parts = ((String) getContacts().get("email")).split(",");
+			List<String> returnList = new ArrayList<String>(Arrays.asList(parts));		
+			return returnList;
+		} else
+			return null;
 	}
 
 	public void saveEmails(List<String> emails) {
+		StringBuffer buf = new StringBuffer(256); // Java default is 16,
+		for (String email: emails){
+			buf.append(email+",");
+					
+		}
+		buf.deleteCharAt(buf.length() - 1);
 		this.getContacts().put("email", emails.toString());
+
 	}
 
 	public String getCategory() {

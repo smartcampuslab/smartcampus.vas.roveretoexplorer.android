@@ -188,7 +188,7 @@ public class CommentsHandler {
 
 		@Override
 		public CommunityData performAction(Review... params) throws SecurityException, Exception {
-			return DTHelper.review(object, params[0]);
+			return DTHelper.writeReview(object, params[0]);
 		}
 
 		@Override
