@@ -16,6 +16,8 @@
 package eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -23,33 +25,47 @@ import java.util.Map;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.Address;
 
 public class ExplorerObject extends BaseDTObject {
-	
 
 	private static final long serialVersionUID = 388550207183035548L;
-	private String whenWhere=null;
+	private String whenWhere = null;
 	private Address address = null;
 
 	private String image = null;
-	
+
 	private String websiteUrl = null;
 	private String facebookUrl = null;
 	private String twitterUrl = null;
-	
-	
+
 	private String origin = null;
 	private String category = null;
 	private Map<String, Object> contacts = null;
 
+	private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
 
-    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
-
-	
 	public String getOrigin() {
 		return origin;
 	}
 
 	public void setOrigin(String origin) {
 		this.origin = origin;
+	}
+
+	public List<String> bringEmails() {
+		String[] parts = ((String) getContacts().get("email")).split(",");
+		List<String> returnList = new ArrayList<String>();
+		for (int i = 0; i < parts.length; i++) {
+			try{
+			returnList.add(parts[i].substring(1, parts[i].length() - 2));
+			} catch (Exception e) {
+				returnList.add("");
+			}
+		}
+		return returnList;
+
+	}
+
+	public void saveEmails(List<String> emails) {
+		this.getContacts().put("email", emails.toString());
 	}
 
 	public String getCategory() {
@@ -69,8 +85,6 @@ public class ExplorerObject extends BaseDTObject {
 	}
 
 	private Integer rating = null;
-	
-
 
 	public String getImage() {
 		return image;
@@ -95,7 +109,7 @@ public class ExplorerObject extends BaseDTObject {
 	public void setWebsiteUrl(String url) {
 		this.websiteUrl = url;
 	}
-	
+
 	public String getFacebookUrl() {
 		return facebookUrl;
 	}
@@ -111,8 +125,6 @@ public class ExplorerObject extends BaseDTObject {
 	public void setTwitterUrl(String url) {
 		this.twitterUrl = url;
 	}
-	
-	
 
 	public Integer getRating() {
 		return rating;
@@ -126,17 +138,16 @@ public class ExplorerObject extends BaseDTObject {
 		super();
 	}
 
-	
+	public CharSequence dateTimeString() {
+		return DATE_FORMAT.format(new Date(getFromTime()));
+	}
 
-    public CharSequence dateTimeString() {
-        return DATE_FORMAT.format(new Date(getFromTime()));
-}
+	public CharSequence toDateTimeString() {
+		if (getToTime() == null || getToTime() == 0)
+			return dateTimeString();
+		return DATE_FORMAT.format(new Date(getToTime()));
+	}
 
-public CharSequence toDateTimeString() {
-        if (getToTime()==null||getToTime()==0)
-                return dateTimeString();        
-        return DATE_FORMAT.format(new Date(getToTime()));
-}
 	public ExplorerObject copy() {
 		ExplorerObject o = new ExplorerObject();
 		o.setCommunityData(getCommunityData());
@@ -169,7 +180,4 @@ public CharSequence toDateTimeString() {
 		this.whenWhere = whenWhere;
 	}
 
-
-	
-	
 }
