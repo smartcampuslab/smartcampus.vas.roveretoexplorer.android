@@ -40,8 +40,9 @@ public class EventStorageHelper implements BeanStorageHelper<ExplorerObject> {
 		event.setWebsiteUrl(cursor.getString(cursor.getColumnIndex("websiteurl")));
 		event.setFacebookUrl(cursor.getString(cursor.getColumnIndex("facebookurl")));
 		event.setTwitterUrl(cursor.getString(cursor.getColumnIndex("twitterurl")));
-		event.setImage(cursor.getString(cursor.getColumnIndex("origin")));
-		event.setImage(cursor.getString(cursor.getColumnIndex("category")));
+		event.setOrigin(cursor.getString(cursor.getColumnIndex("origin")));
+		event.setImage(cursor.getString(cursor.getColumnIndex("image")));
+		event.setCategory(cursor.getString(cursor.getColumnIndex("category")));
 		@SuppressWarnings("unchecked")
 		Map<String, Object> map = Utils.convertJSONToObject(cursor.getString(cursor.getColumnIndex("contacts")),
 				Map.class);
