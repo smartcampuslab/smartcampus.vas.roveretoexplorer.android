@@ -40,13 +40,13 @@ public class CategoryHelper {
 	public static final String CATEGORY_MY = "My";
 
 	public static CategoryDescriptor[] EVENT_CATEGORIES = new CategoryDescriptor[] {
-			/* 1 */new CategoryDescriptor(R.drawable.ic_cultura, R.drawable.ic_cultura, CAT_CULTURA,
+			/* 1 */new CategoryDescriptor(R.drawable.ic_cultura_map, R.drawable.ic_cultura, CAT_CULTURA,
 					R.string.categories_event_cultura),
-			/* 2 */new CategoryDescriptor(R.drawable.ic_svago, R.drawable.ic_svago, CAT_SOCIALE,
+			/* 2 */new CategoryDescriptor(R.drawable.ic_svago_map, R.drawable.ic_svago, CAT_SOCIALE,
 					R.string.categories_event_social),
-			/* 3 */new CategoryDescriptor(R.drawable.ic_sport, R.drawable.ic_sport, CAT_SPORT,
+			/* 3 */new CategoryDescriptor(R.drawable.ic_sport_map, R.drawable.ic_sport, CAT_SPORT,
 					R.string.categories_event_sport),
-			/* 4 */new CategoryDescriptor(R.drawable.ic_marker_e_generic, R.drawable.ic_e_other, EVENT_NONCATEGORIZED,
+			/* 4 */new CategoryDescriptor(R.drawable.ic_altri_eventi_map, R.drawable.ic_altri_eventi, EVENT_NONCATEGORIZED,
 					R.string.categories_event_altri_eventi),
 
 	};
@@ -87,13 +87,13 @@ public class CategoryHelper {
 	public static int getMapIconByType(String type) {
 		if (categoryMapping.containsKey(type))
 			return descriptorMap.get(categoryMapping.get(type)).map_icon;
-		return R.drawable.ic_marker_e_generic;
+		return R.drawable.ic_altri_eventi_map;
 	}
 
 	public static int getIconByType(String type) {
 		if (categoryMapping.containsKey(type))
 			return descriptorMap.get(categoryMapping.get(type)).thumbnail;
-		return R.drawable.ic_e_other;
+		return R.drawable.ic_altri_eventi;
 	}
 
 	public static class CategoryDescriptor {

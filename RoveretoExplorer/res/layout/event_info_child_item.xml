@@ -33,23 +33,6 @@
         android:contentDescription="@string/empty"
         android:scaleType="centerInside" />
 
-    <!--
- the 2 image views will be added when it will possible to cancel/edit the single item
-    
-       <ImageView
-        android:id="@+id/event_info_action2"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@+id/event_info_action1"
-        android:contentDescription="@string/empty" />
 
-    <ImageView
-        android:id="@+id/event_info_action3"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@+id/event_info_action2" />    
-    -->
 
 </RelativeLayout>
