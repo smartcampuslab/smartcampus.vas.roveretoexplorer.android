@@ -536,23 +536,23 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 			
 			if (parent.getText1()=="Contatti"){
 				edit_fragment = new Fragment_EvDetail_Info_Contacts();
-				//Fragment_EvDetail_Info_Contacts fragment_contacts = new Fragment_EvDetail_Info_Contacts();
 				Log.i("CONTACTS", "EventDetailInfoAdapter --> event selected ID: " + fragment.mEventId + "!!");
 				args.putString(Fragment_EvDetail_Info_Contacts.ARG_EVENT_ID, fragment.mEventId);
 				frag_description = "event_details_info_edit_contacts";
 			} else if(parent.getText1()=="Dove"){
 				edit_fragment = new Fragment_EvDetail_Info_Where();
-				//Fragment_EvDetail_Info_Contacts fragment_contacts = new Fragment_EvDetail_Info_Contacts();
 				Log.i("CONTACTS", "EventDetailInfoAdapter --> event selected ID: " + fragment.mEventId + "!!");
 				args.putString(Fragment_EvDetail_Info_Where.ARG_EVENT_ID, fragment.mEventId);
 				frag_description = "event_details_info_edit_where";
 			}else if(parent.getText1()=="Quando"){
 				edit_fragment = new Fragment_EvDetail_Info_When();
-				//Fragment_EvDetail_Info_Contacts fragment_contacts = new Fragment_EvDetail_Info_Contacts();
 				Log.i("CONTACTS", "EventDetailInfoAdapter --> event selected ID: " + fragment.mEventId + "!!");
 				args.putString(Fragment_EvDetail_Info_When.ARG_EVENT_ID, fragment.mEventId);
 				frag_description = "event_details_info_edit_when";
 			}
+			
+			
+			
 
 			if (edit_fragment!=null){
 				edit_fragment.setArguments(args);

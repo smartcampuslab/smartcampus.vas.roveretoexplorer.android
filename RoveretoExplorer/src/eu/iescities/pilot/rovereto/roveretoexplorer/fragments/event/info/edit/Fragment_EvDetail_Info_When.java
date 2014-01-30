@@ -4,6 +4,7 @@ package eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info.edit;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -160,9 +161,11 @@ public class Fragment_EvDetail_Info_When extends Fragment {
 		//get event data
 
 		if (mEvent.getFromTime()!= null){
-			String fromTime = Utils.getDateString(this.context, mEvent.getFromTime());
+			String[] fromDateTime = Utils.getDateTimeString(this.context, mEvent.getFromTime(), Utils.DATETIME_FORMAT, false, false);
 			Log.d("FRAGMENT LC","Fragment_evDetail_Info_When --> from Time: " + fromTime);
-			txtStartDay.setText(fromTime);
+			txtStartDay.setText(fromDateTime[0]);
+			if (!fromDateTime[1].matches(""))
+				txtStartTime.setText(fromDateTime[1]);
 		}
 		else{
 			txtStartDay.setText(getResources().getString(R.string.day_hint));
@@ -193,9 +196,11 @@ public class Fragment_EvDetail_Info_When extends Fragment {
 
 
 		if (mEvent.getToTime()!= null){
-			String toTime = Utils.getDateString(this.context, mEvent.getToTime());
-			Log.d("FRAGMENT LC","Fragment_evDetail_Info_When --> to Time: " + toTime);
-			txtEndDay.setText(toTime);
+			String[] toDateTime = Utils.getDateTimeString(this.context, mEvent.getToTime(), Utils.DATETIME_FORMAT, false, false);
+			Log.d("FRAGMENT LC","Fragment_evDetail_Info_When --> to Time: " + toDateTime);
+			txtEndDay.setText(toDateTime[0]);			
+			if (!toDateTime[1].matches(""))
+				txtEndTime.setText(toDateTime[1]);
 			//compute duration!!
 			String duration = "3 ore";
 			txtDuration.setText(duration);
@@ -260,10 +265,10 @@ public class Fragment_EvDetail_Info_When extends Fragment {
 				if (!txtStartDay.getText().toString().matches("")){
 					String start_datetime;
 					if (!txtStartTime.getText().toString().matches("")){
-						start_datetime= txtStartDay.getText().toString() + " " + txtStartTime.getText().toString() + ":00";
+						start_datetime= txtStartDay.getText().toString() + " " + txtStartTime.getText().toString();
 						Log.i("FRAGMENT LC", "datatime inizio string: " + start_datetime);
 						Log.i("FRAGMENT LC", "datatime inizio long: " + Utils.toDateTimeLong(Utils.DATETIME_FORMAT, start_datetime));
-						String fromTime = Utils.getDateString(context,  Utils.toDateTimeLong(Utils.DATETIME_FORMAT, start_datetime));
+						String[] fromTime = Utils.getDateTimeString(context,  Utils.toDateTimeLong(Utils.DATETIME_FORMAT, start_datetime), Utils.DATETIME_FORMAT, false, false);
 						Log.i("FRAGMENT LC", "datatime inizio string converted: " + fromTime);
 						mEvent.setFromTime(Utils.toDateTimeLong(Utils.DATETIME_FORMAT, start_datetime));
 					}
@@ -271,19 +276,42 @@ public class Fragment_EvDetail_Info_When extends Fragment {
 						start_datetime= txtStartDay.getText().toString();
 						Log.i("FRAGMENT LC", "data inizio string: " + start_datetime);
 						Log.i("FRAGMENT LC", "data inizio long: " + Utils.toDateTimeLong(Utils.DATE_FORMAT, start_datetime));
-						String fromTime = Utils.getDateString(context,  Utils.toDateTimeLong(Utils.DATE_FORMAT, start_datetime));
+						String[] fromTime = Utils.getDateTimeString(context,  Utils.toDateTimeLong(Utils.DATE_FORMAT, start_datetime), Utils.DATE_FORMAT, false, false);
 						Log.i("FRAGMENT LC", "data inizio string converted: " + fromTime);
 						mEvent.setFromTime(Utils.toDateTimeLong(Utils.DATE_FORMAT, start_datetime));
 					}
 				}
+				
+			
+				
+				
+				
+//				SimpleDateFormat sdf = new SimpleDateFormat("MMM dd,yyyy HH:mm");		 
+//				Date resultdate = null;
+//				for (ExplorerObject expObj : result) {
+//					resultdate =  new Date(expObj.getFromTime());
+//					if (!dateGroupList.contains(expObj.getFromTime().toString()))
+//					{
+//
+//						dateGroupList.add(sdf.format(resultdate));
+//
+//						eventCollection.put(sdf.format(resultdate), new ArrayList<ExplorerObject>() );
+//					}
+//					//aggiungi 
+//					eventCollection.get(sdf.format(resultdate)).add(expObj);
+//				}
+				
+				
+				
+				
 
 				if (!txtEndDay.getText().toString().matches("")){
 					String end_datetime;
 					if (!txtEndTime.getText().toString().matches("")){
-						end_datetime= txtEndDay.getText().toString() + " " + txtEndTime.getText().toString() + ":00";
+						end_datetime= txtEndDay.getText().toString() + " " + txtEndTime.getText().toString();
 						Log.i("FRAGMENT LC", "datatime fine string: " + end_datetime);
 						Log.i("FRAGMENT LC", "datatime fine long: " + Utils.toDateTimeLong(Utils.DATETIME_FORMAT, end_datetime));
-						String toTime = Utils.getDateString(context,  Utils.toDateTimeLong(Utils.DATETIME_FORMAT, end_datetime));
+						String[] toTime = Utils.getDateTimeString(context,  Utils.toDateTimeLong(Utils.DATETIME_FORMAT, end_datetime), Utils.DATETIME_FORMAT, false, false);
 						Log.i("FRAGMENT LC", "datatime fine string converted: " + toTime);
 						mEvent.setToTime(Utils.toDateTimeLong(Utils.DATETIME_FORMAT, end_datetime));
 					}
@@ -291,7 +319,7 @@ public class Fragment_EvDetail_Info_When extends Fragment {
 						end_datetime= txtEndDay.getText().toString();
 						Log.i("FRAGMENT LC", "data fine string: " + end_datetime);
 						Log.i("FRAGMENT LC", "data fine long: " + Utils.toDateTimeLong(Utils.DATE_FORMAT, end_datetime));
-						String toTime = Utils.getDateString(context,  Utils.toDateTimeLong(Utils.DATE_FORMAT, end_datetime));
+						String[] toTime = Utils.getDateTimeString(context,  Utils.toDateTimeLong(Utils.DATE_FORMAT, end_datetime), Utils.DATE_FORMAT, false, false);
 						Log.i("FRAGMENT LC", "data fine string converted: " + toTime);
 						mEvent.setToTime(Utils.toDateTimeLong(Utils.DATE_FORMAT, end_datetime));
 					}
@@ -322,19 +350,6 @@ public class Fragment_EvDetail_Info_When extends Fragment {
 
 
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

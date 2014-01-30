@@ -121,7 +121,11 @@ public class EventAdapter extends BaseExpandableListAdapter {
 		if (address != null) {
 
 			String place = (address.getLuogo() != null) ? (String) address.getLuogo() : null;
-			eventPlaceHolder.location.setText(place);
+			if ((place != null) && (!place.matches(""))){
+				eventPlaceHolder.location.setText(place);
+			}
+			else 
+				eventPlaceHolder.location.setText(context.getString(R.string.city_hint));
 		}
 
 		// load the event image
@@ -186,7 +190,7 @@ public class EventAdapter extends BaseExpandableListAdapter {
 		String dateLabel = (String) getGroup(groupPosition);
 		if (convertView == null) {
 			LayoutInflater infalInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			convertView = infalInflater.inflate(R.layout.group_item, null);
+			convertView = infalInflater.inflate(R.layout.event_list_group_item, null);
 		}
 
 		convertView.setBackgroundResource(getBackgroundColor(groupPosition));

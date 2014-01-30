@@ -4,8 +4,10 @@ package eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -14,6 +16,8 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -94,7 +98,7 @@ public class Fragment_EvDetail_Info extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Log.d("FRAGMENT LC","Fragment_evDetail_Info --> onCreate");
-			
+
 		this.context = this.getActivity();
 
 		if(savedInstanceState==null)
@@ -104,8 +108,8 @@ public class Fragment_EvDetail_Info extends Fragment {
 				mEventId = getArguments().getString(ARG_EVENT_ID);
 				//now it will be always null so I load the fake data
 				mEvent = DTHelper.findEventById(mEventId);
-//				List<ExplorerObject> eventList = Utils.getFakeExplorerObjects();
-//				mEvent = Utils.getFakeLocalExplorerObject(eventList,mEventId);
+				//				List<ExplorerObject> eventList = Utils.getFakeExplorerObjects();
+				//				mEvent = Utils.getFakeLocalExplorerObject(eventList,mEventId);
 			}
 		}
 		else
@@ -258,7 +262,7 @@ public class Fragment_EvDetail_Info extends Fragment {
 		Log.d("FRAGMENT LC","Fragment_evDetail_Info --> setExpandableListView");
 
 		//Creating static data in arraylist
-		ArrayList<EventInfoParent> dummyList = getEventDetailData(mEvent);
+		ArrayList<EventInfoParent> eventInfoList = getEventDetailData(mEvent);
 		setGroupImages();
 
 
@@ -276,7 +280,7 @@ public class Fragment_EvDetail_Info extends Fragment {
 
 		/* create the adapter is it is the first time you load */
 		// Adding ArrayList data to ExpandableListView values
-		setAdapter(dummyList);
+		setAdapter(eventInfoList);
 
 		expListView.setAdapter(eventDetailInfoAdapter);
 
@@ -424,6 +428,27 @@ public class Fragment_EvDetail_Info extends Fragment {
 			//Create parent class object
 			EventInfoParent parent = new EventInfoParent();
 
+
+			if (event.getImage()!= null){
+				Log.i("EVENT", "Fragment_EvDetail_Info --> image: " + event.getImage() + "!!");
+			}
+			if (event.getWhenWhere()!= null){
+				Log.i("EVENT", "Fragment_EvDetail_Info --> WhenWhere: " + event.getWhenWhere() + "!!");
+			}
+
+			if (event.getCategory()!= null){
+				Log.i("EVENT", "Fragment_EvDetail_Info --> Category: " + event.getCategory() + "!!");
+			}
+
+			if (event.getOrigin()!= null){
+				Log.i("EVENT", "Fragment_EvDetail_Info --> Origin: " + event.getOrigin() + "!!");
+			}
+			
+			if (event.getLocation()!= null){
+				Log.i("EVENT", "Fragment_EvDetail_Info --> Location: " + event.getLocation() + "!!");
+			}
+			
+
 			// Set values in parent class object
 			if(i==1){   //field DOVE
 				parent.setName("" + i);
@@ -439,7 +464,8 @@ public class Fragment_EvDetail_Info extends Fragment {
 
 					String city = (address.getCitta() !=null)? (String) address.getCitta() : null;
 
-					if (place != null){
+					if ((place != null) && (!place.matches(""))){
+						Log.i("EVENT", "Fragment_EvDetail_Info --> place:" + place + "!!");
 						// Create Child class object 
 						EventInfoChild child = new EventInfoChild();
 						child.setName("0");
@@ -447,16 +473,29 @@ public class Fragment_EvDetail_Info extends Fragment {
 						child.setType(0);
 						parent.getChildren().add(child);
 					}
-					if (city != null){
+					
+					
+					if ((city != null) && (!city.matches(""))){
 						// Create Child class object 
+						Log.i("EVENT", "Fragment_EvDetail_Info --> city: " + city + "!!");
 						EventInfoChild child = new EventInfoChild();
 						child.setName("1");
 						child.setText(city);
 						child.setType(0);
 						parent.getChildren().add(child);
-					}
-					if (street != null){
+					}else{
 						// Create Child class object 
+						Log.i("EVENT", "Fragment_EvDetail_Info --> city: " + context.getString(R.string.city_hint) + "!!");
+						EventInfoChild child = new EventInfoChild();
+						child.setName("1");
+						child.setText(context.getString(R.string.city_hint));
+						child.setType(0);
+						parent.getChildren().add(child);
+					} 
+						
+					if ((street != null) && (!street.matches(""))){
+						// Create Child class object 
+						Log.i("EVENT", "Fragment_EvDetail_Info --> street: " + street + "!!");
 						EventInfoChild child = new EventInfoChild();
 						child.setName("2");
 						child.setText(street);
@@ -472,22 +511,33 @@ public class Fragment_EvDetail_Info extends Fragment {
 				parent.setChildren(new ArrayList<EventInfoChild>());
 
 				if (event.getFromTime()!= null){
-					String fromTime = Utils.getDateString(this.context, event.getFromTime());
+					String[] fromDateTime = Utils.getDateTimeString(this.context, event.getFromTime(), Utils.DATETIME_FORMAT, false, true);
 					EventInfoChild child = new EventInfoChild();
 					child.setName(getResources().getString(R.string.start_date));
-					child.setText(getResources().getString(R.string.start_date) + ": " + fromTime);
+					if (!fromDateTime[1].matches("")){
+						child.setText(getResources().getString(R.string.start_date) + ": " + fromDateTime[0] + " ore: " + fromDateTime[1]);
+					}
+					else
+						child.setText(getResources().getString(R.string.start_date) + ": " + fromDateTime[0]);
+					Log.i("EVENT", "Fragment_EvDetail_Info --> fromTime: " + child.getText() + "!!");
 					child.setType(0);
 					parent.getChildren().add(child);
 				}
 
 				if (event.getToTime()!= null){
-					String toTime = Utils.getDateString(this.context, event.getToTime());
+					String[] toDateTime = Utils.getDateTimeString(this.context, event.getToTime(), Utils.DATETIME_FORMAT, false, true);
 					EventInfoChild child = new EventInfoChild();
 					child.setName(getResources().getString(R.string.end_date));
-					child.setText(getResources().getString(R.string.end_date) + ": " + toTime);
+					
+					if (!toDateTime[1].matches("")){
+						child.setText(getResources().getString(R.string.end_date) + ": " + toDateTime[0] + " ore: " + toDateTime[1]);
+					}
+					else
+						child.setText(getResources().getString(R.string.end_date) + ": " + toDateTime[0]);
+					Log.i("EVENT", "Fragment_EvDetail_Info --> toTime: " + child.getText() + "!!");
 					child.setType(0);
 					parent.getChildren().add(child);
-					
+
 					//compute duration!!!
 					String duration = "3 ore";
 					if (duration!=null){
@@ -504,6 +554,7 @@ public class Fragment_EvDetail_Info extends Fragment {
 				parent.setText1("Cosa");
 				parent.setChildren(new ArrayList<EventInfoChild>());
 				if (event.getDescription()!=null){
+					Log.i("EVENT", "Fragment_EvDetail_Info --> description: " + event.getDescription() + "!!");
 					String desc = event.getDescription();
 					EventInfoChild child = new EventInfoChild();
 					child.setName("0");
@@ -536,6 +587,7 @@ public class Fragment_EvDetail_Info extends Fragment {
 				if (event.getContacts().containsKey("telefono")){
 					telList = (String[]) event.getContacts().get("telefono"); 
 					for (String tel : telList){
+						Log.i("EVENT", "Fragment_EvDetail_Info --> telefono: " + tel + "!!");
 						EventInfoChild child1 = new EventInfoChild();
 						child1.setName("tel");
 						child1.setText(tel);
@@ -564,23 +616,44 @@ public class Fragment_EvDetail_Info extends Fragment {
 
 				parent.getChildren().add(emailChildLabel);
 
-				//TO DO
-				String[] emails = null;
-				if (event.getContacts().containsKey("email")){
-					emails = Arrays.copyOf(event.bringEmails().toArray(), event.bringEmails().toArray().length, String[].class);
+				//to be enabled again when I'll have a list of emails
+				List<String> emails = event.bringEmails();
+				if (emails!=null){
 					for (String email : emails){
-						EventInfoChild child = new EventInfoChild();
-						child.setName("email");
-						child.setText(email);
-						child.setType(0);
-
-						//to be added when it will be possible to cancel/edit the single item
-						//int[] rightIconIds2 = new int[]{R.drawable.ic_action_edit, R.drawable.ic_action_cancel, R.drawable.ic_action_email};
-						int[] rightIconIds2 = new int[]{R.drawable.ic_compose_email};
-						child.setRightIconIds(rightIconIds2);
-						parent.getChildren().add(child);						
+						if (!email.matches("")){
+							Log.i("EVENT", "Fragment_EvDetail_Info --> email: " + email+ "!!");
+							EventInfoChild child = new EventInfoChild();
+							child.setName("email");
+							child.setText(email);
+							child.setType(0);
+							//to be added when it will be possible to cancel/edit the single item
+							//int[] rightIconIds2 = new int[]{R.drawable.ic_action_edit, R.drawable.ic_action_cancel, R.drawable.ic_action_email};
+							int[] rightIconIds2 = new int[]{R.drawable.ic_compose_email};
+							child.setRightIconIds(rightIconIds2);
+							parent.getChildren().add(child);						
+						}
 					}
 				}
+
+				//				String email = null;
+				//				if (event.getContacts().containsKey("email")){
+				//					email = (String) event.getContacts().get("email"); 
+				//					if (email!=""){
+				//						Log.i("EVENT", "Fragment_EvDetail_Info --> email: " + email+ "!!");
+				//						EventInfoChild child = new EventInfoChild();
+				//						child.setName("email");
+				//						child.setText(email);
+				//						child.setType(0);
+				//						//to be added when it will be possible to cancel/edit the single item
+				//						//int[] rightIconIds2 = new int[]{R.drawable.ic_action_edit, R.drawable.ic_action_cancel, R.drawable.ic_action_email};
+				//						int[] rightIconIds2 = new int[]{R.drawable.ic_compose_email};
+				//						child.setRightIconIds(rightIconIds2);
+				//						parent.getChildren().add(child);						
+				//					}
+				//				}
+
+
+
 
 				//set the Web Site item of type 0
 				EventInfoChild siteChildLabel = new EventInfoChild();
@@ -589,9 +662,11 @@ public class Fragment_EvDetail_Info extends Fragment {
 					siteChildLabel.setText(event.getWebsiteUrl());
 				}
 				else
-					siteChildLabel.setText("Web Site ");
+					siteChildLabel.setText("Web Site");
 				siteChildLabel.setType(0);
 				siteChildLabel.setLeftIconId( R.drawable.ic_action_web_site);
+				Log.i("EVENT", "Fragment_EvDetail_Info --> website: " + siteChildLabel.getText() + "!!");
+
 				parent.getChildren().add(siteChildLabel);
 
 				//set Facebook item of type 0
@@ -604,6 +679,7 @@ public class Fragment_EvDetail_Info extends Fragment {
 					fbChildLabel.setText("Facebook ");
 				fbChildLabel.setType(0);
 				fbChildLabel.setLeftIconId( R.drawable.ic_facebook); //to substitute with the right icon
+				Log.i("EVENT", "Fragment_EvDetail_Info --> facebook: " + fbChildLabel.getText() + "!!");
 				parent.getChildren().add(fbChildLabel);
 
 				//set Twitter item of type 0
@@ -614,12 +690,10 @@ public class Fragment_EvDetail_Info extends Fragment {
 				}
 				else
 					twitterChildLabel.setText("Twitter ");
-
 				twitterChildLabel.setType(0);
 				twitterChildLabel.setLeftIconId( R.drawable.ic_twitter); //to substitute with the right icon
+				Log.i("EVENT", "Fragment_EvDetail_Info --> twitter: " + twitterChildLabel.getText() + "!!");
 				parent.getChildren().add(twitterChildLabel);
-
-
 			}
 			else if(i==5){ //field TAGS
 				parent.setName("" + i);
@@ -651,33 +725,33 @@ public class Fragment_EvDetail_Info extends Fragment {
 
 
 
-//	private String getDateString(Long fromTime) {
-//		String newdateformatted = new String("");
-//
-//		Date dateToday = new Date();
-//		String stringToday = (dateFormat.format(dateToday));
-//		String stringEvent = (dateFormat.format(new Date(fromTime)));
-//
-//		Calendar cal = Calendar.getInstance();
-//		cal.setTime(dateToday);
-//		cal.add(Calendar.DAY_OF_YEAR, 1); // <--
-//		Date tomorrow = cal.getTime();
-//		String stringTomorrow = (dateFormat.format(tomorrow));
-//		// check actual date
-//		if (stringToday.equals(stringEvent)) {
-//			// if equal put the Today string
-//			newdateformatted = stringToday;
-//			newdateformatted = this.context.getString(R.string.list_event_today) + " " + newdateformatted;
-//		} else if (stringTomorrow.equals(stringEvent)) {
-//			// else if it's tomorrow, cat that string
-//			newdateformatted = stringTomorrow;
-//			newdateformatted = this.context.getString(R.string.list_event_tomorrow) + " " + newdateformatted;
-//		}
-//		// else put the day's name
-//		else
-//			newdateformatted = extDateFormat.format(new Date(fromTime));
-//		return newdateformatted;
-//	}
+	//	private String getDateString(Long fromTime) {
+	//		String newdateformatted = new String("");
+	//
+	//		Date dateToday = new Date();
+	//		String stringToday = (dateFormat.format(dateToday));
+	//		String stringEvent = (dateFormat.format(new Date(fromTime)));
+	//
+	//		Calendar cal = Calendar.getInstance();
+	//		cal.setTime(dateToday);
+	//		cal.add(Calendar.DAY_OF_YEAR, 1); // <--
+	//		Date tomorrow = cal.getTime();
+	//		String stringTomorrow = (dateFormat.format(tomorrow));
+	//		// check actual date
+	//		if (stringToday.equals(stringEvent)) {
+	//			// if equal put the Today string
+	//			newdateformatted = stringToday;
+	//			newdateformatted = this.context.getString(R.string.list_event_today) + " " + newdateformatted;
+	//		} else if (stringTomorrow.equals(stringEvent)) {
+	//			// else if it's tomorrow, cat that string
+	//			newdateformatted = stringTomorrow;
+	//			newdateformatted = this.context.getString(R.string.list_event_tomorrow) + " " + newdateformatted;
+	//		}
+	//		// else put the day's name
+	//		else
+	//			newdateformatted = extDateFormat.format(new Date(fromTime));
+	//		return newdateformatted;
+	//	}
 
 
 
@@ -706,7 +780,7 @@ public class Fragment_EvDetail_Info extends Fragment {
 		if (mEvent == null) {
 			mEvent = DTHelper.findEventById(mEventId);
 			//List<ExplorerObject> eventList = Utils.getFakeExplorerObjects();
-//			mEvent = Utils.getFakeLocalExplorerObject(Utils.appEvents,mEventId);
+			//			mEvent = Utils.getFakeLocalExplorerObject(Utils.appEvents,mEventId);
 		}
 
 
@@ -718,7 +792,7 @@ public class Fragment_EvDetail_Info extends Fragment {
 
 
 
-	
+
 
 
 
