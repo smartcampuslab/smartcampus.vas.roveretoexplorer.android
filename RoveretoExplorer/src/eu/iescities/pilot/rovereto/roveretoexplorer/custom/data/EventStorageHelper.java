@@ -65,8 +65,8 @@ public class EventStorageHelper implements BeanStorageHelper<ExplorerObject> {
 		}
 		values.put("image", event.getImage());
 		values.put("websiteurl", event.getWebsiteUrl());
-		values.put("twitterurl", event.getWebsiteUrl());
-		values.put("facebookurl", event.getWebsiteUrl());
+		values.put("twitterurl", event.getTwitterUrl());
+		values.put("facebookurl", event.getFacebookUrl());
 		values.put("origin", event.getOrigin());
 		values.put("category", event.getCategory());
 		if (event.getContacts()!= null) {
