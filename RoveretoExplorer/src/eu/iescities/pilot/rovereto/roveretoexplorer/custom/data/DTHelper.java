@@ -952,7 +952,6 @@ public class DTHelper {
 	public static CommunityData writeReview(BaseDTObject object, Review review) throws ConnectionException,
 			ProtocolException, SecurityException, DataException, RemoteException, StorageConfigurationException,
 			AACException, java.lang.SecurityException, eu.trentorise.smartcampus.network.RemoteException {
-		Map<String, Object> params = Collections.<String, Object> singletonMap("rating", review);
 
 
 		String string = RemoteConnector.postJSON(getAppUrl(),

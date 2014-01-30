@@ -39,7 +39,7 @@ import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 
 
 
-public class Fragment_EvDetail_Community extends Fragment {
+public class Fragment_EvDetail_Community extends Fragment implements RefreshComments{
 	CommentAdapter listAdapter;
 	ExpandableListView expListView;
 	View header;
@@ -109,7 +109,7 @@ public class Fragment_EvDetail_Community extends Fragment {
 																	// Child
 																	// data
 
-		listAdapter = new CommentAdapter(getActivity(), listCommentsHeader, listCommentsChild,getActivity(),mEvent);
+		listAdapter = new CommentAdapter(getActivity(), listCommentsHeader, listCommentsChild,getActivity(),mEvent,Fragment_EvDetail_Community.this);
 		updateCommentsList();
 		
 	}
@@ -140,7 +140,7 @@ public class Fragment_EvDetail_Community extends Fragment {
 			}
 			listCommentsChild.clear();
 			listCommentsChild.put(listCommentsHeader.get(0), result); // Header,
-			listAdapter = new CommentAdapter(getActivity(), listCommentsHeader, listCommentsChild,getActivity(),mEvent);
+			listAdapter = new CommentAdapter(getActivity(), listCommentsHeader, listCommentsChild,getActivity(),mEvent,Fragment_EvDetail_Community.this);
 			expListView.setAdapter(listAdapter);
 
 			listAdapter.notifyDataSetChanged();
@@ -393,4 +393,11 @@ public class Fragment_EvDetail_Community extends Fragment {
 		}
 
 	}
+
+	@Override
+	public void refresh() {
+//		listAdapter.notifyDataSetChanged();		
+		updateCommentsList();
+	}
+
 }

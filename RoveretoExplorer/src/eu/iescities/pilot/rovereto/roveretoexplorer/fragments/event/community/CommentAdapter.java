@@ -33,13 +33,16 @@ public class CommentAdapter extends BaseExpandableListAdapter {
 	private List<String> _listDataHeader; // header titles
 	// child data in format of header title, child title
 	private HashMap<String, List<Review>> _listDataChild;
+	private RefreshComments refreshcomment;
 
-	public CommentAdapter(Context context, List<String> listDataHeader, HashMap<String, List<Review>> listChildData, Activity activity, ExplorerObject event) {
+	public CommentAdapter(Context context, List<String> listDataHeader, HashMap<String, List<Review>> listChildData,
+			Activity activity, ExplorerObject event, RefreshComments refreshComments) {
 		this._context = context;
 		this._listDataHeader = listDataHeader;
 		this._listDataChild = listChildData;
 		this.activity = activity;
 		this.mEvent = event;
+		this.refreshcomment = refreshComments;
 	}
 
 	@Override
@@ -118,28 +121,25 @@ public class CommentAdapter extends BaseExpandableListAdapter {
 		// setlistener
 		setCommentAddInteraction(convertView);
 
-
-
 		return convertView;
 	}
-	private void setCommentAddInteraction(View convertView) {
-		//set listener on the button
-		ImageView image = (ImageView) convertView
-				.findViewById(R.id.event_comment_action);
 
+	private void setCommentAddInteraction(View convertView) {
+		// set listener on the button
+		ImageView image = (ImageView) convertView.findViewById(R.id.event_comment_action);
 
 		image.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				ReviewHelper.reviewDialog(_context, 0, new ReviewProcessor(activity),
 						R.string.rating_event_dialog_title);
-				
+
 			}
 		});
 
-		
 	}
+
 	private class ReviewProcessor extends AbstractAsyncTaskProcessor<Review, CommunityData> implements ReviewHandler {
 
 		public ReviewProcessor(Activity activity) {
@@ -156,13 +156,20 @@ public class CommentAdapter extends BaseExpandableListAdapter {
 			mEvent.setCommunityData(result);
 			if (_context != null)
 				Toast.makeText(_context, R.string.rating_success, Toast.LENGTH_SHORT).show();
+			// return community data instead a review
+//			notifyDataSetChanged();
+			if (refreshcomment != null)
+				refreshcomment.refresh();
+
 		}
 
 		@Override
 		public void onReviewChanged(Review review) {
 			new SCAsyncTask<Review, Void, CommunityData>(activity, this).execute(review);
+			// update list of comment
 		}
 	}
+
 	@Override
 	public boolean hasStableIds() {
 		return false;
