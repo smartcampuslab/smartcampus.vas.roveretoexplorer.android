@@ -29,11 +29,13 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
+import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -41,6 +43,7 @@ import android.widget.Toast;
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.Address;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ExplorerObject;
+import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info.edit.DatePickerDialogFragment;
 
 // in EventsListingFragment
 public class EventAdapter extends BaseExpandableListAdapter {
@@ -140,6 +143,23 @@ public class EventAdapter extends BaseExpandableListAdapter {
 		}
 
 		eventPlaceHolder.rating.setRating(eventPlaceHolder.event.getCommunityData().getAverageRating());
+		
+		eventPlaceHolder.rating.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+
+
+				Toast.makeText(context,
+						"rating changed!",
+						Toast.LENGTH_LONG).show(); 
+			
+			
+			}
+		});
+		
+		
+		
+		
 
 		Calendar previousEvent = null;
 		Calendar currentEvent = Calendar.getInstance();

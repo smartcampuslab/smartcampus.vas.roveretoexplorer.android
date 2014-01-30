@@ -155,9 +155,10 @@ public class Fragment_EvDetail_Info_Contacts extends Fragment {
 
 
 		if (mEvent.getContacts().containsKey("email")){
-			String[] emails = (String[]) mEvent.getContacts().get("email"); 
+			
+			List<String> emails = mEvent.bringEmails(); 
 			//to change when there will be more than one email
-			String email = emails[0];		
+			String email = (String) emails.get(0);		
 			txtEmail.setText(email);
 		}
 
