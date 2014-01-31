@@ -462,7 +462,7 @@ public class DTHelper {
 			result = true;
 		} else {
 			// TO DO
-			event = updateEvent(event.getId(), event, getAuthToken());
+			event = updateEvent(event.getId(), event);
 			result = false;
 		}
 		// String requestService = null;
@@ -508,12 +508,14 @@ public class DTHelper {
 		return result;
 	}
 
-	private static ExplorerObject updateEvent(String id, ExplorerObject event, String authToken) {
+	private static ExplorerObject updateEvent(String id, ExplorerObject event) {
 		if (event != null) {
 			try {
-				String json = RemoteConnector.putJSON(serviceUrl, String.format(EVENTS_P, id), JsonUtils.toJSON(event)
-						.toString(), authToken);
-				return JsonUtils.toObject(json, ExplorerObject.class);
+
+				Log.i("POST EDIT", JsonUtils.toJSON(event));
+				String string = RemoteConnector.postJSON(getAppUrl(),
+						 "/social/edit" , JsonUtils.toJSON(event), getAuthToken());
+				return JsonUtils.toObject(string, ExplorerObject.class);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
