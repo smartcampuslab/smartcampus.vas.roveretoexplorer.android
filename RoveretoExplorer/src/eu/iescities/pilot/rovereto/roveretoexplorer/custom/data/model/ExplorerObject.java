@@ -67,8 +67,6 @@ public class ExplorerObject extends BaseDTObject {
 		this.contacts = contacts;
 	}
 
-	private Integer rating = null;
-
 	public String getImage() {
 		return image;
 	}
@@ -109,13 +107,6 @@ public class ExplorerObject extends BaseDTObject {
 		this.twitterUrl = url;
 	}
 
-	public Integer getRating() {
-		return rating;
-	}
-
-	public void setRating(Integer rating) {
-		this.rating = rating;
-	}
 
 	public ExplorerObject() {
 		super();
@@ -181,7 +172,7 @@ public class ExplorerObject extends BaseDTObject {
 
 		}
 		buf.deleteCharAt(buf.length() - 1);
-		this.getContacts().put("email", emails.toString());
+		this.getContacts().put("email", buf);
 
 	}
 

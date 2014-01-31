@@ -2,61 +2,29 @@ package eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info.edit;
 
 
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-import eu.iescities.pilot.rovereto.roveretoexplorer.R;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.CategoryHelper;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.CommentsHandler;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.PagerSlidingTabStrip;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.Utils;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.Address;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.DTHelper;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ExplorerObject;
-import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.EventPlaceholder;
-import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.EventsListingFragment;
-import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.Fragment_EventDetails;
-import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.Fragment_EventDetails.MyPagerAdapter;
-import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.community.Fragment_EvDetail_Community;
-import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.dasapere.Fragment_EvDetail_DaSapere;
-import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info.Fragment_EvDetail_Info;
-import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.multimedia.Fragment_EvDetail_Multimedia;
-import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.search.WhenForSearch;
-import eu.trentorise.smartcampus.android.common.SCAsyncTask;
-
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.AbstractAsyncTaskProcessor;
-
-import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.ViewPager;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.method.LinkMovementMethod;
-import android.text.style.ClickableSpan;
-import android.text.style.ImageSpan;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ExpandableListView;
-import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.TextView;
 import android.widget.Toast;
+import eu.iescities.pilot.rovereto.roveretoexplorer.R;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.AbstractAsyncTaskProcessor;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.DTHelper;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ExplorerObject;
+import eu.trentorise.smartcampus.android.common.SCAsyncTask;
+import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 
 
 public class Fragment_EvDetail_Info_Contacts extends Fragment {
@@ -147,9 +115,10 @@ public class Fragment_EvDetail_Info_Contacts extends Fragment {
 
 
 		if (mEvent.getContacts().containsKey("telefono")){
-			String[] telList = (String[]) mEvent.getContacts().get("telefono"); 
+			List<String> telephones = (List<String>) mEvent.getContacts().get("telefono");
+//			String[] telList = (String[]) mEvent.getContacts().get("telefono"); 
 			//to change when there will be more than one tel number
-			String tel = telList[0];		
+			String tel =telephones.get(0);		
 			txtPhone.setText(tel);
 		}	
 
@@ -188,11 +157,13 @@ public class Fragment_EvDetail_Info_Contacts extends Fragment {
 				//				Log.i("FRAGMENT LC", "index: " + index);
 				//				Log.i("FRAGMENT LC", "index 2: " + index2);
 
-				Map<String,Object> contacts = new HashMap<String, Object>();
-				contacts.put("telefono", new String[]{txtPhone.getText().toString()});
-				contacts.put("email", new String[]{txtEmail.getText().toString()});
 				mEvent.getContacts().clear();
-				mEvent.setContacts(contacts);
+				mEvent.getContacts().put("telefono", new String[]{txtPhone.getText().toString()});
+//				Map<String,Object> contacts = new HashMap<String, Object>();
+//				contacts.put("telefono", new String[]{txtPhone.getText().toString()});
+//				contacts.put("email", new String[]{txtEmail.getText().toString()});
+				mEvent.saveEmails(new ArrayList<String>(){{add(txtEmail.getText().toString());}});
+//				mEvent.setContacts(contacts);
 				mEvent.setWebsiteUrl(txtWebsite.getText().toString());
 
 
