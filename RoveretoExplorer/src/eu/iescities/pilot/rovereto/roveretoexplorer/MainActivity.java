@@ -2,6 +2,7 @@ package eu.iescities.pilot.rovereto.roveretoexplorer;
 
 import java.util.ArrayList;
 
+import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -40,10 +41,7 @@ import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 public class MainActivity extends AbstractNavDrawerActivity{
 
 	public static final String TAG_FRAGMENT_MAP = "fragmap";
-//	public static final String TAG_FRAGMENT_POI_LIST = "fragpopi";
 	public static final String TAG_FRAGMENT_EVENT_LIST = "fragewent";
-//	public static final String TAG_FRAGMENT_TRACK_LIST = "fragtrack";
-//	public static final String TAG_FRAGMENT_INFO_LIST = "fraginfo";
 
 	private FragmentManager mFragmentManager;
 
@@ -54,10 +52,10 @@ public class MainActivity extends AbstractNavDrawerActivity{
 		super.onCreate(savedInstanceState);
 		//Log.i("AB TITLE", "MainActivity start on create!!!");
 		mFragmentManager = getSupportFragmentManager();
-		if (!signedIn()) {
-			return;
+//		signedIn();
+		if (signedIn()) {
+			initDataManagement();
 		}
-		initDataManagement(savedInstanceState);
 
 	}
 
@@ -86,9 +84,8 @@ public class MainActivity extends AbstractNavDrawerActivity{
 				switch (which) {
 				case DialogInterface.BUTTON_POSITIVE:
 					try {
-//						accessprovider.login(this, null);
 						accessprovider.login(MainActivity.this, null);
-
+						break;
 					} catch (AACException e) {
 						
 						e.printStackTrace();
@@ -105,7 +102,7 @@ public class MainActivity extends AbstractNavDrawerActivity{
 				.setPositiveButton(android.R.string.yes, updateDialogClickListener)
 				.setNegativeButton(android.R.string.no, updateDialogClickListener).show();
 	}
-	private void initDataManagement(Bundle savedInstanceState) {
+	private void initDataManagement() {
 		try {
 			
 			initGlobalConstants();
@@ -137,6 +134,19 @@ public class MainActivity extends AbstractNavDrawerActivity{
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
+		if (requestCode == SCAccessProvider.SC_AUTH_ACTIVITY_REQUEST_CODE) {
+		if (resultCode == RESULT_OK) {
+			String token = data.getExtras().getString(AccountManager.KEY_AUTHTOKEN);
+			if (token == null) {
+				Toast.makeText(this, R.string.app_failure_security, Toast.LENGTH_LONG).show();
+				finish();
+			} else {
+				initDataManagement();
+			}
+		} else if (resultCode == RESULT_CANCELED && requestCode == SCAccessProvider.SC_AUTH_ACTIVITY_REQUEST_CODE) {
+			DTHelper.endAppFailure(this, R.string.app_failure_security);
+		}
+	}
 	}
 
 	private boolean initData() {
