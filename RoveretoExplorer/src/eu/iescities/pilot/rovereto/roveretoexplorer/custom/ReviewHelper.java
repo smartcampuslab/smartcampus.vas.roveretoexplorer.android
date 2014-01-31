@@ -30,20 +30,20 @@ public class ReviewHelper {
 		public void onReviewChanged(Review review);
 	}
 	
-	public static void reviewDialog(Context context, float initValue, final ReviewHandler handler, int  ResourceString) {
+	public static void reviewDialog(Context context, final float initValue, final ReviewHandler handler, int  ResourceString) {
 		final Dialog rankDialog = new Dialog(context);
-        rankDialog.setContentView(R.layout.rating);
+        rankDialog.setContentView(R.layout.commenting);
         rankDialog.setCancelable(true);
         rankDialog.setTitle(ResourceString);
-        final RatingBar ratingBar = (RatingBar) rankDialog.findViewById(R.id.ratingBar);
-        ratingBar.setRating(initValue);
+//        final RatingBar ratingBar = (RatingBar) rankDialog.findViewById(R.id.ratingBar);
+//        ratingBar.setRating(initValue);
 		final EditText comment = (EditText) rankDialog.findViewById(R.id.rating_text);
         
         Button updateButton = (Button) rankDialog.findViewById(R.id.rating_ok);
         updateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            	Review r = new Review(null,comment.getText().toString(),(int)ratingBar.getRating());
+            	Review r = new Review(null,comment.getText().toString(),(int)initValue);
             	handler.onReviewChanged(r);
                 rankDialog.dismiss();
             }

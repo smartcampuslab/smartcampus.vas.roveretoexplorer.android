@@ -314,19 +314,17 @@ public class MainActivity extends AbstractNavDrawerActivity{
 
 		switch (pos_in_list) {
 		case 1: // click on "I miei eventi" item 
-			cat = CategoryHelper.CATEGORY_MY;
 			args = new Bundle();
 			elf = new EventsListingFragment();
-			args.putString(SearchFragment.ARG_CATEGORY, cat);
+			args.putBoolean(SearchFragment.ARG_MY, true);
 			elf.setArguments(args);
 			out[0] = elf;
 			out[1] = TAG_FRAGMENT_EVENT_LIST;
 			break;
 		case 2: // click on "Oggi" item 
-			cat = CategoryHelper.CATEGORY_TODAY;
 			args = new Bundle();
 			elf = new EventsListingFragment();
-			args.putString(SearchFragment.ARG_CATEGORY, cat);
+			args.putString(EventsListingFragment.ARG_QUERY_TODAY, "");
 			elf.setArguments(args);
 			out[0] = elf;
 			out[1] = TAG_FRAGMENT_EVENT_LIST;

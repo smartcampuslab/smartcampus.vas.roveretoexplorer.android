@@ -76,7 +76,9 @@ public class BaseDTStorageHelper {
 			values.put("notes", bean.getCommunityData().getNotes());
 			values.put("averageRating", bean.getCommunityData().getAverageRating());
 			values.put("ratings", Utils.convertToJSON(bean.getCommunityData().getRatings()));
-			values.put("attending", Utils.convertToJSON(bean.getCommunityData().getAttending()));
+			if (bean.getCommunityData().getAttending()!=null && bean.getCommunityData().getAttending().isEmpty())
+				values.put("attending",(String) null);
+			else values.put("attending", Utils.convertToJSON(bean.getCommunityData().getAttending()));
 			values.put("attendees", bean.getCommunityData().getAttendees());
 			values.put("ratingsCount", bean.getCommunityData().getRatingsCount());
 
