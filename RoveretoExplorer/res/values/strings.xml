@@ -3,36 +3,35 @@
 
     <string name="app_name">RoveretoExplorer</string>
     <string name="app_failure_init">Failed to initialize ViviTrento application</string>
-    
-    
-    <!-- Edit Fragment  -->
+
+    <!-- Edit Fragment -->
     <string name="modify">Modifica</string>
     <string name="start_url">http://</string>
     <string name="city_hint">Rovereto</string>
     <string name="day_hint">giorno</string>
     <string name="time_hint">ora</string>
     <string name="event_desc_hint">descrivi qui l\'evento</string>
-    
-    
-    <!-- Event Info Contacts-->
+    <string name="what_txt">Descrizione</string>
+    <string name="title_txt">Titolo</string>
+    <string name="origin_txt">Promotore</string>
+
+    <!-- Event Info Contacts -->
     <string name="modify_contacts_txt">Modifica Contatti</string>
     <string name="phone">Telefono</string>
     <string name="email">Email</string>
     <string name="website">Sito Web</string>
     <string name="facebook">Facebook</string>
     <string name="twitter">Twitter</string>
- 
-     <!-- Event Info Where -->
+
+    <!-- Event Info Where -->
     <string name="modify_where_txt">Modifica Luogo</string>
     <string name="place_name">Luogo</string>
     <string name="street">Via</string>
     <string name="city">Citta</string>
-    
-     <!-- Event Info What -->
-    <string name="modify_what_txt">Modifica Descrizione</string>
+
+    <!-- Event Info What -->
     <string name="event_desc">Descrizione</string>
-    
-    
+
     <!-- Event Info When -->
     <string name="modify_when_txt">Modifica Data</string>
     <string name="start_date">Data di inizio</string>
@@ -40,16 +39,15 @@
     <string name="start_time">Ora di Inizio</string>
     <string name="end_time">Ora di Fine</string>
     <string name="duration">Durata</string>
-    
-     <!-- Event Info Description -->
+
+    <!-- Event Info Description -->
     <string name="modify_desc_txt">Modifica Descrizione</string>
     <string name="description">Descrivi l\'evento</string>
-    
-     <!-- Event Info Tag -->
+
+    <!-- Event Info Tag -->
     <string name="modify_tag_txt">Modifica Tag</string>
     <string name="tag">tag</string>
-    
-    
+
     <!-- MainActivity -->
     <string name="nav_drawer_map">Eventi</string>
     <string name="action_poi">POIs</string>
@@ -59,13 +57,11 @@
     <string name="categories_event_sport">Sport</string>
     <string name="categories_event_social">Social</string>
     <string name="categories_event_altri_eventi">Altri eventi</string>
-    
-    
+
     <!-- Create/Update Operations -->
-    
+
     <string name="event_create_success">Event successfully created!</string>
     <string name="update_success">Your updates have been saved.</string>
-    
     <string name="categories_poi_family_audit">\"Family Audit\"</string>
     <string name="categories_poi_summer_holyday">Vacanze al mare</string>
     <string name="categories_poi_new_media">Tavolo \"Nuovi Media\"</string>
@@ -80,7 +76,6 @@
     <string name="categories_track_pedestrian">Piste ciclopedonali</string>
     <string name="categories_track_trekking">Passeggiate</string>
     <string name="categories_track_bicycle">Pista ciclabile</string>
-   
     <string name="categories_event_today">Today\'s Events</string>
     <string name="categories_event_my">My Events</string>
     <string name="search_txt">Search</string>
@@ -104,7 +99,7 @@
     <string name="info_dialog_title_event">Informazioni evento</string>
     <string name="info_dialog_title_track">Informazioni tracciato</string>
     <string name="app_failure_obj_not_found">Oggetto non trovato!</string>
-        
+
     <!-- <string name="smartcampus_auth_url"> https://vas-dev.smartcampuslab.it/accesstoken-provider/ac</string> -->
     <!-- <string name="smartcampus_app_url">https://vas.smartcampuslab.it</string> -->
     <string name="smartcampus_app_url">https://vas-dev.smartcampuslab.it/roveretoexplorer</string>
@@ -141,33 +136,26 @@
     <string name="rating_event_dialog_title">Rate this event:</string>
     <string name="rating_success">Your rating has been saved</string>
     <string name="rate_button">Rate it!</string>
-    
     <string name="hotel_level">Family level: %s</string>
     <string name="hotel_cat">Category: %s stars</string>
-
     <string name="event_subcat">Category: %s</string>
     <string name="event_price">Price: %s </string>
     <string name="event_price_free">Price: free</string>
-
     <string name="audit_person_date">Qualification achievement date: %s</string>
-    
     <string name="auth_required">Please sign in with your Google account. </string>
-    
     <string name="comment_hint">Comment</string>
     <string name="filter_dialog_title">Mostra eventi selezionati</string>
-    
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
-   
     <string name="label_attending">Attending</string>
     <string name="label_comments">Comments</string>
     <string name="community_attendees">Attendees</string>
     <string name="community_attending">Attending</string>
-    
     <string name="label_rating">Rating</string>
     <string name="community_my_rate">My rate</string>
     <string name="community_avg_rate">Average rate</string>
     <string name="community_tot_rate">Total rate</string>
     <string name="attend_success">Added to your attending list!</string>
     <string name="not_attend_success">Removed from your attending list!</string>
+
 </resources>

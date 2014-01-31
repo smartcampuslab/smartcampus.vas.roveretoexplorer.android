@@ -37,6 +37,8 @@ import eu.iescities.pilot.rovereto.roveretoexplorer.custom.Utils;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.Address;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.DTHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ExplorerObject;
+import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info.edit.Fragment_EvDetail_Info_What;
+import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info.edit.Fragment_EvDetail_Info_When;
 
 
 public class Fragment_EvDetail_Info extends Fragment {
@@ -149,6 +151,7 @@ public class Fragment_EvDetail_Info extends Fragment {
 			public void onClick(View v) {  
 				Log.d("main", "link clicked");
 				Toast.makeText(context, "modify event title", Toast.LENGTH_SHORT).show(); 
+				editField("title");
 			} }, start, start + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 		titleTextView.setText(ss); 
 		titleTextView.setMovementMethod(LinkMovementMethod.getInstance());
@@ -188,6 +191,7 @@ public class Fragment_EvDetail_Info extends Fragment {
 				public void onClick(View v) {  
 					Log.d("main", "link clicked");
 					Toast.makeText(context, "modify promoted by", Toast.LENGTH_SHORT).show(); 
+					editField("origin");
 				} }, start, start + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 			categoryTextView.setText(ss); 
 			categoryTextView.setMovementMethod(LinkMovementMethod.getInstance());
@@ -202,6 +206,54 @@ public class Fragment_EvDetail_Info extends Fragment {
 	}
 
 
+	
+private void editField(String field_type) {
+		
+	FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+	Bundle args = new Bundle();
+	String frag_description=null;
+	
+	Fragment edit_fragment = new Fragment_EvDetail_Info_What();
+	Log.i("CONTACTS", "Fragment_EvDetail_Info --> event selected ID: " + mEventId + "!!");
+	args.putString(Utils.ARG_EVENT_ID, mEventId);
+	args.putString(Utils.ARG_EVENT_FIELD_TYPE, field_type);
+	frag_description = "event_details_info_edit_" + field_type;
+
+	if (edit_fragment!=null){
+		edit_fragment.setArguments(args);
+		fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+		// fragmentTransaction.detach(this);
+		fragmentTransaction.replace(R.id.content_frame, edit_fragment, frag_description);
+		fragmentTransaction.addToBackStack(edit_fragment.getTag());
+		fragmentTransaction.commit();
+		//reset event and event id
+		mEvent=null;
+		mEventId=null;
+	}
+}
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 	@Override
 	public void onStart() {

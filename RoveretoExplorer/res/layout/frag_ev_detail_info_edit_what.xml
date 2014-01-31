@@ -16,15 +16,16 @@
             android:orientation="vertical" >
 
             <TextView
-                android:id="@+id/title_what_label"
+                android:id="@+id/form_label"
                 android:layout_width="match_parent"
-                android:layout_height="32dp"
-                android:layout_marginTop="4dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
                 android:background="@color/jungle_green"
-                android:gravity="center_vertical"
+                android:gravity="center"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
-                android:text="@string/modify_what_txt"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
                 android:textColor="@color/sc_light_gray" />
 
             <LinearLayout
@@ -33,19 +34,19 @@
                 android:layout_weight="1"
                 android:orientation="vertical"
                 android:paddingLeft="16dp"
+                android:layout_marginTop="16dp"
                 android:paddingRight="16dp" >
 
                 <TextView
-                    android:id="@+id/event_desc_label"
+                    android:id="@+id/event_field_label"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="@string/event_desc"
                     android:textColor="@color/jungle_green"
                     android:textStyle="bold" />
 
                 <EditText
-                    android:id="@+id/event_desc_text"
+                    android:id="@+id/event_field_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/event_desc_hint"
@@ -64,14 +65,14 @@
         android:layout_alignParentBottom="true" >
 
         <Button
-            android:id="@+id/edit_desc_cancel_button"
+            android:id="@+id/edit_field_cancel_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@android:string/cancel" />
 
         <Button
-            android:id="@+id/edit_desc_modify_button"
+            android:id="@+id/edit_field_modify_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"

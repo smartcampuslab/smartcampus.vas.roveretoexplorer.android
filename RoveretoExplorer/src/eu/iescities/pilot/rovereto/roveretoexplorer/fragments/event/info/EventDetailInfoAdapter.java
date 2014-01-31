@@ -43,8 +43,10 @@ import android.widget.TextView;
 import android.widget.TextView.BufferType;
 import android.widget.Toast;
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.Utils;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ExplorerObject;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info.edit.Fragment_EvDetail_Info_Contacts;
+import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info.edit.Fragment_EvDetail_Info_What;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info.edit.Fragment_EvDetail_Info_When;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info.edit.Fragment_EvDetail_Info_Where;
 
@@ -442,6 +444,8 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 		return groupPosition;
 	}
 
+
+	
 	public View getGroupView(int groupPosition, boolean isExpanded,
 			View convertView, ViewGroup parentView) {
 
@@ -558,8 +562,13 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 				Log.i("CONTACTS", "EventDetailInfoAdapter --> event selected ID: " + fragment.mEventId + "!!");
 				args.putString(Fragment_EvDetail_Info_When.ARG_EVENT_ID, fragment.mEventId);
 				frag_description = "event_details_info_edit_when";
+			}else if(parent.getText1()=="Cosa"){
+				edit_fragment = new Fragment_EvDetail_Info_What();
+				Log.i("CONTACTS", "EventDetailInfoAdapter --> event selected ID: " + fragment.mEventId + "!!");
+				args.putString(Fragment_EvDetail_Info_When.ARG_EVENT_ID, fragment.mEventId);
+				args.putString(Utils.ARG_EVENT_FIELD_TYPE, "description");
+				frag_description = "event_details_info_edit_what";
 			}
-			
 			
 			
 

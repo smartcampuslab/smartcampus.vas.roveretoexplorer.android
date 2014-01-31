@@ -4,6 +4,7 @@ package eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info.edit;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -46,6 +47,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -78,10 +80,11 @@ public class Fragment_EvDetail_Info_What extends Fragment {
 
 	private ExplorerObject mEvent = null;
 	private String mEventId;
-
+	private String mEventFieldType; 
 
 	TextView formLabel;
-	EditText txtEventDesc;
+	TextView eventFieldLabel;
+	EditText txtEventField;
 	
 
 	@Override
@@ -105,14 +108,11 @@ public class Fragment_EvDetail_Info_What extends Fragment {
 			if (getArguments() != null) {
 				mEventId = getArguments().getString(ARG_EVENT_ID);
 				Log.i("FRAGMENT LC", "Fragment_evDetail_Info_What --> EVENT ID: " + mEventId);
-
-				//now it will be always null so I load the fake data
 				mEvent = DTHelper.findEventById(mEventId);
-				//List<ExplorerObject> eventList = Utils.getFakeExplorerObjects();
-				//mEvent = Utils.getFakeLocalExplorerObject(Utils.appEvents,mEventId);
 
+				mEventFieldType = getArguments().getString(Utils.ARG_EVENT_FIELD_TYPE);
+				Log.i("FRAGMENT LC", "Fragment_evDetail_Info_What --> EVENT FIELD TYPE: " + mEventFieldType);
 			}
-
 		}
 		else
 		{
@@ -137,38 +137,80 @@ public class Fragment_EvDetail_Info_What extends Fragment {
 		Log.d("FRAGMENT LC","Fragment_evDetail_Info_What --> onActivityCreated");
 
 
-		//getActivity().getActionBar().setTitle(mEvent.getTitle()); 
-		getActivity().getActionBar().setTitle(getResources().getString(R.string.modify_what_txt)); 
-
-		formLabel = (TextView) getActivity().findViewById(R.id.title_what_label);
-		txtEventDesc= (EditText) getActivity().findViewById(R.id.event_desc_text);
-
+		formLabel = (TextView) getActivity().findViewById(R.id.form_label);
 		formLabel.setText("Evento: " + mEvent.getTitle());
-
-		//get event data
-
-		if (mEvent.getDescription()!= null){
-			txtEventDesc.setText(mEvent.getDescription());
-		}
-		
-
+		eventFieldLabel = (TextView) getActivity().findViewById(R.id.event_field_label);
+		txtEventField= (EditText) getActivity().findViewById(R.id.event_field_text);
 
 		
+		if (mEventFieldType.equals("description")){
+			getActivity().getActionBar().setTitle(getResources().getString(R.string.modify) + " " + getResources().getString(R.string.what_txt)); 
+			eventFieldLabel.setText( getResources().getString(R.string.what_txt));
+			//get event data
+			if ((mEvent.getDescription()!= null) && (!mEvent.getDescription().matches(""))){
+				txtEventField.setText(Html.fromHtml(mEvent.getDescription()));
+			}
+		} 
+		if (mEventFieldType.equals("origin")){
+			getActivity().getActionBar().setTitle(getResources().getString(R.string.modify) + " " + getResources().getString(R.string.origin_txt)); 
+			eventFieldLabel.setText( getResources().getString(R.string.origin_txt));
+			//get event data
+			if ((mEvent.getOrigin()!= null) && (!mEvent.getOrigin().matches(""))){
+				txtEventField.setText(mEvent.getOrigin());
+			}
+		} 
+		if (mEventFieldType.equals("title")){
+			getActivity().getActionBar().setTitle(getResources().getString(R.string.modify) + " " + getResources().getString(R.string.title_txt)); 
+			eventFieldLabel.setText( getResources().getString(R.string.title_txt));
+			//get event data
+			if ((mEvent.getTitle()!= null) && (!mEvent.getTitle().matches(""))){
+				txtEventField.setText(mEvent.getTitle());
+			}
+		} 
+		
+		
 
+		Button modifyBtn = (Button) getView().findViewById(R.id.edit_field_modify_button);
+		modifyBtn.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View view) {
+
+				//Toast.makeText(context, "Edited Fields: " + txtEventField.getText(), Toast.LENGTH_SHORT).show();
+
+				//set the new fields
+				if (mEventFieldType.equals("description")){
+					mEvent.setDescription(txtEventField.getText().toString());
+				} 
+				if (mEventFieldType.equals("origin")){
+					mEvent.setOrigin(txtEventField.getText().toString());
+				} 
+				if (mEventFieldType.equals("title")){
+					mEvent.setTitle(txtEventField.getText().toString());
+				} 
+				
+				//persist the modified field
+				new SCAsyncTask<ExplorerObject, Void, Boolean>(getActivity(), new UpdateEventProcessor(getActivity()))
+				.execute(mEvent);
+				//Utils.appEvents.set(index2, mEvent);
+
+				//go back to the previous screen
+				getActivity().getSupportFragmentManager().popBackStack();
+			}
+		});
+
+
+		Button cancelBtn = (Button) getView().findViewById(R.id.edit_field_cancel_button);
+		cancelBtn.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				getActivity().getSupportFragmentManager().popBackStack();
+			}
+		});
+
+		
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
