@@ -201,10 +201,8 @@ public class Fragment_EvDetail_Info_Contacts extends Fragment {
 				.execute(mEvent);
 				//Utils.appEvents.set(index2, mEvent);
 
-
 				//go back to the previous screen
 				getActivity().getSupportFragmentManager().popBackStack();
-
 
 
 			}

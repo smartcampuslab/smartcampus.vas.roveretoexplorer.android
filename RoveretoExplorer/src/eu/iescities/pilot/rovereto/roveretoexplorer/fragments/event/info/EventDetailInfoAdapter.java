@@ -28,6 +28,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.text.Html;
 import android.text.Spannable;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
@@ -163,6 +164,8 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 		}
 
 		// Get event_info_child_item.xml file elements and set values
+		
+		
 		if (!child.getText().contains("http")){
 			eventChildViewHolder.text.setText(child.getText());
 		}
@@ -204,6 +207,12 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 			//			eventChildViewHolder.text.setText(Html.fromHtml(child.getText()));
 			//			eventChildViewHolder.text.setMovementMethod(LinkMovementMethod.getInstance());
 		}
+		
+		if (child.getName().equals("Description")){
+			Log.i("EVENT", "EventDetailInfoAdapter --> set description to html!!");
+			eventChildViewHolder.text.setText(Html.fromHtml(child.getText()));
+		}
+
 
 		// set icon on the left side
 		if (child.getLeftIconId() != -1) {

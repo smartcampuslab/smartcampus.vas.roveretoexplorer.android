@@ -176,10 +176,9 @@ public class Fragment_EvDetail_Info extends Fragment {
 
 		//display the event category plus the "promoted by" attribute 
 		TextView categoryTextView = (TextView) getActivity().findViewById(R.id.event_placeholder_category);
-		String category = "Evento sportivo";  // to be modified!
-
-		if (mEvent.getCustomData()!=null && mEvent.getCustomData().containsKey("PromossoDa")){
-			text = new String(category + ", promosso da " + (String) mEvent.getCustomData().get("PromossoDa") + " ") ;
+		String category = mEvent.getCategory();
+		if (mEvent.getOrigin()!=null && !mEvent.getOrigin().matches("")){
+			text = new String("Evento " + category + ", promosso da " + mEvent.getOrigin() + " ") ;
 			ss = new SpannableString(text); 
 			start = text.length() - 1;
 			ss.setSpan(span,start, start + 1, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
@@ -443,11 +442,11 @@ public class Fragment_EvDetail_Info extends Fragment {
 			if (event.getOrigin()!= null){
 				Log.i("EVENT", "Fragment_EvDetail_Info --> Origin: " + event.getOrigin() + "!!");
 			}
-			
+
 			if (event.getLocation()!= null){
 				Log.i("EVENT", "Fragment_EvDetail_Info --> Location: " + event.getLocation() + "!!");
 			}
-			
+
 
 			// Set values in parent class object
 			if(i==1){   //field DOVE
@@ -473,8 +472,8 @@ public class Fragment_EvDetail_Info extends Fragment {
 						child.setType(0);
 						parent.getChildren().add(child);
 					}
-					
-					
+
+
 					if ((city != null) && (!city.matches(""))){
 						// Create Child class object 
 						Log.i("EVENT", "Fragment_EvDetail_Info --> city: " + city + "!!");
@@ -492,7 +491,7 @@ public class Fragment_EvDetail_Info extends Fragment {
 						child.setType(0);
 						parent.getChildren().add(child);
 					} 
-						
+
 					if ((street != null) && (!street.matches(""))){
 						// Create Child class object 
 						Log.i("EVENT", "Fragment_EvDetail_Info --> street: " + street + "!!");
@@ -510,7 +509,7 @@ public class Fragment_EvDetail_Info extends Fragment {
 				parent.setText1("Quando");
 				parent.setChildren(new ArrayList<EventInfoChild>());
 
-				if (event.getFromTime()!= null){
+				if ((event.getFromTime()!= null) && (event.getFromTime()!=0)){
 					String[] fromDateTime = Utils.getDateTimeString(this.context, event.getFromTime(), Utils.DATETIME_FORMAT, false, true);
 					EventInfoChild child = new EventInfoChild();
 					child.setName(getResources().getString(R.string.start_date));
@@ -524,11 +523,11 @@ public class Fragment_EvDetail_Info extends Fragment {
 					parent.getChildren().add(child);
 				}
 
-				if (event.getToTime()!= null){
+				if ((event.getToTime()!= null) && (event.getToTime()!=0)){
 					String[] toDateTime = Utils.getDateTimeString(this.context, event.getToTime(), Utils.DATETIME_FORMAT, false, true);
 					EventInfoChild child = new EventInfoChild();
 					child.setName(getResources().getString(R.string.end_date));
-					
+
 					if (!toDateTime[1].matches("")){
 						child.setText(getResources().getString(R.string.end_date) + ": " + toDateTime[0] + " ore: " + toDateTime[1]);
 					}
@@ -557,7 +556,7 @@ public class Fragment_EvDetail_Info extends Fragment {
 					Log.i("EVENT", "Fragment_EvDetail_Info --> description: " + event.getDescription() + "!!");
 					String desc = event.getDescription();
 					EventInfoChild child = new EventInfoChild();
-					child.setName("0");
+					child.setName("Description");
 					child.setText(desc);
 					child.setType(0);
 					parent.getChildren().add(child);
@@ -567,7 +566,7 @@ public class Fragment_EvDetail_Info extends Fragment {
 				parent.setName("" + i);
 				parent.setText1("Contatti");
 				parent.setChildren(new ArrayList<EventInfoChild>());
-				String[] telList = null;
+				//String[] telList = null;
 
 				//set the Phone item of type 1
 				EventInfoChild telChildLabel = new EventInfoChild();
@@ -585,8 +584,9 @@ public class Fragment_EvDetail_Info extends Fragment {
 
 				//set the list of phone numbers
 				if (event.getContacts().containsKey("telefono")){
-					telList = (String[]) event.getContacts().get("telefono"); 
-					for (String tel : telList){
+					List<String> telephones = (List<String>) event.getContacts().get("telefono");
+					for (String tel : telephones){
+						if (!tel.matches("")){
 						Log.i("EVENT", "Fragment_EvDetail_Info --> telefono: " + tel + "!!");
 						EventInfoChild child1 = new EventInfoChild();
 						child1.setName("tel");
@@ -599,6 +599,7 @@ public class Fragment_EvDetail_Info extends Fragment {
 
 						child1.setRightIconIds(rightIconIds1);
 						parent.getChildren().add(child1);
+						}
 					}
 				}
 

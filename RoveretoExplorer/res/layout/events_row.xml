@@ -76,7 +76,7 @@
                         android:layout_alignParentTop="true"
                         android:layout_marginLeft="45dp"
                         android:layout_toRightOf="@+id/event_placeholder_participants"
-                        android:isIndicator="false"
+                        android:isIndicator="true"
                         android:numStars="5"
                         android:rating="0" />
 
