@@ -89,6 +89,7 @@ import android.widget.Toast;
 import com.google.android.maps.GeoPoint;
 
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.CategoryHelper;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.CategoryHelper.CategoryDescriptor;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.DTParamsHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.BaseDTObject;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.CommunityData;
@@ -1090,7 +1091,6 @@ public class DTHelper {
 		return false;
 	}
 
-
 	public static <T extends BaseDTObject> Collection<T> searchInGeneral(int position, int size, String what,
 			WhereForSearch distance, WhenForSearch when, boolean my, Class<T> cls, SortedMap<String, Integer> sort,
 			String... inCategories) throws DataException, StorageConfigurationException, ConnectionException,
@@ -1110,7 +1110,7 @@ public class DTHelper {
 
 			/* if sync create the query */
 			String where = "";
-			if (inCategories[0] != null) {
+			if (inCategories!=null && inCategories[0] != null) {
 				args = new ArrayList<String>();
 				where = addCategoriesToWhere(where, inCategories, args);
 			}
@@ -1414,6 +1414,10 @@ public class DTHelper {
 			NavigationHelper.bringMeThere(activity, from, to);
 
 	}
+
+
+
+	
 
 
 
