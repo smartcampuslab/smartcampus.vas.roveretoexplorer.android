@@ -185,12 +185,12 @@ public class EventAdapter extends BaseExpandableListAdapter {
 		Log.i("IMAGES", "EventAdapter --> image url : " + this.eventImageUrls[childPosition] );
 		
 		
-		fragment.imageLoader.displayImage(this.eventImageUrls[childPosition], eventPlaceHolder.icon, fragment.imgOptions, animateFirstListener);
+		//fragment.imageLoader.displayImage(this.eventImageUrls[childPosition], eventPlaceHolder.icon, fragment.imgOptions, animateFirstListener);
 
 		
-//		String url = fragment.eventImagesUrlNew.get(dateGroupList.get(groupPosition)).get(childPosition);
-//		Log.i("IMAGES", "EventAdapter --> image new url : " + url );
-//		fragment.imageLoader.displayImage(url, eventPlaceHolder.icon, fragment.imgOptions, animateFirstListener);
+		String url = fragment.eventImagesUrlNew.get(dateGroupList.get(groupPosition)).get(childPosition);
+		Log.i("IMAGES", "EventAdapter --> image new url : " + url );
+		fragment.imageLoader.displayImage(url, eventPlaceHolder.icon, fragment.imgOptions, animateFirstListener);
 		
 		
 		

@@ -190,6 +190,8 @@ public class EventsListingFragment extends Fragment implements OnScrollListener 
 		/* create the adapter is it is the first time you load */
 		dateGroupList = new ArrayList<String>();
 		eventCollection = new LinkedHashMap<String, List<ExplorerObject>>();
+		eventImagesUrlNew= new LinkedHashMap<String, List<String>>();
+
 		if (eventsAdapter == null) {
 			eventsAdapter = new EventAdapter(context, R.layout.event_list_child_item, EventsListingFragment.this, dateGroupList, eventCollection);
 
@@ -449,7 +451,7 @@ public class EventsListingFragment extends Fragment implements OnScrollListener 
 							true)[0];
 					dateGroupList.add(date_with_day);
 					eventCollection.put(date_with_day, new ArrayList<ExplorerObject>());
-					//eventImagesUrlNew.put(date_with_day,  new ArrayList<String>());
+					eventImagesUrlNew.put(date_with_day,  new ArrayList<String>());
 				}
 
 				// aggiungi
@@ -460,7 +462,7 @@ public class EventsListingFragment extends Fragment implements OnScrollListener 
 				if (eventImg!=null){
 					Log.i("IMAGES", "EventListingFragment --> image url: " + eventImg + "!!");
 					eventImagesUrls.add(eventImg);
-					//eventImagesUrlNew.get(date_with_day).add(eventImg);
+					eventImagesUrlNew.get(date_with_day).add(eventImg);
 				}
 			}
 		}
