@@ -371,6 +371,7 @@ public class EventsListingFragment extends Fragment implements OnScrollListener 
 			updateCollection(result);
 			eventsAdapter = new EventAdapter(context, R.layout.event_list_child_item, dateGroupList, eventCollection);
 			expListView.setAdapter(eventsAdapter);
+			expListView.expandGroup(0);
 			setListenerOnEvent();
 		}
 
