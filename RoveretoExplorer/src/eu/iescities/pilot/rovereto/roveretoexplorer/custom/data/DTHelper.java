@@ -816,13 +816,16 @@ public class DTHelper {
 		cal.set(Calendar.MINUTE, 0);
 		cal.set(Calendar.SECOND, 0);
 		cal.set(Calendar.MILLISECOND, 0);
+		Date today = cal.getTime();
 
 		cal.add(Calendar.DAY_OF_YEAR, 1);
 		Date tomorrow = cal.getTime();
 
 		if (Utils.getObjectVersion(instance.mContext, DTParamsHelper.getAppToken(), Constants.SYNC_DB_NAME) > 0) {
+//			return getInstance().storage.query(ExplorerObject.class, "( (toTime > " + getCurrentDateTimeForSearching()+" OR toTime = 0 )"
+//					+ " AND (fromTime < " + tomorrow.getTime() + " OR toTime >" + today.getTime() + " )) ", null, position, size, "fromTime ASC");
 			return getInstance().storage.query(ExplorerObject.class, "( toTime > " + getCurrentDateTimeForSearching()
-					+ " AND fromTime < " + tomorrow.getTime() + " ) ", null, position, size, "fromTime ASC");
+					+ " AND (fromTime < " + tomorrow.getTime() + " ) OR (fromTime < " + tomorrow.getTime() + " AND fromTime >" + today.getTime() + " )) ", null, position, size, "fromTime ASC");
 		} else {
 			ObjectFilter filter = new ObjectFilter();
 			Map<String, Object> criteria = new HashMap<String, Object>(1);
