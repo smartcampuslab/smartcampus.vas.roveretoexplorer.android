@@ -44,6 +44,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.TextView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
@@ -166,15 +167,14 @@ public class EventsListingFragment extends Fragment implements OnScrollListener 
 			eventsAdapter = new EventAdapter(context, R.layout.event_list_child_item, dateGroupList, eventCollection);
 
 		}
-		expListView = (ExpandableListView)
-				getActivity().findViewById(R.id.events_list);
+		expListView = (ExpandableListView) getActivity().findViewById(R.id.events_list);
 		// TO DO
 		// dateGroupList = Utils.createFakeDateGroupList();
 		// eventCollection = Utils.createFakeEventCollection((List<String>)
 		// dateGroupList);
 		//
-		//		 expListView = (ExpandableListView)
-		//		 getActivity().findViewById(R.id.events_list);
+		// expListView = (ExpandableListView)
+		// getActivity().findViewById(R.id.events_list);
 		//
 		// if (arg0 != null) {
 		// // Restore last state for checked position.
@@ -203,36 +203,30 @@ public class EventsListingFragment extends Fragment implements OnScrollListener 
 		expListView.setOnChildClickListener(new OnChildClickListener() {
 
 			@Override
-			public boolean onChildClick(ExpandableListView parent, View v, int
-					groupPosition, int childPosition, long id) {
+			public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
 
 				Log.i("LISTENER", "I should toast 1 ");
 
-				final ExplorerObject selected = (ExplorerObject)
-						eventsAdapter.getChild(groupPosition, childPosition);
+				final ExplorerObject selected = (ExplorerObject) eventsAdapter.getChild(groupPosition, childPosition);
 
 				Log.i("SCROLLTABS", "Load the scroll tabs!!");
 				// Toast.makeText(context, selected.getTitle(),
 				// Toast.LENGTH_LONG).show();
 
-				FragmentTransaction fragmentTransaction =
-						getActivity().getSupportFragmentManager().beginTransaction();
+				FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
 				Fragment_EventDetails fragment = new Fragment_EventDetails();
 
 				Bundle args = new Bundle();
 
-				Log.i("SCROLLTABS", "event selected ID: " + ((EventPlaceholder)
-						v.getTag()).event.getId() + "!!");
+				Log.i("SCROLLTABS", "event selected ID: " + ((EventPlaceholder) v.getTag()).event.getId() + "!!");
 
-				args.putString(Fragment_EventDetails.ARG_EVENT_ID,
-						((EventPlaceholder) v.getTag()).event.getId());
+				args.putString(Fragment_EventDetails.ARG_EVENT_ID, ((EventPlaceholder) v.getTag()).event.getId());
 
 				fragment.setArguments(args);
 
 				fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
 				// fragmentTransaction.detach(this);
-				fragmentTransaction.replace(R.id.content_frame, fragment,
-						"event_details");
+				fragmentTransaction.replace(R.id.content_frame, fragment, "event_details");
 				fragmentTransaction.addToBackStack(fragment.getTag());
 				fragmentTransaction.commit();
 
@@ -268,8 +262,9 @@ public class EventsListingFragment extends Fragment implements OnScrollListener 
 				load();
 			// TO DO
 
-			//			eventsAdapter = new EventAdapter(context, R.layout.events_row, dateGroupList, eventCollection);
-			//			expListView.setAdapter(eventsAdapter);
+			// eventsAdapter = new EventAdapter(context, R.layout.events_row,
+			// dateGroupList, eventCollection);
+			// expListView.setAdapter(eventsAdapter);
 
 		}
 		// TO DO
@@ -331,11 +326,11 @@ public class EventsListingFragment extends Fragment implements OnScrollListener 
 				// been
 				// successful
 				eventsAdapter.getGroupCount() >= size;
-				if (loadMore) {
-					lastSize = eventsAdapter.getGroupCount();
-					position += size;
-					load();
-				}
+		if (loadMore) {
+			lastSize = eventsAdapter.getGroupCount();
+			position += size;
+			load();
+		}
 	}
 
 	protected void load() {
@@ -351,7 +346,7 @@ public class EventsListingFragment extends Fragment implements OnScrollListener 
 	}
 
 	private class EventLoader extends
-	AbstractAsyncTaskProcessor<AbstractLstingFragment.ListingRequest, List<ExplorerObject>> {
+			AbstractAsyncTaskProcessor<AbstractLstingFragment.ListingRequest, List<ExplorerObject>> {
 
 		private FragmentActivity currentRootActivity = null;
 
@@ -367,25 +362,35 @@ public class EventsListingFragment extends Fragment implements OnScrollListener 
 
 		@Override
 		public void handleResult(List<ExplorerObject> result) {
-			// una volta ricevuti i dati li sistemo per data
-			updateCollection(result);
-			eventsAdapter = new EventAdapter(context, R.layout.event_list_child_item, dateGroupList, eventCollection);
-			expListView.setAdapter(eventsAdapter);
-			setListenerOnEvent();
+			if (!result.isEmpty()) {
+				// una volta ricevuti i dati li sistemo per data
+				updateCollection(result);
+				eventsAdapter = new EventAdapter(context, R.layout.event_list_child_item, dateGroupList,
+						eventCollection);
+				expListView.setAdapter(eventsAdapter);
+				setListenerOnEvent();
+			} else {
+				TextView no_result = (TextView) getActivity().findViewById(R.id.events_no_results);
+				no_result.setVisibility(View.VISIBLE);
+				expListView.setVisibility(View.GONE);
+			}
 		}
 
 		private void updateCollection(List<ExplorerObject> result) {
 			String date_with_day = null;
 			for (ExplorerObject expObj : result) {
-				if (!dateGroupList.contains(expObj.getFromTime().toString()))
-				{
-					Log.i("FORMAT", "EventsListingFragment --> date formatted: " + Utils.getDateTimeString(context, expObj.getFromTime(), Utils.DATE_FORMAT_2, true, true)[0] + "!!");
+				if (!dateGroupList.contains(expObj.getFromTime().toString())) {
+					Log.i("FORMAT",
+							"EventsListingFragment --> date formatted: "
+									+ Utils.getDateTimeString(context, expObj.getFromTime(), Utils.DATE_FORMAT_2, true,
+											true)[0] + "!!");
 
-					date_with_day = Utils.getDateTimeString(context, expObj.getFromTime(), Utils.DATE_FORMAT_2, true, true)[0];
+					date_with_day = Utils.getDateTimeString(context, expObj.getFromTime(), Utils.DATE_FORMAT_2, true,
+							true)[0];
 					dateGroupList.add(date_with_day);
-					eventCollection.put(date_with_day, new ArrayList<ExplorerObject>() );
+					eventCollection.put(date_with_day, new ArrayList<ExplorerObject>());
 				}
-				//aggiungi 
+				// aggiungi
 				eventCollection.get(date_with_day).add(expObj);
 			}
 		}
@@ -424,7 +429,7 @@ public class EventsListingFragment extends Fragment implements OnScrollListener 
 						(WhereForSearch) bundle.getParcelable(SearchFragment.ARG_WHERE_SEARCH),
 						(WhenForSearch) bundle.getParcelable(SearchFragment.ARG_WHEN_SEARCH), my, ExplorerObject.class,
 						sort, categories);
-//				result = tmpPostProc(result);
+				// result = tmpPostProc(result);
 
 			} else if (bundle.containsKey(SearchFragment.ARG_QUERY)) {
 
@@ -465,7 +470,7 @@ public class EventsListingFragment extends Fragment implements OnScrollListener 
 
 	private Collection<ExplorerObject> tmpPostProc(Collection<ExplorerObject> result) {
 		Collection<ExplorerObject> returnEvents = new ArrayList<ExplorerObject>();
-		for (ExplorerObject event: result){
+		for (ExplorerObject event : result) {
 			if (!event.getCommunityData().getAttending().isEmpty())
 				returnEvents.add(event);
 		}
@@ -588,10 +593,10 @@ public class EventsListingFragment extends Fragment implements OnScrollListener 
 			category = (getArguments() != null) ? getArguments().getString(SearchFragment.ARG_CATEGORY) : null;
 			if (category == null && (getArguments() != null) && getArguments().containsKey(SearchFragment.ARG_MY))
 				category = CategoryHelper.EVENTS_MY.category;
-			if (category == null && (getArguments() != null) && getArguments().getString(ARG_QUERY_TODAY) !=null)
+			if (category == null && (getArguments() != null) && getArguments().getString(ARG_QUERY_TODAY) != null)
 				category = CategoryHelper.EVENTS_TODAY.category;
 			boolean query = getArguments().containsKey(SearchFragment.ARG_QUERY);
-			
+
 			if (category != null && !query) {
 				Log.i("AB TITLE", "switchToMapView category:" + category);
 				MapManager.switchToMapView(category, MapFragment.ARG_EVENT_CATEGORY, this);
