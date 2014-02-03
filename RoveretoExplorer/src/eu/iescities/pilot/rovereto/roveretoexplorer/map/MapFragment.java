@@ -47,6 +47,8 @@ import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ExplorerOb
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.EventDetailsFragment;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.EventsListingFragment;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.search.SearchFragment;
+import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.search.WhenForSearch;
+import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.search.WhereForSearch;
 import eu.iescities.pilot.rovereto.roveretoexplorer.map.MapFilterDialogFragment.REQUEST_TYPE;
 import eu.trentorise.smartcampus.android.common.SCAsyncTask;
 
@@ -63,7 +65,7 @@ public class MapFragment extends Fragment implements MapItemsHandler, OnCameraCh
 	private String[] poiCategories = null;
 	private String[] eventsCategories = null;
 	private String[] tracksCategories = null;
-	private String[] eventsNotTodayCategories = null;
+	private String[] eventsCleaned = null;
 	private Collection<? extends BaseDTObject> objects;
 
 	private boolean loaded = false;
@@ -120,7 +122,8 @@ public class MapFragment extends Fragment implements MapItemsHandler, OnCameraCh
 			 */// if (item.getItemId() == R.id.action_poi) {
 		if (item.getTitle() == "filtro") {
 			MapFilterDialogFragment psf = MapFilterDialogFragment.istantiate(this, R.array.map_items_events_labels,
-					R.array.map_items_events_icons, REQUEST_TYPE.EVENT, CategoryHelper.getEventCategories());
+					R.array.map_items_events_icons, REQUEST_TYPE.EVENT,
+					CategoryHelper.getEventCategoriesForMapFilters());
 			psf.show(getFragmentManager(), TAG_FRAGMENT_POI_SELECT);
 			return true;
 		} /*
@@ -201,7 +204,6 @@ public class MapFragment extends Fragment implements MapItemsHandler, OnCameraCh
 			eventsCategories = Arrays.asList(eventCategory.toArray()).toArray(
 					new String[eventCategory.toArray().length]);
 		}
-		
 
 		setHasOptionsMenu(true);
 	}
@@ -382,7 +384,7 @@ public class MapFragment extends Fragment implements MapItemsHandler, OnCameraCh
 	@Override
 	public void setEventCategoriesToLoad(final String... categories) {
 		this.eventsCategories = categories;
-		this.eventsNotTodayCategories = categories;
+		this.eventsCleaned = categories;
 
 		/* actually only event or poi at the same time */
 		this.poiCategories = null;
@@ -400,14 +402,21 @@ public class MapFragment extends Fragment implements MapItemsHandler, OnCameraCh
 					 * check if todays is checked and cat with searchTodayEvents
 					 */
 					Collection<ExplorerObject> newList;
-					if (isTodayIncluded()) {
-						newList = new ArrayList<ExplorerObject>();
-						newList.addAll(DTHelper.searchTodayEvents(0, -1, ""));
-						if (categories != null)
-							newList.addAll(DTHelper.getEventsByCategories(0, -1, eventsNotTodayCategories));
+					newList = new ArrayList<ExplorerObject>();
 
-					} else
-						newList = DTHelper.getEventsByCategories(0, -1, categories);
+					if (isTodayIncluded()) {
+						newList.addAll(DTHelper.searchTodayEvents(0, -1, ""));
+
+					} 
+					if (isMyIncluded()) {
+						SortedMap<String, Integer> sort = new TreeMap<String, Integer>();
+						sort.put("fromTime", 1);
+							newList.addAll(DTHelper.searchInGeneral(0, -1, null,  null, null, true, ExplorerObject.class,
+									 sort, null));
+
+					}
+					if (eventsCleaned.length!=0)
+						newList.addAll(DTHelper.getEventsByCategories(0, -1, eventsCleaned));
 					Iterator<ExplorerObject> i = newList.iterator();
 					while (i.hasNext()) {
 						ExplorerObject obj = i.next();
@@ -426,7 +435,7 @@ public class MapFragment extends Fragment implements MapItemsHandler, OnCameraCh
 	}
 
 	private boolean isTodayIncluded() {
-		List<String> categoriesNotToday = new ArrayList<String>();
+		List<String> categoriesCleaned = new ArrayList<String>();
 		boolean istodayincluded = false;
 		if (eventsCategories.length > 0)
 			for (int i = 0; i < eventsCategories.length; i++) {
@@ -434,11 +443,27 @@ public class MapFragment extends Fragment implements MapItemsHandler, OnCameraCh
 
 					istodayincluded = true;
 				} else
-					categoriesNotToday.add(eventsCategories[i]);
+					categoriesCleaned.add(eventsCategories[i]);
 
 			}
-		eventsNotTodayCategories = categoriesNotToday.toArray(new String[categoriesNotToday.size()]);
+		eventsCleaned = categoriesCleaned.toArray(new String[categoriesCleaned.size()]);
 		return istodayincluded;
+	}
+
+	private boolean isMyIncluded() {
+		List<String> categoriesCleaned = new ArrayList<String>();
+		boolean isMyincluded = false;
+		if (eventsCategories.length > 0)
+			for (int i = 0; i < eventsCategories.length; i++) {
+				if (eventsCategories[i].contains("My")) {
+
+					isMyincluded = true;
+				} else
+					categoriesCleaned.add(eventsCategories[i]);
+
+			}
+		eventsCleaned = categoriesCleaned.toArray(new String[categoriesCleaned.size()]);
+		return isMyincluded;
 	}
 
 	private GoogleMap getSupportMap() {
@@ -509,7 +534,7 @@ public class MapFragment extends Fragment implements MapItemsHandler, OnCameraCh
 			if (entityId != null && type != null) {
 				if ("event".equals(type))
 					return DTHelper.findEventByEntityId(entityId);
-				
+
 			}
 			return null;
 		}

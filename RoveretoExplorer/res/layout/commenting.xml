@@ -19,15 +19,16 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <RatingBar
-        android:id="@+id/ratingBar"
-        style="@style/ratingBarDlg"
-        android:layout_width="wrap_content"
+    <EditText
+        android:id="@+id/rating_text"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:numStars="5"
-        android:rating="3.0"
-        android:stepSize="1.0" />
+        android:minLines="3"
+        android:maxLength="1000" 
+        android:hint="@string/comment_hint"
+        android:ems="10" >
+        <requestFocus />
+    </EditText>
 
     <LinearLayout
         android:id="@+id/rating_commands"

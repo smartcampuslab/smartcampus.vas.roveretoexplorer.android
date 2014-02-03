@@ -425,6 +425,7 @@ public class EventsListingFragment extends Fragment implements OnScrollListener 
 						(WhereForSearch) bundle.getParcelable(SearchFragment.ARG_WHERE_SEARCH),
 						(WhenForSearch) bundle.getParcelable(SearchFragment.ARG_WHEN_SEARCH), my, ExplorerObject.class,
 						sort, categories);
+//				result = tmpPostProc(result);
 
 			} else if (bundle.containsKey(SearchFragment.ARG_QUERY)) {
 
@@ -461,6 +462,15 @@ public class EventsListingFragment extends Fragment implements OnScrollListener 
 			listEvents = Collections.emptyList();
 			return listEvents;
 		}
+	}
+
+	private Collection<ExplorerObject> tmpPostProc(Collection<ExplorerObject> result) {
+		Collection<ExplorerObject> returnEvents = new ArrayList<ExplorerObject>();
+		for (ExplorerObject event: result){
+			if (!event.getCommunityData().getAttending().isEmpty())
+				returnEvents.add(event);
+		}
+		return returnEvents;
 	}
 
 	private List<ExplorerObject> postProcForRecurrentEvents(List<ExplorerObject> result, boolean endReached,
@@ -577,8 +587,12 @@ public class EventsListingFragment extends Fragment implements OnScrollListener 
 
 		if (item.getItemId() == R.id.map_view) {
 			category = (getArguments() != null) ? getArguments().getString(SearchFragment.ARG_CATEGORY) : null;
+			if (category == null && (getArguments() != null) && getArguments().containsKey(SearchFragment.ARG_MY))
+				category = CategoryHelper.EVENTS_MY.category;
+			if (category == null && (getArguments() != null) && getArguments().getString(ARG_QUERY_TODAY) !=null)
+				category = CategoryHelper.EVENTS_TODAY.category;
 			boolean query = getArguments().containsKey(SearchFragment.ARG_QUERY);
-
+			
 			if (category != null && !query) {
 				Log.i("AB TITLE", "switchToMapView category:" + category);
 				MapManager.switchToMapView(category, MapFragment.ARG_EVENT_CATEGORY, this);
