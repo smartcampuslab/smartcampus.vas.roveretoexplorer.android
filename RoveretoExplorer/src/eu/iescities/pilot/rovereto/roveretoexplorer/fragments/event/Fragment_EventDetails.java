@@ -3,17 +3,13 @@ package eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event;
 import java.util.ArrayList;
 import java.util.Locale;
 
-import com.google.android.maps.GeoPoint;
-
 import android.app.ActionBar;
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.location.Address;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.util.TypedValue;
@@ -22,8 +18,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.google.android.maps.GeoPoint;
+
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.CategoryHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.CommentsHandler;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.PagerSlidingTabStrip;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.DTHelper;
@@ -90,6 +88,20 @@ public class Fragment_EventDetails extends Fragment {
 
 		// getActivity().getActionBar().setTitle(mEvent.getTitle());
 
+	}
+
+	@Override
+	public void onStart() {
+		super.onStart();
+
+		Log.d("FRAGMENT LC", "Fragment_evDetail --> onStart");
+
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		Log.d("FRAGMENT LC", "Fragment_evDetail --> onResume");
 		// Set up the action bar.
 		final ActionBar actionBar = getActivity().getActionBar();
 		actionBar.setTitle(mEvent.getTitle());
@@ -117,21 +129,6 @@ public class Fragment_EventDetails extends Fragment {
 
 	}
 
-	@Override
-	public void onStart() {
-		super.onStart();
-		Log.d("FRAGMENT LC", "Fragment_evDetail --> onStart");
-
-	}
-
-	@Override
-	public void onResume() {
-		super.onResume();
-		Log.d("FRAGMENT LC", "Fragment_evDetail --> onResume");
-
-	}
-
-	
 	private ExplorerObject getEvent() {
 		if (mEventId == null) {
 			mEventId = getArguments().getString(Fragment_EventDetails.ARG_EVENT_ID);
@@ -143,6 +140,7 @@ public class Fragment_EventDetails extends Fragment {
 
 		return mEvent;
 	}
+
 	// private void refreshPage(int i) {
 	// Fragment fragment = mFragments.get(i);
 	//
@@ -201,7 +199,7 @@ public class Fragment_EventDetails extends Fragment {
 
 	}
 
-	public class MyPagerAdapter extends FragmentPagerAdapter {
+	public class MyPagerAdapter extends FragmentStatePagerAdapter {
 
 		private final String[] TITLES = { "Info", "Da Sapere", "Multimedia", "Comunita" };
 
@@ -239,6 +237,10 @@ public class Fragment_EventDetails extends Fragment {
 			return fragment;
 		}
 
+		@Override
+		public int getItemPosition(Object object) {
+			return POSITION_NONE;
+		}
 	}
 
 	@Override
@@ -257,9 +259,6 @@ public class Fragment_EventDetails extends Fragment {
 		return true;
 	}
 
-	
-	
-	
 	protected void callBringMeThere() {
 		Address to = new Address(Locale.getDefault());
 		to.setLatitude(mEvent.getLocation()[0]);
@@ -274,6 +273,7 @@ public class Fragment_EventDetails extends Fragment {
 		DTHelper.bringmethere(getActivity(), from, to);
 
 	}
+
 	@Override
 	public void onPrepareOptionsMenu(Menu menu) {
 
@@ -282,7 +282,8 @@ public class Fragment_EventDetails extends Fragment {
 		// menu.clear();
 
 		getActivity().getMenuInflater().inflate(R.menu.event_detail_menu, menu);
-		if (getEvent()== null || getEvent().getLocation() == null || (getEvent().getLocation()[0] == 0 && getEvent().getLocation()[1] == 0)) {
+		if (getEvent() == null || getEvent().getLocation() == null
+				|| (getEvent().getLocation()[0] == 0 && getEvent().getLocation()[1] == 0)) {
 			menu.findItem(R.id.map_view).setVisible(false);
 			menu.findItem(R.id.direction_action).setVisible(false);
 		}
