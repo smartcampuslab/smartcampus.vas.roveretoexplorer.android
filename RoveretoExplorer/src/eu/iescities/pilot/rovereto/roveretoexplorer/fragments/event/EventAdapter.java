@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
@@ -107,6 +108,7 @@ public class EventAdapter extends BaseExpandableListAdapter {
 		this.dateGroupList = events_dates;
 		this.layoutResourceId = layoutResourceId;
 		this.fragment = fragment;
+		this.fragment.imageLoader.init(ImageLoaderConfiguration.createDefault(context));
 	}
 
 	@Override
