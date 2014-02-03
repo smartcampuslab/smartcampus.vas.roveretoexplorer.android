@@ -247,10 +247,6 @@ private void editField(String field_type) {
 	
 	
 	
-	
-	
-	
-	
 
 	@Override
 	public void onStart() {

@@ -2,6 +2,7 @@ package eu.iescities.pilot.rovereto.roveretoexplorer;
 
 import java.util.ArrayList;
 
+
 import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -37,6 +38,9 @@ import eu.trentorise.smartcampus.ac.SCAccessProvider;
 import eu.trentorise.smartcampus.android.common.GlobalConfig;
 import eu.trentorise.smartcampus.android.common.SCAsyncTask;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
+
+
+import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.AnimateFirstDisplayListener;
 
 public class MainActivity extends AbstractNavDrawerActivity{
 
@@ -409,10 +413,16 @@ public class MainActivity extends AbstractNavDrawerActivity{
 		// Else, nothing in the direct fragment back stack
 		else {
 
-			Log.i("AB TITLE", "current fragment: " + currentFragment.getTag() +"!");
+			Log.i("AB TITLE", "MainActivity --> current fragment: " + currentFragment.getTag() +"!");
 
 			if ( !this.TAG_FRAGMENT_MAP.equals(currentFragment.getTag())) 
 				this.setTitleWithDrawerTitle();
+			
+			if ( this.TAG_FRAGMENT_EVENT_LIST.equals(currentFragment.getTag())) 
+				AnimateFirstDisplayListener.displayedImages.clear();
+
+			
+			
 
 			super.onBackPressed();
 

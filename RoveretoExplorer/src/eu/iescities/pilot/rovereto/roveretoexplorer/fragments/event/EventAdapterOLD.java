@@ -26,7 +26,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
@@ -52,7 +51,6 @@ import android.widget.Toast;
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.Address;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ExplorerObject;
-import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info.Fragment_EvDetail_Info;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info.edit.DatePickerDialogFragment;
 
 import android.view.View.OnTouchListener;
@@ -60,7 +58,7 @@ import android.view.MotionEvent;
 
 
 // in EventsListingFragment
-public class EventAdapter extends BaseExpandableListAdapter {
+public class EventAdapterOLD extends BaseExpandableListAdapter {
 
 	private static final DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 	private static final DateFormat extDateFormat = new SimpleDateFormat("EEEEEE dd/MM/yyyy");
@@ -84,13 +82,8 @@ public class EventAdapter extends BaseExpandableListAdapter {
 	
 	
 	
-	//for loading images
-	private String[] eventImageUrls;
-	private ImageLoadingListener animateFirstListener = new AnimateFirstDisplayListener();
-	EventsListingFragment fragment;
-	
 
-	public EventAdapter(Context context, int layoutResourceId, List<String> events_dates,
+	public EventAdapterOLD(Context context, int layoutResourceId, List<String> events_dates,
 			Map<String, List<ExplorerObject>> eventCollections) {
 		this.context = context;
 		this.eventCollections = eventCollections;
@@ -100,14 +93,6 @@ public class EventAdapter extends BaseExpandableListAdapter {
 	}
 	
 	
-	public EventAdapter(Context context, int layoutResourceId, EventsListingFragment fragment, List<String> events_dates,
-			Map<String, List<ExplorerObject>> eventCollections) {
-		this.context = context;
-		this.eventCollections = eventCollections;
-		this.dateGroupList = events_dates;
-		this.layoutResourceId = layoutResourceId;
-		this.fragment = fragment;
-	}
 
 	@Override
 	public View getChildView(final int groupPosition, final int childPosition, boolean isLastChild, View convertView,
@@ -168,35 +153,13 @@ public class EventAdapter extends BaseExpandableListAdapter {
 		Log.i("IMAGES", "START ADAPTER, EVENT TITLE: " + eventPlaceHolder.event.getTitle() + "!!");
 		// Log.i("IMAGES", "loaded: " + loadedImgs.toString() + "!!");
 
-//		if ((loadedImgs == null) || (!loadedImgs.contains(eventPlaceHolder.event.getTitle()))) {
-//			if (eventPlaceHolder.event.getImage() != null) {
-//				RetreiveImageTask getImgTask = new RetreiveImageTask();
-//				getImgTask.execute(eventPlaceHolder);
-//			}
-//		}
-
-		if (fragment.eventImagesUrls!=null){
-			Log.i("IMAGES", "EventAdapter --> image array size: " + fragment.eventImagesUrls.size() );
-			this.eventImageUrls = fragment.eventImagesUrls.toArray(new String[fragment.eventImagesUrls.size()]);
+		if ((loadedImgs == null) || (!loadedImgs.contains(eventPlaceHolder.event.getTitle()))) {
+			if (eventPlaceHolder.event.getImage() != null) {
+				RetreiveImageTask getImgTask = new RetreiveImageTask();
+				getImgTask.execute(eventPlaceHolder);
+			}
 		}
 
-		Log.i("IMAGES", "EventAdapter --> group position: " + groupPosition );
-		Log.i("IMAGES", "EventAdapter --> child position: " + childPosition );
-		Log.i("IMAGES", "EventAdapter --> image url : " + this.eventImageUrls[childPosition] );
-		
-		
-		//fragment.imageLoader.displayImage(this.eventImageUrls[childPosition], eventPlaceHolder.icon, fragment.imgOptions, animateFirstListener);
-
-		
-		String url = fragment.eventImagesUrlNew.get(dateGroupList.get(groupPosition)).get(childPosition);
-		Log.i("IMAGES", "EventAdapter --> image new url : " + url );
-		fragment.imageLoader.displayImage(url, eventPlaceHolder.icon, fragment.imgOptions, animateFirstListener);
-		
-		
-		
-		
-		
-		//set the rating bar
 		eventPlaceHolder.rating.setRating(eventPlaceHolder.event.getCommunityData().getAverageRating());
 		
 		eventPlaceHolder.rating.setOnTouchListener(new OnTouchListener() {
@@ -204,7 +167,6 @@ public class EventAdapter extends BaseExpandableListAdapter {
 	            return true;
 	        }
 	    });	
-		
 		
 		eventPlaceHolder.rating.setFocusable(false);
 	       
