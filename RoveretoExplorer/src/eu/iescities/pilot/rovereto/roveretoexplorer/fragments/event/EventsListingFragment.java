@@ -586,8 +586,12 @@ public class EventsListingFragment extends Fragment implements OnScrollListener 
 
 		if (item.getItemId() == R.id.map_view) {
 			category = (getArguments() != null) ? getArguments().getString(SearchFragment.ARG_CATEGORY) : null;
+			if (category == null && (getArguments() != null) && getArguments().containsKey(SearchFragment.ARG_MY))
+				category = CategoryHelper.EVENTS_MY.category;
+			if (category == null && (getArguments() != null) && getArguments().getString(ARG_QUERY_TODAY) !=null)
+				category = CategoryHelper.EVENTS_TODAY.category;
 			boolean query = getArguments().containsKey(SearchFragment.ARG_QUERY);
-
+			
 			if (category != null && !query) {
 				Log.i("AB TITLE", "switchToMapView category:" + category);
 				MapManager.switchToMapView(category, MapFragment.ARG_EVENT_CATEGORY, this);
