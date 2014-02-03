@@ -47,10 +47,12 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.text.Editable;
 import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
+import android.text.TextWatcher;
 import android.text.format.Time;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
@@ -166,6 +168,28 @@ public class Fragment_EvDetail_Info_What extends Fragment {
 			if ((mEvent.getTitle()!= null) && (!mEvent.getTitle().matches(""))){
 				txtEventField.setText(mEvent.getTitle());
 			}
+			
+			
+			txtEventField.addTextChangedListener(new TextWatcher() {
+			    @Override
+			    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+			    }
+
+			    @Override
+			    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+			    }
+
+			    @Override
+			    public void afterTextChanged(Editable s) {
+			        if(txtEventField.getText().length() >= 0) {
+			        	formLabel.setText("Evento: " + txtEventField.getText().toString());
+			        	//formLabel.setText(txtEventField.getText().toString());
+			        } 
+			    }
+			});
+			
 		} 
 		
 		

@@ -49,7 +49,6 @@
                     android:id="@+id/event_field_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/event_desc_hint"
                     android:inputType="text">
                 </EditText>
 

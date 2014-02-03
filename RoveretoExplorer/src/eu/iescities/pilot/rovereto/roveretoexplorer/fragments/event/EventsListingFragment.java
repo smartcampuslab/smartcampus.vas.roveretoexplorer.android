@@ -374,6 +374,7 @@ public class EventsListingFragment extends Fragment implements OnScrollListener 
 				no_result.setVisibility(View.VISIBLE);
 				expListView.setVisibility(View.GONE);
 			}
+
 		}
 
 		private void updateCollection(List<ExplorerObject> result) {

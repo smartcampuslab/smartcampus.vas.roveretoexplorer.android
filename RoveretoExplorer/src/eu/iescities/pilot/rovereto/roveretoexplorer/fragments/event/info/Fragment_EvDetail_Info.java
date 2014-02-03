@@ -334,6 +334,8 @@ private void editField(String field_type) {
 		setAdapter(eventInfoList);
 
 		expListView.setAdapter(eventDetailInfoAdapter);
+		expListView.expandGroup(0);
+		expListView.expandGroup(1);
 
 
 		expListView
@@ -414,7 +416,7 @@ private void editField(String field_type) {
 		groupImages.add(R.drawable.ic_action_edit_white);
 		groupImages.add(R.drawable.ic_action_edit_white);
 		groupImages.add(R.drawable.ic_action_edit_white);
-		groupImages.add(R.drawable.ic_action_new_label);
+		//groupImages.add(R.drawable.ic_action_new_label);
 
 
 	}
@@ -453,15 +455,15 @@ private void editField(String field_type) {
 
 
 
-	private  static ArrayList<String> createAttributeGroupList(){
-		ArrayList<String> groupList = new ArrayList<String>();
-		groupList.add("Dove");
-		groupList.add("Quando");
-		groupList.add("Cosa");
-		groupList.add("Contatti");
-		groupList.add("Tags");
-		return groupList;
-	}
+//	private  static ArrayList<String> createAttributeGroupList(){
+//		ArrayList<String> groupList = new ArrayList<String>();
+//		groupList.add("Dove");
+//		groupList.add("Quando");
+//		groupList.add("Cosa");
+//		groupList.add("Contatti");
+//		//groupList.add("Tags");
+//		return groupList;
+//	}
 
 
 	/**
@@ -474,7 +476,9 @@ private void editField(String field_type) {
 
 		// Creating ArrayList of type parent class to store parent class objects
 		ArrayList<EventInfoParent> list = new ArrayList<EventInfoParent>();
-		for (int i = 1; i < 6; i++)
+		
+		//put 6 when there will be the group "Tags"
+		for (int i = 1; i < 5; i++)
 		{
 			//Create parent class object
 			EventInfoParent parent = new EventInfoParent();
@@ -748,23 +752,27 @@ private void editField(String field_type) {
 				Log.i("EVENT", "Fragment_EvDetail_Info --> twitter: " + twitterChildLabel.getText() + "!!");
 				parent.getChildren().add(twitterChildLabel);
 			}
-			else if(i==5){ //field TAGS
-				parent.setName("" + i);
-				parent.setText1("Tags");
-				parent.setChildren(new ArrayList<EventInfoChild>());
-				List<String> tags = null;
-				if (event.getCommunityData().getTags()!=null){
-					tags = event.getCommunityData().getTags(); 
-					for (String tag : tags){
-						EventInfoChild child = new EventInfoChild();
-						child.setName("tag");
-						child.setText(tag);
-						child.setType(0);
-						child.setLeftIconId(R.drawable.ic_action_labels_dark);
-						parent.getChildren().add(child);
-					}
-				}
-			}
+			//to be added again when there will be tags
+//			else if(i==5){ //field TAGS
+//				parent.setName("" + i);
+//				parent.setText1("Tags");
+//				parent.setChildren(new ArrayList<EventInfoChild>());
+//				List<String> tags = null;
+//				if (event.getCommunityData().getTags()!=null){
+//					tags = event.getCommunityData().getTags(); 
+//					for (String tag : tags){
+//						EventInfoChild child = new EventInfoChild();
+//						child.setName("tag");
+//						child.setText(tag);
+//						child.setType(0);
+//						child.setLeftIconId(R.drawable.ic_action_labels_dark);
+//						parent.getChildren().add(child);
+//					}
+//				}
+//			}
+			
+			
+			
 
 			//Adding Parent class object to ArrayList 	      
 			list.add(parent);

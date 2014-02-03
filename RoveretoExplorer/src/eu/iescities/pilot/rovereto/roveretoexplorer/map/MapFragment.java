@@ -294,7 +294,7 @@ public class MapFragment extends Fragment implements MapItemsHandler, OnCameraCh
 
 		MenuItem filter = menu.add(Menu.NONE, Menu.NONE, 1, "filtro");
 		// ovItem.setIcon(getResources().getDrawable(R.drawable.ic_location_actionbar));
-		filter.setIcon(getResources().getDrawable(R.drawable.ic_filtro_eventi_nero));
+		filter.setIcon(getResources().getDrawable(R.drawable.ic_filter));
 		filter.setVisible(true);
 		filter.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 
