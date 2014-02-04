@@ -19,12 +19,16 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.AbstractAsyncTaskProcessor;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.Utils;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.Constants;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.DTHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ExplorerObject;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ToKnow;
+import eu.trentorise.smartcampus.android.common.SCAsyncTask;
+import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 
 public class Fragment_EvDetail_DaSapere extends ListFragment {
 
@@ -91,7 +95,7 @@ public class Fragment_EvDetail_DaSapere extends ListFragment {
 		}
 
 		Map<String, String> toKnowMap = (Map<String, String>) mEvent.getCustomData().get(Constants.CUSTOM_TOKNOW);
-		
+
 		if (toKnowMap == null) {
 			Map<String, Object> customData = mEvent.getCustomData();
 			customData.put(Constants.CUSTOM_TOKNOW, new LinkedHashMap<String, String>());
@@ -119,14 +123,18 @@ public class Fragment_EvDetail_DaSapere extends ListFragment {
 				customData.put(Constants.CUSTOM_TOKNOW, toKnowMap);
 				mEvent.setCustomData(customData);
 
-				DTHelper.saveEvent(mEvent);
+				// persistence
+				new SCAsyncTask<ExplorerObject, Void, Boolean>(getActivity(), new UpdateEventProcessor(getActivity()))
+						.execute(mEvent);
 			} catch (Exception e) {
-				Log.e(getClass().getName(), e.getMessage());
+				Log.e(getClass().getName(), e.getMessage() != null ? e.getMessage() : "");
 			}
 		}
 
-		List<ToKnow> toKnowList = Utils.toKnowMapToList((Map<String, String>) mEvent.getCustomData().get(
-				Constants.CUSTOM_TOKNOW));
+		// List<ToKnow> toKnowList = Utils.toKnowMapToList((Map<String, String>)
+		// mEvent.getCustomData().get(
+		// Constants.CUSTOM_TOKNOW));
+		List<ToKnow> toKnowList = Utils.toKnowMapToList(toKnowMap);
 		adapter.addAll(toKnowList);
 
 		Button toKnowAddButton = (Button) getActivity().findViewById(R.id.toKnowAddButton);
@@ -149,8 +157,8 @@ public class Fragment_EvDetail_DaSapere extends ListFragment {
 				fragmentTransaction.addToBackStack(getTag());
 				fragmentTransaction.commit();
 				// reset event and event id
-				// fragment.mEvent = null;
-				// fragment.mEventId = null;
+				mEvent = null;
+				mEventId = null;
 			}
 		});
 	}
@@ -214,6 +222,34 @@ public class Fragment_EvDetail_DaSapere extends ListFragment {
 			mEvent = DTHelper.findEventById(mEventId);
 		}
 		return mEvent;
+	}
+
+	private class UpdateEventProcessor extends AbstractAsyncTaskProcessor<ExplorerObject, Boolean> {
+
+		public UpdateEventProcessor(Activity activity) {
+			super(activity);
+		}
+
+		@Override
+		public Boolean performAction(ExplorerObject... params) throws SecurityException, Exception {
+			// to be enabled when the connection with the server is ok
+			return DTHelper.saveEvent(params[0]);
+		}
+
+		@Override
+		public void handleResult(Boolean result) {
+			if (getActivity() != null) {
+				// getActivity().getSupportFragmentManager().popBackStack();
+
+				// if (result) {
+				// Toast.makeText(getActivity(), R.string.event_create_success,
+				// Toast.LENGTH_SHORT).show();
+				// } else {
+				// Toast.makeText(getActivity(), R.string.update_success,
+				// Toast.LENGTH_SHORT).show();
+				// }
+			}
+		}
 	}
 
 }

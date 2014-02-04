@@ -1,5 +1,8 @@
 package eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.dasapere;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
@@ -14,8 +17,16 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.AbstractAsyncTaskProcessor;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.Utils;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.Constants;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.DTHelper;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ExplorerObject;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ToKnow;
+import eu.trentorise.smartcampus.android.common.SCAsyncTask;
+import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 
 public class EventDetailToKnowAdapter extends ArrayAdapter<ToKnow> {
 
@@ -39,7 +50,7 @@ public class EventDetailToKnowAdapter extends ArrayAdapter<ToKnow> {
 
 		final int pos = position;
 
-		ToKnow toKnow = getItem(position);
+		final ToKnow toKnow = getItem(position);
 
 		if (row == null) {
 			LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();
@@ -95,6 +106,23 @@ public class EventDetailToKnowAdapter extends ArrayAdapter<ToKnow> {
 			}
 		});
 
+		holder.toKnowDelete.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				List<ToKnow> newList = new ArrayList<ToKnow>();
+				for (int i = 0; i < getCount(); i++) {
+					if (getItem(i) != toKnow) {
+						newList.add(getItem(i));
+					}
+				}
+
+				ExplorerObject mEvent = DTHelper.findEventById(mEventId);
+				mEvent.getCustomData().put(Constants.CUSTOM_TOKNOW, Utils.toKnowListToMap(newList));
+				new SCAsyncTask<ExplorerObject, Void, Boolean>((Activity) getContext(), new UpdateEventProcessor(
+						(Activity) getContext(), toKnow)).execute(mEvent);
+			}
+		});
+
 		return row;
 	}
 
@@ -103,5 +131,34 @@ public class EventDetailToKnowAdapter extends ArrayAdapter<ToKnow> {
 		TextView toKnowContent;
 		ImageButton toKnowDelete;
 		ImageButton toKnowEdit;
+	}
+
+	private class UpdateEventProcessor extends AbstractAsyncTaskProcessor<ExplorerObject, Boolean> {
+
+		private ToKnow toKnow;
+
+		public UpdateEventProcessor(Activity activity, ToKnow toKnow) {
+			super(activity);
+			this.toKnow = toKnow;
+		}
+
+		@Override
+		public Boolean performAction(ExplorerObject... params) throws SecurityException, Exception {
+			// to be enabled when the connection with the server is ok
+			return DTHelper.saveEvent(params[0]);
+		}
+
+		@Override
+		public void handleResult(Boolean result) {
+			if (getContext() != null) {
+				if (result) {
+					Toast.makeText(getContext(), R.string.event_create_success, Toast.LENGTH_SHORT).show();
+				} else {
+					Toast.makeText(getContext(), R.string.update_success, Toast.LENGTH_SHORT).show();
+				}
+				remove(toKnow);
+				// getActivity().getSupportFragmentManager().popBackStack();
+			}
+		}
 	}
 }

@@ -170,7 +170,7 @@
     <string name="toknow_label_edit">Edit "to know"</string>
     <string name="toknow_label_title">Title</string>
     <string name="toknow_label_content">Content</string>
-    <string name="title_activity_ev_details__da_sapere__form_">EvDetails_DaSapere_Form_Activity</string>
+    <string name="toknow_toast_title_empty">The title is empty</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_oscar_test">OscarTestActivity</string>

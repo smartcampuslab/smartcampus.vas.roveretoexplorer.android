@@ -91,5 +91,6 @@
     <string name="toknow_label_edit">Modifica "to know"</string>
     <string name="toknow_label_title">Titolo</string>
     <string name="toknow_label_content">Contenuto</string>
+    <string name="toknow_toast_title_empty">Il titolo è vuoto</string>
         
 </resources>
