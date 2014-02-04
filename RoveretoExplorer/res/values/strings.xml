@@ -157,4 +157,25 @@
     <string name="community_tot_rate">Total rate</string>
     <string name="attend_success">Added to your attending list!</string>
     <string name="not_attend_success">Removed from your attending list!</string>
+
+    <!-- To know tab -->
+    <string name="_toknow_place_type">Place type</string>
+    <string name="_toknow_access">Access</string>
+    <string name="_toknow_chance">Happening chance</string>
+    <string name="_toknow_language_main">Main language</string>
+    <string name="_toknow_clothing">Suggested clothing</string>
+    <string name="_toknow_to_bring">To bring</string>
+    <string name="toknow_button_add">Add more info</string>
+    <string name="toknow_label_new">Add "to know"</string>
+    <string name="toknow_label_edit">Edit "to know"</string>
+    <string name="toknow_label_title">Title</string>
+    <string name="toknow_label_content">Content</string>
+    <string name="title_activity_ev_details__da_sapere__form_">EvDetails_DaSapere_Form_Activity</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_oscar_test">OscarTestActivity</string>
+    <string name="title_section1">Section 1</string>
+    <string name="title_section2">Section 2</string>
+    <string name="title_section3">Section 3</string>
+
 </resources>

@@ -13,6 +13,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.http.impl.cookie.DateUtils;
 
@@ -26,6 +27,7 @@ import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.Address;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.DTHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.CommunityData;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ExplorerObject;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ToKnow;
 import eu.trentorise.smartcampus.android.common.follow.model.Concept;
 import eu.trentorise.smartcampus.android.common.tagging.SemanticSuggestion;
 import eu.trentorise.smartcampus.android.common.tagging.SemanticSuggestion.TYPE;
@@ -665,7 +667,27 @@ public class Utils {
 		return from.compareTo(now) < 0 ? false : true;
 	}
 
+	public static List<ToKnow> toKnowMapToList(Map<String, String> map) {
+		List<ToKnow> list = new ArrayList<ToKnow>();
+
+		for (Entry<String, String> entry : map.entrySet()) {
+			ToKnow toKnow = new ToKnow(entry.getKey(), entry.getValue());
+			list.add(toKnow);
+		}
+
+		return list;
+	}
+
+	public static Map<String, String> toKnowListToMap(List<ToKnow> list) {
+		Map<String, String> map = new LinkedHashMap<String, String>();
+
+		if (list != null) {
+			for (ToKnow toKnow : list) {
+				map.put(toKnow.getTitle(), toKnow.getContent());
+			}
+		}
+
+		return map;
+	}
+	
 }
-
-
-

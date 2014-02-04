@@ -51,6 +51,14 @@ public class Constants {
 	public static final String TYPE_LOCATION = "location";
 	public static final String TYPE_INFO = "info";
 	public static final String TYPE_TRACK = "track";
+	
+	public static final String CUSTOM_TOKNOW = "toknow";
+	public static final String CUSTOM_TOKNOW_PLACE_TYPE = "_toknow_place_type";
+	public static final String CUSTOM_TOKNOW_ACCESS = "_toknow_access";
+	public static final String CUSTOM_TOKNOW_CHANCE = "_toknow_chance";
+	public static final String CUSTOM_TOKNOW_LANGUAGE_MAIN = "_toknow_language_main";
+	public static final String CUSTOM_TOKNOW_CLOTHING = "_toknow_clothing";
+	public static final String CUSTOM_TOKNOW_TO_BRING = "_toknow_to_bring";
 
 	
 	public static String getAuthority(Context ctx) throws NameNotFoundException {

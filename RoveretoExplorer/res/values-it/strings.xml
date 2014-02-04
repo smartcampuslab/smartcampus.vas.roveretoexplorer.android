@@ -78,4 +78,18 @@
 
     <string name="attend_success">Aggiunto alla tua lista di partecipazioni!</string>
     <string name="not_attend_success">Rimosso dalla tua lista di partecipazioni!</string>
+    
+    <!-- To know tab -->
+    <string name="_toknow_place_type">Tipo di luogo</string>
+    <string name="_toknow_access">Accesso</string>
+    <string name="_toknow_chance">Probabilità di evento</string>
+    <string name="_toknow_language_main">Lingua principale</string>
+    <string name="_toknow_clothing">Abbigliamento consigliato</string>
+    <string name="_toknow_to_bring">Da portare</string>
+    <string name="toknow_button_add">Aggiungere nuove informazioni</string>
+    <string name="toknow_label_new">Nuovo "to know"</string>
+    <string name="toknow_label_edit">Modifica "to know"</string>
+    <string name="toknow_label_title">Titolo</string>
+    <string name="toknow_label_content">Contenuto</string>
+        
 </resources>
