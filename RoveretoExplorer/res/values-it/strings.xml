@@ -87,8 +87,8 @@
     <string name="_toknow_clothing">Abbigliamento consigliato</string>
     <string name="_toknow_to_bring">Da portare</string>
     <string name="toknow_button_add">Aggiungere nuove informazioni</string>
-    <string name="toknow_label_new">Nuovo "to know"</string>
-    <string name="toknow_label_edit">Modifica "to know"</string>
+    <string name="toknow_label_new">Nuovo \"da sapere\"</string>
+    <string name="toknow_label_edit">Modifica \"da sapere\"</string>
     <string name="toknow_label_title">Titolo</string>
     <string name="toknow_label_content">Contenuto</string>
     <string name="toknow_toast_title_empty">Il titolo è vuoto</string>

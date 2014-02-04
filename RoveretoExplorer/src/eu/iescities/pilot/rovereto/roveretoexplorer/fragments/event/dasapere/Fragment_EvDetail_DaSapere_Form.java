@@ -130,13 +130,13 @@ public class Fragment_EvDetail_DaSapere_Form extends Fragment {
 				} else {
 					if (toKnow == null) {
 						toKnow = new ToKnow("", "");
-						list.add(toKnow);
 					}
 
 					if (!toKnow.getTitle().startsWith("_toknow_")) {
 						toKnow.setTitle(toKnowTitleEditText.getText().toString().trim());
 					}
 					toKnow.setContent(toKnowContentEditText.getText().toString().trim());
+					
 					mEvent.getCustomData().put(Constants.CUSTOM_TOKNOW, Utils.toKnowListToMap(list));
 					new SCAsyncTask<ExplorerObject, Void, Boolean>(getActivity(), new UpdateEventProcessor(getActivity()))
 							.execute(mEvent);
