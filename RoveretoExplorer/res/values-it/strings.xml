@@ -8,9 +8,9 @@
     <string name="action_poi">POIs</string>
     <string name="overflow">more</string>
 
-       <string name="categories_event_cultura">Cultur</string>
+    <string name="categories_event_cultura">Cultura</string>
     <string name="categories_event_sport">Sport</string>
-    <string name="categories_event_social">Social</string>
+    <string name="categories_event_social">Svago</string>
     <string name="categories_event_altri_eventi">Altri eventi</string>
     <string name="categories_event_today">Eventi di oggi</string>
     <string name="categories_event_my">I miei eventi</string>

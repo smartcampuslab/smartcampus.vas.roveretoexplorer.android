@@ -406,9 +406,8 @@ public class EventsListingFragment extends Fragment implements OnScrollListener 
 				//				eventsAdapter = new EventAdapter(context, R.layout.event_list_child_item, dateGroupList,
 				//						eventCollection);
 				eventsAdapter = new EventAdapter(context, R.layout.event_list_child_item, EventsListingFragment.this, dateGroupList,	eventCollection);
-
-
 				expListView.setAdapter(eventsAdapter);
+				expListView.expandGroup(0);
 				setListenerOnEvent();
 			} else {
 				TextView no_result = (TextView) getActivity().findViewById(R.id.events_no_results);
