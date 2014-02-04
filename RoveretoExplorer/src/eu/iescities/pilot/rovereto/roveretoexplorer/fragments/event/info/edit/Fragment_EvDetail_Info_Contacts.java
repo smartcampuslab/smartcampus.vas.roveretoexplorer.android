@@ -2,6 +2,8 @@ package eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info.edit;
 
 
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -110,13 +112,15 @@ public class Fragment_EvDetail_Info_Contacts extends Fragment {
 		txtPhone= (EditText) getActivity().findViewById(R.id.phone_text);
 		txtEmail = (EditText) getActivity().findViewById(R.id.email_text);
 		txtWebsite = (EditText) getActivity().findViewById(R.id.website_link);
+		txtFacebook = (EditText) getActivity().findViewById(R.id.facebook_link);
+		txtTwitter = (EditText) getActivity().findViewById(R.id.twitter_link);
 
 		formLabel.setText("Evento: " + mEvent.getTitle());
 
 
 		if (mEvent.getContacts().containsKey("telefono")){
 			List<String> telephones = (List<String>) mEvent.getContacts().get("telefono");
-//			String[] telList = (String[]) mEvent.getContacts().get("telefono"); 
+			//			String[] telList = (String[]) mEvent.getContacts().get("telefono"); 
 			//to change when there will be more than one tel number
 			String tel =telephones.get(0);		
 			txtPhone.setText(tel);
@@ -124,7 +128,7 @@ public class Fragment_EvDetail_Info_Contacts extends Fragment {
 
 
 		if (mEvent.getContacts().containsKey("email")){
-			
+
 			List<String> emails = mEvent.bringEmails(); 
 			//to change when there will be more than one email
 			String email = (String) emails.get(0);		
@@ -135,6 +139,15 @@ public class Fragment_EvDetail_Info_Contacts extends Fragment {
 			txtWebsite.setText(mEvent.getWebsiteUrl());
 		}
 
+		if (mEvent.getFacebookUrl()!=null){
+			txtFacebook.setText(mEvent.getFacebookUrl());
+		}
+
+		if (mEvent.getTwitterUrl()!=null){
+			txtTwitter.setText(mEvent.getTwitterUrl());
+		}
+
+
 
 		Button modifyBtn = (Button) getView().findViewById(R.id.edit_contacts_modify_button);
 		modifyBtn.setOnClickListener(new OnClickListener() {
@@ -143,7 +156,7 @@ public class Fragment_EvDetail_Info_Contacts extends Fragment {
 			public void onClick(View view) {
 
 				Toast.makeText(context, "Edited Fields: " + txtPhone.getText() + ", " + txtEmail.getText() + 
-						", " + txtWebsite.getText() , Toast.LENGTH_SHORT).show();
+						", " + txtTwitter.getText() , Toast.LENGTH_SHORT).show();
 
 				//set the new fields
 				//				Log.i("FRAGMENT LC", "EVENT ID 2: " + mEventId);
@@ -159,12 +172,39 @@ public class Fragment_EvDetail_Info_Contacts extends Fragment {
 
 				mEvent.getContacts().clear();
 				mEvent.getContacts().put("telefono", new String[]{txtPhone.getText().toString()});
-//				Map<String,Object> contacts = new HashMap<String, Object>();
-//				contacts.put("telefono", new String[]{txtPhone.getText().toString()});
-//				contacts.put("email", new String[]{txtEmail.getText().toString()});
+				//				Map<String,Object> contacts = new HashMap<String, Object>();
+				//				contacts.put("telefono", new String[]{txtPhone.getText().toString()});
+				//				contacts.put("email", new String[]{txtEmail.getText().toString()});
 				mEvent.saveEmails(new ArrayList<String>(){{add(txtEmail.getText().toString());}});
-//				mEvent.setContacts(contacts);
-				mEvent.setWebsiteUrl(txtWebsite.getText().toString());
+				//				mEvent.setContacts(contacts);
+
+				
+				try {
+					new URL(txtWebsite.getText().toString());
+					mEvent.setWebsiteUrl(txtWebsite.getText().toString());
+				} catch (MalformedURLException e) {
+					mEvent.setWebsiteUrl(null);
+				}
+
+				
+				try {
+					new URL(txtFacebook.getText().toString());
+					mEvent.setFacebookUrl(txtFacebook.getText().toString());
+				} catch (MalformedURLException e) {
+					mEvent.setFacebookUrl(null);
+				}
+
+
+				try {
+					new URL(txtTwitter.getText().toString());
+					mEvent.setTwitterUrl(txtTwitter.getText().toString());
+				} catch (MalformedURLException e) {
+					mEvent.setTwitterUrl(null);
+				}
+
+
+
+
 
 
 				//persist the new contacts

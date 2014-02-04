@@ -117,8 +117,7 @@ public class EventsListingFragment extends Fragment implements OnScrollListener 
 	protected ArrayList<String> eventImagesUrls = new ArrayList<String>();
 	protected Map<String, List<String>> eventImagesUrlNew;
 
-	protected ImageLoader imageLoader = ImageLoader.getInstance();
-
+	//protected ImageLoader imageLoader = ImageLoader.getInstance();
 
 
 	@Override
@@ -250,8 +249,9 @@ public class EventsListingFragment extends Fragment implements OnScrollListener 
 
 				Log.i("SCROLLTABS", "event selected ID: " + ((EventPlaceholder) v.getTag()).event.getId() + "!!");
 
-				args.putString(Fragment_EventDetails.ARG_EVENT_ID, ((EventPlaceholder) v.getTag()).event.getId());
-
+				args.putString(Utils.ARG_EVENT_ID, ((EventPlaceholder) v.getTag()).event.getId());
+				args.putString(Utils.ARG_EVENT_IMAGE_URL, eventImagesUrlNew.get(dateGroupList.get(groupPosition)).get(childPosition));
+				
 				fragment.setArguments(args);
 
 				fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);

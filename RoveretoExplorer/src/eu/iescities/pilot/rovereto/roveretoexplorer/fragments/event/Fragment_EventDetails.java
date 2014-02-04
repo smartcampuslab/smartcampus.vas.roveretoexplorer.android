@@ -3,9 +3,12 @@ package eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import com.google.android.maps.GeoPoint;
+
 import android.app.ActionBar;
 import android.app.Activity;
-import android.database.DataSetObserver;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.location.Address;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -19,12 +22,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.google.android.maps.GeoPoint;
-
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.CategoryHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.CommentsHandler;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.PagerSlidingTabStrip;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.Utils;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.DTHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.BaseDTObject;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ExplorerObject;
@@ -36,16 +38,15 @@ import eu.iescities.pilot.rovereto.roveretoexplorer.map.MapManager;
 
 public class Fragment_EventDetails extends Fragment {
 
-	public static final String ARG_EVENT_ID = "event_id";
-
 	private PagerSlidingTabStrip tabs;
 	private ViewPager pager;
 	private MyPagerAdapter adapter;
 	// private int currentColor = R.color.jungle_green;
 	private int currentColor = 0xFF96AA39;
-
 	public ExplorerObject mEvent = null;
 	private String mEventId;
+	private String mEventImageUrl;
+	
 
 	private Fragment mFragment = this;
 
@@ -65,8 +66,9 @@ public class Fragment_EventDetails extends Fragment {
 			setHasOptionsMenu(true);
 
 			if (getArguments() != null) {
-				mEventId = getArguments().getString(ARG_EVENT_ID);
+				mEventId = getArguments().getString(Utils.ARG_EVENT_ID);
 				mEvent = DTHelper.findEventById(mEventId);
+				mEventImageUrl = getArguments().getString(Utils.ARG_EVENT_IMAGE_URL);
 			}
 		} else {
 			Log.d("SCROLLTABS", "onCreate SUBSEQUENT TIME");
@@ -89,20 +91,6 @@ public class Fragment_EventDetails extends Fragment {
 
 		// getActivity().getActionBar().setTitle(mEvent.getTitle());
 
-	}
-
-	@Override
-	public void onStart() {
-		super.onStart();
-
-		Log.d("FRAGMENT LC", "Fragment_evDetail --> onStart");
-
-	}
-
-	@Override
-	public void onResume() {
-		super.onResume();
-		Log.d("FRAGMENT LC", "Fragment_evDetail --> onResume");
 		// Set up the action bar.
 		final ActionBar actionBar = getActivity().getActionBar();
 		actionBar.setTitle(mEvent.getTitle());
@@ -130,9 +118,24 @@ public class Fragment_EventDetails extends Fragment {
 
 	}
 
+	@Override
+	public void onStart() {
+		super.onStart();
+		Log.d("FRAGMENT LC", "Fragment_evDetail --> onStart");
+
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		Log.d("FRAGMENT LC", "Fragment_evDetail --> onResume");
+
+	}
+
+	
 	private ExplorerObject getEvent() {
 		if (mEventId == null) {
-			mEventId = getArguments().getString(Fragment_EventDetails.ARG_EVENT_ID);
+			mEventId = getArguments().getString(Utils.ARG_EVENT_ID);
 		}
 
 		if (mEvent == null) {
@@ -141,7 +144,6 @@ public class Fragment_EventDetails extends Fragment {
 
 		return mEvent;
 	}
-
 	// private void refreshPage(int i) {
 	// Fragment fragment = mFragments.get(i);
 	//
@@ -223,7 +225,7 @@ public class Fragment_EventDetails extends Fragment {
 			Fragment fragment = null;
 			// Log.d("SCROLLTABS", "get Item is called "+i);
 			if (position == 0) {
-				fragment = Fragment_EvDetail_Info.newInstance(mEventId);
+				fragment = Fragment_EvDetail_Info.newInstance(mEventId, mEventImageUrl);
 			}
 			if (position == 1) {
 				fragment = Fragment_EvDetail_DaSapere.newInstance(mEventId);
@@ -237,12 +239,6 @@ public class Fragment_EventDetails extends Fragment {
 
 			return fragment;
 		}
-
-		@Override
-		public int getItemPosition(Object object) {
-			return POSITION_NONE;
-		}
-		
 
 	}
 
@@ -262,6 +258,9 @@ public class Fragment_EventDetails extends Fragment {
 		return true;
 	}
 
+	
+	
+	
 	protected void callBringMeThere() {
 		Address to = new Address(Locale.getDefault());
 		to.setLatitude(mEvent.getLocation()[0]);
@@ -276,7 +275,6 @@ public class Fragment_EventDetails extends Fragment {
 		DTHelper.bringmethere(getActivity(), from, to);
 
 	}
-
 	@Override
 	public void onPrepareOptionsMenu(Menu menu) {
 
@@ -285,8 +283,7 @@ public class Fragment_EventDetails extends Fragment {
 		// menu.clear();
 
 		getActivity().getMenuInflater().inflate(R.menu.event_detail_menu, menu);
-		if (getEvent() == null || getEvent().getLocation() == null
-				|| (getEvent().getLocation()[0] == 0 && getEvent().getLocation()[1] == 0)) {
+		if (getEvent()== null || getEvent().getLocation() == null || (getEvent().getLocation()[0] == 0 && getEvent().getLocation()[1] == 0)) {
 			menu.findItem(R.id.map_view).setVisible(false);
 			menu.findItem(R.id.direction_action).setVisible(false);
 		}

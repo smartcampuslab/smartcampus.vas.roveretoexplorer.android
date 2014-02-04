@@ -48,8 +48,8 @@
                     android:id="@+id/phone_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="phone"
-    				android:digits="0123456789+">
+                    android:digits="0123456789+"
+                    android:inputType="phone" >
                 </EditText>
 
                 <TextView
@@ -77,20 +77,51 @@
                     android:textColor="@color/jungle_green"
                     android:textStyle="bold" />
 
-                 <EditText
+                <EditText
                     android:id="@+id/website_link"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/start_url"
                     android:inputType="textUri" >
                 </EditText>
-         
-                 
+
+                <TextView
+                    android:id="@+id/facebook_label"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/facebook"
+                    android:textColor="@color/jungle_green"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/facebook_link"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/start_url"
+                    android:inputType="textUri" >
+                </EditText>
+
+                <TextView
+                    android:id="@+id/twitter_label"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/twitter"
+                    android:textColor="@color/jungle_green"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/twitter_link"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/start_url"
+                    android:inputType="text" >
+                </EditText>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
 
-    
     <LinearLayout
         android:id="@+id/choice_buttons"
         android:layout_width="match_parent"
