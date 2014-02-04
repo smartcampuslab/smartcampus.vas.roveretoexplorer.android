@@ -138,6 +138,9 @@ public class Fragment_EvDetail_Info_What extends Fragment {
 		super.onActivityCreated(savedInstanceState);
 		Log.d("FRAGMENT LC","Fragment_evDetail_Info_What --> onActivityCreated");
 
+		if (mEvent == null) {
+			mEvent = DTHelper.findEventById(mEventId);
+		}
 
 		formLabel = (TextView) getActivity().findViewById(R.id.form_label);
 		formLabel.setText("Evento: " + mEvent.getTitle());
