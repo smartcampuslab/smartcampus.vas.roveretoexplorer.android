@@ -5,6 +5,7 @@ import java.util.Locale;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.database.DataSetObserver;
 import android.location.Address;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -241,6 +242,13 @@ public class Fragment_EventDetails extends Fragment {
 		public int getItemPosition(Object object) {
 			return POSITION_NONE;
 		}
+		
+		@Override
+		public void unregisterDataSetObserver(DataSetObserver observer) {
+		  if (observer != null) {
+		    super.unregisterDataSetObserver(observer);
+		  }
+		} 
 	}
 
 	@Override
