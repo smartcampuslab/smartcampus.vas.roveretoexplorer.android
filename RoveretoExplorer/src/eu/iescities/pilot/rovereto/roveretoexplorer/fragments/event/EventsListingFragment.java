@@ -250,7 +250,11 @@ public class EventsListingFragment extends Fragment implements OnScrollListener 
 				Log.i("SCROLLTABS", "event selected ID: " + ((EventPlaceholder) v.getTag()).event.getId() + "!!");
 
 				args.putString(Utils.ARG_EVENT_ID, ((EventPlaceholder) v.getTag()).event.getId());
-				args.putString(Utils.ARG_EVENT_IMAGE_URL, eventImagesUrlNew.get(dateGroupList.get(groupPosition)).get(childPosition));
+				try {
+					args.putString(Utils.ARG_EVENT_IMAGE_URL, eventImagesUrlNew.get(dateGroupList.get(groupPosition)).get(childPosition));
+				} catch (Exception e){
+				}
+				
 				
 				fragment.setArguments(args);
 

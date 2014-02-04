@@ -183,7 +183,7 @@ public class EventAdapter extends BaseExpandableListAdapter {
 
 		Log.i("IMAGES", "EventAdapter --> group position: " + groupPosition );
 		Log.i("IMAGES", "EventAdapter --> child position: " + childPosition );
-		Log.i("IMAGES", "EventAdapter --> image url : " + this.eventImageUrls[childPosition] );
+//		Log.i("IMAGES", "EventAdapter --> image url : " + this.eventImageUrls[childPosition] );
 		
 		
 		//fragment.imageLoader.displayImage(this.eventImageUrls[childPosition], eventPlaceHolder.icon, fragment.imgOptions, animateFirstListener);
