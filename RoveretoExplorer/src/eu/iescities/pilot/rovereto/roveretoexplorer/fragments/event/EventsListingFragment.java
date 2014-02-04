@@ -680,8 +680,8 @@ public class EventsListingFragment extends Fragment implements OnScrollListener 
 			} else {
 				ArrayList<BaseDTObject> target = new ArrayList<BaseDTObject>();
 				if (list != null) {
-					for (int i = 0; i < list.getAdapter().getCount(); i++) {
-						BaseDTObject o = (BaseDTObject) list.getAdapter().getItem(i);
+					for (int i = 0; i < listEvents.size(); i++) {
+						ExplorerObject o = listEvents.get(i);
 						if (o.getLocation() != null && o.getLocation()[0] != 0 && o.getLocation()[1] != 0) {
 							target.add(o);
 						}

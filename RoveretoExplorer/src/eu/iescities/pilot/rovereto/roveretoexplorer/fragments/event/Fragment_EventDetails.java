@@ -116,7 +116,7 @@ public class Fragment_EventDetails extends Fragment {
 		tabs = (PagerSlidingTabStrip) getActivity().findViewById(R.id.tabs);
 		pager = (ViewPager) getActivity().findViewById(R.id.pager);
 
-		adapter = new MyPagerAdapter(getActivity().getSupportFragmentManager());
+		adapter = new MyPagerAdapter(getChildFragmentManager());
 
 		pager.setAdapter(adapter);
 
@@ -243,12 +243,7 @@ public class Fragment_EventDetails extends Fragment {
 			return POSITION_NONE;
 		}
 		
-		@Override
-		public void unregisterDataSetObserver(DataSetObserver observer) {
-		  if (observer != null) {
-		    super.unregisterDataSetObserver(observer);
-		  }
-		} 
+
 	}
 
 	@Override
