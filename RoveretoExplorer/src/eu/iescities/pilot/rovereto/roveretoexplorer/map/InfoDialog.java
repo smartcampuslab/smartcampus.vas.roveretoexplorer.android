@@ -66,7 +66,7 @@ public class InfoDialog extends DialogFragment {
 			if (event.getType() != null) {
 				msgText += "<p>";
 				msgText += getString(CategoryHelper.getCategoryDescriptorByCategoryFiltered(
-						CategoryHelper.CATEGORY_TYPE_EVENTS, event.getType()).description);
+						CategoryHelper.CATEGORY_TYPE_EVENTS, event.getCategory()).description);
 				msgText += "</p><br/>";
 			}
 			msgText += "<p>" + event.dateTimeString() + "</p>";
