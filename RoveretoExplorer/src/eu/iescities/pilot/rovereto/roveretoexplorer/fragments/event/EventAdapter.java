@@ -92,7 +92,6 @@ public class EventAdapter extends BaseExpandableListAdapter {
 		this.eventCollections = eventCollections;
 		this.dateGroupList = events_dates;
 		this.layoutResourceId = layoutResourceId;
-		this.fragment.imageLoader.init(ImageLoaderConfiguration.createDefault(context));
 
 	}
 
