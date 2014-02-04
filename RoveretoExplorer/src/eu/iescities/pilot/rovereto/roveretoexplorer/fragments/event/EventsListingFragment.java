@@ -250,7 +250,11 @@ public class EventsListingFragment extends Fragment implements OnScrollListener 
 				Log.i("SCROLLTABS", "event selected ID: " + ((EventPlaceholder) v.getTag()).event.getId() + "!!");
 
 				args.putString(Utils.ARG_EVENT_ID, ((EventPlaceholder) v.getTag()).event.getId());
-				args.putString(Utils.ARG_EVENT_IMAGE_URL, eventImagesUrlNew.get(dateGroupList.get(groupPosition)).get(childPosition));
+				try {
+					args.putString(Utils.ARG_EVENT_IMAGE_URL, eventImagesUrlNew.get(dateGroupList.get(groupPosition)).get(childPosition));
+				} catch (Exception e){
+				}
+				
 				
 				fragment.setArguments(args);
 
@@ -441,7 +445,7 @@ public class EventsListingFragment extends Fragment implements OnScrollListener 
 
 
 				//get event-dates
-				if (!dateGroupList.contains(expObj.getFromTime().toString())) {
+				if (!dateGroupList.contains(Utils.getDateTimeString(context, expObj.getFromTime(), Utils.DATE_FORMAT_2, true,true)[0])) {
 					Log.i("FORMAT",
 							"EventsListingFragment --> date formatted: "
 									+ Utils.getDateTimeString(context, expObj.getFromTime(), Utils.DATE_FORMAT_2, true,
