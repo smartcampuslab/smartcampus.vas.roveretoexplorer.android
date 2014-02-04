@@ -136,6 +136,7 @@ public class Fragment_EvDetail_DaSapere extends ListFragment {
 		// Constants.CUSTOM_TOKNOW));
 		List<ToKnow> toKnowList = Utils.toKnowMapToList(toKnowMap);
 		adapter.addAll(toKnowList);
+		adapter.notifyDataSetChanged();
 
 		Button toKnowAddButton = (Button) getActivity().findViewById(R.id.toKnowAddButton);
 		toKnowAddButton.setOnClickListener(new OnClickListener() {
@@ -157,8 +158,8 @@ public class Fragment_EvDetail_DaSapere extends ListFragment {
 				fragmentTransaction.addToBackStack(getTag());
 				fragmentTransaction.commit();
 				// reset event and event id
-				mEvent = null;
-				mEventId = null;
+				// mEvent = null;
+				// mEventId = null;
 			}
 		});
 	}
@@ -218,9 +219,7 @@ public class Fragment_EvDetail_DaSapere extends ListFragment {
 		if (mEventId == null) {
 			mEventId = getArguments().getString(Utils.ARG_EVENT_ID);
 		}
-		if (mEvent == null) {
-			mEvent = DTHelper.findEventById(mEventId);
-		}
+		mEvent = DTHelper.findEventById(mEventId);
 		return mEvent;
 	}
 
