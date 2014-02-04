@@ -25,12 +25,13 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 
-/**
- * @author Sergey Tarasevich (nostra13[at]gmail[dot]com)
- */
+
 public class RoveretoExplorerApplication extends Application {
 
 	public static final boolean DEVELOPER_MODE = false;
+	
+	public static ImageLoader imageLoader; 
+
 
 	@TargetApi(Build.VERSION_CODES.GINGERBREAD)
 	@SuppressWarnings("unused")
@@ -59,7 +60,11 @@ public class RoveretoExplorerApplication extends Application {
 				.writeDebugLogs() // Remove for release app
 				.build();
 		// Initialize ImageLoader with configuration.
-		ImageLoader.getInstance().init(config);
+		//ImageLoader.getInstance().init(config);
+		imageLoader = ImageLoader.getInstance();
+		imageLoader.init(config); 
+		
+		
 	}
 }
 

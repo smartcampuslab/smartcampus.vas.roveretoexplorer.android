@@ -30,9 +30,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
+import eu.iescities.pilot.rovereto.roveretoexplorer.RoveretoExplorerApplication;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.Utils;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.Address;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.DTHelper;
@@ -55,13 +57,13 @@ public class Fragment_EvDetail_Info extends Fragment {
 	protected ExplorerObject mEvent = null;
 	private EventDetailInfoAdapter eventDetailInfoAdapter;
 
-
 	private static final String ARG_POSITION = "position";
-	public static final String ARG_EVENT_ID = "event_id";
 	public static final String ARG_INDEX = "index_adapter";
 
 	private Integer indexAdapter;
 	protected String mEventId;
+	private String mEventImageUrl;
+
 
 	private static final DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 	private static final DateFormat extDateFormat = new SimpleDateFormat("EEEEEE dd/MM/yyyy");
@@ -82,11 +84,19 @@ public class Fragment_EvDetail_Info extends Fragment {
 	public static Fragment_EvDetail_Info newInstance(String event_id) {
 		Fragment_EvDetail_Info  f = new Fragment_EvDetail_Info();
 		Bundle b = new Bundle();
-		b.putString(ARG_EVENT_ID, event_id);
+		b.putString(Utils.ARG_EVENT_ID, event_id);
 		f.setArguments(b);
 		return f;
 	}
 
+	public static Fragment_EvDetail_Info newInstance(String event_id, String event_img_url) {
+		Fragment_EvDetail_Info  f = new Fragment_EvDetail_Info();
+		Bundle b = new Bundle();
+		b.putString(Utils.ARG_EVENT_ID, event_id);
+		b.putString(Utils.ARG_EVENT_IMAGE_URL, event_img_url);
+		f.setArguments(b);
+		return f;
+	}
 
 
 	@Override
@@ -107,11 +117,10 @@ public class Fragment_EvDetail_Info extends Fragment {
 		{
 			Log.d("SCROLLTABS","onCreate FIRST TIME");
 			if (getArguments() != null) {
-				mEventId = getArguments().getString(ARG_EVENT_ID);
-				//now it will be always null so I load the fake data
+				mEventId = getArguments().getString(Utils.ARG_EVENT_ID);
 				mEvent = DTHelper.findEventById(mEventId);
-				//				List<ExplorerObject> eventList = Utils.getFakeExplorerObjects();
-				//				mEvent = Utils.getFakeLocalExplorerObject(eventList,mEventId);
+				mEventImageUrl = getArguments().getString(Utils.ARG_EVENT_IMAGE_URL);
+				Log.d("IMAGES","Fragment_evDetail_Info --> image url: " + mEventImageUrl);
 			}
 		}
 		else
@@ -120,7 +129,7 @@ public class Fragment_EvDetail_Info extends Fragment {
 		}
 	}
 
-
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		super.onCreateView(inflater,container,savedInstanceState);
@@ -158,8 +167,11 @@ public class Fragment_EvDetail_Info extends Fragment {
 
 
 		//display the event image 
-		//		ImageView imgView = (ImageView) getActivity().findViewById(R.id.event_placeholder_photo);
-		//		Bitmap bmp = null;
+		ImageView imgView = (ImageView) getActivity().findViewById(R.id.event_placeholder_photo);
+		
+		RoveretoExplorerApplication.imageLoader.displayImage(mEventImageUrl, imgView);
+		
+				//		Bitmap bmp = null;
 		//		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 		//		StrictMode.setThreadPolicy(policy); 
 		//		try {
@@ -177,6 +189,9 @@ public class Fragment_EvDetail_Info extends Fragment {
 		//			imgView.setImageBitmap(bmp);
 
 
+		
+		
+		
 		//display the event category plus the "promoted by" attribute 
 		TextView categoryTextView = (TextView) getActivity().findViewById(R.id.event_placeholder_category);
 		String category = mEvent.getCategory();
@@ -233,7 +248,10 @@ private void editField(String field_type) {
 }
 
 
-
+	
+	
+	
+	
 	
 	
 	
@@ -318,7 +336,7 @@ private void editField(String field_type) {
 
 		if (savedInstanceState != null) {
 			// Restore last state for checked position.
-			mEventId = savedInstanceState.getString(ARG_EVENT_ID);
+			mEventId = savedInstanceState.getString(Utils.ARG_EVENT_ID);
 			indexAdapter = savedInstanceState.getInt(ARG_INDEX);
 		}
 
@@ -828,7 +846,7 @@ private void editField(String field_type) {
 
 	private ExplorerObject getEvent() {
 		if (mEventId == null) {
-			mEventId = getArguments().getString(ARG_EVENT_ID);
+			mEventId = getArguments().getString(Utils.ARG_EVENT_ID);
 		}
 
 		if (mEvent == null) {
@@ -838,6 +856,7 @@ private void editField(String field_type) {
 		}
 
 
+		
 		return mEvent;
 	}
 

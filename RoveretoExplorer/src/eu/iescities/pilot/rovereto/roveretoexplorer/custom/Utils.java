@@ -58,6 +58,7 @@ public class Utils {
 
 	public static final String ARG_EVENT_ID = "event_id";
 	public static final String ARG_EVENT_FIELD_TYPE = "event_field_type";
+	public static final String ARG_EVENT_IMAGE_URL = "event_image";
 	
 
 	//	public static List<ExplorerObject> appEvents = getFakeEventObjects();

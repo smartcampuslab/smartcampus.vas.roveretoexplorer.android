@@ -27,6 +27,7 @@ import eu.iescities.pilot.rovereto.roveretoexplorer.custom.RatingHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.RatingHelper.RatingHandler;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.ReviewHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.ReviewHelper.ReviewHandler;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.Utils;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.DTHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.Rating;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.CommunityData;
@@ -37,7 +38,9 @@ import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info.Fragmen
 import eu.trentorise.smartcampus.android.common.SCAsyncTask;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 
-public class Fragment_EvDetail_Community extends Fragment implements RefreshComments {
+
+
+public class Fragment_EvDetail_Community extends Fragment implements RefreshComments{
 	CommentAdapter listAdapter;
 	ExpandableListView expListView;
 	View header;
@@ -47,14 +50,14 @@ public class Fragment_EvDetail_Community extends Fragment implements RefreshComm
 	boolean attending_is_open = true;
 	public ExplorerObject mEvent = null;
 	private String mEventId;
-	private float rate = 0;
-
+	private float rate =0;
 	public static Fragment_EvDetail_Community newInstance(String event_id) {
 		Fragment_EvDetail_Community f = new Fragment_EvDetail_Community();
 		Bundle b = new Bundle();
-		b.putString(Fragment_EvDetail_Info.ARG_EVENT_ID, event_id);
+		b.putString(Utils.ARG_EVENT_ID, event_id);
 		f.setArguments(b);
 		return f;
+	
 	}
 
 	@Override
@@ -68,11 +71,11 @@ public class Fragment_EvDetail_Community extends Fragment implements RefreshComm
 	}
 
 	@Override
-	public void onResume() {
-		super.onResume();
+	public void onStart() {
+		super.onStart();
 		// get param
 		Bundle bundle = this.getArguments();
-		mEventId = bundle.getString(Fragment_EventDetails.ARG_EVENT_ID);
+		mEventId = bundle.getString(Utils.ARG_EVENT_ID);
 		// try {
 		// if (mEventId!=null)
 		// mEvent = DTHelper.findEventByEntityId(mEventId);
@@ -80,12 +83,6 @@ public class Fragment_EvDetail_Community extends Fragment implements RefreshComm
 		// e.printStackTrace();
 		// }
 		setLayoutInteraction();
-	}
-
-	@Override
-	public void onStart() {
-		super.onStart();
-
 	}
 
 	private void setLayoutInteraction() {
@@ -107,25 +104,27 @@ public class Fragment_EvDetail_Community extends Fragment implements RefreshComm
 		listCommentsHeader = new ArrayList<String>();
 		listCommentsChild = new HashMap<String, List<Review>>();
 		listCommentsHeader.add(getString(R.string.label_comments));
-		// get comment list
+		//get comment list
 		List<Review> comments = new ArrayList<Review>();
-		// setCommentAddInteraction();
+//		setCommentAddInteraction();
 		listCommentsChild.put(listCommentsHeader.get(0), comments); // Header,
 																	// Child
 																	// data
 
-		listAdapter = new CommentAdapter(getActivity(), listCommentsHeader, listCommentsChild, getActivity(), mEvent,
-				Fragment_EvDetail_Community.this);
+		listAdapter = new CommentAdapter(getActivity(), listCommentsHeader, listCommentsChild,getActivity(),mEvent,Fragment_EvDetail_Community.this);
 		updateCommentsList();
-
+		
 	}
+
+
 
 	private void updateCommentsList() {
 
 		new SCAsyncTask<Void, Void, List<Review>>(getActivity(), new LoadCommentsProcessor(getActivity())).execute();
 
+		
 	}
-
+	
 	private class LoadCommentsProcessor extends AbstractAsyncTaskProcessor<Void, List<Review>> {
 		public LoadCommentsProcessor(Activity activity) {
 			super(activity);
@@ -139,24 +138,23 @@ public class Fragment_EvDetail_Community extends Fragment implements RefreshComm
 		@Override
 		public void handleResult(List<Review> result) {
 			if (result == null || result.isEmpty()) {
-				// ViewHelper.addEmptyListView(container);
+//				ViewHelper.addEmptyListView(container);
 			}
 			listCommentsChild.clear();
 			listCommentsChild.put(listCommentsHeader.get(0), result); // Header,
-			listAdapter = new CommentAdapter(getActivity(), listCommentsHeader, listCommentsChild, getActivity(),
-					mEvent, Fragment_EvDetail_Community.this);
+			listAdapter = new CommentAdapter(getActivity(), listCommentsHeader, listCommentsChild,getActivity(),mEvent,Fragment_EvDetail_Community.this);
 			expListView.setAdapter(listAdapter);
 
 			listAdapter.notifyDataSetChanged();
-			//
-			// listAdapter.getGroup(0).clear();
-			// for (Review r : result) {
-			// listAdapter.getGroup(0).add(r);
-			// }
-			// adapter.notifyDataSetChanged();
+			//			
+//			listAdapter.getGroup(0).clear();
+//			for (Review r : result) {
+//				listAdapter.getGroup(0).add(r);
+//			}
+//			adapter.notifyDataSetChanged();
 		}
 	}
-
+	
 	private void setHeaderInteraction(View header) {
 
 		set_attending_interaction(header);
@@ -167,7 +165,7 @@ public class Fragment_EvDetail_Community extends Fragment implements RefreshComm
 
 	private ExplorerObject getEvent() {
 		if (mEventId == null) {
-			mEventId = getArguments().getString(Fragment_EventDetails.ARG_EVENT_ID);
+			mEventId = getArguments().getString(Utils.ARG_EVENT_ID);
 		}
 
 		if (mEvent == null) {
@@ -206,6 +204,7 @@ public class Fragment_EvDetail_Community extends Fragment implements RefreshComm
 			}
 		});
 
+
 		// set listener for rating
 		RatingBar rating = (RatingBar) getView().findViewById(R.id.event_my_rating);
 
@@ -220,20 +219,22 @@ public class Fragment_EvDetail_Community extends Fragment implements RefreshComm
 				return true;
 			}
 
+
 		});
 
 		updateRating();
-
+		
+		
+		
 	}
-
 	private void ratingDialog() {
 		float rating = (getEvent() != null && getEvent().getCommunityData() != null && getEvent().getCommunityData()
 				.getAverageRating() > 0) ? getEvent().getCommunityData().getAverageRating() : 2.5f;
 		RatingHelper.ratingDialog(getActivity(), rating, new RatingProcessor(getActivity()),
 				R.string.rating_event_dialog_title);
-
+		
 	}
-
+	
 	private class RatingProcessor extends AbstractAsyncTaskProcessor<Integer, Integer> implements RatingHandler {
 
 		public RatingProcessor(Activity activity) {
@@ -259,59 +260,62 @@ public class Fragment_EvDetail_Community extends Fragment implements RefreshComm
 			new SCAsyncTask<Integer, Void, Integer>(getActivity(), this).execute((int) rating);
 		}
 	}
+	
+	
+
 
 	private void updateRating() {
 		if (this.getView() != null) {
-			// set my rating
-			RatingBar myRating = (RatingBar) getActivity().findViewById(R.id.event_my_rating);
-			if (getEvent().getCommunityData() != null) {
-				CommunityData cd = getEvent().getCommunityData();
+		// set my rating
+				RatingBar myRating = (RatingBar) getActivity().findViewById(R.id.event_my_rating);
+				if (getEvent().getCommunityData() != null) {
+					CommunityData cd = getEvent().getCommunityData();
 
-				if (cd.getRatings() != null && !cd.getRatings().isEmpty()) {
-					rate = 0;
-					for (Rating rating : cd.getRatings()) {
-						rate = rating.getValue();
+					 if (cd.getRatings() != null && !cd.getRatings().isEmpty()) {
+						 rate = 0;
+						 for (Rating rating: cd.getRatings()){
+							 rate = rating.getValue();
+						 }
+						 myRating.setRating(rate);
+					 }
+
+				}
+				// set avg rating
+				RatingBar avgRating = (RatingBar) getActivity().findViewById(R.id.event_avg_rating);
+				if (getEvent().getCommunityData() != null) {
+					avgRating.setRating(getEvent().getCommunityData().getAverageRating());
+				}
+				// set total rating
+				TextView totRating = (TextView) getActivity().findViewById(R.id.event_total_rating);
+				if (getEvent().getCommunityData() != null) {
+					totRating.setText(Integer.toString(getEvent().getCommunityData().getRatingsCount()));
+				}
+				// set visible or invisible
+				final ImageView attending_open = (ImageView) header.findViewById(R.id.attending_is_open);
+				final ImageView attending_close = (ImageView) header.findViewById(R.id.attending_is_close);
+				final LinearLayout attending_layout = (LinearLayout) header.findViewById(R.id.attending_layout);
+				attending_open.setOnClickListener(new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						attending_is_open = false;
+						attending_layout.setVisibility(View.GONE);
+						attending_open.setVisibility(View.GONE);
+						attending_close.setVisibility(View.VISIBLE);
 					}
-					myRating.setRating(rate);
-				}
+				});
+				attending_close.setOnClickListener(new OnClickListener() {
 
-			}
-			// set avg rating
-			RatingBar avgRating = (RatingBar) getActivity().findViewById(R.id.event_avg_rating);
-			if (getEvent().getCommunityData() != null) {
-				avgRating.setRating(getEvent().getCommunityData().getAverageRating());
-			}
-			// set total rating
-			TextView totRating = (TextView) getActivity().findViewById(R.id.event_total_rating);
-			if (getEvent().getCommunityData() != null) {
-				totRating.setText(Integer.toString(getEvent().getCommunityData().getRatingsCount()));
-			}
-			// set visible or invisible
-			final ImageView attending_open = (ImageView) header.findViewById(R.id.attending_is_open);
-			final ImageView attending_close = (ImageView) header.findViewById(R.id.attending_is_close);
-			final LinearLayout attending_layout = (LinearLayout) header.findViewById(R.id.attending_layout);
-			attending_open.setOnClickListener(new OnClickListener() {
-
-				@Override
-				public void onClick(View v) {
-					attending_is_open = false;
-					attending_layout.setVisibility(View.GONE);
-					attending_open.setVisibility(View.GONE);
-					attending_close.setVisibility(View.VISIBLE);
-				}
-			});
-			attending_close.setOnClickListener(new OnClickListener() {
-
-				@Override
-				public void onClick(View v) {
-					attending_is_open = true;
-					attending_layout.setVisibility(View.VISIBLE);
-					attending_open.setVisibility(View.VISIBLE);
-					attending_close.setVisibility(View.GONE);
-				}
-			});
+					@Override
+					public void onClick(View v) {
+						attending_is_open = true;
+						attending_layout.setVisibility(View.VISIBLE);
+						attending_open.setVisibility(View.VISIBLE);
+						attending_close.setVisibility(View.GONE);
+					}
+				});
 		}
-
+		
 	}
 
 	private void set_rating_interaction(View header2) {
@@ -394,7 +398,7 @@ public class Fragment_EvDetail_Community extends Fragment implements RefreshComm
 
 	@Override
 	public void refresh() {
-		// listAdapter.notifyDataSetChanged();
+//		listAdapter.notifyDataSetChanged();		
 		updateCommentsList();
 	}
 

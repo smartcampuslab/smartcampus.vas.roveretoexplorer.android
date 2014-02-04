@@ -41,11 +41,13 @@ import eu.iescities.pilot.rovereto.roveretoexplorer.custom.AbstractAsyncTaskProc
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.CategoryHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.CategoryHelper.CategoryDescriptor;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.DTParamsHelper;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.Utils;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.DTHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.BaseDTObject;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ExplorerObject;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.EventDetailsFragment;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.EventsListingFragment;
+import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.Fragment_EventDetails;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.search.SearchFragment;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.search.WhenForSearch;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.search.WhereForSearch;
@@ -555,8 +557,8 @@ public class MapFragment extends Fragment implements MapItemsHandler, OnCameraCh
 				Fragment fragment = null;
 				Bundle args = new Bundle();
 				if (result instanceof ExplorerObject) {
-					fragment = new EventDetailsFragment();
-					args.putString(EventDetailsFragment.ARG_EVENT_ID, (result.getId()));
+					fragment = new Fragment_EventDetails();
+					args.putString(Utils.ARG_EVENT_ID, (result.getId()));
 				}
 				// else if (result instanceof StoryObject) {
 				// fragment = new StoryDetailsFragment();

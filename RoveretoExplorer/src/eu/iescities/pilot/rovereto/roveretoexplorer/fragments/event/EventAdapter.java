@@ -27,7 +27,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
@@ -51,6 +50,7 @@ import android.widget.RatingBar.OnRatingBarChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
+import eu.iescities.pilot.rovereto.roveretoexplorer.RoveretoExplorerApplication;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.Address;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ExplorerObject;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info.Fragment_EvDetail_Info;
@@ -58,6 +58,7 @@ import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info.edit.Da
 
 import android.view.View.OnTouchListener;
 import android.view.MotionEvent;
+
 
 // in EventsListingFragment
 public class EventAdapter extends BaseExpandableListAdapter {
@@ -80,11 +81,15 @@ public class EventAdapter extends BaseExpandableListAdapter {
 	private int count = 0;
 
 	private EventPlaceholder eventPlaceHolderForImg = null;
-
-	// for loading images
+	
+	
+	
+	
+	//for loading images
 	private String[] eventImageUrls;
 	private ImageLoadingListener animateFirstListener = new AnimateFirstDisplayListener();
 	EventsListingFragment fragment;
+	
 
 	public EventAdapter(Context context, int layoutResourceId, List<String> events_dates,
 			Map<String, List<ExplorerObject>> eventCollections) {
@@ -94,15 +99,15 @@ public class EventAdapter extends BaseExpandableListAdapter {
 		this.layoutResourceId = layoutResourceId;
 
 	}
-
-	public EventAdapter(Context context, int layoutResourceId, EventsListingFragment fragment,
-			List<String> events_dates, Map<String, List<ExplorerObject>> eventCollections) {
+	
+	
+	public EventAdapter(Context context, int layoutResourceId, EventsListingFragment fragment, List<String> events_dates,
+			Map<String, List<ExplorerObject>> eventCollections) {
 		this.context = context;
 		this.eventCollections = eventCollections;
 		this.dateGroupList = events_dates;
 		this.layoutResourceId = layoutResourceId;
 		this.fragment = fragment;
-		this.fragment.imageLoader.init(ImageLoaderConfiguration.createDefault(context));
 	}
 
 	@Override
@@ -153,9 +158,10 @@ public class EventAdapter extends BaseExpandableListAdapter {
 		if (address != null) {
 
 			String place = (address.getLuogo() != null) ? (String) address.getLuogo() : null;
-			if ((place != null) && (!place.matches(""))) {
+			if ((place != null) && (!place.matches(""))){
 				eventPlaceHolder.location.setText(place);
-			} else
+			}
+			else 
 				eventPlaceHolder.location.setText(context.getString(R.string.city_hint));
 		}
 
@@ -163,49 +169,54 @@ public class EventAdapter extends BaseExpandableListAdapter {
 		Log.i("IMAGES", "START ADAPTER, EVENT TITLE: " + eventPlaceHolder.event.getTitle() + "!!");
 		// Log.i("IMAGES", "loaded: " + loadedImgs.toString() + "!!");
 
-		// if ((loadedImgs == null) ||
-		// (!loadedImgs.contains(eventPlaceHolder.event.getTitle()))) {
-		// if (eventPlaceHolder.event.getImage() != null) {
-		// RetreiveImageTask getImgTask = new RetreiveImageTask();
-		// getImgTask.execute(eventPlaceHolder);
-		// }
-		// }
+//		if ((loadedImgs == null) || (!loadedImgs.contains(eventPlaceHolder.event.getTitle()))) {
+//			if (eventPlaceHolder.event.getImage() != null) {
+//				RetreiveImageTask getImgTask = new RetreiveImageTask();
+//				getImgTask.execute(eventPlaceHolder);
+//			}
+//		}
 
-		if (fragment.eventImagesUrls != null) {
-			Log.i("IMAGES", "EventAdapter --> image array size: " + fragment.eventImagesUrls.size());
+		if (fragment.eventImagesUrls!=null){
+			Log.i("IMAGES", "EventAdapter --> image array size: " + fragment.eventImagesUrls.size() );
 			this.eventImageUrls = fragment.eventImagesUrls.toArray(new String[fragment.eventImagesUrls.size()]);
 		}
 
-		Log.i("IMAGES", "EventAdapter --> group position: " + groupPosition);
-		Log.i("IMAGES", "EventAdapter --> child position: " + childPosition);
-		// Log.i("IMAGES", "EventAdapter --> image url : " +
-		// this.eventImageUrls[childPosition] );
-
-		// fragment.imageLoader.displayImage(this.eventImageUrls[childPosition],
-		// eventPlaceHolder.icon, fragment.imgOptions, animateFirstListener);
-		String url = null;
-//		if (dateGroupList.get(groupPosition) != null)
+		Log.i("IMAGES", "EventAdapter --> group position: " + groupPosition );
+		Log.i("IMAGES", "EventAdapter --> child position: " + childPosition );
+		Log.i("IMAGES", "EventAdapter --> image url : " + this.eventImageUrls[childPosition] );
+		
+		
+		//fragment.imageLoader.displayImage(this.eventImageUrls[childPosition], eventPlaceHolder.icon, fragment.imgOptions, animateFirstListener);
+		
+		String imgUrl = null;
 		try {
-			url = fragment.eventImagesUrlNew.get(dateGroupList.get(groupPosition)).get(childPosition);
+			imgUrl = fragment.eventImagesUrlNew.get(dateGroupList.get(groupPosition)).get(childPosition);
 		} catch (Exception e){
 			e.printStackTrace();
 		}
-		Log.i("IMAGES", "EventAdapter --> image new url : " + url);
-		fragment.imageLoader.displayImage(url, eventPlaceHolder.icon, fragment.imgOptions, animateFirstListener);
-
-		// set the rating bar
+		Log.i("IMAGES", "EventAdapter --> image new url : " + imgUrl );
+		
+		//fragment.imageLoader.displayImage(imgUrl, eventPlaceHolder.icon, fragment.imgOptions, animateFirstListener);
+		RoveretoExplorerApplication.imageLoader.displayImage(imgUrl, eventPlaceHolder.icon, fragment.imgOptions, animateFirstListener);
+		
+		
+		
+		//set the rating bar
 		eventPlaceHolder.rating.setRating(eventPlaceHolder.event.getCommunityData().getAverageRating());
-
+		
 		eventPlaceHolder.rating.setOnTouchListener(new OnTouchListener() {
-			public boolean onTouch(View v, MotionEvent event) {
-				return true;
-			}
-		});
-
+	        public boolean onTouch(View v, MotionEvent event) {
+	            return true;
+	        }
+	    });	
+		
+		
 		eventPlaceHolder.rating.setFocusable(false);
-
+	       
+		
 		Calendar previousEvent = null;
 		Calendar currentEvent = Calendar.getInstance();
+		
 
 		if (event.getFromTime() != null)
 			currentEvent.setTimeInMillis(event.getFromTime());
@@ -240,8 +251,7 @@ public class EventAdapter extends BaseExpandableListAdapter {
 	public int getGroupCount() {
 		if (dateGroupList != null)
 			return dateGroupList.size();
-		else
-			return 0;
+		else return 0;
 	}
 
 	public long getGroupId(int groupPosition) {
@@ -336,5 +346,9 @@ public class EventAdapter extends BaseExpandableListAdapter {
 		}
 
 	}
+	
+	
+	
+	
 
 }

@@ -32,6 +32,7 @@ import eu.iescities.pilot.rovereto.roveretoexplorer.custom.Utils;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.BaseDTObject;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ExplorerObject;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.EventDetailsFragment;
+import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.Fragment_EventDetails;
 
 public class InfoDialog extends DialogFragment {
 	public static final String PARAM = "DTO_OBJECT";
@@ -96,8 +97,8 @@ public class InfoDialog extends DialogFragment {
 				Bundle args = new Bundle();
 
 				if (data instanceof ExplorerObject) {
-					EventDetailsFragment fragment = new EventDetailsFragment();
-					args.putString(EventDetailsFragment.ARG_EVENT_ID, (data.getId()));
+					Fragment_EventDetails fragment = new Fragment_EventDetails();
+					args.putString(Utils.ARG_EVENT_ID, (data.getId()));
 					fragment.setArguments(args);
 					fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
 					fragmentTransaction.replace(R.id.content_frame, fragment, "me");

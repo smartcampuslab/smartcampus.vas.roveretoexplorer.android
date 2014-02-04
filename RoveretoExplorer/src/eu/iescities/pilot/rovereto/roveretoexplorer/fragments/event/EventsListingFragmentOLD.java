@@ -223,7 +223,7 @@ public class EventsListingFragmentOLD extends Fragment implements OnScrollListen
 
 				Log.i("SCROLLTABS", "event selected ID: " + ((EventPlaceholder) v.getTag()).event.getId() + "!!");
 
-				args.putString(Fragment_EventDetails.ARG_EVENT_ID, ((EventPlaceholder) v.getTag()).event.getId());
+				args.putString(Utils.ARG_EVENT_ID, ((EventPlaceholder) v.getTag()).event.getId());
 
 				fragment.setArguments(args);
 
