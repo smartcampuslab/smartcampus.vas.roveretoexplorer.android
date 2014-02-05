@@ -160,8 +160,8 @@ public class Fragment_EvDetail_Info_Where extends Fragment {
 			@Override
 			public void onClick(View view) {
 
-				Toast.makeText(context, "Edited Fields: " + txtPlaceName.getText() + ", " + txtCity.getText() + 
-						", " + txtStreet.getText() , Toast.LENGTH_SHORT).show();
+//				Toast.makeText(context, "Edited Fields: " + txtPlaceName.getText() + ", " + txtCity.getText() + 
+//						", " + txtStreet.getText() , Toast.LENGTH_SHORT).show();
 
 				//set the new fields
 //				ExplorerObject ev = Utils.getFakeLocalExplorerObject(Utils.appEvents, mEventId);
