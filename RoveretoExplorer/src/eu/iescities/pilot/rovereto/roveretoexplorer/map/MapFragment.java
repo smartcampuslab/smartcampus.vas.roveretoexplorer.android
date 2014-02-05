@@ -292,8 +292,8 @@ public class MapFragment extends Fragment implements MapItemsHandler, OnCameraCh
 
 	@Override
 	public void onPrepareOptionsMenu(Menu menu) {
+		menu.clear();
 		Log.i("MENU", "start on Prepare Options Menu MAP frag: " + menu.toString());
-
 		MenuItem filter = menu.add(Menu.NONE, Menu.NONE, 1, "filtro");
 		// ovItem.setIcon(getResources().getDrawable(R.drawable.ic_location_actionbar));
 		filter.setIcon(getResources().getDrawable(R.drawable.ic_filter));
