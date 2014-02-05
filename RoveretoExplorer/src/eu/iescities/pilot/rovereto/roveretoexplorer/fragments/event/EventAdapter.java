@@ -289,63 +289,6 @@ public class EventAdapter extends BaseExpandableListAdapter {
 	public boolean isChildSelectable(int groupPosition, int childPosition) {
 		return true;
 	}
-
-	// class to handle the network connection to rietrieve the image
-	class RetreiveImageTask extends AsyncTask<EventPlaceholder, String, Bitmap> {
-
-		protected Bitmap doInBackground(EventPlaceholder... e) {
-
-			count++;
-			EventPlaceholder ev = e[0];
-			Log.i("IMAGES", "********************************");
-			Log.i("IMAGES", count + "START ASYNC TASK, EVENT TITLE: " + ev.event.getTitle());
-
-			URL img_url = null;
-			Bitmap bmp = null;
-
-			rightTextViewTitle = ev.event.getTitle();
-			eventPlaceHolderForImg = ev;
-
-			try {
-				img_url = new URL(ev.event.getImage());
-				// Log.i("IMAGES", "image for event " + ev.event.getTitle());
-				Log.i("IMAGES", "image url: " + img_url.toString() + "!!");
-				if (img_url != null) {
-					bmp = BitmapFactory.decodeStream(img_url.openConnection().getInputStream());
-				}
-			} catch (IOException e1) {
-				e1.printStackTrace();
-				return null;
-			}
-
-			return bmp;
-		}
-
-		protected void onPostExecute(Bitmap bmp) {
-			Log.i("IMAGES", "on post execute!" + rightTextViewTitle);
-			Log.i("IMAGES", "Right Title: " + rightTextViewTitle);
-			Log.i("IMAGES", "Current Title: " + eventPlaceHolder.event.getTitle());
-
-			if (bmp != null) {
-				Log.i("IMAGES", "set image icon " + rightTextViewTitle);
-				Log.i("IMAGES", "event place holder title " + eventPlaceHolderForImg.title.getText());
-
-				eventPlaceHolderForImg.icon.setImageBitmap(bmp);
-				loadedImgs.add((String) eventPlaceHolderForImg.title.getText());
-				Log.i("IMAGES", "loaded 2: " + loadedImgs.toString() + "!!");
-
-			}
-
-		}
-
-		@Override
-		protected void onProgressUpdate(String... text) {
-			// Things to be done while execution of long running operation is in
-			// progress. For example updating ProgessDialog
-			Toast.makeText(context, "loading image...", Toast.LENGTH_LONG).show();
-		}
-
-	}
 	
 	
 	

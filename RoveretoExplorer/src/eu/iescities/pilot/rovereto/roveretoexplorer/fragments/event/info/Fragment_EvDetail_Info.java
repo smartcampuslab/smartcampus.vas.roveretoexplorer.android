@@ -146,7 +146,7 @@ public class Fragment_EvDetail_Info extends Fragment {
 			@Override
 			public void onClick(View v) {
 				Log.d("main", "link clicked");
-				Toast.makeText(context, "modify event title", Toast.LENGTH_SHORT).show();
+//				Toast.makeText(context, "modify event title", Toast.LENGTH_SHORT).show();
 				editField("title");
 			}
 		}, start, start + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -190,7 +190,7 @@ public class Fragment_EvDetail_Info extends Fragment {
 				@Override
 				public void onClick(View v) {
 					Log.d("main", "link clicked");
-					Toast.makeText(context, "modify promoted by", Toast.LENGTH_SHORT).show();
+//					Toast.makeText(context, "modify promoted by", Toast.LENGTH_SHORT).show();
 					editField("origin");
 				}
 			}, start, start + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -330,7 +330,7 @@ public class Fragment_EvDetail_Info extends Fragment {
 				if (childClickStatus != childPosition) {
 					childClickStatus = childPosition;
 
-					Toast.makeText(context, "Parent :" + groupPosition + " Child :" + childPosition, Toast.LENGTH_LONG).show();
+//					Toast.makeText(context, "Parent :" + groupPosition + " Child :" + childPosition, Toast.LENGTH_LONG).show();
 				}
 
 				int iCount;
