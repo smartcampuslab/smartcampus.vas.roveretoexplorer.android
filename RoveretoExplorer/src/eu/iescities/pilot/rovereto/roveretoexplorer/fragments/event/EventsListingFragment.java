@@ -678,7 +678,6 @@ public class EventsListingFragment extends Fragment implements OnScrollListener 
 
 	@Override
 	public void onScrollStateChanged(AbsListView view, int scrollState) {
-		// TODO Auto-generated method stub
 		
 	}
 }

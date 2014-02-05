@@ -57,7 +57,7 @@ public class MapManager {
 	private static MapView mapView;
 
 	public static int ZOOM_DEFAULT = 15;
-	public static LatLng DEFAULT_POINT = new LatLng(46.0696727540531, 11.1212700605392); // Trento
+	public static LatLng DEFAULT_POINT = new LatLng(45.89096,11.04014); // Rovereto
 
 	public static void initWithParam() {
 		int zoom = DTParamsHelper.getZoomLevelMap();
