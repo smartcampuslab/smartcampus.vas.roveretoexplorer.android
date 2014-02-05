@@ -137,12 +137,20 @@ public class Fragment_EvDetail_Info_What extends Fragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		Log.d("FRAGMENT LC","Fragment_evDetail_Info_What --> onActivityCreated");
+		Log.i("FRAGMENT LC", "Fragment_evDetail_Info_What --> EVENT ID activity created: " + mEventId);
 
 		if (mEvent == null) {
+			Log.i("FRAGMENT LC", "Fragment_evDetail_Info_What --> MY EVENT null");
+
 			mEvent = DTHelper.findEventById(mEventId);
+			
 		}
 
 		formLabel = (TextView) getActivity().findViewById(R.id.form_label);
+		
+		Log.i("FRAGMENT LC", "Fragment_evDetail_Info_What --> EVENT title  activity created: " + mEvent.getTitle());
+		Log.i("FRAGMENT LC", "Fragment_evDetail_Info_What --> VIEW ID: " + R.id.form_label);
+
 		formLabel.setText("Evento: " + mEvent.getTitle());
 		eventFieldLabel = (TextView) getActivity().findViewById(R.id.event_field_label);
 		txtEventField= (EditText) getActivity().findViewById(R.id.event_field_text);

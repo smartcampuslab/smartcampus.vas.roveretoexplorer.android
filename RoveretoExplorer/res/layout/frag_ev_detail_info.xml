@@ -21,7 +21,7 @@
                 android:paddingLeft="10dp"
                 android:paddingTop="10dp"
                 android:scaleType="fitXY"
-                android:src="@drawable/ic_placeholder_photo" />
+                android:src="@drawable/ic_empty" />
 
             <TextView
                 android:id="@+id/event_placeholder_title"

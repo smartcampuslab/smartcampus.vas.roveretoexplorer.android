@@ -52,7 +52,7 @@ public class Fragment_EvDetail_DaSapere extends ListFragment {
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
-		Log.d("FRAGMENT LC", "Fragment_evDetail_DaSapere --> onAttach");
+		//Log.d("FRAGMENT LC", "Fragment_evDetail_DaSapere --> onAttach");
 	}
 
 	@Override
@@ -76,14 +76,14 @@ public class Fragment_EvDetail_DaSapere extends ListFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
-		Log.d("FRAGMENT LC", "Fragment_evDetail_DaSapere --> onCreateView");
+		//Log.d("FRAGMENT LC", "Fragment_evDetail_DaSapere --> onCreateView");
 		return inflater.inflate(R.layout.frag_ev_detail_dasapere, container, false);
 	}
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		Log.d("FRAGMENT LC", "Fragment_evDetail_DaSapere --> onActivityCreated");
+		//Log.d("FRAGMENT LC", "Fragment_evDetail_DaSapere --> onActivityCreated");
 
 		mEvent = getEvent();
 
@@ -167,52 +167,52 @@ public class Fragment_EvDetail_DaSapere extends ListFragment {
 	@Override
 	public void onStart() {
 		super.onStart();
-		Log.d("FRAGMENT LC", "Fragment_evDetail_DaSapere --> onStart");
+		//Log.d("FRAGMENT LC", "Fragment_evDetail_DaSapere --> onStart");
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-		Log.d("FRAGMENT LC", "Fragment_evDetail_DaSapere --> onResume");
+		//Log.d("FRAGMENT LC", "Fragment_evDetail_DaSapere --> onResume");
 	}
 
 	@Override
 	public void onPause() {
 		super.onPause();
-		Log.d("FRAGMENT LC", "Fragment_evDetail_DaSapere --> onPause");
+		//Log.d("FRAGMENT LC", "Fragment_evDetail_DaSapere --> onPause");
 
 	}
 
 	@Override
 	public void onStop() {
 		super.onStop();
-		Log.d("FRAGMENT LC", "Fragment_evDetail_DaSapere --> onStop");
+		//Log.d("FRAGMENT LC", "Fragment_evDetail_DaSapere --> onStop");
 	}
 
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
-		Log.d("FRAGMENT LC", "Fragment_evDetail_DaSapere --> onSaveInstanceState");
+		//Log.d("FRAGMENT LC", "Fragment_evDetail_DaSapere --> onSaveInstanceState");
 
 	}
 
 	@Override
 	public void onDestroyView() {
 		super.onDestroyView();
-		Log.d("FRAGMENT LC", "Fragment_evDetail_DaSapere --> onDestroyView");
+		//Log.d("FRAGMENT LC", "Fragment_evDetail_DaSapere --> onDestroyView");
 	}
 
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		Log.d("FRAGMENT LC", "Fragment_evDetail_DaSapere --> onDestroy");
+		//Log.d("FRAGMENT LC", "Fragment_evDetail_DaSapere --> onDestroy");
 
 	}
 
 	@Override
 	public void onDetach() {
 		super.onDetach();
-		Log.d("FRAGMENT LC", "Fragment_evDetail_DaSapere --> onDetach");
+		//Log.d("FRAGMENT LC", "Fragment_evDetail_DaSapere --> onDetach");
 	}
 
 	private ExplorerObject getEvent() {

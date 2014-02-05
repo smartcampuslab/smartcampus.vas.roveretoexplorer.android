@@ -70,6 +70,9 @@ public class Fragment_EvDetail_Info extends Fragment {
 
 	private View _lastColored;
 
+
+	Activity infoActivity=null; 
+
 	public static Fragment_EvDetail_Info newInstance(String event_id) {
 		Fragment_EvDetail_Info f = new Fragment_EvDetail_Info();
 		Bundle b = new Bundle();
@@ -90,8 +93,8 @@ public class Fragment_EvDetail_Info extends Fragment {
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
-		Log.d("FRAGMENT LC", "Fragment_evDetail_Info --> onAttach");
-
+		Log.d("FRAGMENT LC", "Fragment_evDetail_Info --> onAttach: " + activity.toString());
+		infoActivity=activity;
 	}
 
 	@Override
@@ -105,7 +108,6 @@ public class Fragment_EvDetail_Info extends Fragment {
 			Log.d("SCROLLTABS", "onCreate FIRST TIME");
 			if (getArguments() != null) {
 				mEventId = getArguments().getString(Utils.ARG_EVENT_ID);
-				Log.d("IMAGES", "Fragment_evDetail_Info --> image url: " + mEventImageUrl);
 			}
 		} else {
 			Log.d("SCROLLTABS", "onCreate SUBSEQUENT TIME");
@@ -114,6 +116,8 @@ public class Fragment_EvDetail_Info extends Fragment {
 
 		mEvent = DTHelper.findEventById(mEventId);
 		mEventImageUrl = mEvent.getImage();
+		Log.d("IMAGES", "Fragment_evDetail_Info --> image url:" + mEventImageUrl + "!");
+
 	}
 
 	@Override
@@ -146,7 +150,7 @@ public class Fragment_EvDetail_Info extends Fragment {
 			@Override
 			public void onClick(View v) {
 				Log.d("main", "link clicked");
-//				Toast.makeText(context, "modify event title", Toast.LENGTH_SHORT).show();
+				//				Toast.makeText(context, "modify event title", Toast.LENGTH_SHORT).show();
 				editField("title");
 			}
 		}, start, start + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -156,7 +160,11 @@ public class Fragment_EvDetail_Info extends Fragment {
 		// display the event image
 		ImageView imgView = (ImageView) getActivity().findViewById(R.id.event_placeholder_photo);
 
-		RoveretoExplorerApplication.imageLoader.displayImage(mEventImageUrl, imgView);
+		
+		if ((mEventImageUrl!=null) && (!mEventImageUrl.matches(""))){
+			RoveretoExplorerApplication.imageLoader.displayImage(mEventImageUrl, imgView);
+		}
+		
 
 		// Bitmap bmp = null;
 		// StrictMode.ThreadPolicy policy = new
@@ -190,14 +198,14 @@ public class Fragment_EvDetail_Info extends Fragment {
 				@Override
 				public void onClick(View v) {
 					Log.d("main", "link clicked");
-//					Toast.makeText(context, "modify promoted by", Toast.LENGTH_SHORT).show();
+					//					Toast.makeText(context, "modify promoted by", Toast.LENGTH_SHORT).show();
 					editField("origin");
 				}
 			}, start, start + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 			categoryTextView.setText(ss);
 			categoryTextView.setMovementMethod(LinkMovementMethod.getInstance());
 		} else
-			categoryTextView.setText(category + ".");
+			categoryTextView.setText("Evento " + category + ".");
 
 		// display the event attributes
 		setExpandableListView(savedInstanceState);
@@ -206,20 +214,36 @@ public class Fragment_EvDetail_Info extends Fragment {
 
 	private void editField(String field_type) {
 
-		FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-		Bundle args = new Bundle();
-		String frag_description = null;
-
-		Fragment edit_fragment = new Fragment_EvDetail_Info_What();
+		Log.d("FRAGMENT LC", "Fragment_evDetail_Info --> INFO ACTIVITY: " + infoActivity.toString());
 		Log.i("CONTACTS", "Fragment_EvDetail_Info --> event selected ID: " + mEventId + "!!");
+
+		String frag_description = "event_details_info_edit_" + field_type;
+		Bundle args = new Bundle();
 		args.putString(Utils.ARG_EVENT_ID, mEventId);
 		args.putString(Utils.ARG_EVENT_FIELD_TYPE, field_type);
-		frag_description = "event_details_info_edit_" + field_type;
 
+		Fragment edit_fragment = new Fragment_EvDetail_Info_What();
+
+//		FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+//		if (edit_fragment != null) {
+//			edit_fragment.setArguments(args);
+//			transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+//			// fragmentTransaction.detach(this);
+//			//transaction.replace(R.id.content_frame, edit_fragment, frag_description);
+//			transaction.add(edit_fragment, frag_description);
+//			//transaction.addToBackStack(edit_fragment.getTag());
+//			transaction.commit();
+//			// reset event and event id
+//			mEvent = null;
+//			mEventId = null;
+//		}
+		
+		
+		FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
 		if (edit_fragment != null) {
 			edit_fragment.setArguments(args);
 			fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-			// fragmentTransaction.detach(this);
+			//fragmentTransaction.detach(this);
 			fragmentTransaction.replace(R.id.content_frame, edit_fragment, frag_description);
 			fragmentTransaction.addToBackStack(edit_fragment.getTag());
 			fragmentTransaction.commit();
@@ -227,6 +251,9 @@ public class Fragment_EvDetail_Info extends Fragment {
 			mEvent = null;
 			mEventId = null;
 		}
+		
+		
+		
 	}
 
 	@Override
@@ -330,7 +357,7 @@ public class Fragment_EvDetail_Info extends Fragment {
 				if (childClickStatus != childPosition) {
 					childClickStatus = childPosition;
 
-//					Toast.makeText(context, "Parent :" + groupPosition + " Child :" + childPosition, Toast.LENGTH_LONG).show();
+					//					Toast.makeText(context, "Parent :" + groupPosition + " Child :" + childPosition, Toast.LENGTH_LONG).show();
 				}
 
 				int iCount;
@@ -684,10 +711,10 @@ public class Fragment_EvDetail_Info extends Fragment {
 					fbChildLabel.setText("Facebook ");
 				fbChildLabel.setType(0);
 				fbChildLabel.setLeftIconId(R.drawable.ic_facebook); // to
-																	// substitute
-																	// with the
-																	// right
-																	// icon
+				// substitute
+				// with the
+				// right
+				// icon
 				Log.i("EVENT", "Fragment_EvDetail_Info --> facebook: " + fbChildLabel.getText() + "!!");
 				parent.getChildren().add(fbChildLabel);
 
@@ -700,11 +727,11 @@ public class Fragment_EvDetail_Info extends Fragment {
 					twitterChildLabel.setText("Twitter ");
 				twitterChildLabel.setType(0);
 				twitterChildLabel.setLeftIconId(R.drawable.ic_twitter); // to
-																		// substitute
-																		// with
-																		// the
-																		// right
-																		// icon
+				// substitute
+				// with
+				// the
+				// right
+				// icon
 				Log.i("EVENT", "Fragment_EvDetail_Info --> twitter: " + twitterChildLabel.getText() + "!!");
 				parent.getChildren().add(twitterChildLabel);
 			}
