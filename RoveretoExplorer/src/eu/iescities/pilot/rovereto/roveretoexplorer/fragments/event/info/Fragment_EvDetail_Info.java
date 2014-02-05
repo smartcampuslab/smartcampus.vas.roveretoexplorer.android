@@ -146,7 +146,6 @@ public class Fragment_EvDetail_Info extends Fragment {
 		ss.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), start, start + 1,
 				Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 		ss.setSpan(new ClickableSpan() {
-
 			@Override
 			public void onClick(View v) {
 				Log.d("main", "link clicked");
@@ -189,12 +188,13 @@ public class Fragment_EvDetail_Info extends Fragment {
 		TextView categoryTextView = (TextView) getActivity().findViewById(R.id.event_placeholder_category);
 		String category = mEvent.getCategory();
 		if (mEvent.getOrigin() != null && !mEvent.getOrigin().matches("")) {
-			text = new String("Evento " + category + ", promosso da " + mEvent.getOrigin() + " ");
+			// text = new String("Evento " + category + ", promosso da " + mEvent.getOrigin() + " ");
+			text = getResources().getString(R.string.event_category, category, mEvent.getOrigin());
+			text += " ";
 			ss = new SpannableString(text);
 			start = text.length() - 1;
 			ss.setSpan(span, start, start + 1, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
 			ss.setSpan(new ClickableSpan() {
-
 				@Override
 				public void onClick(View v) {
 					Log.d("main", "link clicked");
@@ -209,7 +209,6 @@ public class Fragment_EvDetail_Info extends Fragment {
 
 		// display the event attributes
 		setExpandableListView(savedInstanceState);
-
 	}
 
 	private void editField(String field_type) {
@@ -237,8 +236,8 @@ public class Fragment_EvDetail_Info extends Fragment {
 //			mEvent = null;
 //			mEventId = null;
 //		}
-		
-		
+
+
 		FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
 		if (edit_fragment != null) {
 			edit_fragment.setArguments(args);
@@ -251,9 +250,9 @@ public class Fragment_EvDetail_Info extends Fragment {
 			mEvent = null;
 			mEventId = null;
 		}
-		
-		
-		
+
+
+
 	}
 
 	@Override
@@ -807,12 +806,9 @@ public class Fragment_EvDetail_Info extends Fragment {
 			mEventId = getArguments().getString(Utils.ARG_EVENT_ID);
 		}
 
-		if (mEvent == null) {
-			mEvent = DTHelper.findEventById(mEventId);
-			// List<ExplorerObject> eventList = Utils.getFakeExplorerObjects();
-			// mEvent =
-			// Utils.getFakeLocalExplorerObject(Utils.appEvents,mEventId);
-		}
+		// if (mEvent == null) {
+		mEvent = DTHelper.findEventById(mEventId);
+		// }
 
 		return mEvent;
 	}

@@ -8,6 +8,9 @@
     <string name="action_poi">POIs</string>
     <string name="overflow">more</string>
 
+    <!-- Event Info Contacts -->
+    <string name="event_category">Event %1$s, promoted by %2$s</string>
+    
     <string name="categories_event_cultura">Cultura</string>
     <string name="categories_event_sport">Sport</string>
     <string name="categories_event_social">Svago</string>
