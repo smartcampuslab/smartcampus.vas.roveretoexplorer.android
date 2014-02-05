@@ -97,7 +97,6 @@ public class Fragment_EventDetails extends Fragment {
 		// Specify that the Home/Up button should not be enabled, since there is
 		// no hierarchical
 		// parent.
-		actionBar.setHomeButtonEnabled(false);
 
 		// getFragmentManager().addOnBackStackChangedListener(getListener());
 
@@ -244,17 +243,17 @@ public class Fragment_EventDetails extends Fragment {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		if (item.getItemId() == R.id.map_view) {
-			ArrayList<BaseDTObject> list = new ArrayList<BaseDTObject>();
-			getEvent().setLocation(mEvent.getLocation());
-			list.add(getEvent());
-			MapManager.switchToMapView(list, mFragment);
-			return true;
-		} else if (item.getItemId() == R.id.direction_action) {
-			callBringMeThere();
-
-			return true;
-		}
+//		if (item.getItemId() == R.id.map_view) {
+//			ArrayList<BaseDTObject> list = new ArrayList<BaseDTObject>();
+//			getEvent().setLocation(mEvent.getLocation());
+//			list.add(getEvent());
+//			MapManager.switchToMapView(list, mFragment);
+//			return true;
+//		} else if (item.getItemId() == R.id.direction_action) {
+//			callBringMeThere();
+//
+//			return true;
+//		}
 		return true;
 	}
 
@@ -262,35 +261,35 @@ public class Fragment_EventDetails extends Fragment {
 	
 	
 	protected void callBringMeThere() {
-		Address to = new Address(Locale.getDefault());
-		to.setLatitude(mEvent.getLocation()[0]);
-		to.setLongitude(mEvent.getLocation()[1]);
-		Address from = null;
-		GeoPoint mylocation = MapManager.requestMyLocation(getActivity());
-		if (mylocation != null) {
-			from = new Address(Locale.getDefault());
-			from.setLatitude(mylocation.getLatitudeE6() / 1E6);
-			from.setLongitude(mylocation.getLongitudeE6() / 1E6);
-		}
-		DTHelper.bringmethere(getActivity(), from, to);
+//		Address to = new Address(Locale.getDefault());
+//		to.setLatitude(mEvent.getLocation()[0]);
+//		to.setLongitude(mEvent.getLocation()[1]);
+//		Address from = null;
+//		GeoPoint mylocation = MapManager.requestMyLocation(getActivity());
+//		if (mylocation != null) {
+//			from = new Address(Locale.getDefault());
+//			from.setLatitude(mylocation.getLatitudeE6() / 1E6);
+//			from.setLongitude(mylocation.getLongitudeE6() / 1E6);
+//		}
+//		DTHelper.bringmethere(getActivity(), from, to);
 
 	}
 	@Override
 	public void onPrepareOptionsMenu(Menu menu) {
 
-		Log.i("MENU", "start on Prepare Options Menu EVENT LISTING frag: " + menu.toString());
-
-		// menu.clear();
-
-		getActivity().getMenuInflater().inflate(R.menu.event_detail_menu, menu);
-		if (getEvent()== null || getEvent().getLocation() == null || (getEvent().getLocation()[0] == 0 && getEvent().getLocation()[1] == 0)) {
-			menu.findItem(R.id.map_view).setVisible(false);
-			menu.findItem(R.id.direction_action).setVisible(false);
-		}
-		/*
-		 * if (category == null) { category = (getArguments() != null) ?
-		 * getArguments().getString(SearchFragment.ARG_CATEGORY) : null; }
-		 */
+//		Log.i("MENU", "start on Prepare Options Menu EVENT LISTING frag: " + menu.toString());
+//
+//		// menu.clear();
+//
+//		getActivity().getMenuInflater().inflate(R.menu.event_detail_menu, menu);
+//		if (getEvent()== null || getEvent().getLocation() == null || (getEvent().getLocation()[0] == 0 && getEvent().getLocation()[1] == 0)) {
+//			menu.findItem(R.id.map_view).setVisible(false);
+//			menu.findItem(R.id.direction_action).setVisible(false);
+//		}
+//		/*
+//		 * if (category == null) { category = (getArguments() != null) ?
+//		 * getArguments().getString(SearchFragment.ARG_CATEGORY) : null; }
+//		 */
 		super.onPrepareOptionsMenu(menu);
 	}
 
