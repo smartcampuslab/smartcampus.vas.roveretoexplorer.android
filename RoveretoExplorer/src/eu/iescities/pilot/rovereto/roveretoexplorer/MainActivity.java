@@ -22,6 +22,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.AbstractAsyncTaskProcessor;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.CategoryHelper;
@@ -68,8 +69,20 @@ public class MainActivity extends AbstractNavDrawerActivity{
 		// this is a class created to avoid an Android bug
 		// see the class for further infos.
 		mDrawerToggle =  new ActionBarDrawerToggle(this, mDrawerLayout,
-                R.drawable.ic_drawer, R.string.drawer_open, R.string.drawer_close);
+                R.drawable.ic_drawer, R.string.drawer_open, R.string.drawer_close){
+			
 
+
+
+				@Override
+				public void onDrawerSlide(View drawerView, float slideOffset)
+				{
+				    super.onDrawerSlide(drawerView, slideOffset);
+				    mDrawerLayout.bringChildToFront(drawerView);
+				    mDrawerLayout.requestLayout();
+				}
+		
+		};
 		mDrawerLayout.setDrawerListener(mDrawerToggle);
     }
 
