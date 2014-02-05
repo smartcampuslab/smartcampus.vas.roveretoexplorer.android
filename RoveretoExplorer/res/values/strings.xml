@@ -16,7 +16,7 @@
     <string name="origin_txt">Promotore</string>
 
     <!-- Event Info Contacts -->
-    <string name="event_category">Event %1$s, promoted by %2$s</string>
+    <string name="event_category">Evento %1$s, promosso da %2$s</string>
     
     <!-- Event Info Contacts -->
     <string name="modify_contacts_txt">Modifica Contatti</string>
