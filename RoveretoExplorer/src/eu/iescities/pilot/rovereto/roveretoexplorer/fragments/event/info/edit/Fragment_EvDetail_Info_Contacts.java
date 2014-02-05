@@ -155,8 +155,8 @@ public class Fragment_EvDetail_Info_Contacts extends Fragment {
 			@Override
 			public void onClick(View view) {
 
-				Toast.makeText(context, "Edited Fields: " + txtPhone.getText() + ", " + txtEmail.getText() + 
-						", " + txtTwitter.getText() , Toast.LENGTH_SHORT).show();
+//				Toast.makeText(context, "Edited Fields: " + txtPhone.getText() + ", " + txtEmail.getText() + 
+//						", " + txtTwitter.getText() , Toast.LENGTH_SHORT).show();
 
 				//set the new fields
 				//				Log.i("FRAGMENT LC", "EVENT ID 2: " + mEventId);

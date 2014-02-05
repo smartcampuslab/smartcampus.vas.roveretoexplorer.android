@@ -188,14 +188,14 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 				@Override
 				public void onClick(View widget) { 
 					/* do something */
-					Toast.makeText(fragment.context,
-							"Open browser ofr url: " + child.getText(),
-							Toast.LENGTH_LONG).show(); 
+//					Toast.makeText(fragment.context,
+//							"Open browser ofr url: " + child.getText(),
+//							Toast.LENGTH_LONG).show(); 
 
-					//					String url = child.getText();
-					//					Intent i = new Intent(Intent.ACTION_VIEW);
-					//					i.setData(Uri.parse(url)); 
-					//					fragment.context.startActivity(i); 
+										String url = child.getText();
+										Intent i = new Intent(Intent.ACTION_VIEW);
+										i.setData(Uri.parse(url)); 
+										fragment.context.startActivity(i); 
 
 				}
 			};
@@ -433,8 +433,8 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 		if (groupPosition == 2 && fragment.ParentClickStatus != groupPosition) {
 
 			// Alert to user
-			Toast.makeText(this.fragment.context, "Parent :" + groupPosition,
-					Toast.LENGTH_LONG).show();
+//			Toast.makeText(this.fragment.context, "Parent :" + groupPosition,
+//					Toast.LENGTH_LONG).show();
 		}
 
 		fragment.ParentClickStatus = groupPosition;
@@ -488,7 +488,9 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 
 	public int getBackgroundColor(int groupPosition) {
 
-		return R.color.orange_rovereto;
+		//return R.color.orange_rovereto;
+		return R.color.app_green;
+		
 
 	}
 
@@ -539,8 +541,8 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 			.notifyDataSetChanged();
 
 			// final Boolean checked = parent.isChecked();
-			Toast.makeText(context, "Parent : " + parent.getText1(),
-					Toast.LENGTH_LONG).show();
+//			Toast.makeText(context, "Parent : " + parent.getText1(),
+//					Toast.LENGTH_LONG).show();
 
 			FragmentTransaction fragmentTransaction = fragment.getActivity().getSupportFragmentManager().beginTransaction();
 			Fragment edit_fragment=null;
@@ -610,9 +612,9 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 			((EventDetailInfoAdapter) fragment.getExpandableListAdapter())
 			.notifyDataSetChanged();
 
-			Toast.makeText(context,
-					"Add a new child of type: " + child.getText(),
-					Toast.LENGTH_LONG).show();
+//			Toast.makeText(context,
+//					"Add a new child of type: " + child.getText(),
+//					Toast.LENGTH_LONG).show();
 
 		}
 
