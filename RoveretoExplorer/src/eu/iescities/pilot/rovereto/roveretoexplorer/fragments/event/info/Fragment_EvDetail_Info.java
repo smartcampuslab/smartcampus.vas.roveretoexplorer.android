@@ -132,10 +132,61 @@ public class Fragment_EvDetail_Info extends Fragment {
 		super.onActivityCreated(savedInstanceState);
 		Log.d("FRAGMENT LC", "Fragment_evDetail_Info --> onActivityCreated");
 
+	
+	}
+
+	private void editField(String field_type) {
+
+		Log.d("FRAGMENT LC", "Fragment_evDetail_Info --> INFO ACTIVITY: " + infoActivity.toString());
+		Log.i("CONTACTS", "Fragment_EvDetail_Info --> event selected ID: " + mEventId + "!!");
+
+		String frag_description = "event_details_info_edit_" + field_type;
+		Bundle args = new Bundle();
+		args.putString(Utils.ARG_EVENT_ID, mEventId);
+		args.putString(Utils.ARG_EVENT_FIELD_TYPE, field_type);
+
+		Fragment edit_fragment = new Fragment_EvDetail_Info_What();
+
+//		FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+//		if (edit_fragment != null) {
+//			edit_fragment.setArguments(args);
+//			transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+//			// fragmentTransaction.detach(this);
+//			//transaction.replace(R.id.content_frame, edit_fragment, frag_description);
+//			transaction.add(edit_fragment, frag_description);
+//			//transaction.addToBackStack(edit_fragment.getTag());
+//			transaction.commit();
+//			// reset event and event id
+//			mEvent = null;
+//			mEventId = null;
+//		}
+
+
+		FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+		if (edit_fragment != null) {
+			edit_fragment.setArguments(args);
+			fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+			//fragmentTransaction.detach(this);
+			fragmentTransaction.replace(R.id.content_frame, edit_fragment, frag_description);
+			fragmentTransaction.addToBackStack(edit_fragment.getTag());
+			fragmentTransaction.commit();
+			// reset event and event id
+			mEvent = null;
+			mEventId = null;
+		}
+
+
+
+	}
+
+	@Override
+	public void onStart() {
+		super.onStart();
+		Log.d("FRAGMENT LC", "Fragment_evDetail_Info --> onStart");
 		mEvent = getEvent();
 
 		// display the event title
-		TextView titleTextView = (TextView) getActivity().findViewById(R.id.event_placeholder_title);
+		TextView titleTextView = (TextView) getActivity().findViewById(R.id.event_info_placeholder_title);
 		String text = mEvent.getTitle() + " ";
 		SpannableString ss = new SpannableString(text);
 		Drawable d = getResources().getDrawable(R.drawable.ic_action_edit);
@@ -208,58 +259,7 @@ public class Fragment_EvDetail_Info extends Fragment {
 			categoryTextView.setText("Evento " + category + ".");
 
 		// display the event attributes
-		setExpandableListView(savedInstanceState);
-	}
-
-	private void editField(String field_type) {
-
-		Log.d("FRAGMENT LC", "Fragment_evDetail_Info --> INFO ACTIVITY: " + infoActivity.toString());
-		Log.i("CONTACTS", "Fragment_EvDetail_Info --> event selected ID: " + mEventId + "!!");
-
-		String frag_description = "event_details_info_edit_" + field_type;
-		Bundle args = new Bundle();
-		args.putString(Utils.ARG_EVENT_ID, mEventId);
-		args.putString(Utils.ARG_EVENT_FIELD_TYPE, field_type);
-
-		Fragment edit_fragment = new Fragment_EvDetail_Info_What();
-
-//		FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-//		if (edit_fragment != null) {
-//			edit_fragment.setArguments(args);
-//			transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-//			// fragmentTransaction.detach(this);
-//			//transaction.replace(R.id.content_frame, edit_fragment, frag_description);
-//			transaction.add(edit_fragment, frag_description);
-//			//transaction.addToBackStack(edit_fragment.getTag());
-//			transaction.commit();
-//			// reset event and event id
-//			mEvent = null;
-//			mEventId = null;
-//		}
-
-
-		FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-		if (edit_fragment != null) {
-			edit_fragment.setArguments(args);
-			fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-			//fragmentTransaction.detach(this);
-			fragmentTransaction.replace(R.id.content_frame, edit_fragment, frag_description);
-			fragmentTransaction.addToBackStack(edit_fragment.getTag());
-			fragmentTransaction.commit();
-			// reset event and event id
-			mEvent = null;
-			mEventId = null;
-		}
-
-
-
-	}
-
-	@Override
-	public void onStart() {
-		super.onStart();
-		Log.d("FRAGMENT LC", "Fragment_evDetail_Info --> onStart");
-		// mEvent = getEvent();
+		setExpandableListView();
 	}
 
 	@Override
@@ -307,7 +307,7 @@ public class Fragment_EvDetail_Info extends Fragment {
 		Log.d("FRAGMENT LC", "Fragment_evDetail_Info --> onDetach");
 	}
 
-	private void setExpandableListView(Bundle savedInstanceState) {
+	private void setExpandableListView() {
 
 		Log.d("FRAGMENT LC", "Fragment_evDetail_Info --> setExpandableListView");
 
@@ -323,10 +323,10 @@ public class Fragment_EvDetail_Info extends Fragment {
 
 		expListView = (ExpandableListView) getActivity().findViewById(R.id.event_details_info);
 
-		if (savedInstanceState != null) {
+		if (getArguments() != null) {
 			// Restore last state for checked position.
-			mEventId = savedInstanceState.getString(Utils.ARG_EVENT_ID);
-			indexAdapter = savedInstanceState.getInt(ARG_INDEX);
+			mEventId = getArguments().getString(Utils.ARG_EVENT_ID);
+			indexAdapter = getArguments().getInt(ARG_INDEX);
 		}
 
 		/* create the adapter is it is the first time you load */
