@@ -28,10 +28,6 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
@@ -48,11 +44,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
-import android.widget.TextView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ListView;
+import android.widget.TextView;
+
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.AbstractAsyncTaskProcessor;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.CategoryHelper;
@@ -70,9 +69,6 @@ import eu.trentorise.smartcampus.android.common.SCAsyncTask.SCAsyncTaskProcessor
 import eu.trentorise.smartcampus.android.common.listing.AbstractLstingFragment;
 import eu.trentorise.smartcampus.android.common.listing.AbstractLstingFragment.ListingRequest;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
-
-
-
 
 // to be used for event listing both in categories and in My Events
 public class EventsListingFragment extends Fragment implements OnScrollListener {
@@ -107,18 +103,18 @@ public class EventsListingFragment extends Fragment implements OnScrollListener 
 	protected int size = DEFAULT_ELEMENTS_NUMBER;
 
 	// For the expandable list view
-	List<String> dateGroupList;
+	List<String> dateGroupList = new ArrayList<String>();
+
 	private List<ExplorerObject> listEvents = new ArrayList<ExplorerObject>();
-	Map<String, List<ExplorerObject>> eventCollection;
+	Map<String, List<ExplorerObject>> eventCollection = new LinkedHashMap<String, List<ExplorerObject>>();
 	ExpandableListView expListView;
 
-	//for loading the images
+	// for loading the images
 	protected DisplayImageOptions imgOptions;
 	protected ArrayList<String> eventImagesUrls = new ArrayList<String>();
-	protected Map<String, List<String>> eventImagesUrlNew;
+	protected Map<String, List<String>> eventImagesUrlNew = new LinkedHashMap<String, List<String>>();;
 
-	//protected ImageLoader imageLoader = ImageLoader.getInstance();
-
+	// protected ImageLoader imageLoader = ImageLoader.getInstance();
 
 	@Override
 	public void onResume() {
@@ -167,17 +163,11 @@ public class EventsListingFragment extends Fragment implements OnScrollListener 
 	public void onActivityCreated(Bundle arg0) {
 		super.onActivityCreated(arg0);
 
-
-		imgOptions = new DisplayImageOptions.Builder()
-		.showImageOnLoading(R.drawable.ic_stub)
-		.showImageForEmptyUri(R.drawable.ic_empty)
-		.showImageOnFail(R.drawable.ic_error)
-		.cacheInMemory(true)
-		.cacheOnDisc(true)
-		.considerExifParams(true)
-		//.displayer(new RoundedBitmapDisplayer(20))
-		.build();
-
+		imgOptions = new DisplayImageOptions.Builder().showImageOnLoading(R.drawable.ic_stub)
+				.showImageForEmptyUri(R.drawable.ic_empty).showImageOnFail(R.drawable.ic_error).cacheInMemory(true)
+				.cacheOnDisc(true).considerExifParams(true)
+				// .displayer(new RoundedBitmapDisplayer(20))
+				.build();
 
 		list = (ListView) getActivity().findViewById(R.id.events_list);
 		if (arg0 != null) {
@@ -186,44 +176,13 @@ public class EventsListingFragment extends Fragment implements OnScrollListener 
 			indexAdapter = arg0.getInt(ARG_INDEX);
 
 		}
-		/* create the adapter is it is the first time you load */
-		dateGroupList = new ArrayList<String>();
-		eventCollection = new LinkedHashMap<String, List<ExplorerObject>>();
-		eventImagesUrlNew= new LinkedHashMap<String, List<String>>();
 
 		if (eventsAdapter == null) {
-			eventsAdapter = new EventAdapter(context, R.layout.event_list_child_item, EventsListingFragment.this, dateGroupList, eventCollection);
-
+			eventsAdapter = new EventAdapter(context, R.layout.event_list_child_item, EventsListingFragment.this,
+					dateGroupList, eventCollection);
 
 		}
 		expListView = (ExpandableListView) getActivity().findViewById(R.id.events_list);
-		// TO DO
-		// dateGroupList = Utils.createFakeDateGroupList();
-		// eventCollection = Utils.createFakeEventCollection((List<String>)
-		// dateGroupList);
-		//
-		// expListView = (ExpandableListView)
-		// getActivity().findViewById(R.id.events_list);
-		//
-		// if (arg0 != null) {
-		// // Restore last state for checked position.
-		// idEvent = arg0.getString(ARG_ID);
-		// indexAdapter = arg0.getInt(ARG_INDEX);
-		//
-		// }
-		//
-		// postProcAndHeader = false;
-		// /* create the adapter if it is the first time you load */
-		// if (eventsAdapter == null) {
-		// // eventsAdapter = new EventAdapter(context, R.layout.events_row,
-		// // postProcAndHeader);
-		// eventsAdapter = new EventAdapter(context, R.layout.events_row,
-		// dateGroupList, eventCollection);
-		//
-		// }
-		//
-		// expListView.setAdapter(eventsAdapter);
-		//
 		setListenerOnEvent();
 
 	}
@@ -251,11 +210,11 @@ public class EventsListingFragment extends Fragment implements OnScrollListener 
 
 				args.putString(Utils.ARG_EVENT_ID, ((EventPlaceholder) v.getTag()).event.getId());
 				try {
-					args.putString(Utils.ARG_EVENT_IMAGE_URL, eventImagesUrlNew.get(dateGroupList.get(groupPosition)).get(childPosition));
-				} catch (Exception e){
+					args.putString(Utils.ARG_EVENT_IMAGE_URL, eventImagesUrlNew.get(dateGroupList.get(groupPosition))
+							.get(childPosition));
+				} catch (Exception e) {
 				}
-				
-				
+
 				fragment.setArguments(args);
 
 				fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
@@ -274,14 +233,16 @@ public class EventsListingFragment extends Fragment implements OnScrollListener 
 		Bundle bundle = this.getArguments();
 
 		if (reload) {
-			// eventsAdapter = new EventAdapter(context, R.layout.events_row,
-			// postProcAndHeader);
-			eventsAdapter = new EventAdapter(context, R.layout.event_list_child_item, EventsListingFragment.this, dateGroupList, eventCollection);
+			eventsAdapter = new EventAdapter(context, R.layout.event_list_child_item, EventsListingFragment.this,
+					dateGroupList, eventCollection);
 
 			expListView.setAdapter(eventsAdapter);
 			setListenerOnEvent();
 			reload = false;
-		}
+		} else
+			expListView.setAdapter(eventsAdapter);
+		if (eventsAdapter.getGroupCount() > 0)
+			expListView.expandGroup(0);
 		initData();
 		super.onStart();
 
@@ -295,15 +256,8 @@ public class EventsListingFragment extends Fragment implements OnScrollListener 
 
 			if (loadOnStart())
 				load();
-			// TO DO
-
-			// eventsAdapter = new EventAdapter(context, R.layout.events_row,
-			// dateGroupList, eventCollection);
-			// expListView.setAdapter(eventsAdapter);
 
 		}
-		// TO DO
-		// getListView().setOnScrollListener(this);
 
 	}
 
@@ -330,13 +284,7 @@ public class EventsListingFragment extends Fragment implements OnScrollListener 
 		indexAdapter = position;
 	}
 
-	@Override
-	public void onScrollStateChanged(AbsListView view, int scrollState) {
-		if ((postitionSelected != -1) && (scrollState == SCROLL_STATE_TOUCH_SCROLL)) {
-			// hideListItemsMenu(view, true);
 
-		}
-	}
 
 	private static class EventComparator implements Comparator<ExplorerObject> {
 		public int compare(ExplorerObject c1, ExplorerObject c2) {
@@ -361,13 +309,12 @@ public class EventsListingFragment extends Fragment implements OnScrollListener 
 				// been
 				// successful
 				eventsAdapter.getGroupCount() >= size;
-				if (loadMore) {
-					lastSize = eventsAdapter.getGroupCount();
-					position += size;
-					load();
-				}
+		if (loadMore) {
+			lastSize = eventsAdapter.getGroupCount();
+			position += size;
+			load();
+		}
 	}
-
 
 	protected void load() {
 		if (position == 0) {
@@ -382,7 +329,7 @@ public class EventsListingFragment extends Fragment implements OnScrollListener 
 	}
 
 	private class EventLoader extends
-	AbstractAsyncTaskProcessor<AbstractLstingFragment.ListingRequest, List<ExplorerObject>> {
+			AbstractAsyncTaskProcessor<AbstractLstingFragment.ListingRequest, List<ExplorerObject>> {
 
 		private FragmentActivity currentRootActivity = null;
 
@@ -401,11 +348,10 @@ public class EventsListingFragment extends Fragment implements OnScrollListener 
 			if (!result.isEmpty()) {
 
 				// una volta ricevuti i dati li sistemo per data
-				//updateCollection(result);
 				updateCollectionAndGetImages(result);
-				//				eventsAdapter = new EventAdapter(context, R.layout.event_list_child_item, dateGroupList,
-				//						eventCollection);
-				eventsAdapter = new EventAdapter(context, R.layout.event_list_child_item, EventsListingFragment.this, dateGroupList,	eventCollection);
+
+				eventsAdapter = new EventAdapter(context, R.layout.event_list_child_item, EventsListingFragment.this,
+						dateGroupList, eventCollection);
 				expListView.setAdapter(eventsAdapter);
 				expListView.expandGroup(0);
 				setListenerOnEvent();
@@ -438,13 +384,12 @@ public class EventsListingFragment extends Fragment implements OnScrollListener 
 
 		private void updateCollectionAndGetImages(List<ExplorerObject> result) {
 			String date_with_day = null;
-			
 
 			for (ExplorerObject expObj : result) {
 
-
-				//get event-dates
-				if (!dateGroupList.contains(Utils.getDateTimeString(context, expObj.getFromTime(), Utils.DATE_FORMAT_2, true,true)[0])) {
+				// get event-dates
+				if (!dateGroupList.contains(Utils.getDateTimeString(context, expObj.getFromTime(), Utils.DATE_FORMAT_2,
+						true, true)[0])) {
 					Log.i("FORMAT",
 							"EventsListingFragment --> date formatted: "
 									+ Utils.getDateTimeString(context, expObj.getFromTime(), Utils.DATE_FORMAT_2, true,
@@ -454,25 +399,21 @@ public class EventsListingFragment extends Fragment implements OnScrollListener 
 							true)[0];
 					dateGroupList.add(date_with_day);
 					eventCollection.put(date_with_day, new ArrayList<ExplorerObject>());
-					eventImagesUrlNew.put(date_with_day,  new ArrayList<String>());
+					eventImagesUrlNew.put(date_with_day, new ArrayList<String>());
 				}
 
 				// aggiungi
 				eventCollection.get(date_with_day).add(expObj);
 
-				//get event image urls
+				// get event image urls
 				String eventImg = expObj.getImage();
-				if (eventImg!=null){
+				if (eventImg != null) {
 					Log.i("IMAGES", "EventListingFragment --> image url: " + eventImg + "!!");
 					eventImagesUrls.add(eventImg);
 					eventImagesUrlNew.get(date_with_day).add(eventImg);
 				}
 			}
 		}
-
-
-
-
 
 	}
 
@@ -532,13 +473,6 @@ public class EventsListingFragment extends Fragment implements OnScrollListener 
 
 			List<ExplorerObject> sorted = new ArrayList<ExplorerObject>(listEvents);
 
-			// TO DO
-
-			// if (sorted.size() > 0) {
-			// return postProcForRecurrentEvents(sorted,
-			// result.size() == 0 || result.size() < DEFAULT_ELEMENTS_NUMBER,
-			// getArguments().containsKey(ARG_QUERY_TODAY));
-			// } else
 			return sorted;
 		} catch (Exception e) {
 			Log.e(EventsListingFragment.class.getName(), e.getMessage());
@@ -740,5 +674,11 @@ public class EventsListingFragment extends Fragment implements OnScrollListener 
 			// }
 			eventsAdapter.notifyDataSetChanged();
 		}
+	}
+
+	@Override
+	public void onScrollStateChanged(AbsListView view, int scrollState) {
+		// TODO Auto-generated method stub
+		
 	}
 }
