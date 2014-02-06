@@ -182,8 +182,7 @@ public class Fragment_EvDetail_Info_Where extends Fragment {
 								.execute(mEvent);
 				//Utils.appEvents.set(index, mEvent);
 				
-				//go back to the previous screen
-				getActivity().getSupportFragmentManager().popBackStack();
+
 
 			}
 		});

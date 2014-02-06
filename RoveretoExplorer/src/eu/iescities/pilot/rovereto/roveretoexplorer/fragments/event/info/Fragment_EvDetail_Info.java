@@ -70,8 +70,7 @@ public class Fragment_EvDetail_Info extends Fragment {
 
 	private View _lastColored;
 
-
-	Activity infoActivity=null; 
+	Activity infoActivity = null;
 
 	public static Fragment_EvDetail_Info newInstance(String event_id) {
 		Fragment_EvDetail_Info f = new Fragment_EvDetail_Info();
@@ -94,7 +93,7 @@ public class Fragment_EvDetail_Info extends Fragment {
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
 		Log.d("FRAGMENT LC", "Fragment_evDetail_Info --> onAttach: " + activity.toString());
-		infoActivity=activity;
+		infoActivity = activity;
 	}
 
 	@Override
@@ -114,8 +113,6 @@ public class Fragment_EvDetail_Info extends Fragment {
 			mEventId = savedInstanceState.getString(Utils.ARG_EVENT_ID);
 		}
 
-		mEvent = DTHelper.findEventById(mEventId);
-		mEventImageUrl = mEvent.getImage();
 		Log.d("IMAGES", "Fragment_evDetail_Info --> image url:" + mEventImageUrl + "!");
 
 	}
@@ -132,7 +129,6 @@ public class Fragment_EvDetail_Info extends Fragment {
 		super.onActivityCreated(savedInstanceState);
 		Log.d("FRAGMENT LC", "Fragment_evDetail_Info --> onActivityCreated");
 
-	
 	}
 
 	private void editField(String field_type) {
@@ -147,35 +143,35 @@ public class Fragment_EvDetail_Info extends Fragment {
 
 		Fragment edit_fragment = new Fragment_EvDetail_Info_What();
 
-//		FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-//		if (edit_fragment != null) {
-//			edit_fragment.setArguments(args);
-//			transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-//			// fragmentTransaction.detach(this);
-//			//transaction.replace(R.id.content_frame, edit_fragment, frag_description);
-//			transaction.add(edit_fragment, frag_description);
-//			//transaction.addToBackStack(edit_fragment.getTag());
-//			transaction.commit();
-//			// reset event and event id
-//			mEvent = null;
-//			mEventId = null;
-//		}
-
+		// FragmentTransaction transaction =
+		// getChildFragmentManager().beginTransaction();
+		// if (edit_fragment != null) {
+		// edit_fragment.setArguments(args);
+		// transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+		// // fragmentTransaction.detach(this);
+		// //transaction.replace(R.id.content_frame, edit_fragment,
+		// frag_description);
+		// transaction.add(edit_fragment, frag_description);
+		// //transaction.addToBackStack(edit_fragment.getTag());
+		// transaction.commit();
+		// // reset event and event id
+		// mEvent = null;
+		// mEventId = null;
+		// }
 
 		FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
 		if (edit_fragment != null) {
-			edit_fragment.setArguments(args);
-			fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-			//fragmentTransaction.detach(this);
-			fragmentTransaction.replace(R.id.content_frame, edit_fragment, frag_description);
-			fragmentTransaction.addToBackStack(edit_fragment.getTag());
-			fragmentTransaction.commit();
 			// reset event and event id
 			mEvent = null;
 			mEventId = null;
+			edit_fragment.setArguments(args);
+			fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+			// fragmentTransaction.detach(this);
+			fragmentTransaction.replace(R.id.content_frame, edit_fragment, frag_description);
+			fragmentTransaction.addToBackStack(getTag());			
+			fragmentTransaction.commit();
+
 		}
-
-
 
 	}
 
@@ -184,6 +180,8 @@ public class Fragment_EvDetail_Info extends Fragment {
 		super.onStart();
 		Log.d("FRAGMENT LC", "Fragment_evDetail_Info --> onStart");
 		mEvent = getEvent();
+		if (mEvent != null)
+			mEventImageUrl = mEvent.getImage();
 
 		// display the event title
 		TextView titleTextView = (TextView) getActivity().findViewById(R.id.event_info_placeholder_title);
@@ -200,7 +198,8 @@ public class Fragment_EvDetail_Info extends Fragment {
 			@Override
 			public void onClick(View v) {
 				Log.d("main", "link clicked");
-				//				Toast.makeText(context, "modify event title", Toast.LENGTH_SHORT).show();
+				// Toast.makeText(context, "modify event title",
+				// Toast.LENGTH_SHORT).show();
 				editField("title");
 			}
 		}, start, start + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -210,11 +209,9 @@ public class Fragment_EvDetail_Info extends Fragment {
 		// display the event image
 		ImageView imgView = (ImageView) getActivity().findViewById(R.id.event_placeholder_photo);
 
-		
-		if ((mEventImageUrl!=null) && (!mEventImageUrl.matches(""))){
+		if ((mEventImageUrl != null) && (!mEventImageUrl.matches(""))) {
 			RoveretoExplorerApplication.imageLoader.displayImage(mEventImageUrl, imgView);
 		}
-		
 
 		// Bitmap bmp = null;
 		// StrictMode.ThreadPolicy policy = new
@@ -239,7 +236,8 @@ public class Fragment_EvDetail_Info extends Fragment {
 		TextView categoryTextView = (TextView) getActivity().findViewById(R.id.event_placeholder_category);
 		String category = mEvent.getCategory();
 		if (mEvent.getOrigin() != null && !mEvent.getOrigin().matches("")) {
-			// text = new String("Evento " + category + ", promosso da " + mEvent.getOrigin() + " ");
+			// text = new String("Evento " + category + ", promosso da " +
+			// mEvent.getOrigin() + " ");
 			text = getResources().getString(R.string.event_category, category, mEvent.getOrigin());
 			text += " ";
 			ss = new SpannableString(text);
@@ -249,7 +247,8 @@ public class Fragment_EvDetail_Info extends Fragment {
 				@Override
 				public void onClick(View v) {
 					Log.d("main", "link clicked");
-					//					Toast.makeText(context, "modify promoted by", Toast.LENGTH_SHORT).show();
+					// Toast.makeText(context, "modify promoted by",
+					// Toast.LENGTH_SHORT).show();
 					editField("origin");
 				}
 			}, start, start + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -331,9 +330,17 @@ public class Fragment_EvDetail_Info extends Fragment {
 
 		/* create the adapter is it is the first time you load */
 		// Adding ArrayList data to ExpandableListView values
-		setAdapter(eventInfoList);
+		parents = eventInfoList;
 
+		if (eventDetailInfoAdapter == null) {
+			eventDetailInfoAdapter = new EventDetailInfoAdapter(Fragment_EvDetail_Info.this);
+
+		}
+		expListView.invalidateViews();
 		expListView.setAdapter(eventDetailInfoAdapter);
+
+		eventDetailInfoAdapter.notifyDataSetChanged();
+
 		expListView.expandGroup(0);
 		expListView.expandGroup(1);
 
@@ -356,7 +363,8 @@ public class Fragment_EvDetail_Info extends Fragment {
 				if (childClickStatus != childPosition) {
 					childClickStatus = childPosition;
 
-					//					Toast.makeText(context, "Parent :" + groupPosition + " Child :" + childPosition, Toast.LENGTH_LONG).show();
+					// Toast.makeText(context, "Parent :" + groupPosition +
+					// " Child :" + childPosition, Toast.LENGTH_LONG).show();
 				}
 
 				int iCount;
@@ -509,7 +517,8 @@ public class Fragment_EvDetail_Info extends Fragment {
 						parent.getChildren().add(child);
 					} else {
 						// Create Child class object
-						Log.i("EVENT", "Fragment_EvDetail_Info --> city: " + context.getString(R.string.city_hint) + "!!");
+						Log.i("EVENT", "Fragment_EvDetail_Info --> city: " + context.getString(R.string.city_hint)
+								+ "!!");
 						EventInfoChild child = new EventInfoChild();
 						child.setName("1");
 						child.setText(context.getString(R.string.city_hint));
@@ -534,8 +543,8 @@ public class Fragment_EvDetail_Info extends Fragment {
 				parent.setChildren(new ArrayList<EventInfoChild>());
 
 				if ((event.getFromTime() != null) && (event.getFromTime() != 0)) {
-					String[] fromDateTime = Utils.getDateTimeString(this.context, event.getFromTime(), Utils.DATETIME_FORMAT,
-							false, true);
+					String[] fromDateTime = Utils.getDateTimeString(this.context, event.getFromTime(),
+							Utils.DATETIME_FORMAT, false, true);
 					EventInfoChild child = new EventInfoChild();
 					child.setName(getResources().getString(R.string.start_date));
 					if (!fromDateTime[1].matches("")) {
@@ -549,8 +558,8 @@ public class Fragment_EvDetail_Info extends Fragment {
 				}
 
 				if ((event.getToTime() != null) && (event.getToTime() != 0)) {
-					String[] toDateTime = Utils.getDateTimeString(this.context, event.getToTime(), Utils.DATETIME_FORMAT,
-							false, true);
+					String[] toDateTime = Utils.getDateTimeString(this.context, event.getToTime(),
+							Utils.DATETIME_FORMAT, false, true);
 					EventInfoChild child = new EventInfoChild();
 					child.setName(getResources().getString(R.string.end_date));
 
