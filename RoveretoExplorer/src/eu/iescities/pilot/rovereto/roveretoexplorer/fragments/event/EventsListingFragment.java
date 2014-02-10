@@ -97,7 +97,6 @@ public class EventsListingFragment extends Fragment implements OnScrollListener 
 	private Integer postitionSelected = -1;
 	private boolean postProcAndHeader = true;
 
-	private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
 	protected int lastSize = 0;
 	protected int position = 0;
 	protected int size = DEFAULT_ELEMENTS_NUMBER;
@@ -111,9 +110,7 @@ public class EventsListingFragment extends Fragment implements OnScrollListener 
 
 	// for loading the images
 	protected DisplayImageOptions imgOptions;
-	protected ArrayList<String> eventImagesUrls = new ArrayList<String>();
-	protected Map<String, List<String>> eventImagesUrlNew = new LinkedHashMap<String, List<String>>();;
-
+	protected Map<String, List<String>> eventImageUrls= new LinkedHashMap<String, List<String>>();;
 	// protected ImageLoader imageLoader = ImageLoader.getInstance();
 
 	@Override
@@ -210,7 +207,7 @@ public class EventsListingFragment extends Fragment implements OnScrollListener 
 
 				args.putString(Utils.ARG_EVENT_ID, ((EventPlaceholder) v.getTag()).event.getId());
 				try {
-					args.putString(Utils.ARG_EVENT_IMAGE_URL, eventImagesUrlNew.get(dateGroupList.get(groupPosition))
+					args.putString(Utils.ARG_EVENT_IMAGE_URL, eventImageUrls.get(dateGroupList.get(groupPosition))
 							.get(childPosition));
 				} catch (Exception e) {
 				}
@@ -309,11 +306,11 @@ public class EventsListingFragment extends Fragment implements OnScrollListener 
 				// been
 				// successful
 				eventsAdapter.getGroupCount() >= size;
-		if (loadMore) {
-			lastSize = eventsAdapter.getGroupCount();
-			position += size;
-			load();
-		}
+				if (loadMore) {
+					lastSize = eventsAdapter.getGroupCount();
+					position += size;
+					load();
+				}
 	}
 
 	protected void load() {
@@ -329,7 +326,7 @@ public class EventsListingFragment extends Fragment implements OnScrollListener 
 	}
 
 	private class EventLoader extends
-			AbstractAsyncTaskProcessor<AbstractLstingFragment.ListingRequest, List<ExplorerObject>> {
+	AbstractAsyncTaskProcessor<AbstractLstingFragment.ListingRequest, List<ExplorerObject>> {
 
 		private FragmentActivity currentRootActivity = null;
 
@@ -363,24 +360,6 @@ public class EventsListingFragment extends Fragment implements OnScrollListener 
 
 		}
 
-		private void updateCollection(List<ExplorerObject> result) {
-			String date_with_day = null;
-			for (ExplorerObject expObj : result) {
-				if (!dateGroupList.contains(expObj.getFromTime().toString())) {
-					Log.i("FORMAT",
-							"EventsListingFragment --> date formatted: "
-									+ Utils.getDateTimeString(context, expObj.getFromTime(), Utils.DATE_FORMAT_2, true,
-											true)[0] + "!!");
-
-					date_with_day = Utils.getDateTimeString(context, expObj.getFromTime(), Utils.DATE_FORMAT_2, true,
-							true)[0];
-					dateGroupList.add(date_with_day);
-					eventCollection.put(date_with_day, new ArrayList<ExplorerObject>());
-				}
-				// aggiungi
-				eventCollection.get(date_with_day).add(expObj);
-			}
-		}
 
 		private void updateCollectionAndGetImages(List<ExplorerObject> result) {
 			String date_with_day = null;
@@ -399,7 +378,7 @@ public class EventsListingFragment extends Fragment implements OnScrollListener 
 							true)[0];
 					dateGroupList.add(date_with_day);
 					eventCollection.put(date_with_day, new ArrayList<ExplorerObject>());
-					eventImagesUrlNew.put(date_with_day, new ArrayList<String>());
+					eventImageUrls.put(date_with_day, new ArrayList<String>());
 				}
 
 				// aggiungi
@@ -407,11 +386,8 @@ public class EventsListingFragment extends Fragment implements OnScrollListener 
 
 				// get event image urls
 				String eventImg = expObj.getImage();
-				if (eventImg != null) {
-					Log.i("IMAGES", "EventListingFragment --> image url: " + eventImg + "!!");
-					eventImagesUrls.add(eventImg);
-					eventImagesUrlNew.get(date_with_day).add(eventImg);
-				}
+				eventImageUrls.get(date_with_day).add(eventImg);
+
 			}
 		}
 
@@ -678,6 +654,6 @@ public class EventsListingFragment extends Fragment implements OnScrollListener 
 
 	@Override
 	public void onScrollStateChanged(AbsListView view, int scrollState) {
-		
+
 	}
 }

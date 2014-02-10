@@ -15,59 +15,34 @@
  ******************************************************************************/
 package eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event;
 
-import java.io.IOException;
-import java.net.URL;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
-import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
-import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
-import android.os.AsyncTask;
-import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RatingBar;
-import android.widget.RatingBar.OnRatingBarChangeListener;
 import android.widget.TextView;
-import android.widget.Toast;
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
 import eu.iescities.pilot.rovereto.roveretoexplorer.RoveretoExplorerApplication;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.Address;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ExplorerObject;
-import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info.Fragment_EvDetail_Info;
-import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info.edit.DatePickerDialogFragment;
-
-import android.view.View.OnTouchListener;
 import android.view.MotionEvent;
 
 
 // in EventsListingFragment
 public class EventAdapter extends BaseExpandableListAdapter {
 
-	private static final DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-	private static final DateFormat extDateFormat = new SimpleDateFormat("EEEEEE dd/MM/yyyy");
 	private Context context;
-	private int elementSelected = -1;
-	private boolean postProcAndHeader = true;
 
 	// for expandable list
 	private Map<String, List<ExplorerObject>> eventCollections;
@@ -76,17 +51,9 @@ public class EventAdapter extends BaseExpandableListAdapter {
 
 	private EventPlaceholder eventPlaceHolder = null;
 	private View row = null;
-	private String rightTextViewTitle = null;
-	private ArrayList<String> loadedImgs = new ArrayList();
-	private int count = 0;
-
-	private EventPlaceholder eventPlaceHolderForImg = null;
-	
-	
 	
 	
 	//for loading images
-	private String[] eventImageUrls;
 	private ImageLoadingListener animateFirstListener = new AnimateFirstDisplayListener();
 	EventsListingFragment fragment;
 	
@@ -166,31 +133,16 @@ public class EventAdapter extends BaseExpandableListAdapter {
 		}
 
 		// load the event image
-		Log.i("IMAGES", "START ADAPTER, EVENT TITLE: " + eventPlaceHolder.event.getTitle() + "!!");
-		// Log.i("IMAGES", "loaded: " + loadedImgs.toString() + "!!");
-
-//		if ((loadedImgs == null) || (!loadedImgs.contains(eventPlaceHolder.event.getTitle()))) {
-//			if (eventPlaceHolder.event.getImage() != null) {
-//				RetreiveImageTask getImgTask = new RetreiveImageTask();
-//				getImgTask.execute(eventPlaceHolder);
-//			}
-//		}
-
-		if (fragment.eventImagesUrls!=null){
-			Log.i("IMAGES", "EventAdapter --> image array size: " + fragment.eventImagesUrls.size() );
-			this.eventImageUrls = fragment.eventImagesUrls.toArray(new String[fragment.eventImagesUrls.size()]);
-		}
-
-		Log.i("IMAGES", "EventAdapter --> group position: " + groupPosition );
-		Log.i("IMAGES", "EventAdapter --> child position: " + childPosition );
-//		Log.i("IMAGES", "EventAdapter --> image url : " + this.eventImageUrls[childPosition] );
+//		Log.i("IMAGES", "START ADAPTER, EVENT TITLE: " + eventPlaceHolder.event.getTitle() + "!!");
+//		Log.i("IMAGES", "EventAdapter --> group position: " + groupPosition );
+//		Log.i("IMAGES", "EventAdapter --> child position: " + childPosition );
 		
 		
 		//fragment.imageLoader.displayImage(this.eventImageUrls[childPosition], eventPlaceHolder.icon, fragment.imgOptions, animateFirstListener);
 		
 		String imgUrl = null;
 		try {
-			imgUrl = fragment.eventImagesUrlNew.get(dateGroupList.get(groupPosition)).get(childPosition);
+			imgUrl = fragment.eventImageUrls.get(dateGroupList.get(groupPosition)).get(childPosition);
 		} catch (Exception e){
 			e.printStackTrace();
 		}
