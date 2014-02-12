@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/LinearLayout1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
     android:orientation="vertical" >
 
-    <GridView
-        android:id="@+id/multimedia_gridView"
+    <ImageView
+        android:id="@+id/multimediaThumbnail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:numColumns="3" >
-    </GridView>
+        android:contentDescription="@string/empty" />
+
+    <TextView
+        android:id="@+id/multimediaName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
 </LinearLayout>
