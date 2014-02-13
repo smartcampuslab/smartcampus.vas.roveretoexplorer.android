@@ -17,7 +17,7 @@
 
     <!-- Event Info Contacts -->
     <string name="event_category">Evento %1$s, promosso da %2$s</string>
-    
+
     <!-- Event Info Contacts -->
     <string name="modify_contacts_txt">Modifica Contatti</string>
     <string name="phone">Telefono</string>
@@ -180,5 +180,6 @@
     <string name="title_section1">Section 1</string>
     <string name="title_section2">Section 2</string>
     <string name="title_section3">Section 3</string>
+    <string name="address_select_toast">Select an address</string>
 
 </resources>
