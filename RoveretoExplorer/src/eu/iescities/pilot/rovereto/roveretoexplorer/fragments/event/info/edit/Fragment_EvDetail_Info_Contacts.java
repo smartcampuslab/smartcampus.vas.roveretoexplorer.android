@@ -11,6 +11,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.telephony.PhoneNumberUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -23,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.AbstractAsyncTaskProcessor;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.Utils;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.DTHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ExplorerObject;
 import eu.trentorise.smartcampus.android.common.SCAsyncTask;
@@ -106,7 +108,9 @@ public class Fragment_EvDetail_Info_Contacts extends Fragment {
 		Log.d("FRAGMENT LC","Fragment_evDetail_Info_Contacts --> onActivityCreated");
 
 		//getActivity().getActionBar().setTitle(mEvent.getTitle()); 
-		getActivity().getActionBar().setTitle("Modifica Contatti"); 
+		//getActivity().getActionBar().setTitle("Modifica Contatti"); 
+		getActivity().getActionBar().setTitle(
+				getResources().getString(R.string.modify) + " " + getResources().getString(R.string.contacts_txt));
 
 		formLabel = (TextView) getActivity().findViewById(R.id.title_contacts_label);
 		txtPhone= (EditText) getActivity().findViewById(R.id.phone_text);
@@ -135,17 +139,26 @@ public class Fragment_EvDetail_Info_Contacts extends Fragment {
 			txtEmail.setText(email);
 		}
 
-		if (mEvent.getWebsiteUrl()!=null){
+		
+		if (mEvent.getWebsiteUrl()!=null)
 			txtWebsite.setText(mEvent.getWebsiteUrl());
-		}
-
-		if (mEvent.getFacebookUrl()!=null){
+		else 
+			txtWebsite.setText( getResources().getString(R.string.start_url));
+		txtWebsite.setSelection(txtWebsite.getText().length());
+		
+	
+		if (mEvent.getFacebookUrl()!=null)
 			txtFacebook.setText(mEvent.getFacebookUrl());
-		}
-
-		if (mEvent.getTwitterUrl()!=null){
+		else 
+			txtFacebook.setText( getResources().getString(R.string.start_url));
+		txtFacebook.setSelection(txtFacebook.getText().length());
+		
+		
+		if (mEvent.getTwitterUrl()!=null)
 			txtTwitter.setText(mEvent.getTwitterUrl());
-		}
+		else 
+			txtTwitter.setText( getResources().getString(R.string.start_url));
+		txtTwitter.setSelection(txtTwitter.getText().length());
 
 
 
@@ -155,8 +168,8 @@ public class Fragment_EvDetail_Info_Contacts extends Fragment {
 			@Override
 			public void onClick(View view) {
 
-//				Toast.makeText(context, "Edited Fields: " + txtPhone.getText() + ", " + txtEmail.getText() + 
-//						", " + txtTwitter.getText() , Toast.LENGTH_SHORT).show();
+				//				Toast.makeText(context, "Edited Fields: " + txtPhone.getText() + ", " + txtEmail.getText() + 
+				//						", " + txtTwitter.getText() , Toast.LENGTH_SHORT).show();
 
 				//set the new fields
 				//				Log.i("FRAGMENT LC", "EVENT ID 2: " + mEventId);
@@ -170,51 +183,49 @@ public class Fragment_EvDetail_Info_Contacts extends Fragment {
 				//				Log.i("FRAGMENT LC", "index: " + index);
 				//				Log.i("FRAGMENT LC", "index 2: " + index2);
 
-				mEvent.getContacts().clear();
-				mEvent.getContacts().put("telefono", new String[]{txtPhone.getText().toString()});
-				//				Map<String,Object> contacts = new HashMap<String, Object>();
-				//				contacts.put("telefono", new String[]{txtPhone.getText().toString()});
-				//				contacts.put("email", new String[]{txtEmail.getText().toString()});
-				mEvent.saveEmails(new ArrayList<String>(){{add(txtEmail.getText().toString());}});
-				//				mEvent.setContacts(contacts);
 
-				
-				try {
-					new URL(txtWebsite.getText().toString());
-					mEvent.setWebsiteUrl(txtWebsite.getText().toString());
-				} catch (MalformedURLException e) {
-					mEvent.setWebsiteUrl(null);
+				if (isValidInput()){
+					mEvent.getContacts().clear();
+					mEvent.getContacts().put("telefono", new String[]{txtPhone.getText().toString()});
+					//				Map<String,Object> contacts = new HashMap<String, Object>();
+					//				contacts.put("telefono", new String[]{txtPhone.getText().toString()});
+					//				contacts.put("email", new String[]{txtEmail.getText().toString()});
+
+
+					mEvent.saveEmails(new ArrayList<String>(){{add(txtEmail.getText().toString());}});
+
+
+
+
+					try {
+						new URL(txtWebsite.getText().toString());
+						mEvent.setWebsiteUrl(txtWebsite.getText().toString());
+					} catch (MalformedURLException e) {
+						mEvent.setWebsiteUrl(null);
+					}
+
+
+					try {
+						new URL(txtFacebook.getText().toString());
+						mEvent.setFacebookUrl(txtFacebook.getText().toString());
+					} catch (MalformedURLException e) {
+						mEvent.setFacebookUrl(null);
+					}
+
+
+					try {
+						new URL(txtTwitter.getText().toString());
+						mEvent.setTwitterUrl(txtTwitter.getText().toString());
+					} catch (MalformedURLException e) {
+						mEvent.setTwitterUrl(null);
+					}
+
+
+					//persist the new contacts
+					new SCAsyncTask<ExplorerObject, Void, Boolean>(getActivity(), new UpdateEventProcessor(getActivity()))
+					.execute(mEvent);
+					//Utils.appEvents.set(index2, mEvent);
 				}
-
-				
-				try {
-					new URL(txtFacebook.getText().toString());
-					mEvent.setFacebookUrl(txtFacebook.getText().toString());
-				} catch (MalformedURLException e) {
-					mEvent.setFacebookUrl(null);
-				}
-
-
-				try {
-					new URL(txtTwitter.getText().toString());
-					mEvent.setTwitterUrl(txtTwitter.getText().toString());
-				} catch (MalformedURLException e) {
-					mEvent.setTwitterUrl(null);
-				}
-
-
-
-
-
-
-				//persist the new contacts
-				new SCAsyncTask<ExplorerObject, Void, Boolean>(getActivity(), new UpdateEventProcessor(getActivity()))
-				.execute(mEvent);
-				//Utils.appEvents.set(index2, mEvent);
-
-
-
-
 			}
 		});
 
@@ -232,6 +243,56 @@ public class Fragment_EvDetail_Info_Contacts extends Fragment {
 	}
 
 
+	private  boolean isValidInput(){
+		boolean validEmail=false;
+		boolean validPhone=false;
+		boolean validWebUrl=false;
+		boolean validFBUrl=false;
+		boolean validTwitterUrl=false;
+
+		if ((txtEmail.getText().toString().matches(""))||(Utils.isValidEmail(txtEmail.getText().toString()))){
+			validEmail=true;	
+		}
+		else
+			Toast.makeText(getActivity(), getResources().getString(R.string.invalid_email), Toast.LENGTH_SHORT).show();
+
+		if ((txtPhone.getText().toString().matches(""))||(PhoneNumberUtils.isGlobalPhoneNumber(txtPhone.getText().toString()))){
+			validPhone=true;	
+		}
+		else
+			Toast.makeText(getActivity(), getResources().getString(R.string.invalid_phone), Toast.LENGTH_SHORT).show();
+
+		
+		if ((txtWebsite.getText().toString().matches("")) || (txtWebsite.getText().toString().matches(getResources().getString(R.string.start_url))) || (Utils.isValidUrl(txtWebsite.getText().toString()))){
+			validWebUrl=true;	
+		}
+		else
+			Toast.makeText(getActivity(), getResources().getString(R.string.invalid_weburl), Toast.LENGTH_SHORT).show();
+		
+		
+		if ((txtFacebook.getText().toString().matches("")) || (txtFacebook.getText().toString().matches(getResources().getString(R.string.start_url))) || (Utils.isValidUrl(txtFacebook.getText().toString()))){
+			validFBUrl=true;	
+		}
+		else
+			Toast.makeText(getActivity(), getResources().getString(R.string.invalid_fburl), Toast.LENGTH_SHORT).show();
+		
+
+		
+		if ((txtTwitter.getText().toString().matches("")) || (txtTwitter.getText().toString().matches(getResources().getString(R.string.start_url))) || (Utils.isValidUrl(txtTwitter.getText().toString()))){
+			validTwitterUrl=true;	
+		}
+		else
+			Toast.makeText(getActivity(), getResources().getString(R.string.invalid_twitterurl), Toast.LENGTH_SHORT).show();
+		
+		
+		
+		
+		if ((validEmail)&&(validPhone)&&(validWebUrl)&&(validFBUrl)&&(validTwitterUrl))
+			return true;
+		else return false;
+
+
+	}
 
 	//to be deleted when there will be the call to the server
 	public void setNewEventContacts(String eventID, String[] tel, String[] email, String website){

@@ -15,11 +15,14 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.http.impl.cookie.DateUtils;
 
 import android.content.Context;
 import android.util.Log;
+import android.util.Patterns;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -695,6 +698,40 @@ public class Utils {
 
 		return map;
 	}
+	
+	
+	
+	 /** 
+		 * This is used to check the given email is valid or not.
+		 * @param url
+		 * @return
+		 */
+	
+	public final static boolean isValidEmail(CharSequence target) {
+         if (target == null) {
+         return false;
+         } else {
+         return android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
+         }
+     }   
+
+	 /** 
+	 * This is used to check the given URL is valid or not.
+	 * @param url
+	 * @return
+	 */
+
+	 public final static boolean isValidUrl(String url) {
+	     Pattern p = Patterns.WEB_URL;
+	     Matcher m = p.matcher(url);
+	     if(m.matches())
+	         return true;
+	     else
+	     return false;
+	 }
+
+	 
+	 
 	
 	public static List<Date> getDatesBetweenInterval(Date dateInitial, Date dateFinal) {
 		List<Date> dates = new ArrayList<Date>();

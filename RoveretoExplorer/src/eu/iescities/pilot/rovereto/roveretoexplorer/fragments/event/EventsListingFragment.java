@@ -378,11 +378,6 @@ public class EventsListingFragment extends Fragment implements OnScrollListener 
 						// get event image urls
 						String eventImg = expObj.getImage();
 						eventImageUrls.get(date_with_day).add(eventImg);
-//						if (eventImg != null) {
-//							Log.i("IMAGES", "EventListingFragment --> image url: " + eventImg + "!!");
-//							eventImagesUrls.add(eventImg);
-//							eventImagesUrlNew.get(date_with_day).add(eventImg);
-//						}
 					}
 				} else {
 					// get the list of dates

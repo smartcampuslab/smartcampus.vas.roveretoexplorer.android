@@ -116,6 +116,7 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 
 	}
 
+	
 	// public EventDetailInfoAdapter(Context context, int layoutResourceId,
 	// List<String> events_attr_names,
 	// Map<String, List<String>> eventAttrValuesCollections) {
@@ -136,7 +137,7 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 
 		Log.i("GROUPVIEW", "************ init child view!! ************ ");
 		Log.i("GROUPVIEW", "COUNT: " + countChildViewCall);
-		//Log.i("GROUPVIEW", "CHILD TEXT: " + child.getText());
+		Log.i("GROUPVIEW", "CHILD TEXT: " + child.getText());
 		Log.i("GROUPVIEW", "CHILD TYPE: " + child.getType());
 
 		row = convertView;
@@ -166,50 +167,58 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 		}
 
 		// Get event_info_child_item.xml file elements and set values
-		
-		
+
+
 		if (!child.getText().contains("http")){
 			eventChildViewHolder.text.setText(child.getText());
 		}
 		else{
-			//make the text part clickable
-			int i1 = 0;
-			int i2 = child.getName().length()-1;
-			eventChildViewHolder.text.setMovementMethod(LinkMovementMethod.getInstance());
-			eventChildViewHolder.text.setText(child.getName(), BufferType.SPANNABLE);
-			//eventChildViewHolder.text.setAutoLinkMask(Linkify.WEB_URLS);
-			//Linkify.addLinks(eventChildViewHolder.text, Linkify.WEB_URLS);
-			//String s = "<a href=\" + child.getText() + \">Website</a>";
-			//eventChildViewHolder.text.setText(Html.fromHtml(s));
 
-			Spannable mySpannable = (Spannable)eventChildViewHolder.text.getText();
-			ClickableSpan myClickableSpan = new ClickableSpan()
-			{
-				@Override
-				public void onClick(View widget) { 
-					/* do something */
-//					Toast.makeText(fragment.context,
-//							"Open browser ofr url: " + child.getText(),
-//							Toast.LENGTH_LONG).show(); 
+			if(!child.getText().matches(fragment.getString(R.string.start_url))){
 
-										String url = child.getText();
-										Intent i = new Intent(Intent.ACTION_VIEW);
-										i.setData(Uri.parse(url)); 
-										fragment.context.startActivity(i); 
-
-				}
-			};
-
-			//			row.setFocusable(true);
-			//			row.setFocusableInTouchMode(true);
-
-			mySpannable.setSpan(myClickableSpan, i1, i2 , Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+				Log.i("GROUPVIEW", "make the text part clickable!!!");
 
 
-			//			eventChildViewHolder.text.setText(Html.fromHtml(child.getText()));
-			//			eventChildViewHolder.text.setMovementMethod(LinkMovementMethod.getInstance());
+				//make the text part clickable
+				int i1 = 0;
+				int i2 = child.getName().length()-1;
+				eventChildViewHolder.text.setMovementMethod(LinkMovementMethod.getInstance());
+				eventChildViewHolder.text.setText(child.getName(), BufferType.SPANNABLE);
+				//eventChildViewHolder.text.setAutoLinkMask(Linkify.WEB_URLS);
+				//Linkify.addLinks(eventChildViewHolder.text, Linkify.WEB_URLS);
+				//String s = "<a href=\" + child.getText() + \">Website</a>";
+				//eventChildViewHolder.text.setText(Html.fromHtml(s));
+
+				Spannable mySpannable = (Spannable)eventChildViewHolder.text.getText();
+				ClickableSpan myClickableSpan = new ClickableSpan()
+				{
+					@Override
+					public void onClick(View widget) { 
+						//					Toast.makeText(fragment.context,
+						//							"Open browser ofr url: " + child.getText(),
+						//							Toast.LENGTH_LONG).show(); 
+						String url = child.getText();
+						Intent i = new Intent(Intent.ACTION_VIEW);
+						i.setData(Uri.parse(url)); 
+						fragment.context.startActivity(i); 
+
+					}
+				};
+
+				//			row.setFocusable(true);
+				//			row.setFocusableInTouchMode(true);
+
+				mySpannable.setSpan(myClickableSpan, i1, i2 , Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+
+				//			eventChildViewHolder.text.setText(Html.fromHtml(child.getText()));
+				//			eventChildViewHolder.text.setMovementMethod(LinkMovementMethod.getInstance());
+			}
+			else
+				eventChildViewHolder.text.setText(child.getName());
+
 		}
-		
+
 		if (child.getName().equals("Description")){
 			Log.i("EVENT", "EventDetailInfoAdapter --> set description to html!!");
 			eventChildViewHolder.text.setText(Html.fromHtml(child.getText()));
@@ -223,8 +232,15 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 			eventChildViewHolder.imgSx.setImageResource(child.getLeftIconId());
 		} else {
 			Log.i("GROUPVIEW", "CHILD SX ICON -1");
-			eventChildViewHolder.imgSx.setVisibility(View.INVISIBLE);
-			eventChildViewHolder.text.setPadding(10, 0, 0, 0);
+			if ( (child.getName().equals("email")) || (child.getName().equals("tel")) ){
+				Log.i("GROUPVIEW", "CHILD NAME: " + child.getName());
+				eventChildViewHolder.imgSx.setVisibility(View.INVISIBLE);
+				eventChildViewHolder.text.setPadding(10, 0, 0, 0);
+			}
+			else{
+				eventChildViewHolder.imgSx.setVisibility(View.GONE);
+				eventChildViewHolder.text.setPadding(10, 10, 0, 0);
+			}
 		}
 
 		// set icons on the right side for the items of type 1 (telefono, email)
@@ -290,7 +306,6 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 		// }
 
 		countChildViewCall++;
-
 
 
 		return row;
@@ -433,8 +448,8 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 		if (groupPosition == 2 && fragment.ParentClickStatus != groupPosition) {
 
 			// Alert to user
-//			Toast.makeText(this.fragment.context, "Parent :" + groupPosition,
-//					Toast.LENGTH_LONG).show();
+			//			Toast.makeText(this.fragment.context, "Parent :" + groupPosition,
+			//					Toast.LENGTH_LONG).show();
 		}
 
 		fragment.ParentClickStatus = groupPosition;
@@ -445,7 +460,7 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 	}
 
 
-	
+
 	public View getGroupView(int groupPosition, boolean isExpanded,
 			View convertView, ViewGroup parentView) {
 
@@ -490,7 +505,6 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 
 		//return R.color.orange_rovereto;
 		return R.color.app_green;
-		
 
 	}
 
@@ -541,14 +555,14 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 			.notifyDataSetChanged();
 
 			// final Boolean checked = parent.isChecked();
-//			Toast.makeText(context, "Parent : " + parent.getText1(),
-//					Toast.LENGTH_LONG).show();
+			//			Toast.makeText(context, "Parent : " + parent.getText1(),
+			//					Toast.LENGTH_LONG).show();
 
 			FragmentTransaction fragmentTransaction = fragment.getActivity().getSupportFragmentManager().beginTransaction();
 			Fragment edit_fragment=null;
 			Bundle args = new Bundle();
 			String frag_description=null;
-			
+
 			if (parent.getText1()=="Contatti"){
 				edit_fragment = new Fragment_EvDetail_Info_Contacts();
 				Log.i("CONTACTS", "EventDetailInfoAdapter --> event selected ID: " + fragment.mEventId + "!!");
@@ -571,8 +585,8 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 				args.putString(Utils.ARG_EVENT_FIELD_TYPE, "description");
 				frag_description = "event_details_info_edit_what";
 			}
-			
-			
+
+
 
 			if (edit_fragment!=null){
 				edit_fragment.setArguments(args);
@@ -612,9 +626,9 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 			((EventDetailInfoAdapter) fragment.getExpandableListAdapter())
 			.notifyDataSetChanged();
 
-//			Toast.makeText(context,
-//					"Add a new child of type: " + child.getText(),
-//					Toast.LENGTH_LONG).show();
+			//			Toast.makeText(context,
+			//					"Add a new child of type: " + child.getText(),
+			//					Toast.LENGTH_LONG).show();
 
 		}
 

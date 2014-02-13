@@ -213,24 +213,6 @@ public class Fragment_EvDetail_Info extends Fragment {
 			RoveretoExplorerApplication.imageLoader.displayImage(mEventImageUrl, imgView);
 		}
 
-		// Bitmap bmp = null;
-		// StrictMode.ThreadPolicy policy = new
-		// StrictMode.ThreadPolicy.Builder().permitAll().build();
-		// StrictMode.setThreadPolicy(policy);
-		// try {
-		// if (mEvent.getCustomData().containsKey("event_img")){
-		// URL img_url = (URL) mEvent.getCustomData().get("event_img");
-		// Log.i("SCROLLTABS", "image url: " + img_url.toString() + "!!");
-		// if (img_url!=null){
-		// bmp =
-		// BitmapFactory.decodeStream(img_url.openConnection().getInputStream());
-		// }
-		// }
-		// } catch (IOException e1) {
-		// e1.printStackTrace();
-		// }
-		// if (bmp!=null)
-		// imgView.setImageBitmap(bmp);
 
 		// display the event category plus the "promoted by" attribute
 		TextView categoryTextView = (TextView) getActivity().findViewById(R.id.event_placeholder_category);
@@ -404,8 +386,7 @@ public class Fragment_EvDetail_Info extends Fragment {
 		groupImages.add(R.drawable.ic_action_edit_white);
 		groupImages.add(R.drawable.ic_action_edit_white);
 		groupImages.add(R.drawable.ic_action_edit_white);
-		groupImages.add(R.drawable.ic_action_edit_white);
-		// groupImages.add(R.drawable.ic_action_new_label);
+		groupImages.add(R.drawable.ic_action_new_label);
 
 	}
 
@@ -438,15 +419,7 @@ public class Fragment_EvDetail_Info extends Fragment {
 		mEventId = null;
 	}
 
-	// private static ArrayList<String> createAttributeGroupList(){
-	// ArrayList<String> groupList = new ArrayList<String>();
-	// groupList.add("Dove");
-	// groupList.add("Quando");
-	// groupList.add("Cosa");
-	// groupList.add("Contatti");
-	// //groupList.add("Tags");
-	// return groupList;
-	// }
+
 
 	/**
 	 * here should come your data service implementation
@@ -458,35 +431,43 @@ public class Fragment_EvDetail_Info extends Fragment {
 		// Creating ArrayList of type parent class to store parent class objects
 		ArrayList<EventInfoParent> list = new ArrayList<EventInfoParent>();
 
-		// put 6 when there will be the group "Tags"
+
 		for (int i = 1; i < 5; i++) {
 			// Create parent class object
 			EventInfoParent parent = new EventInfoParent();
 
-			if (event.getImage() != null) {
-				Log.i("EVENT", "Fragment_EvDetail_Info --> image: " + event.getImage() + "!!");
-			}
-			if (event.getWhenWhere() != null) {
-				Log.i("EVENT", "Fragment_EvDetail_Info --> WhenWhere: " + event.getWhenWhere() + "!!");
-			}
-
-			if (event.getCategory() != null) {
-				Log.i("EVENT", "Fragment_EvDetail_Info --> Category: " + event.getCategory() + "!!");
-			}
-
-			if (event.getOrigin() != null) {
-				Log.i("EVENT", "Fragment_EvDetail_Info --> Origin: " + event.getOrigin() + "!!");
-			}
-
-			if (event.getLocation() != null) {
-				Log.i("EVENT", "Fragment_EvDetail_Info --> Location: " + event.getLocation() + "!!");
-			}
+			//			if (event.getImage() != null) {
+			//				Log.i("EVENT", "Fragment_EvDetail_Info --> image: " + event.getImage() + "!!");
+			//			}
+			//
+			//
+			//			if (event.getCategory() != null) {
+			//				Log.i("EVENT", "Fragment_EvDetail_Info --> Category: " + event.getCategory() + "!!");
+			//			}
+			//
+			//			if (event.getOrigin() != null) {
+			//				Log.i("EVENT", "Fragment_EvDetail_Info --> Origin: " + event.getOrigin() + "!!");
+			//			}
+			//
+			//			if (event.getLocation() != null) {
+			//				Log.i("EVENT", "Fragment_EvDetail_Info --> Location: " + event.getLocation() + "!!");
+			//			}
 
 			// Set values in parent class object
-			if (i == 1) { // field DOVE
+			if (i == 1) { // field DOVE e QUANDO
 				parent.setName("" + i);
-				parent.setText1("Dove");
+				parent.setText1("Dove e quando");
 				parent.setChildren(new ArrayList<EventInfoChild>());
+
+
+				if (event.getWhenWhere() != null) {
+					Log.i("EVENT", "Fragment_EvDetail_Info --> WhenWhere: " + event.getWhenWhere() + "!!");
+					EventInfoChild child = new EventInfoChild();
+					child.setName("whenwhere");
+					child.setText(event.getWhenWhere());
+					child.setType(0);
+					parent.getChildren().add(child);
+				}
 
 				Address address = event.getAddress();
 				if (address != null) {
@@ -497,50 +478,27 @@ public class Fragment_EvDetail_Info extends Fragment {
 
 					String city = (address.getCitta() != null) ? (String) address.getCitta() : null;
 
-					if ((place != null) && (!place.matches(""))) {
-						Log.i("EVENT", "Fragment_EvDetail_Info --> place:" + place + "!!");
-						// Create Child class object
-						EventInfoChild child = new EventInfoChild();
-						child.setName("0");
-						child.setText(place);
-						child.setType(0);
-						parent.getChildren().add(child);
-					}
+					String addressStr = "";
 
-					if ((city != null) && (!city.matches(""))) {
-						// Create Child class object
-						Log.i("EVENT", "Fragment_EvDetail_Info --> city: " + city + "!!");
-						EventInfoChild child = new EventInfoChild();
-						child.setName("1");
-						child.setText(city);
-						child.setType(0);
-						parent.getChildren().add(child);
-					} else {
-						// Create Child class object
-						Log.i("EVENT", "Fragment_EvDetail_Info --> city: " + context.getString(R.string.city_hint)
-								+ "!!");
-						EventInfoChild child = new EventInfoChild();
-						child.setName("1");
-						child.setText(context.getString(R.string.city_hint));
-						child.setType(0);
-						parent.getChildren().add(child);
-					}
+					if ((place != null) && (!place.matches("")))
+						addressStr = addressStr + place + ", ";
 
-					if ((street != null) && (!street.matches(""))) {
-						// Create Child class object
-						Log.i("EVENT", "Fragment_EvDetail_Info --> street: " + street + "!!");
-						EventInfoChild child = new EventInfoChild();
-						child.setName("2");
-						child.setText(street);
-						child.setType(0);
-						parent.getChildren().add(child);
-					}
+					if ((street != null) && (!street.matches("")))
+						addressStr = addressStr + street + ", ";
+
+					if ((city != null) && (!city.matches(""))) 
+						addressStr = addressStr + city;
+					else 
+						addressStr = addressStr + context.getString(R.string.city_hint);
+
+					// Create Child class object
+					EventInfoChild child = new EventInfoChild();
+					child.setName("address");
+					child.setText(getResources().getString(R.string.address) + ": " + addressStr);
+					child.setType(0);
+					child.setLeftIconId(R.drawable.ic_action_place);
+					parent.getChildren().add(child);
 				}
-
-			} else if (i == 2) { // field QUANDO
-				parent.setName("" + i);
-				parent.setText1("Quando");
-				parent.setChildren(new ArrayList<EventInfoChild>());
 
 				if ((event.getFromTime() != null) && (event.getFromTime() != 0)) {
 					String[] fromDateTime = Utils.getDateTimeString(this.context, event.getFromTime(),
@@ -548,12 +506,13 @@ public class Fragment_EvDetail_Info extends Fragment {
 					EventInfoChild child = new EventInfoChild();
 					child.setName(getResources().getString(R.string.start_date));
 					if (!fromDateTime[1].matches("")) {
-						child.setText(getResources().getString(R.string.start_date) + ": " + fromDateTime[0] + " ore: "
+						child.setText(getResources().getString(R.string.start_date) + ": " + fromDateTime[0] + ", Ore "
 								+ fromDateTime[1]);
 					} else
 						child.setText(getResources().getString(R.string.start_date) + ": " + fromDateTime[0]);
 					Log.i("EVENT", "Fragment_EvDetail_Info --> fromTime: " + child.getText() + "!!");
 					child.setType(0);
+					child.setLeftIconId(R.drawable.ic_action_time);
 					parent.getChildren().add(child);
 				}
 
@@ -564,7 +523,7 @@ public class Fragment_EvDetail_Info extends Fragment {
 					child.setName(getResources().getString(R.string.end_date));
 
 					if (!toDateTime[1].matches("")) {
-						child.setText(getResources().getString(R.string.end_date) + ": " + toDateTime[0] + " ore: "
+						child.setText(getResources().getString(R.string.end_date) + ": " + toDateTime[0] + ", Ore "
 								+ toDateTime[1]);
 					} else
 						child.setText(getResources().getString(R.string.end_date) + ": " + toDateTime[0]);
@@ -572,8 +531,8 @@ public class Fragment_EvDetail_Info extends Fragment {
 					child.setType(0);
 					parent.getChildren().add(child);
 
-					// compute duration!!!
-					String duration = "3 ore";
+					// compute duration or get in from the Explorer Object when there will be such info!!!
+					String duration = null;
 					if (duration != null) {
 						child = new EventInfoChild();
 						child.setName(getResources().getString(R.string.duration));
@@ -582,7 +541,8 @@ public class Fragment_EvDetail_Info extends Fragment {
 						parent.getChildren().add(child);
 					}
 				}
-			} else if (i == 3) { // field COSA
+
+			} else if (i == 2) { // field COSA
 				parent.setName("" + i);
 				parent.setText1("Cosa");
 				parent.setChildren(new ArrayList<EventInfoChild>());
@@ -595,7 +555,7 @@ public class Fragment_EvDetail_Info extends Fragment {
 					child.setType(0);
 					parent.getChildren().add(child);
 				}
-			} else if (i == 4) { // field CONTATTI
+			} else if (i == 3) { // field CONTATTI
 				parent.setName("" + i);
 				parent.setText1("Contatti");
 				parent.setChildren(new ArrayList<EventInfoChild>());
@@ -699,7 +659,7 @@ public class Fragment_EvDetail_Info extends Fragment {
 
 				// set the Web Site item of type 0
 				EventInfoChild siteChildLabel = new EventInfoChild();
-				siteChildLabel.setName("Web Site ");
+				siteChildLabel.setName("Website ");
 				if (event.getWebsiteUrl() != null) {
 					siteChildLabel.setText(event.getWebsiteUrl());
 				} else
@@ -714,15 +674,12 @@ public class Fragment_EvDetail_Info extends Fragment {
 				EventInfoChild fbChildLabel = new EventInfoChild();
 				fbChildLabel.setName("Facebook ");
 				if (event.getFacebookUrl() != null) {
-					fbChildLabel.setText("<a href=\"" + event.getFacebookUrl() + "\">Facebook</a>");
+					//fbChildLabel.setText("<a href=\"" + event.getFacebookUrl() + "\">Facebook</a>");
+					fbChildLabel.setText(event.getFacebookUrl());
 				} else
-					fbChildLabel.setText("Facebook ");
+					fbChildLabel.setText("Facebook");
 				fbChildLabel.setType(0);
-				fbChildLabel.setLeftIconId(R.drawable.ic_facebook); // to
-				// substitute
-				// with the
-				// right
-				// icon
+				fbChildLabel.setLeftIconId(R.drawable.ic_facebook); 
 				Log.i("EVENT", "Fragment_EvDetail_Info --> facebook: " + fbChildLabel.getText() + "!!");
 				parent.getChildren().add(fbChildLabel);
 
@@ -730,37 +687,33 @@ public class Fragment_EvDetail_Info extends Fragment {
 				EventInfoChild twitterChildLabel = new EventInfoChild();
 				twitterChildLabel.setName("Twitter ");
 				if (event.getTwitterUrl() != null) {
-					twitterChildLabel.setText("<a href=\"" + event.getTwitterUrl() + "\">Twitter</a>");
+					//twitterChildLabel.setText("<a href=\"" + event.getTwitterUrl() + "\">Twitter</a>");
+					twitterChildLabel.setText(event.getTwitterUrl());
+					
 				} else
 					twitterChildLabel.setText("Twitter ");
 				twitterChildLabel.setType(0);
-				twitterChildLabel.setLeftIconId(R.drawable.ic_twitter); // to
-				// substitute
-				// with
-				// the
-				// right
-				// icon
+				twitterChildLabel.setLeftIconId(R.drawable.ic_twitter); 
 				Log.i("EVENT", "Fragment_EvDetail_Info --> twitter: " + twitterChildLabel.getText() + "!!");
 				parent.getChildren().add(twitterChildLabel);
 			}
-			// to be added again when there will be tags
-			// else if(i==5){ //field TAGS
-			// parent.setName("" + i);
-			// parent.setText1("Tags");
-			// parent.setChildren(new ArrayList<EventInfoChild>());
-			// List<String> tags = null;
-			// if (event.getCommunityData().getTags()!=null){
-			// tags = event.getCommunityData().getTags();
-			// for (String tag : tags){
-			// EventInfoChild child = new EventInfoChild();
-			// child.setName("tag");
-			// child.setText(tag);
-			// child.setType(0);
-			// child.setLeftIconId(R.drawable.ic_action_labels_dark);
-			// parent.getChildren().add(child);
-			// }
-			// }
-			// }
+			else if(i==4){ //field TAGS
+				parent.setName("" + i);
+				parent.setText1("Tags");
+				parent.setChildren(new ArrayList<EventInfoChild>());
+				List<String> tags = null;
+				if (event.getCommunityData().getTags()!=null){
+					tags = event.getCommunityData().getTags();
+					for (String tag : tags){
+						EventInfoChild child = new EventInfoChild();
+						child.setName("tag");
+						child.setText(tag);
+						child.setType(0);
+						child.setLeftIconId(R.drawable.ic_action_labels_dark);
+						parent.getChildren().add(child);
+					}
+				}
+			}
 
 			// Adding Parent class object to ArrayList
 			list.add(parent);

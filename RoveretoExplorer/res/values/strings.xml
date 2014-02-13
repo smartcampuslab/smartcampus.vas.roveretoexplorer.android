@@ -14,6 +14,13 @@
     <string name="what_txt">Descrizione</string>
     <string name="title_txt">Titolo</string>
     <string name="origin_txt">Promotore</string>
+    <string name="contacts_txt">Contatti</string>
+    <string name="invalid_email">indirizzo email non valido</string>
+    <string name="invalid_phone">telefono non valido</string>
+    <string name="invalid_weburl">web url non valida</string>
+    <string name="invalid_fburl">facebook url non valida</string>
+    <string name="invalid_twitterurl">twitter url non valida</string>
+    
 
     <!-- Event Info Contacts -->
     <string name="event_category">Evento %1$s, promosso da %2$s</string>
@@ -31,6 +38,7 @@
     <string name="place_name">Luogo</string>
     <string name="street">Via</string>
     <string name="city">Citta</string>
+    <string name="address">Indirizzo</string>
 
     <!-- Event Info What -->
     <string name="event_desc">Descrizione</string>
