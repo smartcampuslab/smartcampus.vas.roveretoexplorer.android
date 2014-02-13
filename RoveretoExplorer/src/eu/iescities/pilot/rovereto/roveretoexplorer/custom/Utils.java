@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -62,6 +63,10 @@ public class Utils {
 	public static final String ARG_EVENT_FIELD_TYPE = "event_field_type";
 	public static final String ARG_EVENT_IMAGE_URL = "event_image";
 	
+	
+	public static final String ROVERETO_REGION = "it";
+	public static final String ROVERETO_COUNTRY = "IT";
+	public static final String ROVERETO_ADM_AREA = "TN";
 
 	//	public static List<ExplorerObject> appEvents = getFakeEventObjects();
 
@@ -689,6 +694,19 @@ public class Utils {
 		}
 
 		return map;
+	}
+	
+	public static List<Date> getDatesBetweenInterval(Date dateInitial, Date dateFinal) {
+		List<Date> dates = new ArrayList<Date>();
+		Calendar calendar = new GregorianCalendar();
+		calendar.setTime(dateInitial);
+
+		while (calendar.getTime().before(dateFinal)) {
+			Date result = calendar.getTime();
+			dates.add(result);
+			calendar.add(Calendar.DATE, 1);
+		}
+		return dates;
 	}
 	
 }

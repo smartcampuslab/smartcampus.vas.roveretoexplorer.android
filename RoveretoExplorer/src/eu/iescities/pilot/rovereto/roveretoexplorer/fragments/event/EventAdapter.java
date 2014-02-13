@@ -167,14 +167,6 @@ public class EventAdapter extends BaseExpandableListAdapter {
 
 		// load the event image
 		Log.i("IMAGES", "START ADAPTER, EVENT TITLE: " + eventPlaceHolder.event.getTitle() + "!!");
-		// Log.i("IMAGES", "loaded: " + loadedImgs.toString() + "!!");
-
-//		if ((loadedImgs == null) || (!loadedImgs.contains(eventPlaceHolder.event.getTitle()))) {
-//			if (eventPlaceHolder.event.getImage() != null) {
-//				RetreiveImageTask getImgTask = new RetreiveImageTask();
-//				getImgTask.execute(eventPlaceHolder);
-//			}
-//		}
 
 		if (fragment.eventImagesUrls!=null){
 			Log.i("IMAGES", "EventAdapter --> image array size: " + fragment.eventImagesUrls.size() );
@@ -183,10 +175,8 @@ public class EventAdapter extends BaseExpandableListAdapter {
 
 		Log.i("IMAGES", "EventAdapter --> group position: " + groupPosition );
 		Log.i("IMAGES", "EventAdapter --> child position: " + childPosition );
-//		Log.i("IMAGES", "EventAdapter --> image url : " + this.eventImageUrls[childPosition] );
 		
 		
-		//fragment.imageLoader.displayImage(this.eventImageUrls[childPosition], eventPlaceHolder.icon, fragment.imgOptions, animateFirstListener);
 		
 		String imgUrl = null;
 		try {
@@ -196,7 +186,6 @@ public class EventAdapter extends BaseExpandableListAdapter {
 		}
 		Log.i("IMAGES", "EventAdapter --> image new url : " + imgUrl );
 		
-		//fragment.imageLoader.displayImage(imgUrl, eventPlaceHolder.icon, fragment.imgOptions, animateFirstListener);
 		RoveretoExplorerApplication.imageLoader.displayImage(imgUrl, eventPlaceHolder.icon, fragment.imgOptions, animateFirstListener);
 		
 		
@@ -288,6 +277,16 @@ public class EventAdapter extends BaseExpandableListAdapter {
 
 	public boolean isChildSelectable(int groupPosition, int childPosition) {
 		return true;
+	}
+
+
+	public void setDateGroupList(List<String> dateGroupList2) {
+		this.dateGroupList = dateGroupList2;
+	}
+
+
+	public void setEventCollection(Map<String, List<ExplorerObject>> eventCollection) {
+		this.eventCollections = eventCollection;
 	}
 	
 	
