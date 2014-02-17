@@ -250,7 +250,9 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 			}
 			// change info in the adapter collection
 			cahngeNewEventinCollection(new_event);
+			eventsAdapter.setDateGroupList(dateGroupList);
 			eventsAdapter.setEventCollection(eventCollection);
+			eventsAdapter.notifyDataSetInvalidated();
 			eventsAdapter.notifyDataSetChanged();
 			try {
 				expListView.setSelectedGroup(previousGroup);
@@ -286,8 +288,7 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 			}
 		} else {
 			// get the list of dates
-			List<Date> listOfDate = Utils.getDatesBetweenInterval(new Date(new_event.getFromTime()),
-					new Date(new_event.getToTime()));
+			List<Date> listOfDate = Utils.getDatesBetweenInterval(new Date(oldFromTime), new Date(oldToTime));
 			// get event-dates
 			for (Date date : listOfDate) {
 				date_with_day = Utils.getDateTimeString(context, date.getTime(), Utils.DATE_FORMAT_2, true, true)[0];
@@ -305,8 +306,7 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 		// get event-dates
 		for (Date date : listOfDate) {
 			date_with_day = Utils.getDateTimeString(context, date.getTime(), Utils.DATE_FORMAT_2, true, true)[0];
-			if (eventCollection.get(date_with_day) != null && eventCollection.get(date_with_day).size() == 1
-					&& eventCollection.get(date_with_day).get(0).getId().equals(idEvent)) {
+			if (eventCollection.get(date_with_day) != null && eventCollection.get(date_with_day).size() == 0) {
 				dateGroupList.remove(date_with_day);
 			}
 		}
