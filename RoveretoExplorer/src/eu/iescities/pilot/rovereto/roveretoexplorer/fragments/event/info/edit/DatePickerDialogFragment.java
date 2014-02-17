@@ -23,17 +23,17 @@ import eu.iescities.pilot.rovereto.roveretoexplorer.custom.Utils;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.net.ParseException;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.widget.DatePicker;
 import android.widget.EditText;
 
-
 public class DatePickerDialogFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 
 	private static final String DATA = "data";
 	private EditText dateEditText;
-	
+
 	private Context context;
 
 	public static Bundle prepareData(String date) {
@@ -47,25 +47,17 @@ public class DatePickerDialogFragment extends DialogFragment implements DatePick
 		f.setDateEditText(dateEditText);
 		return f;
 	}
-	
-//	 public void newInstance(Context context, EditText dateEditText) {
-//		this.dateEditText = dateEditText;
-//		this.context=context;
-//		
-//	}
-
 
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 		final Calendar c = Calendar.getInstance();
-		// if (getArguments() != null && getArguments().containsKey(DATA)) {
-		// try {
-		// Date d =
-		// Config.FORMAT_DATE_UI.parse((String)getArguments().getString(DATA));
-		// c.setTime(d);
-		// } catch (ParseException e) {
-		// }
-		// }
+		if (getArguments() != null && getArguments().containsKey(DATA)) {
+			try {
+				Date d = Utils.FORMAT_DATE_UI_LONG.parse((String) getArguments().getString(DATA));
+				c.setTime(d);
+			} catch (Exception e) {
+			}
+		}
 
 		if (getDateEditText().getTag() != null) {
 			c.setTime((Date) getDateEditText().getTag());
@@ -84,10 +76,9 @@ public class DatePickerDialogFragment extends DialogFragment implements DatePick
 		Calendar calendar = Calendar.getInstance();
 		calendar.set(year, month, day);
 		Date date = calendar.getTime();
-		String formattedDate = Utils.FORMAT_DATE_UI.format(date);
+		String formattedDate = Utils.FORMAT_DATE_UI_LONG.format(date);
 		getDateEditText().setTag(date);
 		getDateEditText().setText(formattedDate);
-		//getDateEditText().setText(Utils.getDateString(getActivity().getApplicationContext(), Utils.toDateTimeLong(Utils.FORMAT_DATE_UI, date.toString())));
 		getDialog().dismiss();
 	}
 

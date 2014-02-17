@@ -51,11 +51,19 @@ public class EventAdapter extends BaseExpandableListAdapter {
 
 	private EventPlaceholder eventPlaceHolder = null;
 	private View row = null;
-	
+	protected int visualizedGroup = 0;
+	protected int visualizedItem = 0;
 	
 	//for loading images
 	private ImageLoadingListener animateFirstListener = new AnimateFirstDisplayListener();
+
+
+
+
+
 	EventsListingFragment fragment;
+
+	private ReloadAdapter reloadAdapter;
 	
 
 	public EventAdapter(Context context, int layoutResourceId, List<String> events_dates,
@@ -75,12 +83,28 @@ public class EventAdapter extends BaseExpandableListAdapter {
 		this.dateGroupList = events_dates;
 		this.layoutResourceId = layoutResourceId;
 		this.fragment = fragment;
+		this.reloadAdapter = reloadAdapter;
 	}
+
+	public Map<String, List<ExplorerObject>> getEventCollections() {
+		return eventCollections;
+	}
+
+
+	public void setEventCollections(Map<String, List<ExplorerObject>> eventCollections) {
+		this.eventCollections = eventCollections;
+	}
+
+
+	public List<String> getDateGroupList() {
+		return dateGroupList;
+	}
+
 
 	@Override
 	public View getChildView(final int groupPosition, final int childPosition, boolean isLastChild, View convertView,
 			ViewGroup parent) {
-
+		
 		final ExplorerObject event = (ExplorerObject) getChild(groupPosition, childPosition);
 
 		row = convertView;
@@ -177,7 +201,8 @@ public class EventAdapter extends BaseExpandableListAdapter {
 
 		if (event.getFromTime() != null)
 			currentEvent.setTimeInMillis(event.getFromTime());
-
+		visualizedGroup=groupPosition;
+		visualizedItem = childPosition;
 		return row;
 	}
 
@@ -258,7 +283,15 @@ public class EventAdapter extends BaseExpandableListAdapter {
 	}
 	
 	
-	
+	public int getVisualizedGroup() {
+		return visualizedGroup;
+	}
+
+
+
+	public int getVisualizedItem() {
+		return visualizedItem;
+	}
 	
 
 }
