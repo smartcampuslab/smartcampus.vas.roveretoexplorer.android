@@ -124,6 +124,8 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 			// get info of the event
 			ExplorerObject event = DTHelper.findEventById(idEvent);
 			// notify
+			eventsAdapter.notifyDataSetInvalidated();
+
 			eventsAdapter.notifyDataSetChanged();
 			idEvent = "";
 			indexAdapter = 0;
@@ -254,16 +256,20 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 			eventsAdapter.setEventCollection(eventCollection);
 			eventsAdapter.notifyDataSetInvalidated();
 			eventsAdapter.notifyDataSetChanged();
-			try {
-				expListView.setSelectedGroup(previousGroup);
-				expListView.setSelectedChild(previousGroup, previousItem, true);
-				expListView.expandGroup(previousGroup);
-			} catch (IndexOutOfBoundsException e) {
-				// the changes modify the order of the group, so by default open
-				// the first group
-				if (eventsAdapter.getGroupCount() > 0)
-					expListView.setSelectedGroup(0);
-			}
+//			try {
+//				expListView.setSelectedGroup(previousGroup);
+//				expListView.setSelectedChild(previousGroup, previousItem, true);
+//				expListView.expandGroup(previousGroup);
+//			} catch (IndexOutOfBoundsException e) {
+//				// the changes modify the order of the group, so by default open
+//				// the first group
+//				if (eventsAdapter.getGroupCount() > 0)
+//					{
+//					expListView.setSelectedGroup(0);
+//					expListView.setSelectedChild(0, 0, true);
+//					expListView.expandGroup(0);
+//					}
+//			}
 		}
 		initData();
 		super.onStart();
@@ -399,6 +405,8 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 				updateCollectionAndGetImages(result);
 				eventsAdapter.setDateGroupList(dateGroupList);
 				eventsAdapter.setEventCollection(eventCollection);
+				eventsAdapter.notifyDataSetInvalidated();
+
 				eventsAdapter.notifyDataSetChanged();
 				if (expListView.getExpandableListAdapter().getGroupCount() > 0)
 					expListView.expandGroup(0);
@@ -604,6 +612,8 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 		@Override
 		protected void handleSuccess(List<ExplorerObject> result) {
 			super.handleSuccess(result);
+			eventsAdapter.notifyDataSetInvalidated();
+
 			eventsAdapter.notifyDataSetChanged();
 		}
 	}
