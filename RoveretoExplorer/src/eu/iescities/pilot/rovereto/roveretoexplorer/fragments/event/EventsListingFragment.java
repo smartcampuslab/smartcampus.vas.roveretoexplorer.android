@@ -447,6 +447,10 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 
 		}
 	}
+	
+	
+	
+	
 
 	private void addEvent(ExplorerObject expObj, String date_with_day) {
 		if (!dateGroupList.contains(date_with_day)) {
