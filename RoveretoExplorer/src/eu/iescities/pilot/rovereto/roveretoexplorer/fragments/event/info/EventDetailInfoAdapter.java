@@ -46,9 +46,11 @@ import eu.iescities.pilot.rovereto.roveretoexplorer.R;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.Utils;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ExplorerObject;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info.edit.Fragment_EvDetail_Info_Contacts;
+import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info.edit.Fragment_EvDetail_Info_Tags;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info.edit.Fragment_EvDetail_Info_What;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info.edit.Fragment_EvDetail_Info_When;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info.edit.Fragment_EvDetail_Info_Where;
+import eu.trentorise.smartcampus.android.common.tagging.TaggingDialog;
 
 //in Fragment_EvDetail_Info
 public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
@@ -108,7 +110,6 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 	// this.fragment = fragment;
 	//
 	// }
-
 
 
 	public EventDetailInfoAdapter(Fragment_EvDetail_Info fragment) {
@@ -566,27 +567,36 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 			if (parent.getText1()=="Contatti"){
 				edit_fragment = new Fragment_EvDetail_Info_Contacts();
 				Log.i("CONTACTS", "EventDetailInfoAdapter --> event selected ID: " + fragment.mEventId + "!!");
-				args.putString(Fragment_EvDetail_Info_Contacts.ARG_EVENT_ID, fragment.mEventId);
+				args.putString(Utils.ARG_EVENT_ID, fragment.mEventId);
 				frag_description = "event_details_info_edit_contacts";
 			} else if(parent.getText1()=="Dove"){
 				edit_fragment = new Fragment_EvDetail_Info_Where();
 				Log.i("CONTACTS", "EventDetailInfoAdapter --> event selected ID: " + fragment.mEventId + "!!");
-				args.putString(Fragment_EvDetail_Info_Where.ARG_EVENT_ID, fragment.mEventId);
+				args.putString(Utils.ARG_EVENT_ID, fragment.mEventId);
 				frag_description = "event_details_info_edit_where";
 			}else if(parent.getText1()=="Quando"){
 				edit_fragment = new Fragment_EvDetail_Info_When();
 				Log.i("CONTACTS", "EventDetailInfoAdapter --> event selected ID: " + fragment.mEventId + "!!");
-				args.putString(Fragment_EvDetail_Info_When.ARG_EVENT_ID, fragment.mEventId);
+				args.putString(Utils.ARG_EVENT_ID, fragment.mEventId);
 				frag_description = "event_details_info_edit_when";
 			}else if(parent.getText1()=="Cosa"){
 				edit_fragment = new Fragment_EvDetail_Info_What();
 				Log.i("CONTACTS", "EventDetailInfoAdapter --> event selected ID: " + fragment.mEventId + "!!");
-				args.putString(Fragment_EvDetail_Info_When.ARG_EVENT_ID, fragment.mEventId);
+				args.putString(Utils.ARG_EVENT_ID, fragment.mEventId);
 				args.putString(Utils.ARG_EVENT_FIELD_TYPE, "description");
 				frag_description = "event_details_info_edit_what";
+			}else if(parent.getText1()=="Tags"){
+				edit_fragment = new Fragment_EvDetail_Info_Tags();
+				Log.i("CONTACTS", "EventDetailInfoAdapter --> event selected ID: " + fragment.mEventId + "!!");
+				args.putString(Utils.ARG_EVENT_ID, fragment.mEventId);
+				frag_description = "event_details_info_edit_tags";
+//				TaggingDialog taggingDialog = new TaggingDialog(fragment.getActivity(), fragment,
+//						fragment, Utils.conceptConvertToSS(event.getCommunityData().getTags()));
+//				taggingDialog.show();
 			}
-
-
+			
+			
+			
 
 			if (edit_fragment!=null){
 				edit_fragment.setArguments(args);

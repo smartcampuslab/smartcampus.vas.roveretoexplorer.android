@@ -30,6 +30,10 @@ import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info.Fragmen
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.multimedia.Fragment_EvDetail_Multimedia;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.search.WhenForSearch;
 import eu.trentorise.smartcampus.android.common.SCAsyncTask;
+import eu.trentorise.smartcampus.android.common.tagging.SemanticSuggestion;
+import eu.trentorise.smartcampus.android.common.tagging.SemanticSuggestionsAdapter;
+import eu.trentorise.smartcampus.android.common.tagging.TagListAdapter;
+import eu.trentorise.smartcampus.android.common.tagging.TaggingDialog.TagProvider;
 
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.AbstractAsyncTaskProcessor;
 
@@ -64,6 +68,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
+import android.widget.MultiAutoCompleteTextView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -92,6 +97,7 @@ public class Fragment_EvDetail_Info_When extends Fragment {
 	protected Date fromTime;
 
 
+	
 
 	@Override
 	public void onAttach(Activity activity) {
