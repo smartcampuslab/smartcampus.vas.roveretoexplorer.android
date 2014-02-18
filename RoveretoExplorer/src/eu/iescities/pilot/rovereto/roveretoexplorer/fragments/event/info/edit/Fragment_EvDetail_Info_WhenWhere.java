@@ -36,7 +36,7 @@ import eu.trentorise.smartcampus.android.common.GeocodingAutocompletionHelper.On
 import eu.trentorise.smartcampus.android.common.SCAsyncTask;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 
-public class Fragment_EvDetail_Info_Where extends Fragment {
+public class Fragment_EvDetail_Info_WhenWhere extends Fragment {
 
 	private Context context;
 
@@ -113,8 +113,8 @@ public class Fragment_EvDetail_Info_Where extends Fragment {
 
 		Log.d("FRAGMENT LC", "Fragment_evDetail_Info_Where --> onActivityCreated");
 
-		// getActivity().getActionBar().setTitle(mEvent.getTitle());
-		getActivity().getActionBar().setTitle("Modifica luogo");
+		getActivity().getActionBar().setTitle(
+				getResources().getString(R.string.modify) + " " + getResources().getString(R.string.date_place_name));
 
 		txtStartDay = (EditText) getActivity().findViewById(R.id.start_day_text);
 		txtStartTime = (EditText) getActivity().findViewById(R.id.start_time_text);
@@ -122,7 +122,7 @@ public class Fragment_EvDetail_Info_Where extends Fragment {
 		txtEndTime = (EditText) getActivity().findViewById(R.id.end_time_text);
 		txtDuration = (EditText) getActivity().findViewById(R.id.duration_text);
 
-		formLabel = (TextView) getActivity().findViewById(R.id.title_where_label);
+		formLabel = (TextView) getActivity().findViewById(R.id.title_when_where_label);
 		txtPlaceName = (EditText) getActivity().findViewById(R.id.place_name_text);
 		txtCity = (EditText) getActivity().findViewById(R.id.city_text);
 		// txtStreet = (EditText) getActivity().findViewById(R.id.street_text);

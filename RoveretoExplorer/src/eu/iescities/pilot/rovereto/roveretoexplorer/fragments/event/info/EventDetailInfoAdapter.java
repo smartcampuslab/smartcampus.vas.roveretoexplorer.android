@@ -48,8 +48,7 @@ import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ExplorerOb
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info.edit.Fragment_EvDetail_Info_Contacts;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info.edit.Fragment_EvDetail_Info_Tags;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info.edit.Fragment_EvDetail_Info_What;
-import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info.edit.Fragment_EvDetail_Info_When;
-import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info.edit.Fragment_EvDetail_Info_Where;
+import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info.edit.Fragment_EvDetail_Info_WhenWhere;
 import eu.trentorise.smartcampus.android.common.tagging.TaggingDialog;
 
 //in Fragment_EvDetail_Info
@@ -569,16 +568,11 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 				Log.i("CONTACTS", "EventDetailInfoAdapter --> event selected ID: " + fragment.mEventId + "!!");
 				args.putString(Utils.ARG_EVENT_ID, fragment.mEventId);
 				frag_description = "event_details_info_edit_contacts";
-			} else if(parent.getText1()=="Dove"){
-				edit_fragment = new Fragment_EvDetail_Info_Where();
+			} else if(parent.getText1()=="Dove e quando"){
+				edit_fragment = new Fragment_EvDetail_Info_WhenWhere();
 				Log.i("CONTACTS", "EventDetailInfoAdapter --> event selected ID: " + fragment.mEventId + "!!");
 				args.putString(Utils.ARG_EVENT_ID, fragment.mEventId);
 				frag_description = "event_details_info_edit_where";
-			}else if(parent.getText1()=="Quando"){
-				edit_fragment = new Fragment_EvDetail_Info_When();
-				Log.i("CONTACTS", "EventDetailInfoAdapter --> event selected ID: " + fragment.mEventId + "!!");
-				args.putString(Utils.ARG_EVENT_ID, fragment.mEventId);
-				frag_description = "event_details_info_edit_when";
 			}else if(parent.getText1()=="Cosa"){
 				edit_fragment = new Fragment_EvDetail_Info_What();
 				Log.i("CONTACTS", "EventDetailInfoAdapter --> event selected ID: " + fragment.mEventId + "!!");
@@ -590,9 +584,7 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 				Log.i("CONTACTS", "EventDetailInfoAdapter --> event selected ID: " + fragment.mEventId + "!!");
 				args.putString(Utils.ARG_EVENT_ID, fragment.mEventId);
 				frag_description = "event_details_info_edit_tags";
-//				TaggingDialog taggingDialog = new TaggingDialog(fragment.getActivity(), fragment,
-//						fragment, Utils.conceptConvertToSS(event.getCommunityData().getTags()));
-//				taggingDialog.show();
+
 			}
 			
 			

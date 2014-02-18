@@ -130,6 +130,22 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 			idEvent = "";
 			indexAdapter = 0;
 		}
+		int previousGroup = eventsAdapter.getVisualizedGroup();
+		int previousItem = eventsAdapter.getVisualizedItem();
+		try {
+			expListView.setSelectedGroup(previousGroup);
+			expListView.setSelectedChild(previousGroup, previousItem, true);
+			expListView.expandGroup(previousGroup);
+		} catch (IndexOutOfBoundsException e) {
+			// the changes modify the order of the group, so by default open
+			// the first group
+			if (eventsAdapter.getGroupCount() > 0)
+				{
+				expListView.setSelectedGroup(0);
+				expListView.setSelectedChild(0, 0, true);
+				expListView.expandGroup(0);
+				}
+		}
 
 	}
 
@@ -230,8 +246,7 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 	@Override
 	public void onStart() {
 		Bundle bundle = this.getArguments();
-		int previousGroup = eventsAdapter.getVisualizedGroup();
-		int previousItem = eventsAdapter.getVisualizedItem();
+
 		// I need to pass the interface to the fragment whenwhere. Now reloading
 		// the adapter everytime is too slow
 		// if (reload){
@@ -256,20 +271,7 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 			eventsAdapter.setEventCollection(eventCollection);
 			eventsAdapter.notifyDataSetInvalidated();
 			eventsAdapter.notifyDataSetChanged();
-//			try {
-//				expListView.setSelectedGroup(previousGroup);
-//				expListView.setSelectedChild(previousGroup, previousItem, true);
-//				expListView.expandGroup(previousGroup);
-//			} catch (IndexOutOfBoundsException e) {
-//				// the changes modify the order of the group, so by default open
-//				// the first group
-//				if (eventsAdapter.getGroupCount() > 0)
-//					{
-//					expListView.setSelectedGroup(0);
-//					expListView.setSelectedChild(0, 0, true);
-//					expListView.expandGroup(0);
-//					}
-//			}
+
 		}
 		initData();
 		super.onStart();
