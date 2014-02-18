@@ -28,7 +28,7 @@ import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 
 public class Fragment_EvDetail_Info_What extends Fragment {
 
-	private Context mContext;
+	//private Context mContext;
 
 	public static final String ARG_EVENT_ID = "event_id";
 
@@ -51,7 +51,7 @@ public class Fragment_EvDetail_Info_What extends Fragment {
 		super.onCreate(savedInstanceState);
 		Log.d("FRAGMENT LC", "Fragment_evDetail_Info_What --> onCreate");
 
-		this.mContext = this.getActivity();
+		//this.mContext = this.getActivity();
 
 		if (savedInstanceState == null) {
 			Log.d("FRAGMENT LC", "onCreate FIRST TIME");

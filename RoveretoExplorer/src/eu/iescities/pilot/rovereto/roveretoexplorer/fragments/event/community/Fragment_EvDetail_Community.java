@@ -72,12 +72,12 @@ public class Fragment_EvDetail_Community extends Fragment implements RefreshComm
 	public void onResume() {
 		super.onResume();
 
-//		if (getParentFragment() instanceof Fragment_EventDetails) {
-//			Fragment_EventDetails parentFragment = (Fragment_EventDetails) getParentFragment();
-//			if (parentFragment.isCommentsRefreshNeeded()) {
-//				updateCommentsList();
-//			}
-//		}
+		//		if (getParentFragment() instanceof Fragment_EventDetails) {
+		//			Fragment_EventDetails parentFragment = (Fragment_EventDetails) getParentFragment();
+		//			if (parentFragment.isCommentsRefreshNeeded()) {
+		//				updateCommentsList();
+		//			}
+		//		}
 	}
 
 	private void setLayoutInteraction() {
@@ -182,8 +182,8 @@ public class Fragment_EvDetail_Community extends Fragment implements RefreshComm
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				new SCAsyncTask<Boolean, Void, ExplorerObject>(getActivity(), new AttendProcessor(getActivity(), buttonView))
-						.execute(getEvent().getCommunityData().getAttending() == null
-								|| getEvent().getCommunityData().getAttending().isEmpty());
+				.execute(getEvent().getCommunityData().getAttending() == null
+				|| getEvent().getCommunityData().getAttending().isEmpty());
 			}
 		});
 
@@ -207,7 +207,7 @@ public class Fragment_EvDetail_Community extends Fragment implements RefreshComm
 	private void ratingDialog() {
 		float rating = (getEvent() != null && getEvent().getCommunityData() != null && getEvent().getCommunityData()
 				.getAverageRating() > 0) ? getEvent().getCommunityData().getAverageRating() : 2.5f;
-		RatingHelper
+				RatingHelper
 				.ratingDialog(getActivity(), rating, new RatingProcessor(getActivity()), R.string.rating_event_dialog_title);
 	}
 

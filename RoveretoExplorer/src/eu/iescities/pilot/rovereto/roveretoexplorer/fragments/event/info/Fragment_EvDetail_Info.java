@@ -48,6 +48,7 @@ public class Fragment_EvDetail_Info extends Fragment {
 	ExpandableListView expListView;
 	protected ExplorerObject mEvent = null;
 	private EventDetailInfoAdapter eventDetailInfoAdapter;
+	View header;
 
 	private static final String ARG_POSITION = "position";
 	public static final String ARG_INDEX = "index_adapter";
@@ -183,6 +184,9 @@ public class Fragment_EvDetail_Info extends Fragment {
 		if (mEvent != null)
 			mEventImageUrl = mEvent.getImage();
 
+		// set expandable list view
+		setExpandableListView();
+
 		// display the event title
 		TextView titleTextView = (TextView) getActivity().findViewById(R.id.event_info_placeholder_title);
 		String text = mEvent.getTitle() + " ";
@@ -239,9 +243,11 @@ public class Fragment_EvDetail_Info extends Fragment {
 		} else
 			categoryTextView.setText("Evento " + category + ".");
 
-		// display the event attributes
-		setExpandableListView();
+
 	}
+
+
+
 
 	@Override
 	public void onResume() {
@@ -303,6 +309,15 @@ public class Fragment_EvDetail_Info extends Fragment {
 		// getEventDetailCollection(attributeGroupList, mEvent);
 
 		expListView = (ExpandableListView) getActivity().findViewById(R.id.event_details_info);
+
+		// header part
+		header = getActivity().getLayoutInflater().inflate(R.layout.frag_ev_detail_info_header, null);
+
+
+		// adding header to list
+		if (expListView.getHeaderViewsCount() == 0) {
+			expListView.addHeaderView(header);
+		}
 
 		if (getArguments() != null) {
 			// Restore last state for checked position.
@@ -452,6 +467,14 @@ public class Fragment_EvDetail_Info extends Fragment {
 			//			if (event.getLocation() != null) {
 			//				Log.i("EVENT", "Fragment_EvDetail_Info --> Location: " + event.getLocation() + "!!");
 			//			}
+
+			if (event.getCommunityData().getTags() != null) {
+				Log.i("EVENT", "Fragment_EvDetail_Info --> TAGS: " + event.getCommunityData().getTags() + "!!");
+			}
+			else
+				Log.i("EVENT", "Fragment_EvDetail_Info --> TAGS NULL!!");
+
+
 
 			// Set values in parent class object
 			if (i == 1) { // field DOVE e QUANDO
@@ -689,7 +712,7 @@ public class Fragment_EvDetail_Info extends Fragment {
 				if (event.getTwitterUrl() != null) {
 					//twitterChildLabel.setText("<a href=\"" + event.getTwitterUrl() + "\">Twitter</a>");
 					twitterChildLabel.setText(event.getTwitterUrl());
-					
+
 				} else
 					twitterChildLabel.setText("Twitter ");
 				twitterChildLabel.setType(0);
