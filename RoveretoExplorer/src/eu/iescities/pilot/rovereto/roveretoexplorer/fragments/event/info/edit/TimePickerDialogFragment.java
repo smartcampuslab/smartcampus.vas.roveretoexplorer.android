@@ -29,7 +29,6 @@ import android.text.format.DateFormat;
 import android.widget.EditText;
 import android.widget.TimePicker;
 
-
 public class TimePickerDialogFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener {
 
 	private EditText timeEditText;
@@ -49,17 +48,14 @@ public class TimePickerDialogFragment extends DialogFragment implements TimePick
 
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		// return super.onCreateDialog(savedInstanceState);
 
 		final Calendar c = Calendar.getInstance();
-		// if (getArguments() != null && getArguments().containsKey(DATA)) {
-		 try {
-		 Date d = Utils.DATE_FORMAT.parse((String)getArguments().getString(DATA));
-		 c.setTime(d);
-		 } catch (ParseException e) {
-			 e.printStackTrace();
-		 }
-		// }
+		try {
+			Date d = Utils.FORMAT_TIME_UI.parse((String) getArguments().getString(DATA));
+			c.setTime(d);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
 
 		if (getTimeEditText().getTag() != null) {
 			c.setTime((Date) getTimeEditText().getTag());

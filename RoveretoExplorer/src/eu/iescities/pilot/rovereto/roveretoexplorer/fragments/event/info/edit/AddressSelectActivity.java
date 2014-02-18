@@ -146,7 +146,7 @@ public class AddressSelectActivity extends FragmentActivity implements OnMapLong
 			
 			address.setAddressLine(0, myAddress.formattedAddress());
 			address.setCountryName(myAddress.country());
-			address.setLocality( myAddress.getCity().get(null));
+			address.setLocality(myAddress.getCity().get(""));
 			address.setLatitude(myAddress.getLocation()[0]);
 			address.setLongitude(myAddress.getLocation()[1]);
 

@@ -58,6 +58,7 @@ public class BaseDTStorageHelper {
 					Map.class);
 			if (map != null && !map.isEmpty())
 				o.setCustomData(map);
+			else o.setCustomData(new HashMap<String, Object>());
 		}
 	}
 

@@ -97,4 +97,7 @@
     <string name="toknow_toast_title_empty">Il titolo è vuoto</string>
     <string name="address_select_toast">Selezionare un indirizzo</string>
 
+    
+    <string name="toast_time_wrong">Il tempo dell\'evento è errato</string>
+  
 </resources>
