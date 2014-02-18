@@ -121,7 +121,7 @@ public class Fragment_EvDetail_Info extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
 		Log.d("FRAGMENT LC", "Fragment_evDetail_Info --> onCreateView");
-		return inflater.inflate(R.layout.frag_ev_detail_info, container, false);
+		return inflater.inflate(R.layout.frag_ev_detail_info_list, container, false);
 	}
 
 	@Override
