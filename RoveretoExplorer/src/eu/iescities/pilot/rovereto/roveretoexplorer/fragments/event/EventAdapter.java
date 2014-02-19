@@ -125,13 +125,15 @@ public class EventAdapter extends BaseExpandableListAdapter {
 			row.setTag(eventPlaceHolder);
 		} else {
 			eventPlaceHolder = (EventPlaceholder) row.getTag();
+			 Log.i("BACKPRESSED", "EventAdapter -->get Tag: !!");
+
 		}
 
 		eventPlaceHolder.event = event;
 
 		// **** EVENT INFO ***** //
-		// Log.i("EVENT", "EVENT ID: " + eventPlaceHolder.event.getId() + "!!");
-		// Log.i("EVENT", "title: " + eventPlaceHolder.event.getTitle() + "!!");
+		// Log.i("EVENT", "EventAdapter --> EVENT ID: " + eventPlaceHolder.event.getId() + "!!");
+		 Log.i("BACKPRESSED", "EventAdapter --> title: " + eventPlaceHolder.event.getTitle() + "!!");
 		// Log.i("EVENT", "rating: " +
 		// eventPlaceHolder.event.getCommunityData().getAverageRating() + "!!");
 		// Log.i("EVENT", "participants: " +

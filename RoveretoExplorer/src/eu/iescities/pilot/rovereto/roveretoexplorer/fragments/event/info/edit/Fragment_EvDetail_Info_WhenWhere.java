@@ -34,16 +34,15 @@ import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ExplorerOb
 import eu.trentorise.smartcampus.android.common.GeocodingAutocompletionHelper;
 import eu.trentorise.smartcampus.android.common.GeocodingAutocompletionHelper.OnAddressSelectedListener;
 import eu.trentorise.smartcampus.android.common.SCAsyncTask;
+import eu.trentorise.smartcampus.android.common.geo.OSMAddress;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 
 public class Fragment_EvDetail_Info_WhenWhere extends Fragment {
 
 	private Context context;
 
-	public static final String ARG_EVENT_ID = "event_id";
-	public final static int RESULT_SELECTED = 10;
+	public final static int REQUEST_CODE= 10;
 
-	protected static final String ADDRESS = "address";
 
 	private ExplorerObject mEvent = null;
 	private String mEventId;
@@ -61,6 +60,10 @@ public class Fragment_EvDetail_Info_WhenWhere extends Fragment {
 	protected EditText txtCity;
 	protected AutoCompleteTextView txtStreet;
 	protected Position where;
+
+
+	OSMAddress selectedAddress = null;
+
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -80,21 +83,14 @@ public class Fragment_EvDetail_Info_WhenWhere extends Fragment {
 			setHasOptionsMenu(true);
 
 			if (getArguments() != null) {
-				mEventId = getArguments().getString(ARG_EVENT_ID);
+				mEventId = getArguments().getString(Utils.ARG_EVENT_ID);
 				Log.i("FRAGMENT LC", "Fragment_evDetail_Info_Where --> EVENT ID: " + mEventId);
-
-				// now it will be always null so I load the fake data
 				mEvent = DTHelper.findEventById(mEventId);
-				// List<ExplorerObject> eventList =
-				// Utils.getFakeExplorerObjects();
-				// mEvent =
-				// Utils.getFakeLocalExplorerObject(Utils.appEvents,mEventId);
 			}
 
 		} else {
 			Log.d("FRAGMENT LC", "Fragment_evDetail_Info_Where --> onCreate SUBSEQUENT TIME");
 		}
-
 	}
 
 	@Override
@@ -125,14 +121,22 @@ public class Fragment_EvDetail_Info_WhenWhere extends Fragment {
 		formLabel = (TextView) getActivity().findViewById(R.id.title_when_where_label);
 		txtPlaceName = (EditText) getActivity().findViewById(R.id.place_name_text);
 		txtCity = (EditText) getActivity().findViewById(R.id.city_text);
-		// txtStreet = (EditText) getActivity().findViewById(R.id.street_text);
+		//txtStreet = (EditText) getActivity().findViewById(R.id.street_text);
+
 		txtStreet = (AutoCompleteTextView) getView().findViewById(R.id.street_text);
+
+
 		GeocodingAutocompletionHelper fromAutocompletionHelper = new GeocodingAutocompletionHelper(getActivity(),
 				txtStreet, Utils.ROVERETO_REGION, Utils.ROVERETO_COUNTRY, Utils.ROVERETO_ADM_AREA, refLoc);
 		fromAutocompletionHelper.setOnAddressSelectedListener(new OnAddressSelectedListener() {
 			@Override
 			public void onAddressSelected(android.location.Address address) {
-				savePosition(address);
+
+				Log.i("ADDRESS", "Fragment_EvDetail_Info_WhenWhere --> onAddressSelected");
+
+				//savePosition(address);
+				savePosition(selectedAddress);
+
 			}
 
 		});
@@ -144,9 +148,12 @@ public class Fragment_EvDetail_Info_WhenWhere extends Fragment {
 				@Override
 				public void onClick(View v) {
 					Intent intent = new Intent(getActivity(), AddressSelectActivity.class);
-					intent.putExtra("field", ADDRESS);
-					startActivityForResult(intent, RESULT_SELECTED);
-
+					//not useful but necessary because otherwise the app crashes 
+					//in that it is dependent on line 57 of the InfoDialog class of the  
+					//package eu.trentorise.smartcampus.android.map;
+					intent.putExtra("field", Utils.ADDRESS);
+					//launch the sub-activity to locate an address in the map
+					startActivityForResult(intent, REQUEST_CODE);
 				}
 			});
 
@@ -233,7 +240,7 @@ public class Fragment_EvDetail_Info_WhenWhere extends Fragment {
 			txtStreet.setText(street);
 		}
 
-		Button modifyBtn = (Button) getView().findViewById(R.id.edit_contacts_modify_button);
+		Button modifyBtn = (Button) getView().findViewById(R.id.edit_whenwhere_modify_button);
 		modifyBtn.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -311,7 +318,7 @@ public class Fragment_EvDetail_Info_WhenWhere extends Fragment {
 				}
 
 				new SCAsyncTask<ExplorerObject, Void, Boolean>(getActivity(), new UpdateEventProcessor(getActivity()))
-						.execute(mEvent);
+				.execute(mEvent);
 				// Utils.appEvents.set(index, mEvent);
 
 			}
@@ -350,40 +357,73 @@ public class Fragment_EvDetail_Info_WhenWhere extends Fragment {
 		return true;
 	}
 
-	private void savePosition(android.location.Address address) {
-		EditText street = null;
-		EditText city = null;
+	//	private void savePosition(android.location.Address address) {
+	//
+	//		Log.i("ADDRESS", "Fragment_EvDetail_Info_WhenWhere --> saveAddress");
+	//
+	//		EditText street = null;
+	//		EditText city = null;
+	//
+	//		String s = "";
+	//		for (int i = 0; i <= address.getMaxAddressLineIndex(); i++) {
+	//
+	//			Log.i("ADDRESS", "AddressLine: " +  address.getAddressLine(i));
+	//			s += address.getAddressLine(i) + " ";
+	//		}
+	//		s = s.trim();
+	//
+	//		Log.i("ADDRESS", "Fragment_EvDetail_Info_WhenWhere --> AddressLine0: " +  address.getAddressLine(0));
+	//		Log.i("ADDRESS", "Fragment_EvDetail_Info_WhenWhere --> Address Country: " +  address.getCountryName());
+	//		Log.i("ADDRESS", "Fragment_EvDetail_Info_WhenWhere --> Address Locality: " +  address.getLocality());
+	//
+	//
+	//		where = new Position(address.getAddressLine(0), address.getCountryName(), address.getLocality(),
+	//				address.getLongitude(), address.getLatitude());
+	//
+	//		if (getView() != null) {
+	//			street = (EditText) getView().findViewById(R.id.street_text);
+	//			city = (EditText) getView().findViewById(R.id.city_text);
+	//		}
+	//
+	//		if (street != null) {
+	//			street.setFocusable(false);
+	//			street.setFocusableInTouchMode(false);
+	//			street.setText(s);
+	//			street.setFocusable(true);
+	//			street.setFocusableInTouchMode(true);
+	//		}
+	//
+	//		if (city != null) {
+	//			city.setFocusable(false);
+	//			city.setFocusableInTouchMode(false);
+	//			city.setText(address.getLocality());
+	//			city.setFocusable(true);
+	//			city.setFocusableInTouchMode(true);
+	//		}
+	//
+	//	}
 
-		String s = "";
-		for (int i = 0; i <= address.getMaxAddressLineIndex(); i++) {
-			s += address.getAddressLine(i) + " ";
+
+	private void savePosition(OSMAddress address) {
+		if (address!=null){
+			if (!selectedAddress.getName().matches(selectedAddress.getStreet()))
+				txtPlaceName.setText(selectedAddress.getName());
+			txtCity.setText(selectedAddress.city());
+			txtStreet.setText(selectedAddress.getStreet());
 		}
-		s = s.trim();
-
-		where = new Position(address.getAddressLine(0), address.getCountryName(), address.getLocality(),
-				address.getLongitude(), address.getLatitude());
-		if (getView() != null) {
-			street = (EditText) getView().findViewById(R.id.street_text);
-			city = (EditText) getView().findViewById(R.id.city_text);
-		}
-
-		if (street != null) {
-			street.setFocusable(false);
-			street.setFocusableInTouchMode(false);
-			street.setText(s);
-			street.setFocusable(true);
-			street.setFocusableInTouchMode(true);
-		}
-
-		if (city != null) {
-			city.setFocusable(false);
-			city.setFocusableInTouchMode(false);
-			city.setText(address.getLocality());
-			city.setFocusable(true);
-			city.setFocusableInTouchMode(true);
-		}
-
 	}
+
+
+
+
+
+
+
+
+
+
+
+
 
 	// to be deleted when there will be the call to the server
 	public void setNewEventContacts(String eventID, String[] tel, String[] email, String website) {
@@ -398,15 +438,27 @@ public class Fragment_EvDetail_Info_WhenWhere extends Fragment {
 
 	}
 
-	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent result) {
+	//	@Override
+	//	public void onActivityResult(int requestCode, int resultCode, Intent result) {
+	//
+	//		if (resultCode == RESULT_SELECTED) {
+	//			android.location.Address address = result.getParcelableExtra("address");
+	//			String field = result.getExtras().getString("field");
+	//			savePosition(address);
+	//		}
+	//	}
 
-		if (resultCode == RESULT_SELECTED) {
-			android.location.Address address = result.getParcelableExtra("address");
-			String field = result.getExtras().getString("field");
-			savePosition(address);
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent result_data) {
+
+		if (resultCode == android.app.Activity.RESULT_OK && requestCode == REQUEST_CODE) {
+			selectedAddress = (OSMAddress) result_data.getSerializableExtra(Utils.ADDRESS);
+			savePosition(selectedAddress);
 		}
-	}
+	} 
+
+
 
 	@Override
 	public void onStart() {

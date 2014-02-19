@@ -19,11 +19,13 @@ import java.util.List;
 import java.util.Locale;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.location.Address;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -37,6 +39,7 @@ import com.google.android.maps.GeoPoint;
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.AbstractAsyncTaskProcessor;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.DTParamsHelper;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.Utils;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.DTHelper;
 import eu.trentorise.smartcampus.android.common.SCAsyncTask;
 import eu.trentorise.smartcampus.android.common.geo.OSMAddress;
@@ -48,6 +51,7 @@ public class AddressSelectActivity extends FragmentActivity implements OnMapLong
 
 	private GoogleMap mMap = null;
 	private String url = "https://vas.smartcampuslab.it";
+	private OSMAddress osmAddress = null;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -113,6 +117,17 @@ public class AddressSelectActivity extends FragmentActivity implements OnMapLong
 		new SCAsyncTask<Void, Void, List<OSMAddress>>(this, new GetAddressProcessor((Activity) this, p)).execute();
 
 	}
+	
+	@Override
+	public void finish() {
+	  //Prepare data intent 
+	  Intent data = new Intent();
+	  data.putExtra(Utils.ADDRESS, osmAddress);
+	  // Activity finished ok, return the data
+	  setResult(RESULT_OK, data);
+	  super.finish();
+	} 
+	
 
 	private class GetAddressProcessor extends AbstractAsyncTaskProcessor<Void, List<OSMAddress>> {
 
@@ -136,13 +151,18 @@ public class AddressSelectActivity extends FragmentActivity implements OnMapLong
 			Address address = new Address(Locale.getDefault());
 			OSMAddress myAddress = new OSMAddress();
 			// get first wit street
+			
 			for (OSMAddress osmAddress : result) {
+				
+				Log.i("ADDRESS", "AddressSelectActivity --> osmAddress: " +  osmAddress.toString());
 				if (osmAddress.getStreet() != null) {
 					myAddress = osmAddress;
 					break;
 				}
 			}
-			//set every used fields of address
+			
+			//store the osm address so that it is returned as intent result
+			osmAddress = myAddress;
 			
 			address.setAddressLine(0, myAddress.formattedAddress());
 			address.setCountryName(myAddress.country());
@@ -163,4 +183,7 @@ public class AddressSelectActivity extends FragmentActivity implements OnMapLong
 		}
 	}
 
+	
+	
+	
 }

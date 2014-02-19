@@ -426,6 +426,7 @@ public class MainActivity extends AbstractNavDrawerActivity{
 	@Override
 	public void onBackPressed() {
 
+		Log.i("BACKPRESSED", "MainActivity --> OnBackPressed ");
 
 		// See bug: http://stackoverflow.com/questions/13418436/android-4-2-back-stack-behaviour-with-nested-fragments/14030872#14030872
 		// If the fragment exists and has some back-stack entry
@@ -438,7 +439,7 @@ public class MainActivity extends AbstractNavDrawerActivity{
 		// Else, nothing in the direct fragment back stack
 		else {
 
-			Log.i("AB TITLE", "MainActivity --> current fragment: " + currentFragment.getTag() +"!");
+			Log.i("BACKPRESSED", "MainActivity --> current fragment: " + currentFragment.getTag() +"!");
 
 			if ( !this.TAG_FRAGMENT_MAP.equals(currentFragment.getTag())) 
 				this.setTitleWithDrawerTitle();
