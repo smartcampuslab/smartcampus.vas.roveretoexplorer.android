@@ -15,6 +15,8 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,6 +33,8 @@ public class TagListAdapter extends ArrayAdapter<String> {
 
 	List<String> tags;
 
+	ViewHolder holder = null;
+	
 	public TagListAdapter(Context context, int resourceId,
 			List<String> items) {
 		super(context, resourceId, items);
@@ -47,11 +51,11 @@ public class TagListAdapter extends ArrayAdapter<String> {
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent) {
-		ViewHolder holder = null;
+		 holder = null;
 		String tagItem = getItem(position);
 		
-		Log.i("FRAGMENT LC", "TagListAdapter --> tags: " + tags);
-		Log.i("FRAGMENT LC", "TagListAdapter --> tag: " + tagItem);
+		Log.i("TAG", "TagListAdapter --> tags: " + tags);
+		Log.i("TAG", "TagListAdapter --> tag: " + tagItem);
 
 
 		LayoutInflater mInflater = (LayoutInflater) context
@@ -67,7 +71,41 @@ public class TagListAdapter extends ArrayAdapter<String> {
 
 
 		holder.txtName.setText(tagItem);
+		//holder.txtName.setText(holder.txtName.getText());
+		
+		holder.txtName.addTextChangedListener(new TextWatcher() {
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				if (holder.txtName.getText().length() >= 0) {
+					//holder.txtName.setText(holder.txtName.getText().toString());
+					Log.i("TAG", "TagListAdapter --> new tag: " + holder.txtName.getText().toString());
+
+					// formLabel.setText(txtEventField.getText().toString());
+				}
+			
+			}
+
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+//				if (holder.txtName.getText().length() >= 0) {
+//					//holder.txtName.setText(holder.txtName.getText().toString());
+//					Log.i("TAG", "TagListAdapter --> new tag: " + holder.txtName.getText().toString());
+//
+//					// formLabel.setText(txtEventField.getText().toString());
+//				}
+			}
+		});
+		
+		
+		
 		holder.delete.setOnClickListener(new DeleteIconClickListener(position));
+		
+		
+		
 
 		return convertView;
 	}
@@ -85,16 +123,16 @@ public class TagListAdapter extends ArrayAdapter<String> {
 			Log.i("FRAGMENT LC", "TagListAdapter --> Delete button pressed!");
 			
 			AlertDialog.Builder builder = new AlertDialog.Builder(context);
-			builder.setMessage("Do you want to remove?");
+			builder.setMessage(R.string.tag_remove_request);
 			builder.setCancelable(false);
-			builder.setPositiveButton("Yes",
+			builder.setPositiveButton(R.string.yes,
 					new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int id) {
 					tags.remove(position);
 					notifyDataSetChanged();
 				}
 			});
-			builder.setNegativeButton("No",
+			builder.setNegativeButton(R.string.no,
 					new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int id) {
 					dialog.cancel();

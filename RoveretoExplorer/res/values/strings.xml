@@ -20,6 +20,11 @@
     <string name="invalid_weburl">web url non valida</string>
     <string name="invalid_fburl">facebook url non valida</string>
     <string name="invalid_twitterurl">twitter url non valida</string>
+    <string name="tag_remove_request">Vuoi eliminare il tag?</string>
+    <string name="yes">Si</string>
+    <string name="no">No</string>
+    
+    
     
 
     <!-- Event Info Contacts -->

@@ -415,16 +415,6 @@ public class Fragment_EvDetail_Info_WhenWhere extends Fragment {
 
 
 
-
-
-
-
-
-
-
-
-
-
 	// to be deleted when there will be the call to the server
 	public void setNewEventContacts(String eventID, String[] tel, String[] email, String website) {
 
