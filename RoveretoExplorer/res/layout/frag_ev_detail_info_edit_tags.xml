@@ -31,13 +31,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:layout_weight="0"
         android:background="@color/jungle_green"
         android:gravity="center"
         android:paddingBottom="4dp"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
         android:paddingTop="4dp"
-        android:layout_weight="0"
         android:textColor="@color/sc_light_gray" />
 
     <LinearLayout
@@ -52,8 +52,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="3dp"
-            android:layout_weight="1"
-            />
+            android:layout_weight="1" />
 
         <Button
             android:id="@+id/addTagButton"
@@ -63,32 +62,42 @@
             android:text="@string/tag_add" />
     </LinearLayout>
 
-    <ListView
-        android:id="@+id/tag_list"
-        android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
-
     <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="0dip"
-        android:layout_weight="1"
-        android:gravity="center|bottom"
-        android:orientation="horizontal" >
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:weightSum="1" >
 
-        <Button
-            android:id="@+id/btn_tags_cancel"
-            android:layout_width="wrap_content"
+        <ListView
+            android:id="@+id/tag_list"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:padding="3dp"
-            android:text="@android:string/cancel" />
+            android:layout_weight="0.9" />
 
-        <Button
-            android:id="@+id/btn_tags_ok"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:padding="3dp"
-            android:text="@android:string/ok" />
+            android:layout_gravity="bottom"
+            android:layout_weight="0.1"
+            android:gravity="bottom"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/btn_tags_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="3dp"
+                android:layout_weight="1"
+                android:text="@android:string/cancel" />
+
+            <Button
+                android:id="@+id/btn_tags_ok"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="3dp"
+                android:layout_weight="1"
+                android:text="@android:string/ok" />
+        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>

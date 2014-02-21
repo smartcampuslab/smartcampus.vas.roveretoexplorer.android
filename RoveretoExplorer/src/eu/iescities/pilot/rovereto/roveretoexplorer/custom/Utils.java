@@ -66,6 +66,11 @@ public class Utils {
 	public static final String ROVERETO_REGION = "it";
 	public static final String ROVERETO_COUNTRY = "IT";
 	public static final String ROVERETO_ADM_AREA = "TN";
+	
+	public static final String ADDRESS = "address";
+
+	
+	
 
 	// public static List<ExplorerObject> appEvents = getFakeEventObjects();
 

@@ -157,7 +157,7 @@ public class Fragment_EvDetail_Info_Tags extends Fragment {
 					}
 				}
 				
-				Log.i("FRAGMENT LC", "Fragment_evDetail_Info_Tags --> TAG LIST button OK: " + list);
+				Log.i("TAG", "Fragment_evDetail_Info_Tags --> TAG LIST button OK: " + list);
 
 				mEvent.getCommunityData().setTags(list);
 				// persist the modified field
