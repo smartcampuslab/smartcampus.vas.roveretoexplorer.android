@@ -83,7 +83,6 @@ public class EventAdapter extends BaseExpandableListAdapter {
 		this.dateGroupList = events_dates;
 		this.layoutResourceId = layoutResourceId;
 		this.fragment = fragment;
-		this.reloadAdapter = reloadAdapter;
 	}
 
 	public Map<String, List<ExplorerObject>> getEventCollections() {

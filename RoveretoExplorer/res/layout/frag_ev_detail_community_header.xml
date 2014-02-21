@@ -67,6 +67,11 @@
                 android:text="10" />
         </LinearLayout>
 
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:background="#c0c0c0" />
+
         <LinearLayout
             style="@style/row_community"
             android:layout_width="match_parent"
@@ -99,6 +104,11 @@
         </LinearLayout>
     </LinearLayout>
 
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1px"
+        android:background="@color/sc_light_gray" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -129,7 +139,10 @@
             android:layout_height="match_parent"
             android:text="@string/label_rating" />
     </LinearLayout>
-
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1px"
+        android:background="@color/sc_light_gray" />
     <LinearLayout
         android:id="@+id/rating_layout"
         android:layout_width="match_parent"
@@ -156,7 +169,10 @@
                 android:layout_height="wrap_content"
                 android:numStars="5" />
         </LinearLayout>
-
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:background="#c0c0c0" />
         <LinearLayout
             style="@style/row_community"
             android:layout_width="match_parent"
@@ -177,7 +193,10 @@
                 android:layout_height="wrap_content"
                 android:numStars="5" />
         </LinearLayout>
-
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:background="#c0c0c0" />
         <LinearLayout
             style="@style/row_community"
             android:layout_width="match_parent"

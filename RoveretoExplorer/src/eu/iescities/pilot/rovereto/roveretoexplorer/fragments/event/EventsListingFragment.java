@@ -113,7 +113,9 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 	private int firstVis;
 	private int lastVis;;
 
-	protected Map<String, List<String>> eventImageUrls = new LinkedHashMap<String, List<String>>();;
+	protected Map<String, List<String>> eventImageUrls = new LinkedHashMap<String, List<String>>();
+	private int previousGroup;
+	private int previousItem;;
 
 	// protected ImageLoader imageLoader = ImageLoader.getInstance();
 
@@ -124,14 +126,13 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 			// get info of the event
 			ExplorerObject event = DTHelper.findEventById(idEvent);
 			// notify
-			eventsAdapter.notifyDataSetInvalidated();
+			// eventsAdapter.notifyDataSetInvalidated();
 
 			eventsAdapter.notifyDataSetChanged();
 			idEvent = "";
 			indexAdapter = 0;
 		}
-		int previousGroup = eventsAdapter.getVisualizedGroup();
-		int previousItem = eventsAdapter.getVisualizedItem();
+
 		try {
 			expListView.setSelectedGroup(previousGroup);
 			expListView.setSelectedChild(previousGroup, previousItem, true);
@@ -139,12 +140,11 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 		} catch (IndexOutOfBoundsException e) {
 			// the changes modify the order of the group, so by default open
 			// the first group
-			if (eventsAdapter.getGroupCount() > 0)
-				{
+			if (eventsAdapter.getGroupCount() > 0) {
 				expListView.setSelectedGroup(0);
 				expListView.setSelectedChild(0, 0, true);
 				expListView.expandGroup(0);
-				}
+			}
 		}
 
 	}
@@ -223,6 +223,8 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 				event_id_selected = ((EventPlaceholder) v.getTag()).event.getId();
 				oldFromTime = ((EventPlaceholder) v.getTag()).event.getFromTime();
 				oldToTime = ((EventPlaceholder) v.getTag()).event.getToTime();
+				previousGroup = groupPosition;
+				previousItem = childPosition;
 				args.putString(Utils.ARG_EVENT_ID, ((EventPlaceholder) v.getTag()).event.getId());
 				try {
 					args.putString(Utils.ARG_EVENT_IMAGE_URL,
@@ -269,11 +271,11 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 			cahngeNewEventinCollection(new_event);
 			eventsAdapter.setDateGroupList(dateGroupList);
 			eventsAdapter.setEventCollection(eventCollection);
-			eventsAdapter.notifyDataSetInvalidated();
+			// eventsAdapter.notifyDataSetInvalidated();
 			eventsAdapter.notifyDataSetChanged();
 
-		}
-		initData();
+		} else
+			initData();
 		super.onStart();
 
 	}
@@ -331,8 +333,10 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 				}
 				index++;
 			}
-			if (found)
+			if (found) {
 				eventCollection.get(date_with_day).remove(index);
+				eventImageUrls.get(date_with_day).remove(index);
+			}
 
 		}
 	}
@@ -375,6 +379,7 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 	protected void load() {
 		if (position == 0) {
 			eventCollection.clear();
+			eventImageUrls.clear();
 		}
 		new SCListingFragmentTask<ListingRequest, Void>(getActivity(), getLoader()).execute(new ListingRequest(
 				position, size));
@@ -407,7 +412,7 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 				updateCollectionAndGetImages(result);
 				eventsAdapter.setDateGroupList(dateGroupList);
 				eventsAdapter.setEventCollection(eventCollection);
-				eventsAdapter.notifyDataSetInvalidated();
+				// eventsAdapter.notifyDataSetInvalidated();
 
 				eventsAdapter.notifyDataSetChanged();
 				if (expListView.getExpandableListAdapter().getGroupCount() > 0)
@@ -457,25 +462,42 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 
 		}
 	}
-	
-	
-	
-	
 
 	private void addEvent(ExplorerObject expObj, String date_with_day) {
 		if (!dateGroupList.contains(date_with_day)) {
-
 			dateGroupList.add(date_with_day);
 			eventCollection.put(date_with_day, new ArrayList<ExplorerObject>());
 			eventImageUrls.put(date_with_day, new ArrayList<String>());
 
 		}
-		eventCollection.get(date_with_day).add(expObj);
+		// insert se precedente era presente
+		if (previousItem != -1 && previousGroup == dateGroupList.indexOf(date_with_day))
+			eventCollection.get(date_with_day).add(previousItem, expObj);
+		else
+			eventCollection.get(date_with_day).add(expObj);
 
 		// get event image urls
 		String eventImg = expObj.getImage();
-		eventImageUrls.get(date_with_day).add(eventImg);
+		if (previousItem != -1 && previousGroup == dateGroupList.indexOf(date_with_day))
+			eventImageUrls.get(date_with_day).add(previousItem, eventImg);
+		else
+			eventImageUrls.get(date_with_day).add(eventImg);
 	}
+
+	// private void addEvent(ExplorerObject expObj, String date_with_day) {
+	// if (!dateGroupList.contains(date_with_day)) {
+	//
+	// dateGroupList.add(date_with_day);
+	// eventCollection.put(date_with_day, new ArrayList<ExplorerObject>());
+	// eventImageUrls.put(date_with_day, new ArrayList<String>());
+	//
+	// }
+	// eventCollection.get(date_with_day).add(expObj);
+	//
+	// // get event image urls
+	// String eventImg = expObj.getImage();
+	// eventImageUrls.get(date_with_day).add(eventImg);
+	// }
 
 	private List<ExplorerObject> getEvents(AbstractLstingFragment.ListingRequest... params) {
 		try {
@@ -618,7 +640,7 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 		@Override
 		protected void handleSuccess(List<ExplorerObject> result) {
 			super.handleSuccess(result);
-			eventsAdapter.notifyDataSetInvalidated();
+			// eventsAdapter.notifyDataSetInvalidated();
 
 			eventsAdapter.notifyDataSetChanged();
 		}

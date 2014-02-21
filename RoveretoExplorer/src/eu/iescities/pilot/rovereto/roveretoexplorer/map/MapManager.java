@@ -40,6 +40,7 @@ import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -55,9 +56,9 @@ import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.BaseDTObje
 public class MapManager {
 
 	private static MapView mapView;
-
+	private static List<Marker> myMarkers = null;
 	public static int ZOOM_DEFAULT = 15;
-	public static LatLng DEFAULT_POINT = new LatLng(45.89096,11.04014); // Rovereto
+	public static LatLng DEFAULT_POINT = new LatLng(45.89096, 11.04014); // Rovereto
 
 	public static void initWithParam() {
 		int zoom = DTParamsHelper.getZoomLevelMap();
@@ -265,6 +266,10 @@ public class MapManager {
 			return markers;
 		}
 
+		public static void clearGrid() {
+			grid.clear();
+		}
+
 		/**
 		 * Render markers on the map
 		 * 
@@ -272,8 +277,13 @@ public class MapManager {
 		 * @param markers
 		 */
 		public static void render(GoogleMap map, List<MarkerOptions> markers) {
+			if (myMarkers == null)
+				myMarkers = new ArrayList<Marker>();
+			else
+				myMarkers.clear();
 			for (MarkerOptions mo : markers) {
-				map.addMarker(mo);
+				myMarkers.add(map.addMarker(mo));
+
 			}
 		}
 
@@ -286,20 +296,28 @@ public class MapManager {
 		 */
 		public static void render(Context ctx, GoogleMap map, List<MarkerOptions> markers,
 				Collection<? extends BaseDTObject> objects) {
+			if (myMarkers == null)
+				myMarkers = new ArrayList<Marker>();
 			for (MarkerOptions mo : markers) {
-				map.addMarker(mo);
+				myMarkers.add(map.addMarker(mo));
+				;
 			}
 
 		}
 
+		public static void removeAllMarkers() {
+			if (myMarkers != null && myMarkers.size() > 0)
+				for (Marker marker : myMarkers)
+					marker.remove();
+		}
 
 		private static MarkerOptions createSingleMarker(BaseDTObject item, int x, int y) {
 			LatLng latLng = getLatLngFromBasicObject(item);
 
 			int markerIcon = CategoryHelper.getMapIconByType(item.getType());
-//			if (CategoryHelper.FAMILY_CATEGORY_POI.equals(item.getType())
-//					|| (CategoryHelper.FAMILY_CATEGORY_EVENT.equals(item.getType())))
-//				markerIcon = objectCertified(item);
+			// if (CategoryHelper.FAMILY_CATEGORY_POI.equals(item.getType())
+			// || (CategoryHelper.FAMILY_CATEGORY_EVENT.equals(item.getType())))
+			// markerIcon = objectCertified(item);
 
 			MarkerOptions marker = new MarkerOptions().position(latLng)
 					.icon(BitmapDescriptorFactory.fromResource(markerIcon)).title(x + ":" + y);
@@ -385,23 +403,25 @@ public class MapManager {
 
 	}
 
-//	private static int objectCertified(BaseDTObject o) {
-//		if (o.getCustomData() != null) {
-//			if ((o instanceof LocalEventObject) && ((Boolean) o.getCustomData().get("certified"))) {
-//				/* se ceretificato e evento */
-//				return R.drawable.ic_marker_e_family_certified;
-//			}
-//
-//			/* se certificato e poi */
-//			String status = (String) o.getCustomData().get("status");
-//			if ((o instanceof POIObject)
-//					&& (("Certificato finale").equals(status) || ("Certificato base").equals(status))) {
-//				return R.drawable.ic_marker_p_family_certified;
-//			}
-//		}
-//
-//		return CategoryHelper.getMapIconByType(o.getType());
-//	}
+	// private static int objectCertified(BaseDTObject o) {
+	// if (o.getCustomData() != null) {
+	// if ((o instanceof LocalEventObject) && ((Boolean)
+	// o.getCustomData().get("certified"))) {
+	// /* se ceretificato e evento */
+	// return R.drawable.ic_marker_e_family_certified;
+	// }
+	//
+	// /* se certificato e poi */
+	// String status = (String) o.getCustomData().get("status");
+	// if ((o instanceof POIObject)
+	// && (("Certificato finale").equals(status) ||
+	// ("Certificato base").equals(status))) {
+	// return R.drawable.ic_marker_p_family_certified;
+	// }
+	// }
+	//
+	// return CategoryHelper.getMapIconByType(o.getType());
+	// }
 
 	private static Bitmap writeOnMarker(Context mContext, int drawableId, String text) {
 		float scale = mContext.getResources().getDisplayMetrics().density;
@@ -448,7 +468,7 @@ public class MapManager {
 	}
 
 	private static LatLng getLatLngFromBasicObject(BaseDTObject object) {
-		LatLng latLng =  new LatLng(object.getLocation()[0], object.getLocation()[1]);
+		LatLng latLng = new LatLng(object.getLocation()[0], object.getLocation()[1]);
 		return latLng;
 	}
 
