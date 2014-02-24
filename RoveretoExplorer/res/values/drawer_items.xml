@@ -9,7 +9,7 @@
         <item>Oggi</item>
         <item>Cultura</item>
         <item>Sport</item>
-        <item>Svago</item>
+        <item>Persona</item>
         <item>Altri eventi</item>
     </string-array>
 
@@ -31,7 +31,7 @@
         <item>Eventi di oggi</item>
         <item>Eventi Culturali</item>
         <item>Eventi Sportivi</item>
-         <item>Eventi di Svago</item>
+         <item>Eventi di Persona</item>
         <item>Altri Eventi</item>
     </string-array>   
     
