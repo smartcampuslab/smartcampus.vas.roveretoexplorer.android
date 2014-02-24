@@ -75,7 +75,7 @@ public class MapFragment extends Fragment implements MapItemsHandler, OnCameraCh
 	private String[] tracksCategories = null;
 	private String[] eventsCleaned = null;
 	private Collection<? extends BaseDTObject> objects;
-	private String osmUrl = "http://a.tile.openstreetmap.org/{z}/{x}/{y}.png";
+	private String osmUrl = "http://otile1.mqcdn.com/tiles/1.0.0/osm/%d/%d/%d.jpg";
 
 	private boolean loaded = false;
 	private boolean listmenu = false;
@@ -491,13 +491,13 @@ public class MapFragment extends Fragment implements MapItemsHandler, OnCameraCh
 
 	 private void setUpMap() {
 	        mMap.setMapType(GoogleMap.MAP_TYPE_NONE);
-
 	        TileProvider tileProvider = new UrlTileProvider(256, 256) {
 			    @Override
 			    public URL getTileUrl(int x, int y, int z) {
 			        try {
-			        	String f= "http://otile1.mqcdn.com/tiles/1.0.0/osm/%d/%d/%d.jpg";
-			            return new URL(String.format(f, z, x, y));
+			        	if (z>17) 
+			        		z=17;
+			            return new URL(String.format(osmUrl, z, x, y));
 			        }
 			        catch (MalformedURLException e) {
 			            return null;
