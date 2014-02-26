@@ -15,20 +15,6 @@
  ******************************************************************************/
 package eu.iescities.pilot.rovereto.roveretoexplorer.custom.data;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.Socket;
-import java.net.URI;
-import java.net.URL;
-import java.net.URLEncoder;
-import java.net.UnknownHostException;
-import java.security.KeyManagementException;
-import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.UnrecoverableKeyException;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -40,31 +26,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
-
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLException;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.conn.ClientConnectionManager;
-import org.apache.http.conn.params.ConnManagerParams;
-import org.apache.http.conn.scheme.PlainSocketFactory;
-import org.apache.http.conn.scheme.Scheme;
-import org.apache.http.conn.scheme.SchemeRegistry;
-import org.apache.http.conn.ssl.AbstractVerifier;
-import org.apache.http.conn.ssl.SSLSocketFactory;
-import org.apache.http.conn.ssl.X509HostnameVerifier;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.params.HttpParams;
-import org.apache.http.util.EntityUtils;
 
 import android.accounts.Account;
 import android.app.Activity;
@@ -89,7 +50,6 @@ import android.widget.Toast;
 import com.google.android.maps.GeoPoint;
 
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.CategoryHelper;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.CategoryHelper.CategoryDescriptor;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.DTParamsHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.BaseDTObject;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.CommunityData;
@@ -455,7 +415,7 @@ public class DTHelper {
 	 * @throws AACException
 	 */
 	public static Boolean saveEvent(ExplorerObject event) throws RemoteException, DataException,
-			StorageConfigurationException, ConnectionException, ProtocolException, SecurityException, AACException {
+			StorageConfigurationException, ConnectionException, ProtocolException, SecurityException, AACException, eu.trentorise.smartcampus.network.RemoteException {
 		Boolean result = null;
 		if (event.getId() == null) {
 			// TO DO
@@ -509,17 +469,13 @@ public class DTHelper {
 		return result;
 	}
 
-	private static ExplorerObject updateEvent(String id, ExplorerObject event) {
+	private static ExplorerObject updateEvent(String id, ExplorerObject event) throws SecurityException, eu.trentorise.smartcampus.network.RemoteException{
 		if (event != null) {
-			try {
 
 				Log.i("POST EDIT", JsonUtils.toJSON(event));
 				String string = RemoteConnector.postJSON(getAppUrl(),
 						 "/social/edit" , JsonUtils.toJSON(event), getAuthToken());
 				return JsonUtils.toObject(string, ExplorerObject.class);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
 		}
 		return null;
 	}

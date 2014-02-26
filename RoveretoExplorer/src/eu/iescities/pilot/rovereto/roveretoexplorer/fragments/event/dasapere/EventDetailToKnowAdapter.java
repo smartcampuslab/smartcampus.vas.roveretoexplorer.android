@@ -26,6 +26,7 @@ import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.DTHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ExplorerObject;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ToKnow;
 import eu.trentorise.smartcampus.android.common.SCAsyncTask;
+import eu.trentorise.smartcampus.network.RemoteException;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 
 public class EventDetailToKnowAdapter extends ArrayAdapter<ToKnow> {
@@ -143,7 +144,7 @@ public class EventDetailToKnowAdapter extends ArrayAdapter<ToKnow> {
 		}
 
 		@Override
-		public Boolean performAction(ExplorerObject... params) throws SecurityException, Exception {
+		public Boolean performAction(ExplorerObject... params) throws SecurityException, RemoteException, Exception {
 			// to be enabled when the connection with the server is ok
 			return DTHelper.saveEvent(params[0]);
 		}

@@ -34,7 +34,8 @@ public class BaseDTStorageHelper {
 			o.setDescription(cursor.getString(cursor.getColumnIndex("description")));
 			o.setTitle(cursor.getString(cursor.getColumnIndex("title")));
 			o.setSource(cursor.getString(cursor.getColumnIndex("source")));
-
+			//from BasicObject
+			o.setVersion(cursor.getLong(cursor.getColumnIndex("version")));
 			// set community data
 			o.setCommunityData(new CommunityData());
 			o.getCommunityData().setAverageRating(cursor.getInt(cursor.getColumnIndex("averageRating")));
@@ -70,6 +71,9 @@ public class BaseDTStorageHelper {
 		values.put("title", bean.getTitle());
 		values.put("source", bean.getSource());
 
+		//from BasicObject
+		values.put("version", bean.getVersion());
+		
 		if (bean.getCommunityData() != null) {
 			if (bean.getCommunityData().getTags() != null) {
 				values.put("tags", Utils.convertToJSON(bean.getCommunityData().getTags()));
@@ -105,6 +109,7 @@ public class BaseDTStorageHelper {
 		defs.put("description", "TEXT");
 		defs.put("title", "TEXT");
 		defs.put("source", "TEXT");
+		defs.put("version", "DOUBLE");
 		defs.put("creatorId", "TEXT");
 		defs.put("creatorName", "TEXT");
 		defs.put("tags", "TEXT");
