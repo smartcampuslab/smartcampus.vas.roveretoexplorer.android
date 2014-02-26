@@ -632,7 +632,7 @@ public class Fragment_EvDetail_Info extends Fragment {
 				parent.getChildren().add(emailChildLabel);
 
 				// to be enabled again when I'll have a list of emails
-				List<String> emails = event.bringEmails();
+				List<String> emails =  (List<String>) event.getContacts().get("email");
 				if (emails != null) {
 					for (String email : emails) {
 						if (!email.matches("")) {

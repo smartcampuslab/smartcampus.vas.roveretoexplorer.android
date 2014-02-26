@@ -155,26 +155,26 @@ public class ExplorerObject extends BaseDTObject {
 		this.whenWhere = whenWhere;
 	}
 
-
-	public List<String> bringEmails() {
-		if (getContacts().containsKey("email")) {
-			String[] parts = ((String) getContacts().get("email")).split(",");
-			List<String> returnList = new ArrayList<String>(Arrays.asList(parts));  
-			return returnList;
-		} else
-			return null;
-	}
-
-	public void saveEmails(List<String> emails) {
-		StringBuffer buf = new StringBuffer(256); // Java default is 16,
-		for (String email: emails){
-			buf.append(email+",");
-
-		}
-		buf.deleteCharAt(buf.length() - 1);
-		this.getContacts().put("email", buf);
-
-	}
+//
+//	public List<String> bringEmails() {
+//		if (getContacts().containsKey("email")) {
+//			String[] parts = ((String) getContacts().get("email")).split(",");
+//			List<String> returnList = new ArrayList<String>(Arrays.asList(parts));  
+//			return returnList;
+//		} else
+//			return null;
+//	}
+//
+//	public void saveEmails(List<String> emails) {
+//		StringBuffer buf = new StringBuffer(256); // Java default is 16,
+//		for (String email: emails){
+//			buf.append(email+",");
+//
+//		}
+//		buf.deleteCharAt(buf.length() - 1);
+//		this.getContacts().put("email", buf);
+//
+//	}
 
 
 }
