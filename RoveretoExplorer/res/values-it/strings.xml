@@ -10,7 +10,6 @@
 
     <!-- Event Info Contacts -->
     <string name="event_category">Evento %1$s, promosso da %2$s</string>
-    
     <string name="categories_event_cultura">Cultura</string>
     <string name="categories_event_sport">Sport</string>
     <string name="categories_event_social">Persona</string>
@@ -68,20 +67,17 @@
     <string name="audit_person_date">Data conseguimento qualifica: %s</string>
     <string name="auth_required">Si prega di registrarsi con il suo Google account.</string>
     <string name="comment_hint">Commento</string>
-    
     <string name="label_attending">Partecipazione</string>
     <string name="label_comments">Commenti</string>
     <string name="community_attendees">Partecipanti</string>
     <string name="community_attending">Intendo partecipare</string>
-
     <string name="label_rating">Rating</string>
     <string name="community_my_rate">Il mio giudizio</string>
     <string name="community_avg_rate">Giudizio medio</string>
     <string name="community_tot_rate">Giudizio totale</string>
-
     <string name="attend_success">Aggiunto alla tua lista di partecipazioni!</string>
     <string name="not_attend_success">Rimosso dalla tua lista di partecipazioni!</string>
-    
+
     <!-- To know tab -->
     <string name="_toknow_place_type">Tipo di luogo</string>
     <string name="_toknow_access">Accesso</string>
@@ -96,8 +92,7 @@
     <string name="toknow_label_content">Contenuto</string>
     <string name="toknow_toast_title_empty">Il titolo è vuoto</string>
     <string name="address_select_toast">Selezionare un indirizzo</string>
-
-    
     <string name="toast_time_wrong">Il tempo dell\'evento è errato</string>
-  
+    <string name="when_where">Dove e quando</string>
+
 </resources>

@@ -26,6 +26,23 @@
                 android:paddingRight="16dp"
                 android:textColor="@color/sc_light_gray" />
 
+            <TextView
+                android:id="@+id/when_where_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/when_where"
+                android:textColor="@color/jungle_green"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/when_where_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:focusable="false"
+                android:gravity="top|left"
+                android:inputType="textMultiLine" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -54,6 +71,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="0.7"
                         android:ems="10"
+                        android:enabled="false"
+                        android:focusable="false"
                         android:focusableInTouchMode="false"
                         android:inputType="date" />
 
@@ -63,6 +82,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="0.3"
                         android:ems="10"
+                        android:enabled="false"
+                        android:focusable="false"
                         android:focusableInTouchMode="false"
                         android:inputType="time" />
                 </LinearLayout>
@@ -87,6 +108,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="0.7"
                         android:ems="10"
+                        android:enabled="false"
+                        android:focusable="false"
                         android:focusableInTouchMode="false"
                         android:inputType="date" />
 
@@ -96,6 +119,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="0.3"
                         android:ems="10"
+                        android:enabled="false"
+                        android:focusable="false"
                         android:focusableInTouchMode="false"
                         android:inputType="time" />
                 </LinearLayout>
@@ -113,6 +138,8 @@
                     android:id="@+id/duration_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:focusable="false"
                     android:inputType="text" />
             </LinearLayout>
 
@@ -137,7 +164,7 @@
                     android:id="@+id/place_name_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text">
+                    android:inputType="text" >
                 </EditText>
 
                 <TextView
@@ -156,51 +183,48 @@
                     android:inputType="text" >
                 </AutoCompleteTextView>
 
-                 <LinearLayout
-                     android:layout_width="match_parent"
-                     android:layout_height="wrap_content"
-                     android:gravity="center_vertical"
-                     android:orientation="horizontal" >
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal" >
 
-                     <LinearLayout
-                         android:layout_width="wrap_content"
-                         android:layout_height="wrap_content"
-                         android:orientation="vertical" 
-                         android:layout_weight="1">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical" >
 
-                         <TextView
-                             android:id="@+id/city_label"
-                             android:layout_width="match_parent"
-                             android:layout_height="wrap_content"
-                             android:layout_marginTop="8dp"
-                             android:text="@string/city"
-                             android:textColor="@color/jungle_green"
-                             android:textStyle="bold" />
+                        <TextView
+                            android:id="@+id/city_label"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="@string/city"
+                            android:textColor="@color/jungle_green"
+                            android:textStyle="bold" />
 
-                         <EditText
-                             android:id="@+id/city_text"
-                             android:layout_width="wrap_content"
-                             android:layout_height="wrap_content"
-                             android:hint="@string/city_hint"
-                             android:inputType="text" >
+                        <EditText
+                            android:id="@+id/city_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/city_hint"
+                            android:inputType="text" >
 
-                             <requestFocus />
-                         </EditText>
-                     </LinearLayout>
+                            <requestFocus />
+                        </EditText>
+                    </LinearLayout>
 
-                     <ImageView
-                         android:id="@+id/select_where_map"
-                         android:layout_width="wrap_content"
-                         android:layout_height="wrap_content"
-                         android:src="@drawable/ic_where_map" />
-
-                 </LinearLayout>
-                 
+                    <ImageView
+                        android:id="@+id/select_where_map"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_where_map" />
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
 
-    
     <LinearLayout
         android:id="@+id/choice_buttons"
         android:layout_width="match_parent"

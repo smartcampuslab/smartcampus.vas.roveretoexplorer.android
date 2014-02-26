@@ -46,7 +46,8 @@ public class Fragment_EvDetail_Info_WhenWhere extends Fragment {
 
 	private ExplorerObject mEvent = null;
 	private String mEventId;
-
+	
+	protected TextView txtWhenWhere;
 	protected TextView formLabel;
 	protected EditText txtStartDay;
 	protected EditText txtStartTime;
@@ -112,6 +113,7 @@ public class Fragment_EvDetail_Info_WhenWhere extends Fragment {
 		getActivity().getActionBar().setTitle(
 				getResources().getString(R.string.modify) + " " + getResources().getString(R.string.date_place_name));
 
+		txtWhenWhere= (EditText) getActivity().findViewById(R.id.when_where_text);
 		txtStartDay = (EditText) getActivity().findViewById(R.id.start_day_text);
 		txtStartTime = (EditText) getActivity().findViewById(R.id.start_time_text);
 		txtEndDay = (EditText) getActivity().findViewById(R.id.end_day_text);
@@ -160,6 +162,13 @@ public class Fragment_EvDetail_Info_WhenWhere extends Fragment {
 		}
 		formLabel.setText("Evento: " + mEvent.getTitle());
 
+		if (mEvent.getWhenWhere() != null) {
+
+			txtWhenWhere.setText(mEvent.getWhenWhere());
+		} else {
+			txtWhenWhere.setText("");
+		}
+		
 		if (mEvent.getFromTime() != null) {
 			String[] fromDateTime = Utils.getDateTimeString(this.context, mEvent.getFromTime(), Utils.DATETIME_FORMAT,
 					false, false);
@@ -194,7 +203,7 @@ public class Fragment_EvDetail_Info_WhenWhere extends Fragment {
 			}
 		});
 
-		if (mEvent.getToTime() != null) {
+		if ((mEvent.getToTime() != null) && (mEvent.getToTime() != 0)) {
 			String[] toDateTime = Utils.getDateTimeString(this.context, mEvent.getToTime(), Utils.DATETIME_FORMAT,
 					false, false);
 			Log.d("FRAGMENT LC", "Fragment_evDetail_Info_When --> to Time: " + toDateTime);
@@ -205,8 +214,10 @@ public class Fragment_EvDetail_Info_WhenWhere extends Fragment {
 			String duration = "3 ore";
 			txtDuration.setText(duration);
 		} else {
-			txtEndDay.setText(getResources().getString(R.string.day_hint));
-			txtEndTime.setText(getResources().getString(R.string.time_hint));
+//			txtEndDay.setText(getResources().getString(R.string.day_hint));
+//			txtEndTime.setText(getResources().getString(R.string.time_hint));
+			txtEndDay.setText("");
+			txtEndTime.setText("");
 		}
 
 		txtEndDay.setOnClickListener(new View.OnClickListener() {
@@ -349,11 +360,13 @@ public class Fragment_EvDetail_Info_WhenWhere extends Fragment {
 
 		} catch (ParseException e) {
 		}
+		if (toDate!=null ){
 		if (fromDate.after(toDate))
 			return false;
 		if (fromDate.equals(toDate))
 			if (fromTime.after(toTime))
 				return false;
+		}
 		return true;
 	}
 
