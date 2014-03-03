@@ -169,7 +169,7 @@ public class Fragment_EvDetail_Info extends Fragment {
 			fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
 			// fragmentTransaction.detach(this);
 			fragmentTransaction.replace(R.id.content_frame, edit_fragment, frag_description);
-			fragmentTransaction.addToBackStack(getTag());			
+			fragmentTransaction.addToBackStack(getTag());
 			fragmentTransaction.commit();
 
 		}
@@ -189,26 +189,31 @@ public class Fragment_EvDetail_Info extends Fragment {
 
 		// display the event title
 		TextView titleTextView = (TextView) getActivity().findViewById(R.id.event_info_placeholder_title);
-		String text = mEvent.getTitle() + " ";
-		SpannableString ss = new SpannableString(text);
-		Drawable d = getResources().getDrawable(R.drawable.ic_action_edit);
-		d.setBounds(0, 0, 35, 35);
-		ImageSpan span = new ImageSpan(d, ImageSpan.ALIGN_BASELINE);
-		int start = text.length() - 1;
-		ss.setSpan(span, start, start + 1, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
-		ss.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), start, start + 1,
-				Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-		ss.setSpan(new ClickableSpan() {
-			@Override
-			public void onClick(View v) {
-				Log.d("main", "link clicked");
-				// Toast.makeText(context, "modify event title",
-				// Toast.LENGTH_SHORT).show();
-				editField("title");
-			}
-		}, start, start + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-		titleTextView.setText(ss);
-		titleTextView.setMovementMethod(LinkMovementMethod.getInstance());
+		titleTextView.setText(mEvent.getTitle());
+		
+		//add the edit icon besides the text
+//		String text = mEvent.getTitle() + " ";
+//		SpannableString ss = new SpannableString(text);
+//		Drawable d = getResources().getDrawable(R.drawable.ic_action_edit);
+//		d.setBounds(0, 0, 35, 35);
+//		ImageSpan span = new ImageSpan(d, ImageSpan.ALIGN_BASELINE);
+//		int start = text.length() - 1;
+//		ss.setSpan(span, start, start + 1, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+//		ss.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), start, start + 1,
+//				Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+//		ss.setSpan(new ClickableSpan() {
+//			@Override
+//			public void onClick(View v) {
+//				Log.d("main", "link clicked");
+//				// Toast.makeText(context, "modify event title",
+//				// Toast.LENGTH_SHORT).show();
+//				editField("title");
+//			}
+//		}, start, start + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//		titleTextView.setText(ss);
+//		titleTextView.setMovementMethod(LinkMovementMethod.getInstance());
+		
+		
 
 		// display the event image
 		ImageView imgView = (ImageView) getActivity().findViewById(R.id.event_placeholder_photo);
@@ -222,32 +227,28 @@ public class Fragment_EvDetail_Info extends Fragment {
 		TextView categoryTextView = (TextView) getActivity().findViewById(R.id.event_placeholder_category);
 		String category = mEvent.getCategory();
 		if (mEvent.getOrigin() != null && !mEvent.getOrigin().matches("")) {
-			// text = new String("Evento " + category + ", promosso da " +
-			// mEvent.getOrigin() + " ");
-			text = getResources().getString(R.string.event_category, category, mEvent.getOrigin());
-			text += " ";
-			ss = new SpannableString(text);
-			start = text.length() - 1;
-			ss.setSpan(span, start, start + 1, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
-			ss.setSpan(new ClickableSpan() {
-				@Override
-				public void onClick(View v) {
-					Log.d("main", "link clicked");
-					// Toast.makeText(context, "modify promoted by",
-					// Toast.LENGTH_SHORT).show();
-					editField("origin");
-				}
-			}, start, start + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-			categoryTextView.setText(ss);
-			categoryTextView.setMovementMethod(LinkMovementMethod.getInstance());
+			String text = getResources().getString(R.string.event_category, category, mEvent.getOrigin());
+			categoryTextView.setText(text);
+			//add the edit icon besides the text
+//			text += " ";
+//			ss = new SpannableString(text);
+//			start = text.length() - 1;
+//			ss.setSpan(span, start, start + 1, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+//			ss.setSpan(new ClickableSpan() {
+//				@Override
+//				public void onClick(View v) {
+//					Log.d("main", "link clicked");
+//					// Toast.makeText(context, "modify promoted by",
+//					// Toast.LENGTH_SHORT).show();
+//					editField("origin");
+//				}
+//			}, start, start + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//			categoryTextView.setText(ss);
+//			categoryTextView.setMovementMethod(LinkMovementMethod.getInstance());
 		} else
 			categoryTextView.setText("Evento " + category + ".");
 
-
 	}
-
-
-
 
 	@Override
 	public void onResume() {
@@ -310,13 +311,17 @@ public class Fragment_EvDetail_Info extends Fragment {
 
 		expListView = (ExpandableListView) getActivity().findViewById(R.id.event_details_info);
 
+		expListView.setChildDivider(null);
+		expListView.setChildDivider(getResources().getDrawable(R.color.transparent));
+		
 		// header part
 		header = getActivity().getLayoutInflater().inflate(R.layout.frag_ev_detail_info_header, null);
 
 
-		// adding header to list
+		// adding header to the list
 		if (expListView.getHeaderViewsCount() == 0) {
 			expListView.addHeaderView(header);
+			expListView.setHeaderDividersEnabled(true);
 		}
 
 		if (getArguments() != null) {
@@ -401,8 +406,8 @@ public class Fragment_EvDetail_Info extends Fragment {
 		groupImages.add(R.drawable.ic_action_edit_white);
 		groupImages.add(R.drawable.ic_action_edit_white);
 		groupImages.add(R.drawable.ic_action_edit_white);
-		groupImages.add(R.drawable.ic_action_new_label);
-
+		groupImages.add(R.drawable.ic_action_edit_white);
+		
 	}
 
 	private void setAdapter(final ArrayList<EventInfoParent> newParents) {
@@ -434,8 +439,6 @@ public class Fragment_EvDetail_Info extends Fragment {
 		mEventId = null;
 	}
 
-
-
 	/**
 	 * here should come your data service implementation
 	 * 
@@ -446,14 +449,14 @@ public class Fragment_EvDetail_Info extends Fragment {
 		// Creating ArrayList of type parent class to store parent class objects
 		ArrayList<EventInfoParent> list = new ArrayList<EventInfoParent>();
 
-
 		for (int i = 1; i < 5; i++) {
 			// Create parent class object
 			EventInfoParent parent = new EventInfoParent();
 
-			//			if (event.getImage() != null) {
-			//				Log.i("EVENT", "Fragment_EvDetail_Info --> image: " + event.getImage() + "!!");
-			//			}
+			// if (event.getImage() != null) {
+			// Log.i("EVENT", "Fragment_EvDetail_Info --> image: " +
+			// event.getImage() + "!!");
+			// }
 			//
 			//
 			//			if (event.getCategory() != null) {
@@ -468,20 +471,17 @@ public class Fragment_EvDetail_Info extends Fragment {
 			//				Log.i("EVENT", "Fragment_EvDetail_Info --> Location: " + event.getLocation() + "!!");
 			//			}
 
-			if (event.getCommunityData().getTags() != null) {
-				Log.i("EVENT", "Fragment_EvDetail_Info --> TAGS: " + event.getCommunityData().getTags() + "!!");
-			}
-			else
-				Log.i("EVENT", "Fragment_EvDetail_Info --> TAGS NULL!!");
-
-
+//			if (event.getCommunityData().getTags() != null) {
+//				Log.i("EVENT", "Fragment_EvDetail_Info --> TAGS: " + event.getCommunityData().getTags() + "!!");
+//			}
+//			else
+//				Log.i("EVENT", "Fragment_EvDetail_Info --> TAGS NULL!!");
 
 			// Set values in parent class object
 			if (i == 1) { // field DOVE e QUANDO
 				parent.setName("" + i);
 				parent.setText1("Dove e quando");
 				parent.setChildren(new ArrayList<EventInfoChild>());
-
 
 				if (event.getWhenWhere() != null) {
 					Log.i("EVENT", "Fragment_EvDetail_Info --> WhenWhere: " + event.getWhenWhere() + "!!");
@@ -509,9 +509,9 @@ public class Fragment_EvDetail_Info extends Fragment {
 					if ((street != null) && (!street.matches("")))
 						addressStr = addressStr + street + ", ";
 
-					if ((city != null) && (!city.matches(""))) 
+					if ((city != null) && (!city.matches("")))
 						addressStr = addressStr + city;
-					else 
+					else
 						addressStr = addressStr + context.getString(R.string.city_hint);
 
 					// Create Child class object
@@ -554,7 +554,8 @@ public class Fragment_EvDetail_Info extends Fragment {
 					child.setType(0);
 					parent.getChildren().add(child);
 
-					// compute duration or get in from the Explorer Object when there will be such info!!!
+					// compute duration or get in from the Explorer Object when
+					// there will be such info!!!
 					String duration = null;
 					if (duration != null) {
 						child = new EventInfoChild();
@@ -564,7 +565,6 @@ public class Fragment_EvDetail_Info extends Fragment {
 						parent.getChildren().add(child);
 					}
 				}
-
 			} else if (i == 2) { // field COSA
 				parent.setName("" + i);
 				parent.setText1("Cosa");
@@ -589,6 +589,8 @@ public class Fragment_EvDetail_Info extends Fragment {
 				telChildLabel.setName("Phones");
 				telChildLabel.setText("Telefono");
 				telChildLabel.setType(1);
+				telChildLabel.setDividerHeight(3);
+
 				telChildLabel.setLeftIconId(R.drawable.ic_action_phone);
 
 				// to be added again when it will be possible to add more
@@ -621,6 +623,19 @@ public class Fragment_EvDetail_Info extends Fragment {
 							parent.getChildren().add(child1);
 						}
 					}
+					
+					//fake tel number!!!
+//					EventInfoChild child1 = new EventInfoChild();
+//					child1.setName("tel");
+//					child1.setText("04619839448");
+//					child1.setType(0);
+//					int[] rightIconIds1 = new int[] { R.drawable.ic_action_call };
+//					child1.setRightIconIds(rightIconIds1);
+//					parent.getChildren().add(child1);
+					//end fake tel number!!
+					
+					
+					
 				}
 
 				// set the Email item of type 1
@@ -628,6 +643,7 @@ public class Fragment_EvDetail_Info extends Fragment {
 				emailChildLabel.setName("Emails");
 				emailChildLabel.setText("Email");
 				emailChildLabel.setType(1);
+				emailChildLabel.setDividerHeight(3);
 				emailChildLabel.setLeftIconId(R.drawable.ic_action_email);
 
 				// to be added again when it will be possible to add more emails
@@ -637,8 +653,20 @@ public class Fragment_EvDetail_Info extends Fragment {
 
 				parent.getChildren().add(emailChildLabel);
 
-				// to be enabled again when I'll have a list of emails
-				List<String> emails = event.bringEmails();
+				//List<String> emails = event.bringEmails();
+				
+//				 if (event.getContacts().containsKey("email")){
+//				 String emailn = (String) event.getContacts().get("email");
+//				 Log.i("EVENT", "Fragment_EvDetail_Info --> titolo evento: " + event.getTitle()+ "!!");
+//				 if (emailn!="")
+//					 Log.i("EVENT", "Fragment_EvDetail_Info --> email: " + emailn+ "!!");
+//				 else 
+//					 Log.i("EVENT", "Fragment_EvDetail_Info --> email: NULL");
+//				 }
+				
+				List<String> emails = event.getEmails();
+				
+				
 				if (emails != null) {
 					for (String email : emails) {
 						if (!email.matches("")) {
@@ -660,6 +688,9 @@ public class Fragment_EvDetail_Info extends Fragment {
 					}
 				}
 
+				
+				
+				
 				// String email = null;
 				// if (event.getContacts().containsKey("email")){
 				// email = (String) event.getContacts().get("email");
@@ -738,6 +769,17 @@ public class Fragment_EvDetail_Info extends Fragment {
 				}
 			}
 
+			
+			//delete the divider line for the last item of a group
+			
+			if (parent.getChildren().size()!=0){
+				EventInfoChild lastChild = parent.getChildren().get(parent.getChildren().size()-1);
+				lastChild.setDividerHeight(0);
+				parent.getChildren().remove(parent.getChildren().size()-1);
+				parent.getChildren().add(lastChild);
+			}
+
+			
 			// Adding Parent class object to ArrayList
 			list.add(parent);
 		}

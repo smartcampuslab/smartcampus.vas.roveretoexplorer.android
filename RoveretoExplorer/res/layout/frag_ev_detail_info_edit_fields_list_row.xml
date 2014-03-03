@@ -5,7 +5,7 @@
     android:padding="10dp" >
 
     <EditText
-        android:id="@+id/tag_text"
+        android:id="@+id/field_value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"

@@ -1,6 +1,11 @@
 package eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info;
 
+import eu.iescities.pilot.rovereto.roveretoexplorer.R;
+
+
 public class EventInfoChild{
+	
+	
 	
 	private String name;
 	
@@ -11,6 +16,11 @@ public class EventInfoChild{
 	private int leftIconId = -1;
 	
 	private int[] rightIconIds = null;
+	
+	private int divider_height=1;
+	private int divider_color = R.color.jungle_green;
+	
+	
 	
 	
 	public String getName()
@@ -64,5 +74,39 @@ public class EventInfoChild{
 	{
 		this.rightIconIds = rightIconIds;
 	}
+	
+	
+	public int getDividerColor()
+	{
+		return divider_color;
+	}
+	
+	public void setDividerColor(int divider_colorId)
+	{
+		this.divider_color = divider_colorId;
+	}
+	
+	
+	public int getDividerHeight()
+	{
+		return divider_height;
+	}
+	
+	public void setDividerHeight(int divider_height)
+	{
+		this.divider_height = divider_height;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 }

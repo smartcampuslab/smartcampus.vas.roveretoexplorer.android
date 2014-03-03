@@ -30,7 +30,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
                     android:layout_alignParentLeft="true"
-                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:singleLine="true"
                     android:textAppearance="?android:attr/textAppearanceMedium" />
 
                 <RelativeLayout
@@ -47,6 +48,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingLeft="4dp" 
+                        android:ellipsize="end"
+                        android:singleLine="true"
                         android:layout_alignTop="@+id/event_placeholder_location_icon"
                         android:layout_toRightOf="@+id/event_placeholder_location_icon" />
 
@@ -118,7 +121,7 @@
 
     <View
         android:layout_width="fill_parent"
-        android:layout_height="0.4dp"
-        android:background="@color/orange_rovereto" />
+        android:layout_height="0.2dp"
+        android:background="@color/jungle_green" />
 
 </LinearLayout>

@@ -37,8 +37,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TextView.BufferType;
 import android.widget.Toast;
@@ -128,6 +130,7 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 
 	// This Function used to inflate child rows view
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public View getChildView(int groupPosition, int childPosition,
 			boolean isLastChild, View convertView, ViewGroup parentView) {
@@ -154,6 +157,10 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 					.findViewById(R.id.event_info_attribute_value_icon);
 			eventChildViewHolder.imgsDx1 = (ImageView) row
 					.findViewById(R.id.event_info_action1);
+			
+			eventChildViewHolder.divider = (View) row
+					.findViewById(R.id.event_info_item_divider);
+			
 
 			//this will be added again when it will be possible to cancel/edit the single items
 			//			eventChildViewHolder.imgsDx2 = (ImageView) row
@@ -247,6 +254,9 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 		if ((child.getRightIconIds() != null) && (child.getType() == 1)) {
 			Log.i("GROUPVIEW", "CHILD DX1 ICON ID: "
 					+ child.getRightIconIds()[0]);
+			
+			eventChildViewHolder.text.setTypeface(null, Typeface.BOLD);
+			
 			eventChildViewHolder.imgsDx1.setVisibility(View.VISIBLE);
 			eventChildViewHolder.imgsDx1.setImageResource(child
 					.getRightIconIds()[0]);
@@ -257,7 +267,19 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 			Log.i("GROUPVIEW", "CHILD DX1 ICON NULL");
 			eventChildViewHolder.imgsDx1.setVisibility(View.INVISIBLE);
 		}
-
+		
+		
+		eventChildViewHolder.divider.setBackgroundColor(child.getDividerColor());
+		
+		
+		eventChildViewHolder.divider.setLayoutParams(new LinearLayout.LayoutParams(
+		           LinearLayout.LayoutParams.MATCH_PARENT,
+		           child.getDividerHeight()));
+		
+		
+	
+		
+	
 		// set icons on the right side for the items of type 0 (single values)
 		if ((child.getRightIconIds() != null) && (child.getType() == 0)) {
 			Log.i("GROUPVIEW", "CHILD DX1 ICON ID: "
@@ -288,22 +310,25 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 			//			eventChildViewHolder.imgsDx3.setVisibility(View.INVISIBLE);
 		}
 
-		Log.i("GROUPVIEW", "child view: group  POS: " + groupPosition + "!!");
-		Log.i("GROUPVIEW", "child view: child POS: " + childPosition + "!!");
+//		Log.i("GROUPVIEW", "child view: group  POS: " + groupPosition + "!!");
+//		Log.i("GROUPVIEW", "child view: child POS: " + childPosition + "!!");
 
-		// if (groupPosition==3){ // child of type 2
-		// int imageId =
-		// this.fragment.childType2Images.get(this.fragment.groupImages.get(groupPosition)).get(childPosition);
-		// eventChildType1ViewHolder.imgSx.setImageResource(imageId);
-		// }
-		//
-		// if ((groupPosition==0) || (groupPosition==1) || (groupPosition==4)){
-		// // child of type 1
-		// int imageId =
-		// this.fragment.childType1Images.get(this.fragment.groupImages.get(groupPosition));
-		// Log.i("GROUPVIEW", "IMAGE ID: " + imageId);
-		// eventChildType1ViewHolder.imgSx.setImageResource(imageId);
-		// }
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 
 		countChildViewCall++;
 
@@ -700,6 +725,7 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 		ImageView imgsDx1;
 		ImageView imgsDx2;
 		ImageView imgsDx3;
+		View divider;
 		int position;
 	}
 

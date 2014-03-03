@@ -21,6 +21,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,8 +49,7 @@ public class Fragment_EvDetail_Info_Tags extends Fragment {
 
 
 	private ArrayList<String> tag_list = null;
-
-	TagListAdapter tagListAdapter;
+	EditFieldListAdapter tagListAdapter;
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -115,7 +115,7 @@ public class Fragment_EvDetail_Info_Tags extends Fragment {
 
 		tagToAdd = (EditText) getActivity().findViewById(R.id.tags_tv);
 
-		tagListAdapter = new TagListAdapter(mContext, R.layout.frag_ev_detail_info_edit_tags_list_row, tag_list);
+		tagListAdapter = new EditFieldListAdapter(mContext, R.layout.frag_ev_detail_info_edit_fields_list_row, tag_list, Utils.EDIT_FIELD_TEXT_TYPE);
 
 		ListView list = (ListView) getActivity().findViewById(R.id.tag_list);
 		list.setAdapter(tagListAdapter);
@@ -132,7 +132,7 @@ public class Fragment_EvDetail_Info_Tags extends Fragment {
 			}
 		});
 
-		Button addTag = (Button) getActivity().findViewById(R.id.addTagButton);
+		ImageView addTag = (ImageView) getActivity().findViewById(R.id.add_tag_icon);
 		addTag.setOnClickListener(new View.OnClickListener() {
 
 			@Override
@@ -150,16 +150,16 @@ public class Fragment_EvDetail_Info_Tags extends Fragment {
 		ok.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				
 				List<String> list = new ArrayList<String>();
 				if (!tagListAdapter.isEmpty()) {
 					for (int i = 0; i < tagListAdapter.getCount(); i++) {
 						list.add(tagListAdapter.getItem(i));
 					}
 				}
-				
 				Log.i("TAG", "Fragment_evDetail_Info_Tags --> TAG LIST button OK: " + list);
-
 				mEvent.getCommunityData().setTags(list);
+
 				// persist the modified field
 				new SCAsyncTask<ExplorerObject, Void, Boolean>(getActivity(), new UpdateEventProcessor(getActivity()))
 						.execute(mEvent);

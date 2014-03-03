@@ -68,6 +68,13 @@ public class Utils {
 	public static final String ROVERETO_ADM_AREA = "TN";
 	
 	public static final String ADDRESS = "address";
+	
+	public static final String EDIT_FIELD_PHONE_TYPE = "phone";
+	public static final String EDIT_FIELD_EMAIL_TYPE = "email";
+	public static final String EDIT_FIELD_TEXT_TYPE = "text";
+	
+	
+	
 
 	
 	

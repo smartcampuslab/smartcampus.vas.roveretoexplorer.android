@@ -45,6 +45,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="3dp"
         android:layout_weight="0"
+        android:layout_marginTop="8dp"
         android:orientation="horizontal" >
 
         <EditText
@@ -54,12 +55,13 @@
             android:layout_margin="3dp"
             android:layout_weight="1" />
 
-        <Button
-            android:id="@+id/addTagButton"
+        <ImageView
+            android:id="@+id/add_tag_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="3dp"
-            android:text="@string/tag_add" />
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/ic_action_new_label" />
     </LinearLayout>
 
     <LinearLayout
@@ -86,16 +88,16 @@
                 android:id="@+id/btn_tags_cancel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="3dp"
                 android:layout_weight="1"
+                android:padding="3dp"
                 android:text="@android:string/cancel" />
 
             <Button
                 android:id="@+id/btn_tags_ok"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="3dp"
                 android:layout_weight="1"
+                android:padding="3dp"
                 android:text="@android:string/ok" />
         </LinearLayout>
     </LinearLayout>

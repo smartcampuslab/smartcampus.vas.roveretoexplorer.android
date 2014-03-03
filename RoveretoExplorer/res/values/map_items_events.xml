@@ -8,7 +8,7 @@
         <item>Oggi</item>
         <item>Cultura</item>
         <item>Sport</item>
-        <item>Svago</item>
+        <item>Persona</item>
         <item>Altri eventi</item>
     </string-array>
     <string-array name="map_items_events_icons">

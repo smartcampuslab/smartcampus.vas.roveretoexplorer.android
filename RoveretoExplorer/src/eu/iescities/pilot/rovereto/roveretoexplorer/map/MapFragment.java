@@ -1,11 +1,14 @@
 package eu.iescities.pilot.rovereto.roveretoexplorer.map;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -34,6 +37,9 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.TileOverlayOptions;
+import com.google.android.gms.maps.model.TileProvider;
+import com.google.android.gms.maps.model.UrlTileProvider;
 
 import eu.iescities.pilot.rovereto.roveretoexplorer.MainActivity;
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
@@ -69,6 +75,7 @@ public class MapFragment extends Fragment implements MapItemsHandler, OnCameraCh
 	private String[] tracksCategories = null;
 	private String[] eventsCleaned = null;
 	private Collection<? extends BaseDTObject> objects;
+	private String osmUrl = "http://otile1.mqcdn.com/tiles/1.0.0/osm/%d/%d/%d.jpg";
 
 	private boolean loaded = false;
 	private boolean listmenu = false;
@@ -217,6 +224,7 @@ public class MapFragment extends Fragment implements MapItemsHandler, OnCameraCh
 	protected void initView() {
 		if (getSupportMap() != null) {
 			getSupportMap().clear();
+			setUpMap();
 			getSupportMap().getUiSettings().setRotateGesturesEnabled(false);
 			getSupportMap().getUiSettings().setTiltGesturesEnabled(false);
 		}
@@ -394,7 +402,7 @@ public class MapFragment extends Fragment implements MapItemsHandler, OnCameraCh
 		// mItemizedoverlay.clearMarkers();
 
 		getSupportMap().clear();
-
+		setUpMap();
 		new SCAsyncTask<Void, Void, Collection<? extends BaseDTObject>>(getActivity(), new MapLoadProcessor(
 				getActivity(), this, getSupportMap()) {
 			@Override
@@ -471,8 +479,9 @@ public class MapFragment extends Fragment implements MapItemsHandler, OnCameraCh
 	private GoogleMap getSupportMap() {
 		if (mMap == null) {
 			if (getFragmentManager().findFragmentById(R.id.map) != null
-					&& getFragmentManager().findFragmentById(R.id.map) instanceof SupportMapFragment)
+					&& getFragmentManager().findFragmentById(R.id.map) instanceof SupportMapFragment){
 				mMap = ((SupportMapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
+			}
 			if (mMap != null)
 				mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(MapManager.DEFAULT_POINT, MapManager.ZOOM_DEFAULT));
 
@@ -480,6 +489,24 @@ public class MapFragment extends Fragment implements MapItemsHandler, OnCameraCh
 		return mMap;
 	}
 
+	 private void setUpMap() {
+	        mMap.setMapType(GoogleMap.MAP_TYPE_NONE);
+	        TileProvider tileProvider = new UrlTileProvider(256, 256) {
+			    @Override
+			    public URL getTileUrl(int x, int y, int z) {
+			        try {
+			        	if (z>17) 
+			        		z=17;
+			            return new URL(String.format(osmUrl, z, x, y));
+			        }
+			        catch (MalformedURLException e) {
+			            return null;
+			        }
+			    }
+	        };
+
+	        mMap.addTileOverlay(new TileOverlayOptions().tileProvider(tileProvider));
+	    }
 	@Override
 	public boolean onMarkerClick(Marker marker) {
 		List<BaseDTObject> list = MapManager.ClusteringHelper.getFromGridId(marker.getTitle());
@@ -512,13 +539,22 @@ public class MapFragment extends Fragment implements MapItemsHandler, OnCameraCh
 
 	private void render(Collection<? extends BaseDTObject> objects) {
 		if (getSupportMap() != null) {
-			getSupportMap().clear();
+//			if (MapManager.getMapView()!=null)
+//			{
+//				MapManager.getMapView().getOverlays().clear();
+//				MapManager.getMapView().invalidate();
+//			}
+//			getSupportMap().clear();
+//			setUpMap();
+
 			if (objects != null && getActivity() != null) {
 				List<MarkerOptions> cluster = MapManager.ClusteringHelper.cluster(
 						getActivity().getApplicationContext(), getSupportMap(), objects);
+				MapManager.ClusteringHelper.removeAllMarkers();
 				MapManager.ClusteringHelper.render(getActivity(), getSupportMap(), cluster, objects);
 			}
 		}
+
 
 	}
 

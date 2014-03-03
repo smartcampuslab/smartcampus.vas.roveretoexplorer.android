@@ -18,20 +18,18 @@
             <TextView
                 android:id="@+id/title_contacts_label"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_height="32dp"
+                android:layout_marginTop="4dp"
                 android:background="@color/jungle_green"
-                android:gravity="center"
-                android:paddingBottom="4dp"
+                android:gravity="center_vertical"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
-                android:paddingTop="4dp"
+                android:text="@string/modify_contacts_txt"
                 android:textColor="@color/sc_light_gray" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_marginTop="16dp"
                 android:layout_weight="1"
                 android:orientation="vertical"
                 android:paddingLeft="16dp"
@@ -46,37 +44,13 @@
                     android:textColor="@color/jungle_green"
                     android:textStyle="bold" />
 
-                <LinearLayout
+                <EditText
+                    android:id="@+id/phone_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="3dp"
-                    android:layout_weight="0"
-                    android:orientation="horizontal" >
-
-                    <EditText
-                        android:id="@+id/phone_text"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="3dp"
-                        android:layout_weight="1"
-                        android:digits="0123456789+"
-                        android:inputType="phone" />
-
-                    <ImageView
-                        android:id="@+id/add_phone_icon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="3dp"
-                        android:contentDescription="@string/app_name"
-                        android:src="@drawable/ic_action_new_phone" />
-                </LinearLayout>
-
-                <eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info.edit.EditedFieldListView
-                    android:id="@+id/phone_list"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="0px"
-                    android:scrollbars="none" />
+                    android:digits="0123456789+"
+                    android:inputType="phone" >
+                </EditText>
 
                 <TextView
                     android:id="@+id/email_label"
@@ -87,36 +61,12 @@
                     android:textColor="@color/jungle_green"
                     android:textStyle="bold" />
 
-                <LinearLayout
+                <EditText
+                    android:id="@+id/email_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="3dp"
-                    android:layout_weight="0"
-                    android:orientation="horizontal" >
-
-                    <EditText
-                        android:id="@+id/email_text"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="3dp"
-                        android:layout_weight="1"
-                        android:inputType="textEmailAddress" />
-
-                    <ImageView
-                        android:id="@+id/add_email_icon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="3dp"
-                        android:contentDescription="@string/app_name"
-                        android:src="@drawable/ic_action_new_email" />
-                </LinearLayout>
-
-                <eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info.edit.EditedFieldListView
-                    android:id="@+id/email_list"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="0px"
-                    android:scrollbars="none" />
+                    android:inputType="textEmailAddress" >
+                </EditText>
 
                 <TextView
                     android:id="@+id/website_label"

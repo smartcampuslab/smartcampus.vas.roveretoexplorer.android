@@ -15,12 +15,18 @@
     <string name="title_txt">Titolo</string>
     <string name="origin_txt">Promotore</string>
     <string name="contacts_txt">Contatti</string>
-    <string name="invalid_email">indirizzo email non valido</string>
-    <string name="invalid_phone">telefono non valido</string>
+    <string name="invalid_emails">Email non valide: \'%1$s\'</string>
+    <string name="invalid_phones">Numeri di telefono non validi: \'%1$s\'</string>
+    <string name="invalid_email">Email non valida</string>
+    <string name="invalid_phone">Numero di telefono non valido</string>
     <string name="invalid_weburl">web url non valida</string>
     <string name="invalid_fburl">facebook url non valida</string>
     <string name="invalid_twitterurl">twitter url non valida</string>
-    <string name="tag_remove_request">Vuoi eliminare il tag?</string>
+    <string name="tag_remove_request">Vuoi eliminare il tag \'%1$s\'?</string>
+    <string name="phone_remove_request">Vuoi eliminare il telefono \'%1$s\'?</string>
+    <string name="email_remove_request">Vuoi eliminare l\'email \'%1$s\'?</string>
+    						
+    
     <string name="yes">Si</string>
     <string name="no">No</string>
     
