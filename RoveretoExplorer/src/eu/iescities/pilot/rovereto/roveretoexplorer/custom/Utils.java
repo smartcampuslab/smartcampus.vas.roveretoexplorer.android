@@ -73,6 +73,8 @@ public class Utils {
 	public static final String EDIT_FIELD_EMAIL_TYPE = "email";
 	public static final String EDIT_FIELD_TEXT_TYPE = "text";
 	
+	public static final String EMAIL_CONTACT_TYPE = "email";
+	public static final String PHONE_CONTACT_TYPE = "phone";
 	
 	
 

@@ -437,8 +437,6 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 
 	}
 
-	
-	
 	private void updateSingleEvent(ExplorerObject expObj) {
 		String date_with_day;
 		date_with_day = Utils.getDateTimeString(context, expObj.getFromTime(), Utils.DATE_FORMAT_2, true, true)[0];

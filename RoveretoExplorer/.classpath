@@ -6,7 +6,8 @@
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry exported="true" kind="lib" path="/google-play-services_lib/libs/google-play-services.jar"/>
-	<classpathentry exported="true" kind="lib" path="/home/chrome/Documenti/work/Android/sdk/adt-bundle-linux-x86_64-20130514/adt-bundle-linux-x86_64-20130514/sdk/extras/android/support/v7/appcompat/libs/android-support-v7-appcompat.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/universal-image-loader-1.9.1-with-sources.jar"/>
+	<classpathentry kind="lib" path="/android-support-v7-appcompat/libs/android-support-v7-appcompat.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
+	
 </classpath>

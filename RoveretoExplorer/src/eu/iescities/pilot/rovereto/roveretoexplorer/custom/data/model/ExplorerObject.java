@@ -22,6 +22,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import android.util.Log;
+
 
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.Address;
 
@@ -156,68 +158,31 @@ public class ExplorerObject extends BaseDTObject {
 		this.whenWhere = whenWhere;
 	}
 
-//
-//	public List<String> bringEmails() {
-//		if (getContacts().containsKey("email")) {
-//			String[] parts = ((String) getContacts().get("email")).split(",");
-//			List<String> returnList = new ArrayList<String>(Arrays.asList(parts));  
-//			return returnList;
-//		} else
-//			return null;
-//	}
-//
-//	public void saveEmails(List<String> emails) {
-//		StringBuffer buf = new StringBuffer(256); // Java default is 16,
-//		for (String email: emails){
-//			buf.append(email+",");
-//
-//		}
-//		buf.deleteCharAt(buf.length() - 1);
-//		this.getContacts().put("email", buf);
-//
-//	}
+
 
 	
-
-	public List<String> getEmails() {
-		List<String> emails = null;
-		if (getContacts().containsKey("email")){
-			if((List<String>) getContacts().get("email")!=null)
-				emails = new ArrayList<String>((List<String>) getContacts().get("email"));
-		}	
-		return emails;
-	}
-
-	public void setEmails(List<String> emails) {
-
-		if (emails!=null){
-			if (getContacts().containsKey("email")){
-				getContacts().remove("email"); 
+	//get email or phone number contacts according to the paramter "contact_type" that can assume values "telefono" or "email"
+	public void setPhoneEmailContacts(String contact_type, List<String> contacts) {
+		if (contacts!=null){
+			if (getContacts().containsKey(contact_type)){
+				getContacts().remove(contact_type); 
 			}
-			getContacts().put("email", emails);
+			getContacts().put(contact_type, contacts);
 		}
 	}
 
-	public List<String> getPhones() {
-		List<String> phones = null;
-		if (getContacts().containsKey("telefono")){
-			if((List<String>) getContacts().get("telefono")!=null)
-				phones = new ArrayList<String>((List<String>) getContacts().get("telefono"));
+	
+	
+	//get email or phone number contacts according to the paramter "contact_type" that can assume values "telefono" or "email"
+	public List<String> getPhoneEmailContacts(String contact_type) {
+		List<String> contacts = null;
+		if (getContacts().containsKey(contact_type)){
+			if((List<String>) getContacts().get(contact_type)!=null)
+				contacts = new ArrayList<String>((List<String>) getContacts().get(contact_type));
+				if (contacts.size()==0) contacts=null;
 		}	
-		return phones;
+		return contacts;
 	}
 
-
-	public void setPhones(List<String> phones) {
-
-		if (phones!=null){
-			if (getContacts().containsKey("telefono")){
-				getContacts().remove("telefono"); 
-			}
-			getContacts().put("telefono", phones);
-		}
-
-	}
-
-
+	
 }

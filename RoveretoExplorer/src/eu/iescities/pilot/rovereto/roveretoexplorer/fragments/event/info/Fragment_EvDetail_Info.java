@@ -190,30 +190,30 @@ public class Fragment_EvDetail_Info extends Fragment {
 		// display the event title
 		TextView titleTextView = (TextView) getActivity().findViewById(R.id.event_info_placeholder_title);
 		titleTextView.setText(mEvent.getTitle());
-		
+
 		//add the edit icon besides the text
-//		String text = mEvent.getTitle() + " ";
-//		SpannableString ss = new SpannableString(text);
-//		Drawable d = getResources().getDrawable(R.drawable.ic_action_edit);
-//		d.setBounds(0, 0, 35, 35);
-//		ImageSpan span = new ImageSpan(d, ImageSpan.ALIGN_BASELINE);
-//		int start = text.length() - 1;
-//		ss.setSpan(span, start, start + 1, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
-//		ss.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), start, start + 1,
-//				Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-//		ss.setSpan(new ClickableSpan() {
-//			@Override
-//			public void onClick(View v) {
-//				Log.d("main", "link clicked");
-//				// Toast.makeText(context, "modify event title",
-//				// Toast.LENGTH_SHORT).show();
-//				editField("title");
-//			}
-//		}, start, start + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-//		titleTextView.setText(ss);
-//		titleTextView.setMovementMethod(LinkMovementMethod.getInstance());
-		
-		
+		//		String text = mEvent.getTitle() + " ";
+		//		SpannableString ss = new SpannableString(text);
+		//		Drawable d = getResources().getDrawable(R.drawable.ic_action_edit);
+		//		d.setBounds(0, 0, 35, 35);
+		//		ImageSpan span = new ImageSpan(d, ImageSpan.ALIGN_BASELINE);
+		//		int start = text.length() - 1;
+		//		ss.setSpan(span, start, start + 1, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+		//		ss.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), start, start + 1,
+		//				Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+		//		ss.setSpan(new ClickableSpan() {
+		//			@Override
+		//			public void onClick(View v) {
+		//				Log.d("main", "link clicked");
+		//				// Toast.makeText(context, "modify event title",
+		//				// Toast.LENGTH_SHORT).show();
+		//				editField("title");
+		//			}
+		//		}, start, start + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+		//		titleTextView.setText(ss);
+		//		titleTextView.setMovementMethod(LinkMovementMethod.getInstance());
+
+
 
 		// display the event image
 		ImageView imgView = (ImageView) getActivity().findViewById(R.id.event_placeholder_photo);
@@ -222,7 +222,6 @@ public class Fragment_EvDetail_Info extends Fragment {
 			RoveretoExplorerApplication.imageLoader.displayImage(mEventImageUrl, imgView);
 		}
 
-
 		// display the event category plus the "promoted by" attribute
 		TextView categoryTextView = (TextView) getActivity().findViewById(R.id.event_placeholder_category);
 		String category = mEvent.getCategory();
@@ -230,21 +229,21 @@ public class Fragment_EvDetail_Info extends Fragment {
 			String text = getResources().getString(R.string.event_category, category, mEvent.getOrigin());
 			categoryTextView.setText(text);
 			//add the edit icon besides the text
-//			text += " ";
-//			ss = new SpannableString(text);
-//			start = text.length() - 1;
-//			ss.setSpan(span, start, start + 1, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
-//			ss.setSpan(new ClickableSpan() {
-//				@Override
-//				public void onClick(View v) {
-//					Log.d("main", "link clicked");
-//					// Toast.makeText(context, "modify promoted by",
-//					// Toast.LENGTH_SHORT).show();
-//					editField("origin");
-//				}
-//			}, start, start + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-//			categoryTextView.setText(ss);
-//			categoryTextView.setMovementMethod(LinkMovementMethod.getInstance());
+			//			text += " ";
+			//			ss = new SpannableString(text);
+			//			start = text.length() - 1;
+			//			ss.setSpan(span, start, start + 1, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+			//			ss.setSpan(new ClickableSpan() {
+			//				@Override
+			//				public void onClick(View v) {
+			//					Log.d("main", "link clicked");
+			//					// Toast.makeText(context, "modify promoted by",
+			//					// Toast.LENGTH_SHORT).show();
+			//					editField("origin");
+			//				}
+			//			}, start, start + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+			//			categoryTextView.setText(ss);
+			//			categoryTextView.setMovementMethod(LinkMovementMethod.getInstance());
 		} else
 			categoryTextView.setText("Evento " + category + ".");
 
@@ -313,10 +312,9 @@ public class Fragment_EvDetail_Info extends Fragment {
 
 		expListView.setChildDivider(null);
 		expListView.setChildDivider(getResources().getDrawable(R.color.transparent));
-		
+
 		// header part
 		header = getActivity().getLayoutInflater().inflate(R.layout.frag_ev_detail_info_header, null);
-
 
 		// adding header to the list
 		if (expListView.getHeaderViewsCount() == 0) {
@@ -407,7 +405,7 @@ public class Fragment_EvDetail_Info extends Fragment {
 		groupImages.add(R.drawable.ic_action_edit_white);
 		groupImages.add(R.drawable.ic_action_edit_white);
 		groupImages.add(R.drawable.ic_action_edit_white);
-		
+
 	}
 
 	private void setAdapter(final ArrayList<EventInfoParent> newParents) {
@@ -459,23 +457,26 @@ public class Fragment_EvDetail_Info extends Fragment {
 			// }
 			//
 			//
-			//			if (event.getCategory() != null) {
-			//				Log.i("EVENT", "Fragment_EvDetail_Info --> Category: " + event.getCategory() + "!!");
-			//			}
+			// if (event.getCategory() != null) {
+			// Log.i("EVENT", "Fragment_EvDetail_Info --> Category: " +
+			// event.getCategory() + "!!");
+			// }
 			//
-			//			if (event.getOrigin() != null) {
-			//				Log.i("EVENT", "Fragment_EvDetail_Info --> Origin: " + event.getOrigin() + "!!");
-			//			}
+			// if (event.getOrigin() != null) {
+			// Log.i("EVENT", "Fragment_EvDetail_Info --> Origin: " +
+			// event.getOrigin() + "!!");
+			// }
 			//
-			//			if (event.getLocation() != null) {
-			//				Log.i("EVENT", "Fragment_EvDetail_Info --> Location: " + event.getLocation() + "!!");
-			//			}
+			// if (event.getLocation() != null) {
+			// Log.i("EVENT", "Fragment_EvDetail_Info --> Location: " +
+			// event.getLocation() + "!!");
+			// }
 
-//			if (event.getCommunityData().getTags() != null) {
-//				Log.i("EVENT", "Fragment_EvDetail_Info --> TAGS: " + event.getCommunityData().getTags() + "!!");
-//			}
-//			else
-//				Log.i("EVENT", "Fragment_EvDetail_Info --> TAGS NULL!!");
+
+			if (event.getCommunityData().getTags() != null) {
+				Log.i("EVENT", "Fragment_EvDetail_Info --> TAGS: " + event.getCommunityData().getTags() + "!!");
+			} else
+				Log.i("EVENT", "Fragment_EvDetail_Info --> TAGS NULL!!");
 
 			// Set values in parent class object
 			if (i == 1) { // field DOVE e QUANDO
@@ -535,7 +536,7 @@ public class Fragment_EvDetail_Info extends Fragment {
 						child.setText(getResources().getString(R.string.start_date) + ": " + fromDateTime[0]);
 					Log.i("EVENT", "Fragment_EvDetail_Info --> fromTime: " + child.getText() + "!!");
 					child.setType(0);
-					child.setLeftIconId(R.drawable.ic_action_time);
+					child.setLeftIconId(R.drawable.ic_start);
 					parent.getChildren().add(child);
 				}
 
@@ -552,6 +553,8 @@ public class Fragment_EvDetail_Info extends Fragment {
 						child.setText(getResources().getString(R.string.end_date) + ": " + toDateTime[0]);
 					Log.i("EVENT", "Fragment_EvDetail_Info --> toTime: " + child.getText() + "!!");
 					child.setType(0);
+					child.setLeftIconId(R.drawable.ic_end);
+
 					parent.getChildren().add(child);
 
 					// compute duration or get in from the Explorer Object when
@@ -589,8 +592,6 @@ public class Fragment_EvDetail_Info extends Fragment {
 				telChildLabel.setName("Phones");
 				telChildLabel.setText("Telefono");
 				telChildLabel.setType(1);
-				telChildLabel.setDividerHeight(3);
-
 				telChildLabel.setLeftIconId(R.drawable.ic_action_phone);
 
 				// to be added again when it will be possible to add more
@@ -600,17 +601,17 @@ public class Fragment_EvDetail_Info extends Fragment {
 
 				parent.getChildren().add(telChildLabel);
 
+
 				// set the list of phone numbers
-				if (event.getContacts().containsKey("telefono")) {
-					List<String> telephones = (List<String>) event.getContacts().get("telefono");
+				List<String> telephones = event.getPhoneEmailContacts(Utils.PHONE_CONTACT_TYPE);
+				if (telephones!=null){
+					telChildLabel.setDividerHeight(0);
 					for (String tel : telephones) {
 						if (!tel.matches("")) {
-							Log.i("EVENT", "Fragment_EvDetail_Info --> telefono: " + tel + "!!");
 							EventInfoChild child1 = new EventInfoChild();
 							child1.setName("tel");
 							child1.setText(tel);
 							child1.setType(0);
-
 							// to be added when it will be possible to
 							// cancel/edit the single item
 							// int[] rightIconIds1 = new
@@ -620,22 +621,16 @@ public class Fragment_EvDetail_Info extends Fragment {
 							int[] rightIconIds1 = new int[] { R.drawable.ic_action_call };
 
 							child1.setRightIconIds(rightIconIds1);
-							parent.getChildren().add(child1);
+							child1.setDividerHeight(0);
+							
+							if (tel==telephones.get(telephones.size()-1))
+								child1.setDividerHeight(1);
+
+								parent.getChildren().add(child1);
+								
+							
 						}
 					}
-					
-					//fake tel number!!!
-//					EventInfoChild child1 = new EventInfoChild();
-//					child1.setName("tel");
-//					child1.setText("04619839448");
-//					child1.setType(0);
-//					int[] rightIconIds1 = new int[] { R.drawable.ic_action_call };
-//					child1.setRightIconIds(rightIconIds1);
-//					parent.getChildren().add(child1);
-					//end fake tel number!!
-					
-					
-					
 				}
 
 				// set the Email item of type 1
@@ -643,7 +638,6 @@ public class Fragment_EvDetail_Info extends Fragment {
 				emailChildLabel.setName("Emails");
 				emailChildLabel.setText("Email");
 				emailChildLabel.setType(1);
-				emailChildLabel.setDividerHeight(3);
 				emailChildLabel.setLeftIconId(R.drawable.ic_action_email);
 
 				// to be added again when it will be possible to add more emails
@@ -653,24 +647,12 @@ public class Fragment_EvDetail_Info extends Fragment {
 
 				parent.getChildren().add(emailChildLabel);
 
-				//List<String> emails = event.bringEmails();
-				
-//				 if (event.getContacts().containsKey("email")){
-//				 String emailn = (String) event.getContacts().get("email");
-//				 Log.i("EVENT", "Fragment_EvDetail_Info --> titolo evento: " + event.getTitle()+ "!!");
-//				 if (emailn!="")
-//					 Log.i("EVENT", "Fragment_EvDetail_Info --> email: " + emailn+ "!!");
-//				 else 
-//					 Log.i("EVENT", "Fragment_EvDetail_Info --> email: NULL");
-//				 }
-				
-				List<String> emails = event.getEmails();
-				
+				List<String> emails = event.getPhoneEmailContacts(Utils.EMAIL_CONTACT_TYPE);
 				
 				if (emails != null) {
+					emailChildLabel.setDividerHeight(0);
 					for (String email : emails) {
 						if (!email.matches("")) {
-							Log.i("EVENT", "Fragment_EvDetail_Info --> email: " + email + "!!");
 							EventInfoChild child = new EventInfoChild();
 							child.setName("email");
 							child.setText(email);
@@ -683,33 +665,19 @@ public class Fragment_EvDetail_Info extends Fragment {
 							// R.drawable.ic_action_email};
 							int[] rightIconIds2 = new int[] { R.drawable.ic_compose_email };
 							child.setRightIconIds(rightIconIds2);
+
+							child.setDividerHeight(0);
+
+							if (email==emails.get(emails.size()-1))
+								child.setDividerHeight(1);
+
+							
+							
 							parent.getChildren().add(child);
 						}
+
 					}
 				}
-
-				
-				
-				
-				// String email = null;
-				// if (event.getContacts().containsKey("email")){
-				// email = (String) event.getContacts().get("email");
-				// if (email!=""){
-				// Log.i("EVENT", "Fragment_EvDetail_Info --> email: " + email+
-				// "!!");
-				// EventInfoChild child = new EventInfoChild();
-				// child.setName("email");
-				// child.setText(email);
-				// child.setType(0);
-				// //to be added when it will be possible to cancel/edit the
-				// single item
-				// //int[] rightIconIds2 = new int[]{R.drawable.ic_action_edit,
-				// R.drawable.ic_action_cancel, R.drawable.ic_action_email};
-				// int[] rightIconIds2 = new int[]{R.drawable.ic_compose_email};
-				// child.setRightIconIds(rightIconIds2);
-				// parent.getChildren().add(child);
-				// }
-				// }
 
 				// set the Web Site item of type 0
 				EventInfoChild siteChildLabel = new EventInfoChild();
@@ -728,12 +696,13 @@ public class Fragment_EvDetail_Info extends Fragment {
 				EventInfoChild fbChildLabel = new EventInfoChild();
 				fbChildLabel.setName("Facebook ");
 				if (event.getFacebookUrl() != null) {
-					//fbChildLabel.setText("<a href=\"" + event.getFacebookUrl() + "\">Facebook</a>");
+					// fbChildLabel.setText("<a href=\"" +
+					// event.getFacebookUrl() + "\">Facebook</a>");
 					fbChildLabel.setText(event.getFacebookUrl());
 				} else
 					fbChildLabel.setText("Facebook");
 				fbChildLabel.setType(0);
-				fbChildLabel.setLeftIconId(R.drawable.ic_facebook); 
+				fbChildLabel.setLeftIconId(R.drawable.ic_facebook);
 				Log.i("EVENT", "Fragment_EvDetail_Info --> facebook: " + fbChildLabel.getText() + "!!");
 				parent.getChildren().add(fbChildLabel);
 
@@ -741,24 +710,24 @@ public class Fragment_EvDetail_Info extends Fragment {
 				EventInfoChild twitterChildLabel = new EventInfoChild();
 				twitterChildLabel.setName("Twitter ");
 				if (event.getTwitterUrl() != null) {
-					//twitterChildLabel.setText("<a href=\"" + event.getTwitterUrl() + "\">Twitter</a>");
+					// twitterChildLabel.setText("<a href=\"" +
+					// event.getTwitterUrl() + "\">Twitter</a>");
 					twitterChildLabel.setText(event.getTwitterUrl());
 
 				} else
 					twitterChildLabel.setText("Twitter ");
 				twitterChildLabel.setType(0);
-				twitterChildLabel.setLeftIconId(R.drawable.ic_twitter); 
+				twitterChildLabel.setLeftIconId(R.drawable.ic_twitter);
 				Log.i("EVENT", "Fragment_EvDetail_Info --> twitter: " + twitterChildLabel.getText() + "!!");
 				parent.getChildren().add(twitterChildLabel);
-			}
-			else if(i==4){ //field TAGS
+			} else if (i == 4) { // field TAGS
 				parent.setName("" + i);
 				parent.setText1("Tags");
 				parent.setChildren(new ArrayList<EventInfoChild>());
 				List<String> tags = null;
-				if (event.getCommunityData().getTags()!=null){
+				if (event.getCommunityData().getTags() != null) {
 					tags = event.getCommunityData().getTags();
-					for (String tag : tags){
+					for (String tag : tags) {
 						EventInfoChild child = new EventInfoChild();
 						child.setName("tag");
 						child.setText(tag);
@@ -769,9 +738,9 @@ public class Fragment_EvDetail_Info extends Fragment {
 				}
 			}
 
-			
+
 			//delete the divider line for the last item of a group
-			
+
 			if (parent.getChildren().size()!=0){
 				EventInfoChild lastChild = parent.getChildren().get(parent.getChildren().size()-1);
 				lastChild.setDividerHeight(0);
@@ -779,7 +748,7 @@ public class Fragment_EvDetail_Info extends Fragment {
 				parent.getChildren().add(lastChild);
 			}
 
-			
+
 			// Adding Parent class object to ArrayList
 			list.add(parent);
 		}

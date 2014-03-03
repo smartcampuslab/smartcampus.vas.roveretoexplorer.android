@@ -59,8 +59,6 @@ public class EventAdapter extends BaseExpandableListAdapter {
 
 
 
-
-
 	EventsListingFragment fragment;
 
 	private ReloadAdapter reloadAdapter;

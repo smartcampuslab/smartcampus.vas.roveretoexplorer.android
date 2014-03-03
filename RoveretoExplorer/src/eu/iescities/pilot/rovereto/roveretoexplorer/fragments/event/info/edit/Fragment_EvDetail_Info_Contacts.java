@@ -1,5 +1,7 @@
 package eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info.edit;
 
+
+
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -62,11 +64,11 @@ public class Fragment_EvDetail_Info_Contacts extends Fragment {
 
 
 	private ArrayList<String> phone_list = null;
-	EditFieldListAdapter phoneListAdapter;
+	EditFieldListAdapter phoneListAdapter = null;
 	EditedFieldListView phoneList;
 
 	private ArrayList<String> email_list = null;
-	EditFieldListAdapter emailListAdapter;
+	EditFieldListAdapter emailListAdapter = null;
 	EditedFieldListView emailList;
 
 
@@ -139,7 +141,7 @@ public class Fragment_EvDetail_Info_Contacts extends Fragment {
 
 
 		//get list of phone numbers
-		phone_list =  (ArrayList<String>) mEvent.getPhones();
+		phone_list =  (ArrayList<String>) mEvent.getPhoneEmailContacts(Utils.PHONE_CONTACT_TYPE);
 		//get list view
 		phoneList = (EditedFieldListView) getActivity().findViewById(R.id.phone_list);
 		//set adapter if list not empty
@@ -177,7 +179,10 @@ public class Fragment_EvDetail_Info_Contacts extends Fragment {
 
 
 		//get list of emails
-		email_list =  (ArrayList<String>) mEvent.getEmails();
+		//email_list =  (ArrayList<String>) mEvent.getEmails();
+		email_list =  (ArrayList<String>) mEvent.getPhoneEmailContacts(Utils.EMAIL_CONTACT_TYPE);
+		
+		
 		//get list view
 		emailList = (EditedFieldListView) getActivity().findViewById(R.id.email_list);
 		//set adapter if list not empty
@@ -254,20 +259,22 @@ public class Fragment_EvDetail_Info_Contacts extends Fragment {
 
 				if (isValidInput(phoneList, emailList)){
 
-					mEvent.setPhones(phoneList);
-
-					//					if (mEvent.getContacts().containsKey("telefono")) {
-					//						List<String> telephones = (List<String>) mEvent.getContacts().get("telefono");
-					//						for (String tel : telephones) {
-					//							if (!tel.matches("")) {
-					//								Log.i("CONTACT", "Fragment_evDetail_Info_Contacts --> telefono: " + tel + "!!");
-					//							}
-					//
-					//						}
-					//					}
+					mEvent.setPhoneEmailContacts(Utils.PHONE_CONTACT_TYPE, phoneList);
 
 
-					mEvent.setEmails(emailList);
+										if (mEvent.getContacts().containsKey("telefono")) {
+											List<String> telephones = (List<String>) mEvent.getContacts().get("telefono");
+											for (String tel : telephones) {
+												if (!tel.matches("")) {
+													Log.i("CONTACT", "Fragment_evDetail_Info_Contacts --> telefono: " + tel + "!!");
+												}
+					
+											}
+										}
+
+
+					mEvent.setPhoneEmailContacts(Utils.EMAIL_CONTACT_TYPE, emailList);
+					
 
 
 					try {
@@ -321,13 +328,16 @@ public class Fragment_EvDetail_Info_Contacts extends Fragment {
 
 	protected List<String> getEditFields(EditFieldListAdapter fieldListAdapter){
 		//get values from edit fields
-		List<String> fieldList = new ArrayList<String>();
-		if (!fieldListAdapter.isEmpty()) {
-			for (int i = 0; i < fieldListAdapter.getCount(); i++) {
-				fieldList.add(fieldListAdapter.getItem(i));
+		if (fieldListAdapter!=null){
+			List<String> fieldList = new ArrayList<String>();
+			if (!fieldListAdapter.isEmpty()) {
+				for (int i = 0; i < fieldListAdapter.getCount(); i++) {
+					fieldList.add(fieldListAdapter.getItem(i));
+				}
 			}
-		}
-		return fieldList; 		
+			return fieldList; 		
+		}else return null;
+		
 	}
 
 
