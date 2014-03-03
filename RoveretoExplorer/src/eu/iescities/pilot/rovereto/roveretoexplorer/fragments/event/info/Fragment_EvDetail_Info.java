@@ -518,7 +518,9 @@ public class Fragment_EvDetail_Info extends Fragment {
 					// Create Child class object
 					EventInfoChild child = new EventInfoChild();
 					child.setName("address");
-					child.setText(getResources().getString(R.string.address) + ": " + addressStr);
+					//child.setText(getResources().getString(R.string.address) + ": " + addressStr);
+					child.setText(addressStr);
+					
 					child.setType(0);
 					child.setLeftIconId(R.drawable.ic_action_place);
 					parent.getChildren().add(child);
@@ -530,11 +532,10 @@ public class Fragment_EvDetail_Info extends Fragment {
 					EventInfoChild child = new EventInfoChild();
 					child.setName(getResources().getString(R.string.start_date));
 					if (!fromDateTime[1].matches("")) {
-						child.setText(getResources().getString(R.string.start_date) + ": " + fromDateTime[0] + ", Ore "
-								+ fromDateTime[1]);
+						child.setText(getResources().getString(R.string.date_with_time,fromDateTime[0],fromDateTime[1]));
 					} else
-						child.setText(getResources().getString(R.string.start_date) + ": " + fromDateTime[0]);
-					Log.i("EVENT", "Fragment_EvDetail_Info --> fromTime: " + child.getText() + "!!");
+						child.setText(fromDateTime[0]);
+
 					child.setType(0);
 					child.setLeftIconId(R.drawable.ic_start);
 					parent.getChildren().add(child);
@@ -547,10 +548,11 @@ public class Fragment_EvDetail_Info extends Fragment {
 					child.setName(getResources().getString(R.string.end_date));
 
 					if (!toDateTime[1].matches("")) {
-						child.setText(getResources().getString(R.string.end_date) + ": " + toDateTime[0] + ", Ore "
-								+ toDateTime[1]);
+						child.setText(getResources().getString(R.string.date_with_time,toDateTime[0],toDateTime[1]));
+						
 					} else
-						child.setText(getResources().getString(R.string.end_date) + ": " + toDateTime[0]);
+						child.setText(toDateTime[0]);
+
 					Log.i("EVENT", "Fragment_EvDetail_Info --> toTime: " + child.getText() + "!!");
 					child.setType(0);
 					child.setLeftIconId(R.drawable.ic_end);
@@ -592,6 +594,7 @@ public class Fragment_EvDetail_Info extends Fragment {
 				telChildLabel.setName("Phones");
 				telChildLabel.setText("Telefono");
 				telChildLabel.setType(1);
+				telChildLabel.setTextInBold(true);
 				telChildLabel.setLeftIconId(R.drawable.ic_action_phone);
 
 				// to be added again when it will be possible to add more
@@ -638,6 +641,7 @@ public class Fragment_EvDetail_Info extends Fragment {
 				emailChildLabel.setName("Emails");
 				emailChildLabel.setText("Email");
 				emailChildLabel.setType(1);
+				emailChildLabel.setTextInBold(true);
 				emailChildLabel.setLeftIconId(R.drawable.ic_action_email);
 
 				// to be added again when it will be possible to add more emails
@@ -687,6 +691,7 @@ public class Fragment_EvDetail_Info extends Fragment {
 				} else
 					siteChildLabel.setText("Web Site");
 				siteChildLabel.setType(0);
+				siteChildLabel.setTextInBold(true);
 				siteChildLabel.setLeftIconId(R.drawable.ic_action_web_site);
 				Log.i("EVENT", "Fragment_EvDetail_Info --> website: " + siteChildLabel.getText() + "!!");
 
@@ -702,6 +707,7 @@ public class Fragment_EvDetail_Info extends Fragment {
 				} else
 					fbChildLabel.setText("Facebook");
 				fbChildLabel.setType(0);
+				fbChildLabel.setTextInBold(true);
 				fbChildLabel.setLeftIconId(R.drawable.ic_facebook);
 				Log.i("EVENT", "Fragment_EvDetail_Info --> facebook: " + fbChildLabel.getText() + "!!");
 				parent.getChildren().add(fbChildLabel);
@@ -717,6 +723,7 @@ public class Fragment_EvDetail_Info extends Fragment {
 				} else
 					twitterChildLabel.setText("Twitter ");
 				twitterChildLabel.setType(0);
+				twitterChildLabel.setTextInBold(true);
 				twitterChildLabel.setLeftIconId(R.drawable.ic_twitter);
 				Log.i("EVENT", "Fragment_EvDetail_Info --> twitter: " + twitterChildLabel.getText() + "!!");
 				parent.getChildren().add(twitterChildLabel);

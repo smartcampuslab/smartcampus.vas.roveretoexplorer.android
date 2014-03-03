@@ -118,7 +118,7 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 
 	}
 
-	
+
 	// public EventDetailInfoAdapter(Context context, int layoutResourceId,
 	// List<String> events_attr_names,
 	// Map<String, List<String>> eventAttrValuesCollections) {
@@ -157,10 +157,10 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 					.findViewById(R.id.event_info_attribute_value_icon);
 			eventChildViewHolder.imgsDx1 = (ImageView) row
 					.findViewById(R.id.event_info_action1);
-			
+
 			eventChildViewHolder.divider = (View) row
 					.findViewById(R.id.event_info_item_divider);
-			
+
 
 			//this will be added again when it will be possible to cancel/edit the single items
 			//			eventChildViewHolder.imgsDx2 = (ImageView) row
@@ -174,6 +174,12 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 		}
 
 		// Get event_info_child_item.xml file elements and set values
+
+
+		if (child.getTextInBold())
+			eventChildViewHolder.text.setTypeface(null, Typeface.BOLD);
+		else
+			eventChildViewHolder.text.setTypeface(null, Typeface.NORMAL);
 
 
 		if (!child.getText().contains("http")){
@@ -254,9 +260,9 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 		if ((child.getRightIconIds() != null) && (child.getType() == 1)) {
 			Log.i("GROUPVIEW", "CHILD DX1 ICON ID: "
 					+ child.getRightIconIds()[0]);
-			
+
 			eventChildViewHolder.text.setTypeface(null, Typeface.BOLD);
-			
+
 			eventChildViewHolder.imgsDx1.setVisibility(View.VISIBLE);
 			eventChildViewHolder.imgsDx1.setImageResource(child
 					.getRightIconIds()[0]);
@@ -267,19 +273,19 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 			Log.i("GROUPVIEW", "CHILD DX1 ICON NULL");
 			eventChildViewHolder.imgsDx1.setVisibility(View.INVISIBLE);
 		}
-		
-		
+
+
 		eventChildViewHolder.divider.setBackgroundColor(child.getDividerColor());
-		
-		
+
+
 		eventChildViewHolder.divider.setLayoutParams(new LinearLayout.LayoutParams(
-		           LinearLayout.LayoutParams.MATCH_PARENT,
-		           child.getDividerHeight()));
-		
-		
-	
-		
-	
+				LinearLayout.LayoutParams.MATCH_PARENT,
+				child.getDividerHeight()));
+
+
+
+
+
 		// set icons on the right side for the items of type 0 (single values)
 		if ((child.getRightIconIds() != null) && (child.getType() == 0)) {
 			Log.i("GROUPVIEW", "CHILD DX1 ICON ID: "
@@ -310,25 +316,25 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 			//			eventChildViewHolder.imgsDx3.setVisibility(View.INVISIBLE);
 		}
 
-//		Log.i("GROUPVIEW", "child view: group  POS: " + groupPosition + "!!");
-//		Log.i("GROUPVIEW", "child view: child POS: " + childPosition + "!!");
+		//		Log.i("GROUPVIEW", "child view: group  POS: " + groupPosition + "!!");
+		//		Log.i("GROUPVIEW", "child view: child POS: " + childPosition + "!!");
 
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 		countChildViewCall++;
 
@@ -611,9 +617,9 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 				frag_description = "event_details_info_edit_tags";
 
 			}
-			
-			
-			
+
+
+
 
 			if (edit_fragment!=null){
 				edit_fragment.setArguments(args);

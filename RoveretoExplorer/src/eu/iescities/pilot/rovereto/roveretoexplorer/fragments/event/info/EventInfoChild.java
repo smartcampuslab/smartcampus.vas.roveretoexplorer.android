@@ -19,6 +19,9 @@ public class EventInfoChild{
 	
 	private int divider_height=1;
 	private int divider_color = R.color.jungle_green;
+	private boolean textInBold = false;
+	
+	
 	
 	
 	
@@ -100,6 +103,16 @@ public class EventInfoChild{
 	
 	
 	
+	public boolean getTextInBold()
+	{
+		return textInBold;
+	}
+	
+	
+	public void setTextInBold(boolean text_in_bold)
+	{
+		this.textInBold = text_in_bold;
+	}
 	
 	
 	
