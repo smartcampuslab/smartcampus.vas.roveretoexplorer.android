@@ -50,7 +50,7 @@ public class CategoryHelper {
 					R.string.categories_event_cultura),
 			/* 2 */new CategoryDescriptor(R.drawable.ic_sport_map, R.drawable.ic_sport, CAT_SPORT,
 					R.string.categories_event_sport),
-			/* 3 */new CategoryDescriptor(R.drawable.ic_svago_map, R.drawable.ic_svago, CAT_SOCIALE,
+			/* 3 */new CategoryDescriptor(R.drawable.ic_svago_map, R.drawable.ic_person, CAT_SOCIALE,
 					R.string.categories_event_social),
 			/* 4 */new CategoryDescriptor(R.drawable.ic_altri_eventi_map, R.drawable.ic_altri_eventi,
 					EVENT_NONCATEGORIZED, R.string.categories_event_altri_eventi),

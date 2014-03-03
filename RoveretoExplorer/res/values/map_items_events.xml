@@ -16,7 +16,7 @@
         <item>@drawable/ic_eventi_oggi</item>
         <item>@drawable/ic_cultura</item>
         <item>@drawable/ic_sport</item>
-        <item>@drawable/ic_svago</item>
+        <item>@drawable/ic_person</item>
         <item>@drawable/ic_altri_eventi</item>
     </string-array>
 
