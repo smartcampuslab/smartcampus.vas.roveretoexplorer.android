@@ -520,7 +520,7 @@ public class Fragment_EvDetail_Info extends Fragment {
 					child.setName("address");
 					//child.setText(getResources().getString(R.string.address) + ": " + addressStr);
 					child.setText(addressStr);
-					
+
 					child.setType(0);
 					child.setLeftIconId(R.drawable.ic_action_place);
 					parent.getChildren().add(child);
@@ -549,7 +549,7 @@ public class Fragment_EvDetail_Info extends Fragment {
 
 					if (!toDateTime[1].matches("")) {
 						child.setText(getResources().getString(R.string.date_with_time,toDateTime[0],toDateTime[1]));
-						
+
 					} else
 						child.setText(toDateTime[0]);
 
@@ -581,6 +581,7 @@ public class Fragment_EvDetail_Info extends Fragment {
 					child.setName("Description");
 					child.setText(desc);
 					child.setType(0);
+					
 					parent.getChildren().add(child);
 				}
 			} else if (i == 3) { // field CONTATTI
@@ -625,13 +626,13 @@ public class Fragment_EvDetail_Info extends Fragment {
 
 							child1.setRightIconIds(rightIconIds1);
 							child1.setDividerHeight(0);
-							
+
 							if (tel==telephones.get(telephones.size()-1))
 								child1.setDividerHeight(1);
 
-								parent.getChildren().add(child1);
-								
-							
+							parent.getChildren().add(child1);
+
+
 						}
 					}
 				}
@@ -652,7 +653,7 @@ public class Fragment_EvDetail_Info extends Fragment {
 				parent.getChildren().add(emailChildLabel);
 
 				List<String> emails = event.getPhoneEmailContacts(Utils.EMAIL_CONTACT_TYPE);
-				
+
 				if (emails != null) {
 					emailChildLabel.setDividerHeight(0);
 					for (String email : emails) {
@@ -675,8 +676,8 @@ public class Fragment_EvDetail_Info extends Fragment {
 							if (email==emails.get(emails.size()-1))
 								child.setDividerHeight(1);
 
-							
-							
+
+
 							parent.getChildren().add(child);
 						}
 

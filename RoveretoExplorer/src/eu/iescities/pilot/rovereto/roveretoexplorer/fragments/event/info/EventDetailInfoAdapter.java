@@ -148,13 +148,13 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 			// Inflate event_info_child_item.xml file for child rows
 			LayoutInflater inflater = (LayoutInflater) this.fragment.context
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			row = inflater.inflate(R.layout.event_info_child_item, parentView,
+	 		row = inflater.inflate(R.layout.event_info_child_item, parentView,
 					false);
 			eventChildViewHolder = new EventInfoChildViewHolder();
 			eventChildViewHolder.text = (TextView) row
 					.findViewById(R.id.event_info_attribute_values);
-			eventChildViewHolder.imgSx = (ImageView) row
-					.findViewById(R.id.event_info_attribute_value_icon);
+//			eventChildViewHolder.imgSx = (ImageView) row
+//					.findViewById(R.id.event_info_attribute_value_icon);
 			eventChildViewHolder.imgsDx1 = (ImageView) row
 					.findViewById(R.id.event_info_action1);
 
@@ -232,30 +232,51 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 
 		}
 
+		
 		if (child.getName().equals("Description")){
-			Log.i("EVENT", "EventDetailInfoAdapter --> set description to html!!");
+			//Log.i("EVENT", "EventDetailInfoAdapter --> set description to html!!");
 			eventChildViewHolder.text.setText(Html.fromHtml(child.getText()));
+			eventChildViewHolder.text.setPadding(10,10,0,0);
 		}
 
 
 		// set icon on the left side
+//		if (child.getLeftIconId() != -1) {
+//			Log.i("GROUPVIEW", "CHILD SX ICON ID: " + child.getLeftIconId());
+//			eventChildViewHolder.imgSx.setVisibility(View.VISIBLE);
+//			eventChildViewHolder.imgSx.setImageResource(child.getLeftIconId());
+//
+//			Log.i("IMAGE", "IMG CHILD NAME: "
+//					+ child.getText());
+//
+//			Log.i("IMAGE", "IMG ICON WIDTH: "
+//					+ eventChildViewHolder.imgSx.getWidth());
+//			
+//		} else {
+//			Log.i("GROUPVIEW", "CHILD SX ICON -1");
+//			if ( (child.getName().equals("email")) || (child.getName().equals("tel")) ){
+//				Log.i("GROUPVIEW", "CHILD NAME: " + child.getName());
+//				eventChildViewHolder.imgSx.setVisibility(View.INVISIBLE);
+//				eventChildViewHolder.text.setPadding(10, 0, 0, 0);
+//			}
+//			else{
+//				eventChildViewHolder.imgSx.setVisibility(View.GONE);
+//				eventChildViewHolder.text.setPadding(10, 10, 0, 0);
+//			}
+//			
+//		}
+		
+		// set icon on the left side
 		if (child.getLeftIconId() != -1) {
 			Log.i("GROUPVIEW", "CHILD SX ICON ID: " + child.getLeftIconId());
-			eventChildViewHolder.imgSx.setVisibility(View.VISIBLE);
-			eventChildViewHolder.imgSx.setImageResource(child.getLeftIconId());
-		} else {
-			Log.i("GROUPVIEW", "CHILD SX ICON -1");
-			if ( (child.getName().equals("email")) || (child.getName().equals("tel")) ){
-				Log.i("GROUPVIEW", "CHILD NAME: " + child.getName());
-				eventChildViewHolder.imgSx.setVisibility(View.INVISIBLE);
-				eventChildViewHolder.text.setPadding(10, 0, 0, 0);
-			}
-			else{
-				eventChildViewHolder.imgSx.setVisibility(View.GONE);
-				eventChildViewHolder.text.setPadding(10, 10, 0, 0);
-			}
-		}
-
+			eventChildViewHolder.text.setCompoundDrawablesWithIntrinsicBounds(child.getLeftIconId(), 0, 0, 0);
+		}else
+			eventChildViewHolder.text.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+		
+		
+		
+		
+		
 		// set icons on the right side for the items of type 1 (telefono, email)
 		if ((child.getRightIconIds() != null) && (child.getType() == 1)) {
 			Log.i("GROUPVIEW", "CHILD DX1 ICON ID: "
@@ -275,9 +296,9 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 		}
 
 
+	
+		//set divider line height and color
 		eventChildViewHolder.divider.setBackgroundColor(child.getDividerColor());
-
-
 		eventChildViewHolder.divider.setLayoutParams(new LinearLayout.LayoutParams(
 				LinearLayout.LayoutParams.MATCH_PARENT,
 				child.getDividerHeight()));
@@ -727,7 +748,7 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 
 	private static class EventInfoChildViewHolder {
 		TextView text;
-		ImageView imgSx;
+		//ImageView imgSx;
 		ImageView imgsDx1;
 		ImageView imgsDx2;
 		ImageView imgsDx3;
