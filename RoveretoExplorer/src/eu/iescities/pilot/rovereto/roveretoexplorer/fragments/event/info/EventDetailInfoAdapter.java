@@ -229,7 +229,6 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 			}
 			else
 				eventChildViewHolder.text.setText(child.getName());
-
 		}
 
 		

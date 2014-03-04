@@ -155,7 +155,10 @@ public class Fragment_EventDetails extends Fragment {
 
 	/* Pager Adapter */
 	public class MyPagerAdapter extends FragmentStatePagerAdapter {
-		private final String[] TITLES = { "Info", "Da Sapere", "Multimedia", "Comunita" };
+		//private final String[] TITLES = { "Info", "Da Sapere", "Multimedia", "Comunita" };
+		private final String[] TITLES = { "Info", "Da Sapere", "Comunita" };
+		
+		
 		private Fragment mPrimaryItem;
 
 		public MyPagerAdapter(FragmentManager fm) {
@@ -174,14 +177,19 @@ public class Fragment_EventDetails extends Fragment {
 
 		@Override
 		public Fragment getItem(int position) {
+			
+			
+			
+			
 			switch (position) {
 			case 0:
 				return Fragment_EvDetail_Info.newInstance(mEventId, mEventImageUrl);
 			case 1:
 				return Fragment_EvDetail_DaSapere.newInstance(mEventId);
+//			case 2:
+//				return Fragment_EvDetail_Multimedia.newInstance(mEventId);
+//			case 3:
 			case 2:
-				return Fragment_EvDetail_Multimedia.newInstance(mEventId);
-			case 3:
 				return Fragment_EvDetail_Community.newInstance(mEventId);
 			default:
 				return null;
