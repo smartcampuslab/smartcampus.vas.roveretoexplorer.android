@@ -100,6 +100,8 @@ public class Fragment_EventDetails extends Fragment {
 
 		tabs.setViewPager(pager);
 		tabs.setIndicatorColor(currentColor);
+		tabs.setUnderlineColor(currentColor);
+		tabs.setDividerColor(currentColor);
 
 		tabs.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
 			@Override
@@ -157,12 +159,18 @@ public class Fragment_EventDetails extends Fragment {
 	public class MyPagerAdapter extends FragmentStatePagerAdapter {
 		//private final String[] TITLES = { "Info", "Da Sapere", "Multimedia", "Comunita" };
 		private final String[] TITLES = { "Info", "Da Sapere", "Comunita" };
+		//private final String[] TITLES = { "Info", "Eventi"};
 		
 		
 		private Fragment mPrimaryItem;
 
 		public MyPagerAdapter(FragmentManager fm) {
 			super(fm);
+			
+			if (getCount()<=3){
+				tabs.setShouldExpand(true);
+			}
+			
 		}
 
 		@Override
@@ -177,8 +185,6 @@ public class Fragment_EventDetails extends Fragment {
 
 		@Override
 		public Fragment getItem(int position) {
-			
-			
 			
 			
 			switch (position) {
