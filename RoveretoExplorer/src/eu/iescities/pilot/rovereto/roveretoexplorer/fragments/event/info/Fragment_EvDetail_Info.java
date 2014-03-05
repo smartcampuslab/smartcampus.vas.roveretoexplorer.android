@@ -505,16 +505,27 @@ public class Fragment_EvDetail_Info extends Fragment {
 					String addressStr = "";
 
 					if ((place != null) && (!place.matches("")))
-						addressStr = addressStr + place + ", ";
+						addressStr = addressStr + place;
 
 					if ((street != null) && (!street.matches("")))
-						addressStr = addressStr + street + ", ";
+						addressStr = addressStr + ", " +  street;
 
 					if ((city != null) && (!city.matches("")))
-						addressStr = addressStr + city;
-					else
-						addressStr = addressStr + context.getString(R.string.city_hint);
+						addressStr = addressStr + ", "  + city;
+					//to be enabled again when on the server side there will be distinction between street and city
+//					else
+//						addressStr = addressStr + context.getString(R.string.city_hint);
 
+					
+					if (addressStr.startsWith(","))
+						addressStr = addressStr.substring(1);
+					
+					if (addressStr.isEmpty())
+						addressStr = context.getString(R.string.city_hint);
+	 				
+					
+					
+					
 					// Create Child class object
 					EventInfoChild child = new EventInfoChild();
 					child.setName("address");

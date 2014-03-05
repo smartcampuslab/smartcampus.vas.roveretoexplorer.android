@@ -53,7 +53,9 @@ public class Fragment_EvDetail_Info_WhenWhere extends Fragment {
 	protected EditText txtStartTime;
 	protected EditText txtEndDay;
 	protected EditText txtEndTime;
-	protected EditText txtDuration;
+
+	//this edit field is currently disabled
+	//protected EditText txtDuration;
 
 	protected Date fromDate;
 	protected Date fromTime;
@@ -118,7 +120,7 @@ public class Fragment_EvDetail_Info_WhenWhere extends Fragment {
 		txtStartTime = (EditText) getActivity().findViewById(R.id.start_time_text);
 		txtEndDay = (EditText) getActivity().findViewById(R.id.end_day_text);
 		txtEndTime = (EditText) getActivity().findViewById(R.id.end_time_text);
-		txtDuration = (EditText) getActivity().findViewById(R.id.duration_text);
+		//txtDuration = (EditText) getActivity().findViewById(R.id.duration_text);
 
 		formLabel = (TextView) getActivity().findViewById(R.id.title_when_where_label);
 		txtPlaceName = (EditText) getActivity().findViewById(R.id.place_name_text);
@@ -210,9 +212,9 @@ public class Fragment_EvDetail_Info_WhenWhere extends Fragment {
 			txtEndDay.setText(toDateTime[0]);
 			if (!toDateTime[1].matches(""))
 				txtEndTime.setText(toDateTime[1]);
-			// compute duration!!
-			String duration = "3 ore";
-			txtDuration.setText(duration);
+			// compute duration, currently duration edit field is disabled
+//			String duration = "3 ore";
+//			txtDuration.setText(duration);
 		} else {
 //			txtEndDay.setText(getResources().getString(R.string.day_hint));
 //			txtEndTime.setText(getResources().getString(R.string.time_hint));
