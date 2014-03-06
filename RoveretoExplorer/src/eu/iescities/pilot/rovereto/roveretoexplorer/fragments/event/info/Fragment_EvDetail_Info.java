@@ -3,6 +3,7 @@ package eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -214,7 +215,6 @@ public class Fragment_EvDetail_Info extends Fragment {
 		//		titleTextView.setMovementMethod(LinkMovementMethod.getInstance());
 
 
-
 		// display the event image
 		ImageView imgView = (ImageView) getActivity().findViewById(R.id.event_placeholder_photo);
 
@@ -225,8 +225,11 @@ public class Fragment_EvDetail_Info extends Fragment {
 		// display the event category plus the "promoted by" attribute
 		TextView categoryTextView = (TextView) getActivity().findViewById(R.id.event_placeholder_category);
 		String category = mEvent.getCategory();
+		
+		
 		if (mEvent.getOrigin() != null && !mEvent.getOrigin().matches("")) {
-			String text = getResources().getString(R.string.event_category, category, mEvent.getOrigin());
+			String text = getResources().getString(R.string.event_category, category, 
+					Utils.removeWords(Arrays.asList(Utils.stopWordsForOrigin), mEvent.getOrigin()));
 			categoryTextView.setText(text);
 			//add the edit icon besides the text
 			//			text += " ";

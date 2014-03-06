@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -66,20 +67,23 @@ public class Utils {
 	public static final String ROVERETO_REGION = "it";
 	public static final String ROVERETO_COUNTRY = "IT";
 	public static final String ROVERETO_ADM_AREA = "TN";
-	
+
 	public static final String ADDRESS = "address";
-	
+
 	public static final String EDIT_FIELD_PHONE_TYPE = "phone";
 	public static final String EDIT_FIELD_EMAIL_TYPE = "email";
 	public static final String EDIT_FIELD_TEXT_TYPE = "text";
-	
+
 	public static final String EMAIL_CONTACT_TYPE = "email";
 	public static final String PHONE_CONTACT_TYPE = "phone";
 	
 	
+	public static final String[] stopWordsForOrigin = new String[]{"A cura"};
 
-	
-	
+
+
+
+
 
 	// public static List<ExplorerObject> appEvents = getFakeEventObjects();
 
@@ -657,8 +661,8 @@ public class Utils {
 			date_time[0] = date;
 		}
 
-		Log.i("FORMAT", "Utils --> date formatted: " + date_time[0] + "!!");
-		Log.i("FORMAT", "Utils --> time formatted: " + date_time[1] + "!!");
+		//Log.i("FORMAT", "Utils --> date formatted: " + date_time[0] + "!!");
+		//Log.i("FORMAT", "Utils --> time formatted: " + date_time[1] + "!!");
 
 		return date_time;
 
@@ -766,20 +770,20 @@ public class Utils {
 		return isSameDay(cal1, cal2);
 	}
 
-    public static boolean isSameDay(Calendar cal1, Calendar cal2) {
-        if (cal1 == null || cal2 == null) {
-            throw new IllegalArgumentException("The dates must not be null");
-        }
-        return (cal1.get(Calendar.ERA) == cal2.get(Calendar.ERA) &&
-                cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
-                cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR));
-    }
-    
+	public static boolean isSameDay(Calendar cal1, Calendar cal2) {
+		if (cal1 == null || cal2 == null) {
+			throw new IllegalArgumentException("The dates must not be null");
+		}
+		return (cal1.get(Calendar.ERA) == cal2.get(Calendar.ERA) &&
+				cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
+				cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR));
+	}
+
 	public static List<Date> getDatesBetweenInterval(Date dateInitial, Date dateFinal) {
 		List<Date> dates = new ArrayList<Date>();
 		Calendar calendar = new GregorianCalendar();
 		calendar.setTime(dateInitial);
-		
+
 		while (!calendar.getTime().after(dateFinal)) {
 			Date result = calendar.getTime();
 			dates.add(result);
@@ -787,4 +791,27 @@ public class Utils {
 		}
 		return dates;
 	}
+
+
+	
+	//delete an unwanted word from a sentence
+	public static String removeWord(String unwanted, String sentence)
+	{
+		return (sentence.indexOf(unwanted) != -1) ? sentence.replace(unwanted,"").trim() : sentence;
+
+	}
+
+
+	//delete a list of unwanted words from a sentence
+	public static String removeWords(List<String> unwanted, String sentence)
+	{
+		for (String word : unwanted)
+			sentence = removeWord(word, sentence);
+		return sentence;
+	}
+
+
+
+
+
 }
