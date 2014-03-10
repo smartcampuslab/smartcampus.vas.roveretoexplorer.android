@@ -15,6 +15,8 @@
  ******************************************************************************/
 package eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info.edit;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 import java.util.Locale;
 
@@ -34,6 +36,9 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.TileOverlayOptions;
+import com.google.android.gms.maps.model.TileProvider;
+import com.google.android.gms.maps.model.UrlTileProvider;
 import com.google.android.maps.GeoPoint;
 
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
@@ -52,7 +57,7 @@ public class AddressSelectActivity extends FragmentActivity implements OnMapLong
 	private GoogleMap mMap = null;
 	private String url = "https://vas.smartcampuslab.it";
 	private OSMAddress osmAddress = null;
-
+	private String osmUrl = "http://otile1.mqcdn.com/tiles/1.0.0/osm/%d/%d/%d.jpg";
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -67,7 +72,7 @@ public class AddressSelectActivity extends FragmentActivity implements OnMapLong
 			mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
 			mMap.setOnMapLongClickListener(this);
 			mMap.setMyLocationEnabled(true);
-
+			setUpMap();
 			LatLng centerLatLng = null;
 			if (DTParamsHelper.getCenterMap() != null) {
 				centerLatLng = new LatLng(DTParamsHelper.getCenterMap().get(0), DTParamsHelper.getCenterMap().get(1));
@@ -184,6 +189,23 @@ public class AddressSelectActivity extends FragmentActivity implements OnMapLong
 	}
 
 	
-	
+	 private void setUpMap() {
+	        mMap.setMapType(GoogleMap.MAP_TYPE_NONE);
+	        TileProvider tileProvider = new UrlTileProvider(256, 256) {
+			    @Override
+			    public URL getTileUrl(int x, int y, int z) {
+			        try {
+			        	if (z>17) 
+			        		z=17;
+			            return new URL(String.format(osmUrl, z, x, y));
+			        }
+			        catch (MalformedURLException e) {
+			            return null;
+			        }
+			    }
+	        };
+
+	        mMap.addTileOverlay(new TileOverlayOptions().tileProvider(tileProvider));
+	    }
 	
 }
