@@ -425,6 +425,7 @@ public class Fragment_EvDetail_Info_WhenWhere extends Fragment {
 				txtPlaceName.setText(selectedAddress.getName());
 			txtCity.setText(selectedAddress.city());
 			txtStreet.setText(selectedAddress.getStreet());
+			mEvent.setLocation(address.getLocation());
 		}
 	}
 
