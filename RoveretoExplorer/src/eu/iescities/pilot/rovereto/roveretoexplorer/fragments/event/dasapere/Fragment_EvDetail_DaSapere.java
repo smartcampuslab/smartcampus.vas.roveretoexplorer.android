@@ -80,6 +80,8 @@ public class Fragment_EvDetail_DaSapere extends ListFragment {
 		return inflater.inflate(R.layout.frag_ev_detail_dasapere, container, false);
 	}
 
+
+
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
@@ -87,57 +89,24 @@ public class Fragment_EvDetail_DaSapere extends ListFragment {
 
 		mEvent = getEvent();
 
-		adapter = new EventDetailToKnowAdapter(getActivity(), R.layout.toknow_row, getTag(), mEventId);
+		//adapter = new EventDetailToKnowAdapter(getActivity(), R.layout.event_toknow_row_item, getTag(), mEventId);
+		adapter = new EventDetailToKnowAdapter(getActivity(), R.layout.event_info_child_item, getTag(), mEventId);
+
+
+		getListView().setDivider(null);
+		getListView().setDivider(getResources().getDrawable(R.color.transparent));
 		setListAdapter(adapter);
 
-		if (mEvent.getCustomData() == null) {
-			mEvent.setCustomData(new HashMap<String, Object>());
-		}
+		//List<ToKnow> toKnowList = Utils.toKnowMapToList(getToKnowEventData());
 
-		Map<String, String> toKnowMap = (Map<String, String>) mEvent.getCustomData().get(Constants.CUSTOM_TOKNOW);
+		List<ToKnow> toKnowList = Utils.toKnowMapToList(getToKnowEventDataNew());
 
-		if (toKnowMap == null) {
-			Map<String, Object> customData = mEvent.getCustomData();
-			customData.put(Constants.CUSTOM_TOKNOW, new LinkedHashMap<String, String>());
-			mEvent.setCustomData(customData);
-			toKnowMap = (Map<String, String>) mEvent.getCustomData().get(Constants.CUSTOM_TOKNOW);
-		}
-
-		if (toKnowMap.isEmpty()) {
-			try {
-				List<ToKnow> toKnowList = new ArrayList<ToKnow>();
-				for (String field : CUSTOM_TOKNOW_FIELDS) {
-					toKnowList.add(new ToKnow(field, ""));
-				}
-
-				// MOCKUP: fill to know map
-				// for (int i = 0; i < 15; i++) {
-				// ToKnow toKnow = new ToKnow("The title " + (i + 1),
-				// "This is the content " + (i + 1));
-				// toKnowList.add(toKnow);
-				// }
-				// MOCKUP: end
-
-				Map<String, Object> customData = new HashMap<String, Object>();
-				toKnowMap = Utils.toKnowListToMap(toKnowList);
-				customData.put(Constants.CUSTOM_TOKNOW, toKnowMap);
-				mEvent.setCustomData(customData);
-
-				// persistence
-				new SCAsyncTask<ExplorerObject, Void, Boolean>(getActivity(), new UpdateEventProcessor(getActivity()))
-						.execute(mEvent);
-			} catch (Exception e) {
-				Log.e(getClass().getName(), e.getMessage() != null ? e.getMessage() : "");
-			}
-		}
-
-		// List<ToKnow> toKnowList = Utils.toKnowMapToList((Map<String, String>)
-		// mEvent.getCustomData().get(
-		// Constants.CUSTOM_TOKNOW));
-		List<ToKnow> toKnowList = Utils.toKnowMapToList(toKnowMap);
 		adapter.addAll(toKnowList);
 		adapter.notifyDataSetChanged();
 
+
+
+		//handle the creation of new type of information by the user
 		Button toKnowAddButton = (Button) getActivity().findViewById(R.id.toKnowAddButton);
 		toKnowAddButton.setOnClickListener(new OnClickListener() {
 			@Override
@@ -163,6 +132,107 @@ public class Fragment_EvDetail_DaSapere extends ListFragment {
 			}
 		});
 	}
+
+
+
+
+//	private Map<String, String> getToKnowEventData(){
+//
+//		Map<String, String> toKnowMap = (Map<String, String>) mEvent.getCustomData().get(Constants.CUSTOM_TOKNOW);
+//
+//		if (mEvent.getCustomData() == null) {
+//			mEvent.setCustomData(new HashMap<String, Object>());
+//		}
+//
+//
+//		if (toKnowMap == null) {
+//			Map<String, Object> customData = mEvent.getCustomData();
+//			customData.put(Constants.CUSTOM_TOKNOW, new LinkedHashMap<String, String>());
+//			mEvent.setCustomData(customData);
+//			toKnowMap = (Map<String, String>) mEvent.getCustomData().get(Constants.CUSTOM_TOKNOW);
+//		}
+//
+//
+//		if (toKnowMap.isEmpty()) {
+//			try {
+//
+//
+//				Log.d("DASAPERE", "Fragment_evDetail_DaSapere --> toKnowMap.isEmpty");
+//
+//
+//				List<ToKnow> toKnowList = new ArrayList<ToKnow>();
+//				for (String field : CUSTOM_TOKNOW_FIELDS) {
+//					toKnowList.add(new ToKnow(field, ""));
+//				}
+//
+//				Map<String, Object> customData = new HashMap<String, Object>();
+//				toKnowMap = Utils.toKnowListToMap(toKnowList);
+//				customData.put(Constants.CUSTOM_TOKNOW, toKnowMap);
+//				mEvent.setCustomData(customData);
+//
+//				// persistence
+//				new SCAsyncTask<ExplorerObject, Void, Boolean>(getActivity(), new UpdateEventProcessor(getActivity()))
+//				.execute(mEvent);
+//			} catch (Exception e) {
+//				Log.e(getClass().getName(), e.getMessage() != null ? e.getMessage() : "");
+//			}
+//		}
+//		return toKnowMap;		
+//	}
+
+
+	private Map<String, List<String>> getToKnowEventDataNew(){
+
+		Map<String, List<String>> toKnowMap = null;
+
+		if (mEvent.getCustomData() == null) {
+			mEvent.setCustomData(new HashMap<String, Object>());
+		}
+
+		if (mEvent.getCustomData().containsKey(Constants.CUSTOM_TOKNOW)){
+			toKnowMap = (Map<String, List<String>>) mEvent.getCustomData().get(Constants.CUSTOM_TOKNOW);
+		}
+
+
+		if (toKnowMap == null) {
+			Map<String, Object> customData = mEvent.getCustomData();
+			customData.put(Constants.CUSTOM_TOKNOW, new LinkedHashMap<String, List<String>>());
+			mEvent.setCustomData(customData);
+			toKnowMap = (Map<String, List<String>>) mEvent.getCustomData().get(Constants.CUSTOM_TOKNOW);
+		}
+
+
+		if (toKnowMap.isEmpty()) {
+			try {
+
+				Log.d("DASAPERE", "Fragment_evDetail_DaSapere --> toKnowMap.isEmpty");
+
+				List<ToKnow> toKnowList = new ArrayList<ToKnow>();
+				for (String field : CUSTOM_TOKNOW_FIELDS) {
+					if (field.matches(Constants.CUSTOM_TOKNOW_LANGUAGE_MAIN) || (field.matches(Constants.CUSTOM_TOKNOW_CLOTHING)) ||
+							(field.matches(Constants.CUSTOM_TOKNOW_TO_BRING))){
+						toKnowList.add(new ToKnow(field, false, null));
+					}
+					else 
+						toKnowList.add(new ToKnow(field, true, null));
+				}
+
+				Map<String, Object> customData = new HashMap<String, Object>();
+				toKnowMap = Utils.toKnowListToMap(toKnowList);
+				customData.put(Constants.CUSTOM_TOKNOW, toKnowMap);
+				mEvent.setCustomData(customData);
+
+				// persistence
+				new SCAsyncTask<ExplorerObject, Void, Boolean>(getActivity(), new UpdateEventProcessor(getActivity()))
+				.execute(mEvent);
+			} catch (Exception e) {
+				Log.e(getClass().getName(), e.getMessage() != null ? e.getMessage() : "");
+			}
+		}
+		return toKnowMap;		
+	}
+
+
 
 	@Override
 	public void onStart() {

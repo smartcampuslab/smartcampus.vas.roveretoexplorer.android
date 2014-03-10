@@ -85,7 +85,7 @@
     <string name="_toknow_language_main">Lingua principale</string>
     <string name="_toknow_clothing">Abbigliamento consigliato</string>
     <string name="_toknow_to_bring">Da portare</string>
-    <string name="toknow_button_add">Aggiungere nuove informazioni</string>
+    <string name="toknow_button_add">Aggiungi nuove informazioni</string>
     <string name="toknow_label_new">Nuovo \"da sapere\"</string>
     <string name="toknow_label_edit">Modifica \"da sapere\"</string>
     <string name="toknow_label_title">Titolo</string>

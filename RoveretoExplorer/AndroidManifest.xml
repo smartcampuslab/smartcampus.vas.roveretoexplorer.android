@@ -6,7 +6,7 @@
     android:versionName="1.2.4" >
 
     <uses-sdk
-        android:minSdkVersion="11"
+        android:minSdkVersion="8"
         android:targetSdkVersion="17" />
 
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
@@ -69,15 +69,15 @@
         <meta-data
             android:name="follow-by-intent"
             android:value="false" />
-        <meta-data
+      <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyBb2QaLKTYQhsgJu3PIUxWi5zx8HI30Q6c" />
         <meta-data
             android:name="eu.trentorise.smartcampus.account.CLIENT_ID"
-            android:value="" />
+            android:value="d72e0b27-485e-4c54-82a8-f790f4e78f24" />
         <meta-data
             android:name="eu.trentorise.smartcampus.account.CLIENT_SECRET"
-            android:value="" />
+            android:value="a1ae009c-da8e-4672-ad3a-b816c0050324" />
         <meta-data
             android:name="eu.trentorise.smartcampus.account.AUTH_URL"
             android:value="https://vas-dev.smartcampuslab.it/aac" />

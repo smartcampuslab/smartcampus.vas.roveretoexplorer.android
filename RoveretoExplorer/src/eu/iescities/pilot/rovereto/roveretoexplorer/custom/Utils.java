@@ -29,6 +29,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.Address;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.Constants;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.DTHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.CommunityData;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ExplorerObject;
@@ -78,7 +79,7 @@ public class Utils {
 	public static final String PHONE_CONTACT_TYPE = "phone";
 	
 	
-	public static final String[] stopWordsForOrigin = new String[]{"A cura"};
+	public static final String[] stopWordsForOrigin = new String[]{"a cura", "acura"};
 
 
 
@@ -705,19 +706,49 @@ public class Utils {
 		return from.compareTo(now) < 0 ? false : true;
 	}
 
-	public static List<ToKnow> toKnowMapToList(Map<String, String> map) {
+//	public static List<ToKnow> toKnowMapToList(Map<String, String> map) {
+//		List<ToKnow> list = new ArrayList<ToKnow>();
+//
+//		for (Entry<String, String> entry : map.entrySet()) {
+//			ToKnow toKnow = new ToKnow(entry.getKey(), entry.getValue());
+//			list.add(toKnow);
+//		}
+//
+//		return list;
+//	}
+	
+
+	public static List<ToKnow> toKnowMapToList(Map<String, List<String>> map) {
 		List<ToKnow> list = new ArrayList<ToKnow>();
 
-		for (Entry<String, String> entry : map.entrySet()) {
-			ToKnow toKnow = new ToKnow(entry.getKey(), entry.getValue());
+		for (Entry<String, List<String>> entry : map.entrySet()) {
+			
+			boolean singleValue = (entry.getKey().matches(Constants.CUSTOM_TOKNOW_LANGUAGE_MAIN) || (entry.getKey().matches(Constants.CUSTOM_TOKNOW_CLOTHING)) ||
+					(entry.getKey().matches(Constants.CUSTOM_TOKNOW_TO_BRING)))? false : true;
+			
+			ToKnow toKnow = new ToKnow(entry.getKey(), singleValue, entry.getValue());
 			list.add(toKnow);
 		}
 
 		return list;
 	}
 
-	public static Map<String, String> toKnowListToMap(List<ToKnow> list) {
-		Map<String, String> map = new LinkedHashMap<String, String>();
+
+//	public static Map<String, String> toKnowListToMap(List<ToKnow> list) {
+//		Map<String, String> map = new LinkedHashMap<String, String>();
+//
+//		if (list != null) {
+//			for (ToKnow toKnow : list) {
+//				map.put(toKnow.getTitle(), toKnow.getContent());
+//			}
+//		}
+//
+//		return map;
+//	}
+	
+	public static Map<String, List<String>> toKnowListToMap(List<ToKnow> list) {
+
+		Map<String, List<String>> map = new LinkedHashMap<String, List<String>>();
 
 		if (list != null) {
 			for (ToKnow toKnow : list) {
@@ -727,6 +758,7 @@ public class Utils {
 
 		return map;
 	}
+
 
 	/**
 	 * This is used to check the given email is valid or not.

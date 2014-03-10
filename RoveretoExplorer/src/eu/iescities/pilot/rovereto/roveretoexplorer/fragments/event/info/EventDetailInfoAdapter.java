@@ -294,15 +294,12 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 			eventChildViewHolder.imgsDx1.setVisibility(View.INVISIBLE);
 		}
 
-
 	
 		//set divider line height and color
 		eventChildViewHolder.divider.setBackgroundColor(child.getDividerColor());
 		eventChildViewHolder.divider.setLayoutParams(new LinearLayout.LayoutParams(
 				LinearLayout.LayoutParams.MATCH_PARENT,
 				child.getDividerHeight()));
-
-
 
 
 
@@ -338,23 +335,6 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 
 		//		Log.i("GROUPVIEW", "child view: group  POS: " + groupPosition + "!!");
 		//		Log.i("GROUPVIEW", "child view: child POS: " + childPosition + "!!");
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 		countChildViewCall++;
 
@@ -745,6 +725,8 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 
 	/***********************************************************************/
 
+
+	
 	private static class EventInfoChildViewHolder {
 		TextView text;
 		//ImageView imgSx;

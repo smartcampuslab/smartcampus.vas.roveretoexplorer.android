@@ -254,9 +254,7 @@ public class MainActivity extends AbstractNavDrawerActivity{
 				setSupportProgressBarIndeterminateVisibility(false);
 				//				DTHelper.activateAutoSync();
 			}
-
 		}
-
 	}
 
 
