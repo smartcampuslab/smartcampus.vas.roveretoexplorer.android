@@ -131,8 +131,8 @@ public class MapFragment extends Fragment implements MapItemsHandler, OnCameraCh
 			 */// if (item.getItemId() == R.id.action_poi) {
 		if (item.getTitle() == "filtro") {
 			MapFilterDialogFragment psf = MapFilterDialogFragment.istantiate(this, R.array.map_items_events_labels,
-					R.array.map_items_events_icons, REQUEST_TYPE.EVENT,
-					CategoryHelper.getEventCategoriesForMapFilters());
+					R.array.map_items_events_icons, REQUEST_TYPE.EVENT,eventsCategories,
+					CategoryHelper.getEventCategoriesForMapFilters() );
 			psf.show(getFragmentManager(), TAG_FRAGMENT_POI_SELECT);
 			return true;
 		} /*
