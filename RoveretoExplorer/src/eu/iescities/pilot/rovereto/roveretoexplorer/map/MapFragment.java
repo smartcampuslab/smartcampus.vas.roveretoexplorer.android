@@ -81,6 +81,7 @@ public class MapFragment extends Fragment implements MapItemsHandler, OnCameraCh
 	private boolean listmenu = false;
 
 	private static View view;
+    float maxZoomOnMap = 19.0f;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -495,8 +496,8 @@ public class MapFragment extends Fragment implements MapItemsHandler, OnCameraCh
 			    @Override
 			    public URL getTileUrl(int x, int y, int z) {
 			        try {
-			        	if (z>17) 
-			        		z=17;
+//			        	if (z>17) 
+//			        		z=17;
 			            return new URL(String.format(osmUrl, z, x, y));
 			        }
 			        catch (MalformedURLException e) {
@@ -525,7 +526,14 @@ public class MapFragment extends Fragment implements MapItemsHandler, OnCameraCh
 
 	@Override
 	public void onCameraChange(CameraPosition position) {
-		render(objects);
+		manageMaxLevelOfZoom(position);
+	    render(objects);
+	}
+
+	private void manageMaxLevelOfZoom(CameraPosition position) {
+		/*check if the zoom level is too high*/
+	    if (position.zoom > maxZoomOnMap)
+	    	getSupportMap().animateCamera(CameraUpdateFactory.zoomTo(maxZoomOnMap));
 	}
 
 	@Override
