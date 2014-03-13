@@ -40,7 +40,6 @@ import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.edit.Fragmen
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.edit.Fragment_EvDetail_Edit_SingleValueField;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info.EventDetailInfoAdapter;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info.EventInfoChild;
-import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info.edit.Fragment_EvDetail_Info_What;
 import eu.trentorise.smartcampus.android.common.SCAsyncTask;
 import eu.trentorise.smartcampus.network.RemoteException;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;

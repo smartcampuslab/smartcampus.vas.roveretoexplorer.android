@@ -48,8 +48,8 @@ import eu.iescities.pilot.rovereto.roveretoexplorer.R;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.Utils;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ExplorerObject;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.edit.Fragment_EvDetail_Edit_MultiValueField;
+import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.edit.Fragment_EvDetail_Edit_SingleValueField;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info.edit.Fragment_EvDetail_Info_Contacts;
-import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info.edit.Fragment_EvDetail_Info_What;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info.edit.Fragment_EvDetail_Info_WhenWhere;
 import eu.trentorise.smartcampus.android.common.tagging.TaggingDialog;
 
@@ -607,7 +607,8 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 				args.putString(Utils.ARG_EVENT_ID, fragment.mEventId);
 				frag_description = "event_details_info_edit_where";
 			}else if(parent.getText1()=="Cosa"){
-				edit_fragment = new Fragment_EvDetail_Info_What();
+				//edit_fragment = new Fragment_EvDetail_Info_What();
+				edit_fragment = new Fragment_EvDetail_Edit_SingleValueField();
 				Log.i("CONTACTS", "EventDetailInfoAdapter --> event selected ID: " + fragment.mEventId + "!!");
 				args.putString(Utils.ARG_EVENT_ID, fragment.mEventId);
 				args.putString(Utils.ARG_EVENT_FIELD_TYPE, "description");
