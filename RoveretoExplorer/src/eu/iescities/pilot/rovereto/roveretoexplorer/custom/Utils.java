@@ -77,8 +77,8 @@ public class Utils {
 
 	public static final String EMAIL_CONTACT_TYPE = "email";
 	public static final String PHONE_CONTACT_TYPE = "phone";
-	
-	
+
+
 	public static final String[] stopWordsForOrigin = new String[]{"a cura", "acura"};
 
 
@@ -706,53 +706,93 @@ public class Utils {
 		return from.compareTo(now) < 0 ? false : true;
 	}
 
-//	public static List<ToKnow> toKnowMapToList(Map<String, String> map) {
-//		List<ToKnow> list = new ArrayList<ToKnow>();
-//
-//		for (Entry<String, String> entry : map.entrySet()) {
-//			ToKnow toKnow = new ToKnow(entry.getKey(), entry.getValue());
-//			list.add(toKnow);
-//		}
-//
-//		return list;
-//	}
-	
+	//	public static List<ToKnow> toKnowMapToList(Map<String, String> map) {
+	//		List<ToKnow> list = new ArrayList<ToKnow>();
+	//
+	//		for (Entry<String, String> entry : map.entrySet()) {
+	//			ToKnow toKnow = new ToKnow(entry.getKey(), entry.getValue());
+	//			list.add(toKnow);
+	//		}
+	//
+	//		return list;
+	//	}
+
+
 
 	public static List<ToKnow> toKnowMapToList(Map<String, List<String>> map) {
-		List<ToKnow> list = new ArrayList<ToKnow>();
 
+		Log.i("DASAPERE", "Utils --> start toKnowMapToList");
+
+		//print
 		for (Entry<String, List<String>> entry : map.entrySet()) {
-			
-			boolean singleValue = (entry.getKey().matches(Constants.CUSTOM_TOKNOW_LANGUAGE_MAIN) || (entry.getKey().matches(Constants.CUSTOM_TOKNOW_CLOTHING)) ||
-					(entry.getKey().matches(Constants.CUSTOM_TOKNOW_TO_BRING)))? false : true;
-			
-			ToKnow toKnow = new ToKnow(entry.getKey(), singleValue, entry.getValue());
-			list.add(toKnow);
+			Log.i("DASAPERE", "Utils --> toKnowMap entry key: " + entry.getKey() + "!!");
+
+			if ( entry.getValue().size()==0){
+				Log.i("DASAPERE", "Utils --> toKnowMap entry values NULL");
+			}else
+				Log.i("DASAPERE", "Utils --> toKnowMap entry values: " + entry.getValue() + "!!");
+
+		}
+
+		List<ToKnow> list = new ArrayList<ToKnow>();
+		for (Entry<String, List<String>> entry : map.entrySet()) {
+
+			//			ToKnow toKnow = new ToKnow(entry.getKey(), Constants.CUSTOM_TOKNOW_TYPE_ATTRIBUTE);
+			//			toKnow.setDividerHeight(4);
+			//			toKnow.setTextInBold(true);
+			//			int[] rightIconIds1 = new int[] {R.drawable.ic_action_edit};
+			//			toKnow.setRightIconIds(rightIconIds1);
+			list.add(ToKnow.newCustomDataAttributeField(entry.getKey()));
+			List<String> values = (List<String>) entry.getValue();
+			for (String value : values){
+				if (!value.matches("")){
+					list.add(ToKnow.newCustomDataValueField(value));
+				}
+			}
+		}
+
+		for(ToKnow toKnow : list){
+			Log.i("DASAPERE", "Utils --> toKnow list: " + toKnow.getName() + "!!");
 		}
 
 		return list;
 	}
 
 
-//	public static Map<String, String> toKnowListToMap(List<ToKnow> list) {
-//		Map<String, String> map = new LinkedHashMap<String, String>();
-//
-//		if (list != null) {
-//			for (ToKnow toKnow : list) {
-//				map.put(toKnow.getTitle(), toKnow.getContent());
-//			}
-//		}
-//
-//		return map;
-//	}
-	
+	//	public static Map<String, String> toKnowListToMap(List<ToKnow> list) {
+	//		Map<String, String> map = new LinkedHashMap<String, String>();
+	//
+	//		if (list != null) {
+	//			for (ToKnow toKnow : list) {
+	//				map.put(toKnow.getTitle(), toKnow.getContent());
+	//			}
+	//		}
+	//
+	//		return map;
+	//	}
+
 	public static Map<String, List<String>> toKnowListToMap(List<ToKnow> list) {
 
 		Map<String, List<String>> map = new LinkedHashMap<String, List<String>>();
 
+		String previousAttrName = null;
+
 		if (list != null) {
+
+			previousAttrName = list.get(0).getName();
+			List<String> values = new ArrayList<String>();		
 			for (ToKnow toKnow : list) {
-				map.put(toKnow.getTitle(), toKnow.getContent());
+
+				String currentAttrName = (toKnow.getType().matches(Constants.CUSTOM_TOKNOW_TYPE_ATTRIBUTE)) ? toKnow.getName() : previousAttrName;  
+
+				if ((currentAttrName.matches(previousAttrName)) && (toKnow.getType().matches(Constants.CUSTOM_TOKNOW_TYPE_VALUE)))
+					values.add(toKnow.getName());
+
+				if (!currentAttrName.matches(previousAttrName)){
+					map.put(previousAttrName, values);
+					values = new ArrayList<String>();		
+					previousAttrName = currentAttrName;
+				} 
 			}
 		}
 
@@ -760,6 +800,47 @@ public class Utils {
 	}
 
 
+
+	public static   Map<String, List<String>> convert(Map<String, String> oldMap) {
+		Map<String, List<String>> ret = new HashMap<String, List<String>>();
+		for (String key : oldMap.keySet()) {
+			ret.put(key, Arrays.asList(new String[]{oldMap.get(key)}));
+		}
+		return ret;
+	}
+
+
+	public static boolean isOldMapType(Map<String,Object> map){
+
+		boolean isOld = false;
+
+		for (Entry<String, Object> entry : map.entrySet()) {
+			if(!(entry.getValue() instanceof List<?>)) {
+				isOld=true;
+				break;
+			}
+		}
+		return isOld;
+	}
+
+
+	public static Map<String,List<String>> getCustomToKnowDataFromEvent(ExplorerObject event){
+		Map<String,List<String>> toKnowMap = null;
+		if (event.getCustomData().containsKey(Constants.CUSTOM_TOKNOW)){
+
+			//eventually convert the old map type with the new one
+			if (Utils.isOldMapType((Map<String,Object>) event.getCustomData().get(Constants.CUSTOM_TOKNOW))){
+				toKnowMap = Utils.convert((Map<String,String>) event.getCustomData().get(Constants.CUSTOM_TOKNOW));
+			}
+			else{
+				toKnowMap = (Map<String,List<String>>) event.getCustomData().get(Constants.CUSTOM_TOKNOW);
+			}
+		}
+		return toKnowMap;
+	}
+	
+	
+	
 	/**
 	 * This is used to check the given email is valid or not.
 	 * 
@@ -825,7 +906,7 @@ public class Utils {
 	}
 
 
-	
+
 	//delete an unwanted word from a sentence
 	public static String removeWord(String unwanted, String sentence)
 	{

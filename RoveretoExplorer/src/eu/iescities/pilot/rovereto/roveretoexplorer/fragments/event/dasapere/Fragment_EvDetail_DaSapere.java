@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import android.app.Activity;
 import android.content.Context;
@@ -19,7 +20,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.AbstractAsyncTaskProcessor;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.Utils;
@@ -111,21 +111,26 @@ public class Fragment_EvDetail_DaSapere extends ListFragment {
 		toKnowAddButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+
 				FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
 				Bundle args = new Bundle();
 				String frag_description = null;
 
-				Fragment editFragment = new Fragment_EvDetail_DaSapere_Form();
-				Log.i("CONTACTS", "EventDetailInfoAdapter --> event selected ID: " + mEventId + "!!");
-				args.putString(Fragment_EvDetail_DaSapere_Form.ARG_EVENT_ID, mEventId);
-				frag_description = "Fragment_EvDetail_DaSapere_Form";
+//				Fragment editFragment = new Fragment_EvDetail_DaSapere_Form();
+//				Log.i("CONTACTS", "EventDetailInfoAdapter --> event selected ID: " + mEventId + "!!");
+//				args.putString(Fragment_EvDetail_DaSapere_Form.ARG_EVENT_ID, mEventId);
+//				frag_description = "Fragment_EvDetail_DaSapere_Form";
+//
+//				editFragment.setArguments(args);
+//				fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+//				// fragmentTransaction.detach(this);
+//				fragmentTransaction.replace(R.id.content_frame, editFragment, frag_description);
+//				fragmentTransaction.addToBackStack(getTag());
+//				fragmentTransaction.commit();
 
-				editFragment.setArguments(args);
-				fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-				// fragmentTransaction.detach(this);
-				fragmentTransaction.replace(R.id.content_frame, editFragment, frag_description);
-				fragmentTransaction.addToBackStack(getTag());
-				fragmentTransaction.commit();
+
+
+
 				// reset event and event id
 				// mEvent = null;
 				// mEventId = null;
@@ -136,72 +141,93 @@ public class Fragment_EvDetail_DaSapere extends ListFragment {
 
 
 
-//	private Map<String, String> getToKnowEventData(){
-//
-//		Map<String, String> toKnowMap = (Map<String, String>) mEvent.getCustomData().get(Constants.CUSTOM_TOKNOW);
-//
-//		if (mEvent.getCustomData() == null) {
-//			mEvent.setCustomData(new HashMap<String, Object>());
-//		}
-//
-//
-//		if (toKnowMap == null) {
-//			Map<String, Object> customData = mEvent.getCustomData();
-//			customData.put(Constants.CUSTOM_TOKNOW, new LinkedHashMap<String, String>());
-//			mEvent.setCustomData(customData);
-//			toKnowMap = (Map<String, String>) mEvent.getCustomData().get(Constants.CUSTOM_TOKNOW);
-//		}
-//
-//
-//		if (toKnowMap.isEmpty()) {
-//			try {
-//
-//
-//				Log.d("DASAPERE", "Fragment_evDetail_DaSapere --> toKnowMap.isEmpty");
-//
-//
-//				List<ToKnow> toKnowList = new ArrayList<ToKnow>();
-//				for (String field : CUSTOM_TOKNOW_FIELDS) {
-//					toKnowList.add(new ToKnow(field, ""));
-//				}
-//
-//				Map<String, Object> customData = new HashMap<String, Object>();
-//				toKnowMap = Utils.toKnowListToMap(toKnowList);
-//				customData.put(Constants.CUSTOM_TOKNOW, toKnowMap);
-//				mEvent.setCustomData(customData);
-//
-//				// persistence
-//				new SCAsyncTask<ExplorerObject, Void, Boolean>(getActivity(), new UpdateEventProcessor(getActivity()))
-//				.execute(mEvent);
-//			} catch (Exception e) {
-//				Log.e(getClass().getName(), e.getMessage() != null ? e.getMessage() : "");
-//			}
-//		}
-//		return toKnowMap;		
-//	}
+	//	private Map<String, String> getToKnowEventData(){
+	//
+	//		Map<String, String> toKnowMap = (Map<String, String>) mEvent.getCustomData().get(Constants.CUSTOM_TOKNOW);
+	//
+	//		if (mEvent.getCustomData() == null) {
+	//			mEvent.setCustomData(new HashMap<String, Object>());
+	//		}
+	//
+	//
+	//		if (toKnowMap == null) {
+	//			Map<String, Object> customData = mEvent.getCustomData();
+	//			customData.put(Constants.CUSTOM_TOKNOW, new LinkedHashMap<String, String>());
+	//			mEvent.setCustomData(customData);
+	//			toKnowMap = (Map<String, String>) mEvent.getCustomData().get(Constants.CUSTOM_TOKNOW);
+	//		}
+	//
+	//
+	//		if (toKnowMap.isEmpty()) {
+	//			try {
+	//
+	//
+	//				Log.d("DASAPERE", "Fragment_evDetail_DaSapere --> toKnowMap.isEmpty");
+	//
+	//
+	//				List<ToKnow> toKnowList = new ArrayList<ToKnow>();
+	//				for (String field : CUSTOM_TOKNOW_FIELDS) {
+	//					toKnowList.add(new ToKnow(field, ""));
+	//				}
+	//
+	//				Map<String, Object> customData = new HashMap<String, Object>();
+	//				toKnowMap = Utils.toKnowListToMap(toKnowList);
+	//				customData.put(Constants.CUSTOM_TOKNOW, toKnowMap);
+	//				mEvent.setCustomData(customData);
+	//
+	//				// persistence
+	//				new SCAsyncTask<ExplorerObject, Void, Boolean>(getActivity(), new UpdateEventProcessor(getActivity()))
+	//				.execute(mEvent);
+	//			} catch (Exception e) {
+	//				Log.e(getClass().getName(), e.getMessage() != null ? e.getMessage() : "");
+	//			}
+	//		}
+	//		return toKnowMap;		
+	//	}
 
+
+
+	//	public Map<String, String> convert(Map<String, Object> oldMap) {
+	//		Map<String, String> ret = new HashMap<String, String>();
+	//		for (String key : oldMap.keySet()) {
+	//			ret.put(key, oldMap.get(key).toString());
+	//		}
+	//		return ret;
+	//	}
+
+
+
+	
 
 	private Map<String, List<String>> getToKnowEventDataNew(){
 
-		Map<String, List<String>> toKnowMap = null;
-
+		
 		if (mEvent.getCustomData() == null) {
 			mEvent.setCustomData(new HashMap<String, Object>());
 		}
+		
+		Map<String, List<String>> toKnowMap = Utils.getCustomToKnowDataFromEvent(mEvent);
 
-		if (mEvent.getCustomData().containsKey(Constants.CUSTOM_TOKNOW)){
-			toKnowMap = (Map<String, List<String>>) mEvent.getCustomData().get(Constants.CUSTOM_TOKNOW);
-		}
 
+//		if (mEvent.getCustomData().containsKey(Constants.CUSTOM_TOKNOW)){
+//			//eventually convert the old map type with the new one
+//			if (Utils.isOldMapType((Map<String,Object>) mEvent.getCustomData().get(Constants.CUSTOM_TOKNOW))){
+//				toKnowMap = Utils.convert((Map<String,String>) mEvent.getCustomData().get(Constants.CUSTOM_TOKNOW));
+//			}
+//			else{
+//				toKnowMap = (Map<String,List<String>>) mEvent.getCustomData().get(Constants.CUSTOM_TOKNOW);
+//			}
+//		}
+		
 
 		if (toKnowMap == null) {
+			Log.d("DASAPERE", "Fragment_evDetail_DaSapere --> toKnowMap is NULL");
+
 			Map<String, Object> customData = mEvent.getCustomData();
 			customData.put(Constants.CUSTOM_TOKNOW, new LinkedHashMap<String, List<String>>());
 			mEvent.setCustomData(customData);
 			toKnowMap = (Map<String, List<String>>) mEvent.getCustomData().get(Constants.CUSTOM_TOKNOW);
-		}
-
-
+		}else
 		if (toKnowMap.isEmpty()) {
 			try {
 
@@ -209,15 +235,22 @@ public class Fragment_EvDetail_DaSapere extends ListFragment {
 
 				List<ToKnow> toKnowList = new ArrayList<ToKnow>();
 				for (String field : CUSTOM_TOKNOW_FIELDS) {
-					if (field.matches(Constants.CUSTOM_TOKNOW_LANGUAGE_MAIN) || (field.matches(Constants.CUSTOM_TOKNOW_CLOTHING)) ||
-							(field.matches(Constants.CUSTOM_TOKNOW_TO_BRING))){
-						toKnowList.add(new ToKnow(field, false, null));
-					}
-					else 
-						toKnowList.add(new ToKnow(field, true, null));
+
+//					ToKnow toKnow = null;
+//					if ((field.matches(Constants.CUSTOM_TOKNOW_LANGUAGE_MAIN)) || (field.matches(Constants.CUSTOM_TOKNOW_CLOTHING)) 
+//							|| (field.matches(Constants.CUSTOM_TOKNOW_TO_BRING)))
+//						toKnowList.add(toKnow = new ToKnow(field, Constants.CUSTOM_TOKNOW_TYPE_ATTRIBUTE, true));
+//					else
+//						toKnowList.add(toKnow = new ToKnow(field, Constants.CUSTOM_TOKNOW_TYPE_ATTRIBUTE, false));
+//					toKnow.setDividerHeight(4);
+//					toKnow.setTextInBold(true);
+//					int[] rightIconIds1 = new int[] {R.drawable.ic_action_edit};
+//					toKnow.setRightIconIds(rightIconIds1);
+					toKnowList.add(ToKnow.newCustomDataAttributeField(field));
 				}
 
 				Map<String, Object> customData = new HashMap<String, Object>();
+				Log.i("DASAPERE", "call Utils.toKnowListToMap");
 				toKnowMap = Utils.toKnowListToMap(toKnowList);
 				customData.put(Constants.CUSTOM_TOKNOW, toKnowMap);
 				mEvent.setCustomData(customData);
@@ -229,6 +262,11 @@ public class Fragment_EvDetail_DaSapere extends ListFragment {
 				Log.e(getClass().getName(), e.getMessage() != null ? e.getMessage() : "");
 			}
 		}
+
+
+
+
+
 		return toKnowMap;		
 	}
 

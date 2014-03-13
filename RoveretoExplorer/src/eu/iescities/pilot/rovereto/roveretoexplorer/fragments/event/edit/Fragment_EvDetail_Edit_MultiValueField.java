@@ -1,7 +1,9 @@
-package eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info.edit;
+package eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.edit;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import android.app.Activity;
 import android.content.Context;
@@ -29,13 +31,15 @@ import android.widget.AdapterView.OnItemClickListener;
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.AbstractAsyncTaskProcessor;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.Utils;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.Constants;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.DTHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ExplorerObject;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ToKnow;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info.Fragment_EvDetail_Info;
 import eu.trentorise.smartcampus.android.common.SCAsyncTask;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 
-public class Fragment_EvDetail_Info_Tags extends Fragment {
+public class Fragment_EvDetail_Edit_MultiValueField extends Fragment {
 
 	private Context mContext;
 
@@ -44,12 +48,20 @@ public class Fragment_EvDetail_Info_Tags extends Fragment {
 	private ExplorerObject mEvent = null;
 	private String mEventId;
 
+	private String mEventFieldType;
+	private Map<String,List<String>> toKnowMap=null; 
+
+
 	TextView formLabel;
-	EditText tagToAdd;
+	EditText valueToAdd;
+	ImageView iconImage;
+	TextView eventFieldLabel;
 
 
-	private ArrayList<String> tag_list = null;
-	EditFieldListAdapter tagListAdapter;
+
+	private ArrayList<String> value_list = null;
+	EditFieldListAdapter valueListAdapter;
+
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -72,58 +84,116 @@ public class Fragment_EvDetail_Info_Tags extends Fragment {
 				mEventId = getArguments().getString(ARG_EVENT_ID);
 				Log.i("FRAGMENT LC", "Fragment_evDetail_Info_Tags --> EVENT ID: " + mEventId);
 				mEvent = DTHelper.findEventById(mEventId);
-				// get event tags data
-				if (mEvent.getCommunityData().getTags()!=null)
-					tag_list = new ArrayList<String>(mEvent.getCommunityData().getTags());
+
+				mEventFieldType = getArguments().getString(Utils.ARG_EVENT_FIELD_TYPE);
+
+				if (mEventFieldType.equals("Tags")) {
+					// get event tags data
+					if (mEvent.getCommunityData().getTags()!=null)
+						value_list = new ArrayList<String>(mEvent.getCommunityData().getTags());
+				}
+				else 
+				{
+					//edit a custom field
+					// get event "toknow" custom  data
+					toKnowMap = Utils.getCustomToKnowDataFromEvent(mEvent);
+					//List<String> values = (List<String>) toKnowMap.get(mEventFieldType);
+					value_list = new ArrayList<String>();
+					for (String value : (List<String>) toKnowMap.get(mEventFieldType)){
+						if (!value.matches("")){
+							value_list.add(value);
+						}
+					}
+				}
+
+
+				for (String value : value_list ){
+					Log.i("DASAPERE", "Fragment_EvDetail_Edit_MultiValueField --> FIRST ORIGINAL LIST value:" + value + "!");
+				}
+
+
+
+
+
 			}
 		} else {
-			Log.d("FRAGMENT LC", "Fragment_evDetail_Info_Tags --> onCreate SUBSEQUENT TIME");
+			Log.d("FRAGMENT LC", "Fragment_EvDetail_Edit_MultiValueField --> onCreate SUBSEQUENT TIME");
 		}
 
 	}
 
+
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
-		Log.d("FRAGMENT LC", "Fragment_evDetail_Info_Tags --> onCreateView");
-		return inflater.inflate(R.layout.frag_ev_detail_info_edit_tags, container, false);
+		Log.d("FRAGMENT LC", "Fragment_EvDetail_Edit_MultiValueField --> onCreateView");
+		return inflater.inflate(R.layout.frag_ev_detail_info_edit_multivalue_field, container, false);
 	}
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		Log.d("FRAGMENT LC","Fragment_evDetail_Info_Tags --> onActivityCreated");
-		Log.i("FRAGMENT LC", "Fragment_evDetail_Info_Tags --> EVENT ID activity created: " + mEventId);
+		Log.d("FRAGMENT LC","Fragment_EvDetail_Edit_MultiValueField --> onActivityCreated");
+		Log.i("FRAGMENT LC", "Fragment_EvDetail_Edit_MultiValueField --> EVENT ID activity created: " + mEventId);
 
 		if (mEvent == null) {
-			Log.i("FRAGMENT LC", "Fragment_evDetail_Info_Tags --> MY EVENT null");
+			Log.i("FRAGMENT LC", "Fragment_EvDetail_Edit_MultiValueField --> MY EVENT null");
 
 			mEvent = DTHelper.findEventById(mEventId);
 
 		}
 
-		//set the action bar title
-		getActivity().getActionBar().setTitle(
-				getResources().getString(R.string.tag_add) + " " + getResources().getString(R.string.create_tags));
 
-	
+		iconImage = (ImageView) getActivity().findViewById(R.id.add_icon);
+		eventFieldLabel = (TextView) getActivity().findViewById(R.id.event_field_label);
+
+
+		if (mEventFieldType.equals("Tags")) {
+			//set the action bar title
+			getActivity().getActionBar().setTitle(
+					getResources().getString(R.string.modify) + " " + getResources().getString(R.string.create_tags));
+			iconImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_new_label));
+			eventFieldLabel.setText(mEventFieldType);
+
+		}else{
+			//set the action bar title
+			getActivity().getActionBar().setTitle(
+					getResources().getString(R.string.modify) + " " + getResources().getString(R.string.info_txt));
+
+			if (mEventFieldType.startsWith("_toknow_")) {
+				//edit a custom "toknow" field
+				Integer resId = getResources().getIdentifier(mEventFieldType, "string",
+						"eu.iescities.pilot.rovereto.roveretoexplorer");
+				if (resId != null && resId != 0) {
+					String mandatoryTitle =getResources().getString(resId);
+					eventFieldLabel.setText(mandatoryTitle);
+				}
+			}else
+				eventFieldLabel.setText(mEventFieldType);
+		}
+
+
 		Log.i("FRAGMENT LC", "Fragment_evDetail_Info_Tags --> EVENT title  activity created: " + mEvent.getTitle());
-		Log.i("FRAGMENT LC", "Fragment_evDetail_Info_Tags --> TAG LIST: " + tag_list);
+		Log.i("FRAGMENT LC", "Fragment_evDetail_Info_Tags --> TAG LIST: " + value_list);
 
 		formLabel = (TextView) getActivity().findViewById(R.id.form_label);
 		formLabel.setText("Evento: " + mEvent.getTitle());
 
-		tagToAdd = (EditText) getActivity().findViewById(R.id.tags_tv);
 
-		tagListAdapter = new EditFieldListAdapter(mContext, R.layout.frag_ev_detail_info_edit_fields_list_row, tag_list, Utils.EDIT_FIELD_TEXT_TYPE);
+		valueToAdd = (EditText) getActivity().findViewById(R.id.field_values_tv);
 
-		ListView list = (ListView) getActivity().findViewById(R.id.tag_list);
-		list.setAdapter(tagListAdapter);
-		tagListAdapter.notifyDataSetChanged();
+		//valueListAdapter = new EditFieldListAdapter(mContext, R.layout.frag_ev_detail_info_edit_fields_list_row, value_list, Utils.EDIT_FIELD_TEXT_TYPE);
+		valueListAdapter = new EditFieldListAdapter(mContext, R.layout.frag_ev_detail_info_edit_fields_list_row, value_list, Utils.EDIT_FIELD_TEXT_TYPE, mEventFieldType);
+
+
+		ListView list = (ListView) getActivity().findViewById(R.id.field_value_list);
+		list.setAdapter(valueListAdapter);
+		valueListAdapter.notifyDataSetChanged();
 		//list.setOnItemClickListener(this);
 
 
-		Button cancel = (Button) getActivity().findViewById(R.id.btn_tags_cancel);
+		Button cancel = (Button) getActivity().findViewById(R.id.btn_cancel);
 		cancel.setOnClickListener(new View.OnClickListener() {
 
 			@Override
@@ -132,39 +202,48 @@ public class Fragment_EvDetail_Info_Tags extends Fragment {
 			}
 		});
 
-		ImageView addTag = (ImageView) getActivity().findViewById(R.id.add_tag_icon);
-		addTag.setOnClickListener(new View.OnClickListener() {
+		ImageView addValue = (ImageView) getActivity().findViewById(R.id.add_icon);
+		addValue.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				String addedTag = tagToAdd.getText().toString();
-				if (addedTag != null && addedTag.trim().length() > 0) {
-					tagListAdapter.add(addedTag);
-					tagListAdapter.notifyDataSetChanged();
-					tagToAdd.setText("");
+				String addedValue = valueToAdd.getText().toString();
+				if (addedValue != null && addedValue.trim().length() > 0) {
+					valueListAdapter.add(addedValue);
+					valueListAdapter.notifyDataSetChanged();
+					valueToAdd.setText("");
 				}
 			}
 		});
 
-		Button ok = (Button) getActivity().findViewById(R.id.btn_tags_ok);
+		Button ok = (Button) getActivity().findViewById(R.id.btn_ok);
 		ok.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				
+
 				List<String> list = new ArrayList<String>();
-				if (!tagListAdapter.isEmpty()) {
-					for (int i = 0; i < tagListAdapter.getCount(); i++) {
-						list.add(tagListAdapter.getItem(i));
+				if (!valueListAdapter.isEmpty()) {
+					for (int i = 0; i < valueListAdapter.getCount(); i++) {
+						list.add(valueListAdapter.getItem(i));
 					}
 				}
-				Log.i("TAG", "Fragment_evDetail_Info_Tags --> TAG LIST button OK: " + list);
-				mEvent.getCommunityData().setTags(list);
+
+
+				//set the modified fields
+				if (mEventFieldType.equals("Tags")) {
+					mEvent.getCommunityData().setTags(list);
+				}else{
+					//set edited "toknow" custom field
+					toKnowMap.put(mEventFieldType, list);
+					Map<String, Object> customData = mEvent.getCustomData();
+					customData.put(Constants.CUSTOM_TOKNOW, toKnowMap);
+					mEvent.setCustomData(customData);
+				}
 
 				// persist the modified field
 				new SCAsyncTask<ExplorerObject, Void, Boolean>(getActivity(), new UpdateEventProcessor(getActivity()))
-						.execute(mEvent);
-				//listener.onTagsSelected(list);
-				//dismiss();
+				.execute(mEvent);
+
 			}
 		});		
 

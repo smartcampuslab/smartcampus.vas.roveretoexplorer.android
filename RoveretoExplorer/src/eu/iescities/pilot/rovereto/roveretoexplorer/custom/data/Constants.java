@@ -59,6 +59,12 @@ public class Constants {
 	public static final String CUSTOM_TOKNOW_LANGUAGE_MAIN = "_toknow_language_main";
 	public static final String CUSTOM_TOKNOW_CLOTHING = "_toknow_clothing";
 	public static final String CUSTOM_TOKNOW_TO_BRING = "_toknow_to_bring";
+	
+	public static final String CUSTOM_TOKNOW_TYPE_ATTRIBUTE = "attribute";
+	public static final String CUSTOM_TOKNOW_TYPE_VALUE= "value";
+	
+	
+	
 
 	
 	public static String getAuthority(Context ctx) throws NameNotFoundException {

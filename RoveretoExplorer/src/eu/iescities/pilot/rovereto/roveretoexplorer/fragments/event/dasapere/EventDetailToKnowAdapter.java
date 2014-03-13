@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -35,7 +36,11 @@ import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.Constants;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.DTHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ExplorerObject;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ToKnow;
-import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.dasapere.EventDetailToKnowAdapter_OLD.DaSapereHolder;
+import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.edit.Fragment_EvDetail_Edit_MultiValueField;
+import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.edit.Fragment_EvDetail_Edit_SingleValueField;
+import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info.EventDetailInfoAdapter;
+import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info.EventInfoChild;
+import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info.edit.Fragment_EvDetail_Info_What;
 import eu.trentorise.smartcampus.android.common.SCAsyncTask;
 import eu.trentorise.smartcampus.network.RemoteException;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
@@ -46,12 +51,12 @@ public class EventDetailToKnowAdapter extends ArrayAdapter<ToKnow> {
 	private int layoutResourceId;
 	private String mTag;
 	private String mEventId;
-	
+
 	private View row = null;
 	private EventInfoChildViewHolder eventChildViewHolder = null;
 
 
-	
+
 
 	public EventDetailToKnowAdapter(Context mContext, int layoutResourceId, String mTag, String mEventId) {
 		super(mContext, layoutResourceId);
@@ -63,14 +68,14 @@ public class EventDetailToKnowAdapter extends ArrayAdapter<ToKnow> {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-	
+
 		final ToKnow toKnow = getItem(position);
-		
+
 		row = convertView;
-		
+
 		if (row == null) {
 			// Inflate event_info_child_item.xml file for child rows
-			
+
 			LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();
 			row = inflater.inflate(layoutResourceId, parent, false);
 			eventChildViewHolder = new EventInfoChildViewHolder();
@@ -95,116 +100,76 @@ public class EventDetailToKnowAdapter extends ArrayAdapter<ToKnow> {
 
 		// Get event_info_child_item.xml file elements and set values
 
+		Log.d("DASAPERE", "EventDetailToKnowAdapter --> toKnow NAME: " + toKnow.getName() );
 
-		if (toKnow.getTextInBold())
+
+		if (toKnow.getName().startsWith("_toknow_")) {
+			Integer resId = getContext().getResources().getIdentifier(toKnow.getName(), "string",
+					"eu.iescities.pilot.rovereto.roveretoexplorer");
+			if (resId != null && resId != 0) {
+				String mandatoryTitle = getContext().getResources().getString(resId);
+				eventChildViewHolder.text.setText(mandatoryTitle);
+			}
+
+			//the element is an attribute
+			Log.d("DASAPERE", "EventDetailToKnowAdapter --> toKnow is ATTRIBUTE");
+
+			Log.d("DASAPERE", "EventDetailToKnowAdapter --> toKnow TYPE: " + toKnow.getType() );
+			Log.d("DASAPERE", "EventDetailToKnowAdapter --> toKnow MULTIVALUE: " + toKnow.getMultiValue());
+			Log.d("DASAPERE", "EventDetailToKnowAdapter --> toKnow BOLD: " + toKnow.getTextInBold() );
+
+		} else {
+			//the element is an value
+			Log.d("DASAPERE", "EventDetailToKnowAdapter --> toKnow is VALUE");
+
+			Log.d("DASAPERE", "EventDetailToKnowAdapter --> toKnow TYPE: " + toKnow.getType() );
+			Log.d("DASAPERE", "EventDetailToKnowAdapter --> toKnow MULTIVALUE: " + toKnow.getMultiValue());
+			Log.d("DASAPERE", "EventDetailToKnowAdapter --> toKnow BOLD: " + toKnow.getTextInBold() );
+			eventChildViewHolder.text.setText(toKnow.getName());
+		}
+
+
+		//set the typeface for text
+		if (toKnow.getTextInBold()){
 			eventChildViewHolder.text.setTypeface(null, Typeface.BOLD);
+			eventChildViewHolder.text.setTextColor(mContext.getResources().getColor(toKnow.getDividerColor()));
+		}
 		else
 			eventChildViewHolder.text.setTypeface(null, Typeface.NORMAL);
 
 
-		if (!toKnow.getText().contains("http")){
-			eventChildViewHolder.text.setText(toKnow.getText());
-		}
-		else{
-
-			if(!toKnow.getText().matches(mContext.getString(R.string.start_url))){
-
-				Log.i("TOKNOW", "make the text part clickable!!!");
-
-				//make the text part clickable
-				int i1 = 0;
-				int i2 = toKnow.getName().length()-1;
-				eventChildViewHolder.text.setMovementMethod(LinkMovementMethod.getInstance());
-				eventChildViewHolder.text.setText(toKnow.getName(), BufferType.SPANNABLE);
-		
-				Spannable mySpannable = (Spannable)eventChildViewHolder.text.getText();
-				ClickableSpan myClickableSpan = new ClickableSpan()
-				{
-					@Override
-					public void onClick(View widget) { 
-						String url = toKnow.getText();
-						Intent i = new Intent(Intent.ACTION_VIEW);
-						i.setData(Uri.parse(url)); 
-						mContext.startActivity(i); 
-
-					}
-				};
-				mySpannable.setSpan(myClickableSpan, i1, i2 , Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-			}
-			else
-				eventChildViewHolder.text.setText(toKnow.getName());
-		}
-		
-
 		// set icon on the left side
 		if (toKnow.getLeftIconId() != -1) {
-			Log.i("TOKNOW", "CHILD SX ICON ID: " + toKnow.getLeftIconId());
 			eventChildViewHolder.text.setCompoundDrawablesWithIntrinsicBounds(toKnow.getLeftIconId(), 0, 0, 0);
 		}else
 			eventChildViewHolder.text.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-		
-		
-		// set icons on the right side for the items of type 1 (telefono, email, )
-		if ((toKnow.getRightIconIds() != null) && (toKnow.getType() == 1)) {
-			Log.i("TOKNOW", "CHILD DX1 ICON ID: "
-					+ toKnow.getRightIconIds()[0]);
 
-			eventChildViewHolder.text.setTypeface(null, Typeface.BOLD);
+
+		// set icons on the right side for the items of type 1 (telefono, email, )
+		if ((toKnow.getRightIconIds() != null)) {
+			//			Log.i("TOKNOW", "CHILD DX1 ICON ID: "
+			//					+ toKnow.getRightIconIds()[0]);
+			//eventChildViewHolder.text.setTypeface(null, Typeface.BOLD);
 
 			eventChildViewHolder.imgsDx1.setVisibility(View.VISIBLE);
 			eventChildViewHolder.imgsDx1.setImageResource(toKnow.getRightIconIds()[0]);
-			eventChildViewHolder.imgsDx1
-			.setOnClickListener(new ChildAddIconClickListener(
-					mContext, toKnow));
+			eventChildViewHolder.imgsDx1.setOnClickListener(new EditClickListener(toKnow));
 		} else {
-			Log.i("TOKNOW", "CHILD DX1 ICON NULL");
 			eventChildViewHolder.imgsDx1.setVisibility(View.INVISIBLE);
 		}
 
 
 		//set divider line height and color
-		eventChildViewHolder.divider.setBackgroundColor(toKnow.getDividerColor());
+		eventChildViewHolder.divider.setBackgroundColor(mContext.getResources().getColor(toKnow.getDividerColor()));
+
 		eventChildViewHolder.divider.setLayoutParams(new LinearLayout.LayoutParams(
 				LinearLayout.LayoutParams.MATCH_PARENT,
 				toKnow.getDividerHeight()));
 
-
-
-
-
-		// set icons on the right side for the items of type 0 (single values)
-		if ((toKnow.getRightIconIds() != null) && (toKnow.getType() == 0)) {
-			Log.i("TOKNOW", "CHILD DX1 ICON ID: "
-					+ toKnow.getRightIconIds()[0]);
-			int iconsNumb = toKnow.getRightIconIds().length;
-			Log.i("TOKNOW", "ICON NUMMBER: " + iconsNumb);
-			eventChildViewHolder.imgsDx1.setVisibility(View.VISIBLE);
-			eventChildViewHolder.imgsDx1.setImageResource(toKnow.getRightIconIds()[0]);
-			eventChildViewHolder.imgsDx1
-			.setOnClickListener(new ChildActionIconClickListener(
-					mContext, toKnow));
-			//this will be added when cancel/edit for single item will be possible
-			//			eventChildViewHolder.imgsDx2.setVisibility(View.VISIBLE);
-			//			eventChildViewHolder.imgsDx2.setImageResource(child
-			//					.getRightIconIds()[1]);
-			//			if (iconsNumb == 3)
-			//				eventChildViewHolder.imgsDx3.setVisibility(View.VISIBLE);
-			//			eventChildViewHolder.imgsDx3.setImageResource(child
-			//					.getRightIconIds()[2]);
-
-		} else {
-			Log.i("TOKNOW", "CHILD DX1 ICON NULL");
-			eventChildViewHolder.imgsDx1.setVisibility(View.INVISIBLE);
-
-			//this will be added when cancel/edit for single item will be possible
-			//			eventChildViewHolder.imgsDx2.setVisibility(View.INVISIBLE);
-			//			eventChildViewHolder.imgsDx3.setVisibility(View.INVISIBLE);
-		}
-
 		return row;
 	}
 
-		
+
 	private static class EventInfoChildViewHolder {
 		TextView text;
 		ImageView imgsDx1;
@@ -213,13 +178,13 @@ public class EventDetailToKnowAdapter extends ArrayAdapter<ToKnow> {
 		View divider;
 		int position;
 	}
-	
-	
+
+
 	private class UpdateEventProcessor extends AbstractAsyncTaskProcessor<ExplorerObject, Boolean> {
 
-		private EventToKnowRow toKnow;
+		private ToKnow toKnow;
 
-		public UpdateEventProcessor(Activity activity, EventToKnowRow toKnow) {
+		public UpdateEventProcessor(Activity activity, ToKnow toKnow) {
 			super(activity);
 			this.toKnow = toKnow;
 		}
@@ -243,4 +208,67 @@ public class EventDetailToKnowAdapter extends ArrayAdapter<ToKnow> {
 			}
 		}
 	}
+
+
+	/******************* Checkbox Checked Change Listener ********************/
+
+	private final class EditClickListener implements OnClickListener {
+		private final ToKnow row;
+
+		private EditClickListener(ToKnow row) {
+			this.row = row;
+		}
+
+		@Override
+		public void onClick(View v) {
+
+			Log.i("DASAPERE", "Right Icon Pressed!");
+
+			FragmentTransaction fragmentTransaction = ((FragmentActivity) getContext()).getSupportFragmentManager()
+					.beginTransaction();
+
+			Fragment edit_fragment=null;
+			Bundle args = new Bundle();
+			String frag_description=null;
+
+			if(!row.getMultiValue()){
+				//call a fragment where only one values is shown
+				edit_fragment = new Fragment_EvDetail_Edit_SingleValueField();
+				Log.i("CONTACTS", "EventDetailToKnowAdapter --> event selected ID: " + mEventId + "!!");
+				args.putString(Utils.ARG_EVENT_ID, mEventId);
+				args.putString(Utils.ARG_EVENT_FIELD_TYPE, row.getName());
+				frag_description = "event_details_custom_edit_singlevalue";
+			}else{
+				//call a fragment where multivalues are allowed
+				edit_fragment = new Fragment_EvDetail_Edit_MultiValueField();
+				Log.i("CONTACTS", "EventDetailToKnowAdapter  --> event selected ID: " + mEventId + "!!");
+				args.putString(Utils.ARG_EVENT_ID, mEventId);
+				args.putString(Utils.ARG_EVENT_FIELD_TYPE, row.getName());
+				frag_description = "event_details_custom_edit_multivalue";
+			}
+
+
+			if (edit_fragment!=null){
+				edit_fragment.setArguments(args);
+				fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+				// fragmentTransaction.detach(this);
+				fragmentTransaction.replace(R.id.content_frame, edit_fragment, frag_description);
+				fragmentTransaction.addToBackStack(edit_fragment.getTag());
+				fragmentTransaction.commit();
+				//reset event and event id
+				//				mEvent=null;
+				//				mEventId=null;
+			}
+
+
+
+
+
+		}
+
+	}
+
+
+
+
 }

@@ -11,6 +11,7 @@
     <string name="day_hint">giorno</string>
     <string name="time_hint">ora</string>
     <string name="event_desc_hint">descrivi qui l\'evento</string>
+    <string name="info_txt">Informazione</string>
     <string name="what_txt">Descrizione</string>
     <string name="title_txt">Titolo</string>
     <string name="origin_txt">Promotore</string>
@@ -23,6 +24,8 @@
     <string name="invalid_fburl">facebook url non valida</string>
     <string name="invalid_twitterurl">twitter url non valida</string>
     <string name="tag_remove_request">Vuoi eliminare il tag \'%1$s\'?</string>
+    <string name="info_remove_request">Vuoi eliminare l\'info \'%1$s\'?</string>
+    
     <string name="phone_remove_request">Vuoi eliminare il telefono \'%1$s\'?</string>
     <string name="email_remove_request">Vuoi eliminare l\'email \'%1$s\'?</string>
     						

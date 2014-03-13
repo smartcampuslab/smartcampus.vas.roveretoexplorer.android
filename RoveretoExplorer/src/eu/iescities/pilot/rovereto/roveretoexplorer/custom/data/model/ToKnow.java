@@ -3,15 +3,18 @@ package eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model;
 import java.util.List;
 
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.Constants;
 
 public class ToKnow {
 
-	private String attrTypeName;
+	private String name;
 	
-	private boolean singleValue=true;
+	//it defines whether the field is an attribute (e.g., abbigliamento consigliato) or a value (e.g., sport clothes)
+	private String type;
 	
-	private String valueName;
-	
+	//it defines whether the field of type "attribute" allows for multiple values. If the field is of "value" type then this attribute is null.
+	private Boolean multiValue = null;
+		
 	private int leftIconId = -1;
 	
 	private int[] rightIconIds = null;
@@ -25,44 +28,52 @@ public class ToKnow {
 	public ToKnow() {	
 	}
 	
-	public ToKnow(String attrTypeName, boolean singleValue, String valueName) {
-		setTitle(attrTypeName);
-		setContent(valueName);
-		setSingleValue(singleValue);
+	
+	public ToKnow(String name, String type) {
+		setName(name);
+		setType(type);
 	}
 	
 	
-	public ToKnow(String attrTypeName, String valueName) {
-		setTitle(attrTypeName);
-		setContent(valueName);
+	public ToKnow(String name, String type, Boolean multivalue) {
+		setName(name);
+		setType(type);
+		setMultiValue(multivalue);
 	}
 	
 	
-	public String getTitle() {
-		return attrTypeName;
-	}
-	
-	public void setTitle(String title) {
-		this.attrTypeName = title;
-	}
-	
-	public String getContent() {
-		return valueName;
-	}
-	
-	public void setContent(String content) {
-		this.valueName = content;
+	public Boolean getMultiValue() {
+		return multiValue;
 	}
 
-	public boolean isSingleValue() {
-		return singleValue;
+
+	public void setMultiValue(Boolean multiValue) {
+		this.multiValue = multiValue;
+	}
+	
+	
+	public String getName() {
+		return name;
 	}
 
-	public void setSingleValue(boolean singleValue) {
-		this.singleValue = singleValue;
+
+
+	public void setName(String name) {
+		this.name = name;
 	}
-	
-	
+
+
+
+	public String getType() {
+		return type;
+	}
+
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+
 
 	public int getLeftIconId()
 	{
@@ -119,6 +130,36 @@ public class ToKnow {
 	}
 
 	
+	public static ToKnow newCustomDataAttributeField(String name){
+
+		ToKnow toKnow = new ToKnow(name, Constants.CUSTOM_TOKNOW_TYPE_ATTRIBUTE);
+
+		if ((name.matches(Constants.CUSTOM_TOKNOW_LANGUAGE_MAIN)) || (name.matches(Constants.CUSTOM_TOKNOW_CLOTHING)) 
+				|| (name.matches(Constants.CUSTOM_TOKNOW_TO_BRING)))
+			toKnow.setMultiValue(true);
+		else
+			toKnow.setMultiValue(false);
+
+		toKnow.setDividerHeight(4);
+		toKnow.setTextInBold(true);
+		int[] rightIconIds1 = new int[] {R.drawable.ic_action_edit};
+		toKnow.setRightIconIds(rightIconIds1);
+
+		return toKnow;
+
+	}
+
+	public static ToKnow newCustomDataValueField(String name){
+
+		ToKnow toKnow = new ToKnow(name, Constants.CUSTOM_TOKNOW_TYPE_VALUE);
+
+		toKnow.setDividerHeight(0);
+		toKnow.setTextInBold(false);
+
+		return toKnow;
+
+	}
+
 	
 	
 	
