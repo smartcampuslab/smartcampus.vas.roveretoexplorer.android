@@ -27,11 +27,13 @@ import android.widget.TextView;
 public class MapFilterAdapter extends ArrayAdapter<String> {
 
 	private int mIconRes;
+	private boolean[] mItemStatus;
 
 	public MapFilterAdapter(Context context, List<String> labels,
-			int iconResourceId) {
+			int iconResourceId, boolean[] mItemStatus) {
 		super(context, R.id.select_poi_listview,labels);
 		mIconRes = iconResourceId;
+		this.mItemStatus = mItemStatus;
 	}
 
 	@Override
@@ -47,9 +49,10 @@ public class MapFilterAdapter extends ArrayAdapter<String> {
 		CheckedTextView ctv = (CheckedTextView) convertView
 				.findViewById(R.id.select_poi_checkTv);
 		ctv.setText(getItem(position));
-		if(ctv.getTag()!=null){
-			ctv.setChecked((Boolean) ctv.getTag());
-		}
+//		if(ctv.getTag()!=null){
+//			ctv.setChecked((Boolean) ctv.getTag());
+//		}
+		ctv.setChecked(this.mItemStatus[position]);
 		TypedArray icons = getContext().getResources().obtainTypedArray(
 				mIconRes);
 		int imgid = icons.getResourceId(position, -1);

@@ -34,6 +34,7 @@ public class MapFilterDialogFragment extends DialogFragment implements
 	private static final String TAG_LABEL = "labels";
 	private static final String TAG_ICONS = "icons";
 	private static final String TAG_CATEGORIES = "categories";
+	private static final String TAG_PREVIOUS_CATEGORIES = "previous categories";
 	private static final String TAG_REQUEST = "request";
 
 	private static final int TARGET_FRAG_REQUEST_CODE = 0;
@@ -42,15 +43,17 @@ public class MapFilterDialogFragment extends DialogFragment implements
 	private Button mShow;
 	private MapItemsHandler mCallback;
 	private ListView mListView;
+	private static String[] previousCategories;
 	private String[] mCategories;
 	private boolean[] mItemStatus;
 	private REQUEST_TYPE mReqType;
 
-	public static MapFilterDialogFragment istantiate(MapFragment mapFrag, int labelResId, int iconResId,REQUEST_TYPE type,
-			String... categories ) {
+	public static MapFilterDialogFragment istantiate(MapFragment mapFrag, int labelResId, int iconResId,REQUEST_TYPE type, String[] eventsCategories,
+			String... categories  ) {
 		Bundle args = new Bundle();
 		args.putInt(TAG_LABEL, labelResId);
 		args.putInt(TAG_ICONS, iconResId);
+		args.putStringArray(TAG_PREVIOUS_CATEGORIES, eventsCategories);
 		args.putStringArray(TAG_CATEGORIES, categories);
 		args.putSerializable(TAG_REQUEST, type);
 		MapFilterDialogFragment psf = new MapFilterDialogFragment();
@@ -62,11 +65,12 @@ public class MapFilterDialogFragment extends DialogFragment implements
 		return psf;
 	}
 	
-	public static MapFilterDialogFragment istantiate(MapFragment mapFrag, int labelResId, int iconResId,
+	public static MapFilterDialogFragment istantiate(MapFragment mapFrag, int labelResId, int iconResId,String[] eventsCategories,
 			String... categories ) {
 		Bundle args = new Bundle();
 		args.putInt(TAG_LABEL, labelResId);
 		args.putInt(TAG_ICONS, iconResId);
+		args.putStringArray(TAG_PREVIOUS_CATEGORIES, eventsCategories);
 		args.putStringArray(TAG_CATEGORIES, categories);
 		args.putSerializable(TAG_REQUEST, REQUEST_TYPE.NONE);
 		MapFilterDialogFragment psf = new MapFilterDialogFragment();
@@ -101,13 +105,18 @@ public class MapFilterDialogFragment extends DialogFragment implements
 
 		Bundle b = getArguments();
 		int labels = b.getInt(TAG_LABEL);
+		previousCategories = b.getStringArray(TAG_PREVIOUS_CATEGORIES);
 		mCategories = b.getStringArray(TAG_CATEGORIES);
 		mReqType = (REQUEST_TYPE) b.getSerializable(TAG_REQUEST);
 		List<String> elements = Arrays.asList(getResources().getStringArray(
 				labels));
 		//mItemStatus = new boolean[elements.size()-1];
-		mItemStatus = new boolean[elements.size()];
 
+		mItemStatus = new boolean[elements.size()];
+		ArrayList<String> arrayListCategories = new ArrayList<String>(Arrays.asList(mCategories));
+		for (String prevCat:previousCategories){
+			mItemStatus[arrayListCategories.indexOf(prevCat)]=true;
+		}
 		setupView(b, elements);
 	}
 
@@ -121,7 +130,7 @@ public class MapFilterDialogFragment extends DialogFragment implements
 
 		//mListView.setAdapter(new MapFilterAdapter(getActivity(), elements.subList(1, elements.size()), icons));
 
-		mListView.setAdapter(new MapFilterAdapter(getActivity(), elements, icons));
+		mListView.setAdapter(new MapFilterAdapter(getActivity(), elements, icons,mItemStatus));
 
 		
 		mCancel = (Button) getView().findViewById(R.id.select_poi_cancel);
