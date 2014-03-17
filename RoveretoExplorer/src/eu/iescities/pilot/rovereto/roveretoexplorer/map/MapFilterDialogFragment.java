@@ -1,4 +1,3 @@
-
 package eu.iescities.pilot.rovereto.roveretoexplorer.map;
 
 import java.lang.reflect.Array;
@@ -22,13 +21,10 @@ import android.widget.TextView;
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.MapFilterAdapter;
 
-public class MapFilterDialogFragment extends DialogFragment implements
-		OnItemClickListener {
-	
-	public static enum REQUEST_TYPE{
-		POI,
-		EVENT,
-		NONE
+public class MapFilterDialogFragment extends DialogFragment implements OnItemClickListener {
+
+	public static enum REQUEST_TYPE {
+		POI, EVENT, NONE
 	}
 
 	private static final String TAG_LABEL = "labels";
@@ -48,8 +44,8 @@ public class MapFilterDialogFragment extends DialogFragment implements
 	private boolean[] mItemStatus;
 	private REQUEST_TYPE mReqType;
 
-	public static MapFilterDialogFragment istantiate(MapFragment mapFrag, int labelResId, int iconResId,REQUEST_TYPE type, String[] eventsCategories,
-			String... categories  ) {
+	public static MapFilterDialogFragment istantiate(MapFragment mapFrag, int labelResId, int iconResId,
+			REQUEST_TYPE type, String[] eventsCategories, String... categories) {
 		Bundle args = new Bundle();
 		args.putInt(TAG_LABEL, labelResId);
 		args.putInt(TAG_ICONS, iconResId);
@@ -57,16 +53,16 @@ public class MapFilterDialogFragment extends DialogFragment implements
 		args.putStringArray(TAG_CATEGORIES, categories);
 		args.putSerializable(TAG_REQUEST, type);
 		MapFilterDialogFragment psf = new MapFilterDialogFragment();
-		if(mapFrag instanceof MapItemsHandler)
+		if (mapFrag instanceof MapItemsHandler)
 			psf.setTargetFragment(mapFrag, TARGET_FRAG_REQUEST_CODE);
 		else
 			throw new IllegalArgumentException("The passed MapFragment should implement MapItemsHandler");
 		psf.setArguments(args);
 		return psf;
 	}
-	
-	public static MapFilterDialogFragment istantiate(MapFragment mapFrag, int labelResId, int iconResId,String[] eventsCategories,
-			String... categories ) {
+
+	public static MapFilterDialogFragment istantiate(MapFragment mapFrag, int labelResId, int iconResId,
+			String[] eventsCategories, String... categories) {
 		Bundle args = new Bundle();
 		args.putInt(TAG_LABEL, labelResId);
 		args.putInt(TAG_ICONS, iconResId);
@@ -74,7 +70,7 @@ public class MapFilterDialogFragment extends DialogFragment implements
 		args.putStringArray(TAG_CATEGORIES, categories);
 		args.putSerializable(TAG_REQUEST, REQUEST_TYPE.NONE);
 		MapFilterDialogFragment psf = new MapFilterDialogFragment();
-		if(mapFrag instanceof MapItemsHandler)
+		if (mapFrag instanceof MapItemsHandler)
 			psf.setTargetFragment(mapFrag, TARGET_FRAG_REQUEST_CODE);
 		else
 			throw new IllegalArgumentException("The passed MapFragment should implement MapItemsHandler");
@@ -89,13 +85,11 @@ public class MapFilterDialogFragment extends DialogFragment implements
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		// TODO externalize string
 		getDialog().setTitle(getString(R.string.filter_dialog_title));
-		//getDialog().set
-		View v = inflater.inflate(R.layout.map_filter_dialog, container,
-				false);
+		// getDialog().set
+		View v = inflater.inflate(R.layout.map_filter_dialog, container, false);
 		return v;
 	}
 
@@ -108,14 +102,15 @@ public class MapFilterDialogFragment extends DialogFragment implements
 		previousCategories = b.getStringArray(TAG_PREVIOUS_CATEGORIES);
 		mCategories = b.getStringArray(TAG_CATEGORIES);
 		mReqType = (REQUEST_TYPE) b.getSerializable(TAG_REQUEST);
-		List<String> elements = Arrays.asList(getResources().getStringArray(
-				labels));
-		//mItemStatus = new boolean[elements.size()-1];
+		List<String> elements = Arrays.asList(getResources().getStringArray(labels));
+		// mItemStatus = new boolean[elements.size()-1];
 
 		mItemStatus = new boolean[elements.size()];
 		ArrayList<String> arrayListCategories = new ArrayList<String>(Arrays.asList(mCategories));
-		for (String prevCat:previousCategories){
-			mItemStatus[arrayListCategories.indexOf(prevCat)]=true;
+		if (previousCategories != null) {
+			for (String prevCat : previousCategories) {
+				mItemStatus[arrayListCategories.indexOf(prevCat)] = true;
+			}
 		}
 		setupView(b, elements);
 	}
@@ -125,14 +120,15 @@ public class MapFilterDialogFragment extends DialogFragment implements
 		mListView = (ListView) getView().findViewById(R.id.select_poi_listview);
 		mListView.setOnItemClickListener(this);
 
-		//TextView tv = (TextView) getView().findViewById(R.id.select_poi_header);
-		//tv.setText(elements.get(0));
+		// TextView tv = (TextView)
+		// getView().findViewById(R.id.select_poi_header);
+		// tv.setText(elements.get(0));
 
-		//mListView.setAdapter(new MapFilterAdapter(getActivity(), elements.subList(1, elements.size()), icons));
+		// mListView.setAdapter(new MapFilterAdapter(getActivity(),
+		// elements.subList(1, elements.size()), icons));
 
-		mListView.setAdapter(new MapFilterAdapter(getActivity(), elements, icons,mItemStatus));
+		mListView.setAdapter(new MapFilterAdapter(getActivity(), elements, icons, mItemStatus));
 
-		
 		mCancel = (Button) getView().findViewById(R.id.select_poi_cancel);
 		mCancel.setOnClickListener(new View.OnClickListener() {
 
@@ -147,11 +143,11 @@ public class MapFilterDialogFragment extends DialogFragment implements
 			@Override
 			public void onClick(View arg0) {
 				List<String> toLoad = new ArrayList<String>();
-				for(int i=0;i<mCategories.length;i++){
-					if(mItemStatus[i])
+				for (int i = 0; i < mCategories.length; i++) {
+					if (mItemStatus[i])
 						toLoad.add(mCategories[i]);
 				}
-				if(mReqType==REQUEST_TYPE.EVENT)
+				if (mReqType == REQUEST_TYPE.EVENT)
 					mCallback.setEventCategoriesToLoad(toLoad.toArray(new String[toLoad.size()]));
 				else
 					mCallback.setMiscellaneousCategoriesToLoad(toLoad.toArray(new String[toLoad.size()]));
@@ -162,11 +158,9 @@ public class MapFilterDialogFragment extends DialogFragment implements
 
 	@Override
 	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-		CheckedTextView ctv = (CheckedTextView) arg1
-				.findViewById(R.id.select_poi_checkTv);
+		CheckedTextView ctv = (CheckedTextView) arg1.findViewById(R.id.select_poi_checkTv);
 		ctv.setChecked(!ctv.isChecked());
 		ctv.setTag(ctv.isChecked());
-		mItemStatus[arg2]= ctv.isChecked();
+		mItemStatus[arg2] = ctv.isChecked();
 	}
 }
-
