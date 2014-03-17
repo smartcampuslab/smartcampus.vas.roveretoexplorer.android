@@ -95,8 +95,8 @@
 //			toKnow = list.get(toKnowIndex);
 //			toKnowLabelTextView.setText(R.string.toknow_label_edit);
 //
-//			if (toKnow.getTitle().startsWith("_toknow_")) {
-//				Integer resId = getActivity().getResources().getIdentifier(toKnow.getTitle(), "string",
+//			if (toKnow.getName().startsWith("_toknow_")) {
+//				Integer resId = getActivity().getResources().getIdentifier(toKnow.getName(), "string",
 //						"eu.iescities.pilot.rovereto.roveretoexplorer");
 //				if (resId != null && resId != 0) {
 //					String mandatoryTitle = getActivity().getResources().getString(resId);
@@ -104,7 +104,7 @@
 //					toKnowTitleEditText.setInputType(InputType.TYPE_NULL);
 //				}
 //			} else {
-//				toKnowTitleEditText.setText(toKnow.getTitle());
+//				toKnowTitleEditText.setText(toKnow.getName());
 //			}
 //
 //			toKnowContentEditText.setText(toKnow.getContent());
@@ -132,7 +132,7 @@
 //						toKnow = new ToKnow("", "");
 //					}
 //
-//					if (!toKnow.getTitle().startsWith("_toknow_")) {
+//					if (!toKnow.getName().startsWith("_toknow_")) {
 //						toKnow.setTitle(toKnowTitleEditText.getText().toString().trim());
 //					}
 //					toKnow.setContent(toKnowContentEditText.getText().toString().trim());

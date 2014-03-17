@@ -14,7 +14,11 @@ public class ToKnow {
 	
 	//it defines whether the field of type "attribute" allows for multiple values. If the field is of "value" type then this attribute is null.
 	private Boolean multiValue = null;
-		
+	private Boolean addedbyUser = null;
+	
+	
+	
+	
 	private int leftIconId = -1;
 	
 	private int[] rightIconIds = null;
@@ -130,7 +134,18 @@ public class ToKnow {
 	}
 
 	
-	public static ToKnow newCustomDataAttributeField(String name){
+	
+	public Boolean getAddedbyUser() {
+		return addedbyUser;
+	}
+
+
+	public void setAddedbyUser(Boolean addedbyUser) {
+		this.addedbyUser = addedbyUser;
+	}
+
+	
+	public static ToKnow newCustomDataAttributeField(String name, Boolean addedByUser, int divider_height){
 
 		ToKnow toKnow = new ToKnow(name, Constants.CUSTOM_TOKNOW_TYPE_ATTRIBUTE);
 
@@ -139,8 +154,15 @@ public class ToKnow {
 			toKnow.setMultiValue(true);
 		else
 			toKnow.setMultiValue(false);
+		
+		if (addedByUser){
+			toKnow.setAddedbyUser(true);
+			toKnow.setMultiValue(true);
+		}else
+			toKnow.setAddedbyUser(false);
 
-		toKnow.setDividerHeight(4);
+		
+		toKnow.setDividerHeight(divider_height);
 		toKnow.setTextInBold(true);
 		int[] rightIconIds1 = new int[] {R.drawable.ic_action_edit};
 		toKnow.setRightIconIds(rightIconIds1);
@@ -149,17 +171,17 @@ public class ToKnow {
 
 	}
 
-	public static ToKnow newCustomDataValueField(String name){
+
+	public static ToKnow newCustomDataValueField(String name, int divider_height){
 
 		ToKnow toKnow = new ToKnow(name, Constants.CUSTOM_TOKNOW_TYPE_VALUE);
 
-		toKnow.setDividerHeight(0);
+		toKnow.setDividerHeight(divider_height);
 		toKnow.setTextInBold(false);
 
 		return toKnow;
 
 	}
-
 	
 	
 	

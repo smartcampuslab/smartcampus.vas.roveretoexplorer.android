@@ -754,35 +754,7 @@ public class Fragment_EvDetail_Info extends Fragment {
 		return list;
 	}
 
-	// private String getDateString(Long fromTime) {
-	// String newdateformatted = new String("");
-	//
-	// Date dateToday = new Date();
-	// String stringToday = (dateFormat.format(dateToday));
-	// String stringEvent = (dateFormat.format(new Date(fromTime)));
-	//
-	// Calendar cal = Calendar.getInstance();
-	// cal.setTime(dateToday);
-	// cal.add(Calendar.DAY_OF_YEAR, 1); // <--
-	// Date tomorrow = cal.getTime();
-	// String stringTomorrow = (dateFormat.format(tomorrow));
-	// // check actual date
-	// if (stringToday.equals(stringEvent)) {
-	// // if equal put the Today string
-	// newdateformatted = stringToday;
-	// newdateformatted = this.context.getString(R.string.list_event_today) +
-	// " " + newdateformatted;
-	// } else if (stringTomorrow.equals(stringEvent)) {
-	// // else if it's tomorrow, cat that string
-	// newdateformatted = stringTomorrow;
-	// newdateformatted = this.context.getString(R.string.list_event_tomorrow) +
-	// " " + newdateformatted;
-	// }
-	// // else put the day's name
-	// else
-	// newdateformatted = extDateFormat.format(new Date(fromTime));
-	// return newdateformatted;
-	// }
+	
 
 	/**
 	 * Get the ExpandableListAdapter associated with this activity's

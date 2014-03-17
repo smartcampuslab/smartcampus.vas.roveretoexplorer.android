@@ -116,14 +116,17 @@ public class EventDetailToKnowAdapter extends ArrayAdapter<ToKnow> {
 			Log.d("DASAPERE", "EventDetailToKnowAdapter --> toKnow TYPE: " + toKnow.getType() );
 			Log.d("DASAPERE", "EventDetailToKnowAdapter --> toKnow MULTIVALUE: " + toKnow.getMultiValue());
 			Log.d("DASAPERE", "EventDetailToKnowAdapter --> toKnow BOLD: " + toKnow.getTextInBold() );
+			Log.d("DASAPERE", "EventDetailToKnowAdapter --> toKnow ADDEDBYUSER: " + toKnow.getAddedbyUser() );
+
 
 		} else {
-			//the element is an value
-			Log.d("DASAPERE", "EventDetailToKnowAdapter --> toKnow is VALUE");
+			//the element is a value or an attribute added by a user
 
 			Log.d("DASAPERE", "EventDetailToKnowAdapter --> toKnow TYPE: " + toKnow.getType() );
 			Log.d("DASAPERE", "EventDetailToKnowAdapter --> toKnow MULTIVALUE: " + toKnow.getMultiValue());
 			Log.d("DASAPERE", "EventDetailToKnowAdapter --> toKnow BOLD: " + toKnow.getTextInBold() );
+			Log.d("DASAPERE", "EventDetailToKnowAdapter --> toKnow ADDEDBYUSER: " + toKnow.getAddedbyUser() );
+
 			eventChildViewHolder.text.setText(toKnow.getName());
 		}
 
@@ -164,6 +167,9 @@ public class EventDetailToKnowAdapter extends ArrayAdapter<ToKnow> {
 		eventChildViewHolder.divider.setLayoutParams(new LinearLayout.LayoutParams(
 				LinearLayout.LayoutParams.MATCH_PARENT,
 				toKnow.getDividerHeight()));
+		
+		
+		
 
 		return row;
 	}
@@ -233,16 +239,18 @@ public class EventDetailToKnowAdapter extends ArrayAdapter<ToKnow> {
 			if(!row.getMultiValue()){
 				//call a fragment where only one values is shown
 				edit_fragment = new Fragment_EvDetail_Edit_SingleValueField();
-				Log.i("CONTACTS", "EventDetailToKnowAdapter --> event selected ID: " + mEventId + "!!");
+				//Log.i("CONTACTS", "EventDetailToKnowAdapter --> event selected ID: " + mEventId + "!!");
 				args.putString(Utils.ARG_EVENT_ID, mEventId);
 				args.putString(Utils.ARG_EVENT_FIELD_TYPE, row.getName());
+			
 				frag_description = "event_details_custom_edit_singlevalue";
 			}else{
 				//call a fragment where multivalues are allowed
 				edit_fragment = new Fragment_EvDetail_Edit_MultiValueField();
-				Log.i("CONTACTS", "EventDetailToKnowAdapter  --> event selected ID: " + mEventId + "!!");
+				//Log.i("CONTACTS", "EventDetailToKnowAdapter  --> event selected ID: " + mEventId + "!!");
 				args.putString(Utils.ARG_EVENT_ID, mEventId);
 				args.putString(Utils.ARG_EVENT_FIELD_TYPE, row.getName());
+				args.putBoolean(Utils.ARG_EVENT_FIELD_TYPE_IS_MANDATORY, !row.getAddedbyUser());
 				frag_description = "event_details_custom_edit_multivalue";
 			}
 

@@ -84,7 +84,7 @@ public class Fragment_EvDetail_Edit_SingleValueField extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
 		Log.d("FRAGMENT LC", "Fragment_evDetail_Info_What --> onCreateView");
-		return inflater.inflate(R.layout.frag_ev_detail_info_edit_what, container, false);
+		return inflater.inflate(R.layout.frag_ev_detail_edit_singlevalue_field, container, false);
 	}
 
 	@Override
@@ -173,7 +173,10 @@ public class Fragment_EvDetail_Edit_SingleValueField extends Fragment {
 
 					// get event data
 					toKnowMap = Utils.getCustomToKnowDataFromEvent(mEvent);
-					txtEventField.setText(toKnowMap.get(mEventFieldType).get(0));
+					
+					txtEventField.setText((toKnowMap.get(mEventFieldType).size()!=0) ? toKnowMap.get(mEventFieldType).get(0) : "");
+					
+					//txtEventField.setText(toKnowMap.get(mEventFieldType).get(0));
 				}
 
 

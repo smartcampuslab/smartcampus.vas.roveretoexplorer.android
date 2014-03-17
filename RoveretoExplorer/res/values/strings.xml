@@ -25,13 +25,24 @@
     <string name="invalid_twitterurl">twitter url non valida</string>
     <string name="tag_remove_request">Vuoi eliminare il tag \'%1$s\'?</string>
     <string name="info_remove_request">Vuoi eliminare l\'info \'%1$s\'?</string>
-    
     <string name="phone_remove_request">Vuoi eliminare il telefono \'%1$s\'?</string>
     <string name="email_remove_request">Vuoi eliminare l\'email \'%1$s\'?</string>
     						
     
+    <string name="fieldtype_remove_alert">\'%1$s\' non contiene informazioni e verrà eliminato. Vuoi aggiungere informazioni?</string>
+    <string name="fieldtype_cancel_addnewfiledtype_alert">\'%1$s\' non contiene informazioni e non verrà aggiunto. Vuoi aggiungere informazioni?</string>
+    
+    
     <string name="yes">Si</string>
     <string name="no">No</string>
+    
+    
+    
+    
+    
+    <string name="new_field_type_label">Che tipo di info vuoi aggiungere?</string>
+    <string name="addnewinfo">Aggiungi nuove informazioni</string>
+    <string name="insert_info">Inserisci informazioni</string>
     
     
     

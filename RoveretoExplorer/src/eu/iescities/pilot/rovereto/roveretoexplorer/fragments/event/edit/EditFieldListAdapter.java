@@ -180,7 +180,7 @@ public class EditFieldListAdapter extends ArrayAdapter<String> {
 
 		}
 
-		if(this.event_field_type.equals("tag")){
+		if(this.event_field_type.equals("Tags")){
 			remove_request = context.getResources().getString(R.string.tag_remove_request, field_value);
 		}
 		else 

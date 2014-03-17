@@ -618,8 +618,8 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 				Log.i("CONTACTS", "EventDetailInfoAdapter --> event selected ID: " + fragment.mEventId + "!!");
 				args.putString(Utils.ARG_EVENT_ID, fragment.mEventId);
 				args.putString(Utils.ARG_EVENT_FIELD_TYPE, "Tags");
+				args.putBoolean(Utils.ARG_EVENT_FIELD_TYPE_IS_MANDATORY, true);
 				frag_description = "event_details_info_edit_tags";
-
 			}
 
 

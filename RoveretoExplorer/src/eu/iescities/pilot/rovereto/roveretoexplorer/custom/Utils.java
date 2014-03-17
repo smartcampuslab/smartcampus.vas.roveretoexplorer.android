@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -63,6 +64,7 @@ public class Utils {
 
 	public static final String ARG_EVENT_ID = "event_id";
 	public static final String ARG_EVENT_FIELD_TYPE = "event_field_type";
+	public static final String ARG_EVENT_FIELD_TYPE_IS_MANDATORY = "event_field_type_is_mandatory";
 	public static final String ARG_EVENT_IMAGE_URL = "event_image";
 
 	public static final String ROVERETO_REGION = "it";
@@ -721,55 +723,50 @@ public class Utils {
 
 	public static List<ToKnow> toKnowMapToList(Map<String, List<String>> map) {
 
-		Log.i("DASAPERE", "Utils --> start toKnowMapToList");
-
-		//print
-		for (Entry<String, List<String>> entry : map.entrySet()) {
-			Log.i("DASAPERE", "Utils --> toKnowMap entry key: " + entry.getKey() + "!!");
-
-			if ( entry.getValue().size()==0){
-				Log.i("DASAPERE", "Utils --> toKnowMap entry values NULL");
-			}else
-				Log.i("DASAPERE", "Utils --> toKnowMap entry values: " + entry.getValue() + "!!");
-
-		}
 
 		List<ToKnow> list = new ArrayList<ToKnow>();
+
 		for (Entry<String, List<String>> entry : map.entrySet()) {
 
-			//			ToKnow toKnow = new ToKnow(entry.getKey(), Constants.CUSTOM_TOKNOW_TYPE_ATTRIBUTE);
-			//			toKnow.setDividerHeight(4);
-			//			toKnow.setTextInBold(true);
-			//			int[] rightIconIds1 = new int[] {R.drawable.ic_action_edit};
-			//			toKnow.setRightIconIds(rightIconIds1);
-			list.add(ToKnow.newCustomDataAttributeField(entry.getKey()));
-			List<String> values = (List<String>) entry.getValue();
-			for (String value : values){
-				if (!value.matches("")){
-					list.add(ToKnow.newCustomDataValueField(value));
+			List<String> values = new LinkedList<String>((List<String>) entry.getValue());
+			values.remove("");
+
+			if (entry.getKey().startsWith("_toknow_"))
+				list.add((values.size()!=0) ? ToKnow.newCustomDataAttributeField(entry.getKey(), false, 2) : 
+					ToKnow.newCustomDataAttributeField(entry.getKey(), false, 3));
+			else			
+				list.add((values.size()!=0) ? ToKnow.newCustomDataAttributeField(entry.getKey(), true, 2) :
+					ToKnow.newCustomDataAttributeField(entry.getKey(), true, 3));
+
+
+			for (int i = 0; i < values.size(); i++) {
+				String value = values.get(i);
+
+				if (i == (values.size() - 1)) {
+					// Last item...
+					list.add(ToKnow.newCustomDataValueField(value,3));
+				}else{
+					list.add(ToKnow.newCustomDataValueField(value,2));
 				}
 			}
-		}
 
-		for(ToKnow toKnow : list){
-			Log.i("DASAPERE", "Utils --> toKnow list: " + toKnow.getName() + "!!");
+
 		}
 
 		return list;
 	}
 
 
-	//	public static Map<String, String> toKnowListToMap(List<ToKnow> list) {
-	//		Map<String, String> map = new LinkedHashMap<String, String>();
-	//
-	//		if (list != null) {
-	//			for (ToKnow toKnow : list) {
-	//				map.put(toKnow.getTitle(), toKnow.getContent());
-	//			}
-	//		}
-	//
-	//		return map;
-	//	}
+
+
+
+
+
+
+
+
+
+
 
 	public static Map<String, List<String>> toKnowListToMap(List<ToKnow> list) {
 
@@ -836,11 +833,13 @@ public class Utils {
 				toKnowMap = (Map<String,List<String>>) event.getCustomData().get(Constants.CUSTOM_TOKNOW);
 			}
 		}
+
+
 		return toKnowMap;
 	}
-	
-	
-	
+
+
+
 	/**
 	 * This is used to check the given email is valid or not.
 	 * 

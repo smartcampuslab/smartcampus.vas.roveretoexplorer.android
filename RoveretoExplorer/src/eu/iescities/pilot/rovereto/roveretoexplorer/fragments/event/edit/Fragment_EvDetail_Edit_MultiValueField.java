@@ -6,7 +6,9 @@ import java.util.List;
 import java.util.Map;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -49,6 +51,7 @@ public class Fragment_EvDetail_Edit_MultiValueField extends Fragment {
 	private String mEventId;
 
 	private String mEventFieldType;
+	private Boolean mEventFieldTypeMandatory;
 	private Map<String,List<String>> toKnowMap=null; 
 
 
@@ -85,8 +88,11 @@ public class Fragment_EvDetail_Edit_MultiValueField extends Fragment {
 				Log.i("FRAGMENT LC", "Fragment_evDetail_Info_Tags --> EVENT ID: " + mEventId);
 				mEvent = DTHelper.findEventById(mEventId);
 
-				mEventFieldType = getArguments().getString(Utils.ARG_EVENT_FIELD_TYPE);
+				//handle field type mandatoriness
+				mEventFieldTypeMandatory = getArguments().getBoolean(Utils.ARG_EVENT_FIELD_TYPE_IS_MANDATORY);
 
+				//handle field type
+				mEventFieldType = getArguments().getString(Utils.ARG_EVENT_FIELD_TYPE);
 				if (mEventFieldType.equals("Tags")) {
 					// get event tags data
 					if (mEvent.getCommunityData().getTags()!=null)
@@ -128,7 +134,7 @@ public class Fragment_EvDetail_Edit_MultiValueField extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
 		Log.d("FRAGMENT LC", "Fragment_EvDetail_Edit_MultiValueField --> onCreateView");
-		return inflater.inflate(R.layout.frag_ev_detail_info_edit_multivalue_field, container, false);
+		return inflater.inflate(R.layout.frag_ev_detail_edit_multivalue_field, container, false);
 	}
 
 	@Override
@@ -228,22 +234,40 @@ public class Fragment_EvDetail_Edit_MultiValueField extends Fragment {
 					}
 				}
 
-
 				//set the modified fields
 				if (mEventFieldType.equals("Tags")) {
 					mEvent.getCommunityData().setTags(list);
 				}else{
-					//set edited "toknow" custom field
-					toKnowMap.put(mEventFieldType, list);
+					
 					Map<String, Object> customData = mEvent.getCustomData();
-					customData.put(Constants.CUSTOM_TOKNOW, toKnowMap);
-					mEvent.setCustomData(customData);
+					
+//					Log.i("DASAPERE", "MultivALues--> FILED TYPE : " + mEventFieldType);
+//					Log.i("DASAPERE", "MultivALues--> LIST EMPTY : " + list.isEmpty());
+//					Log.i("DASAPERE", "MultivALues--> MANDATORY FIELd : " + mEventFieldTypeMandatory);
+
+					
+					if (list.isEmpty() && !mEventFieldTypeMandatory ){
+						//the "addedbyuser" attribute has no values hence can be deleted
+						//alert user first
+						//Log.i("DASAPERE", "MultivALues--> MANDATORY FIELd : " + mEventFieldTypeMandatory);
+						askUserForFieldRemotion();
+					}else{
+						//set edited "toknow" custom field
+						toKnowMap.put(mEventFieldType, list);
+						customData.put(Constants.CUSTOM_TOKNOW, toKnowMap);
+						mEvent.setCustomData(customData);
+						// persist the modified field
+						new SCAsyncTask<ExplorerObject, Void, Boolean>(getActivity(), new UpdateEventProcessor(getActivity()))
+						.execute(mEvent);
+
+					}
+						
+					
+					
 				}
 
-				// persist the modified field
-				new SCAsyncTask<ExplorerObject, Void, Boolean>(getActivity(), new UpdateEventProcessor(getActivity()))
-				.execute(mEvent);
 
+			
 			}
 		});		
 
@@ -251,6 +275,57 @@ public class Fragment_EvDetail_Edit_MultiValueField extends Fragment {
 
 
 	}
+	
+	
+	public void askUserForFieldRemotion(){
+		
+		
+		AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+		//set msg to show
+		builder.setMessage(	getResources().getString(R.string.fieldtype_remove_alert, mEventFieldType));
+		builder.setCancelable(false);
+		builder.setPositiveButton(R.string.yes,
+				new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+
+				dialog.cancel();
+			}
+		});
+		
+		builder.setNegativeButton(R.string.no,
+				new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				//remove the field added by the user
+				toKnowMap.remove(mEventFieldType);
+
+				//update the event 
+				Map<String, Object> customData = mEvent.getCustomData();
+				customData.put(Constants.CUSTOM_TOKNOW, toKnowMap);
+				mEvent.setCustomData(customData);
+
+				// persist the modified field
+				new SCAsyncTask<ExplorerObject, Void, Boolean>(getActivity(), new UpdateEventProcessor(getActivity()))
+				.execute(mEvent);
+
+			}
+		});
+		
+		
+		
+		AlertDialog alertDialog = builder.create();
+		alertDialog.show();
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 	@Override
 	public void onStart() {
