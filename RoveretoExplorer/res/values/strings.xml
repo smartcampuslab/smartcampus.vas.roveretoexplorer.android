@@ -30,7 +30,8 @@
     						
     
     <string name="fieldtype_remove_alert">\'%1$s\' non contiene informazioni e verrà eliminato. Vuoi aggiungere informazioni?</string>
-    <string name="fieldtype_cancel_addnewfiledtype_alert">\'%1$s\' non contiene informazioni e non verrà aggiunto. Vuoi aggiungere informazioni?</string>
+    <string name="missing_fieldtype_values_alert">\'%1$s\' non contiene informazioni e non verrà aggiunto. Vuoi aggiungere informazioni?</string>
+    <string name="missing_fieldtype_alert">Non hai specificato il tipo di info da aggiungere. Vuoi farlo ora?</string>
     
     
     <string name="yes">Si</string>

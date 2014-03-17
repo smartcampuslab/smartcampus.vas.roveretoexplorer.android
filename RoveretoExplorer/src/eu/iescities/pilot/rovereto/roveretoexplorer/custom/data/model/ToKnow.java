@@ -24,11 +24,18 @@ public class ToKnow {
 	private int[] rightIconIds = null;
 	
 	private int divider_height=1;
+	
 	private int divider_color = R.color.jungle_green;
+	
+	
+	
 	private boolean textInBold = false;
+	private int default_text_color = R.color.black_background;
 	
 	
 	
+
+
 	public ToKnow() {	
 	}
 	
@@ -144,6 +151,15 @@ public class ToKnow {
 		this.addedbyUser = addedbyUser;
 	}
 
+	
+	public int getDefault_text_color() {
+		return default_text_color;
+	}
+
+
+	public void setDefault_text_color(int default_text_color) {
+		this.default_text_color = default_text_color;
+	}
 	
 	public static ToKnow newCustomDataAttributeField(String name, Boolean addedByUser, int divider_height){
 

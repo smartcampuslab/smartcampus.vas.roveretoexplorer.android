@@ -111,21 +111,21 @@ public class EventDetailToKnowAdapter extends ArrayAdapter<ToKnow> {
 			}
 
 			//the element is an attribute
-			Log.d("DASAPERE", "EventDetailToKnowAdapter --> toKnow is ATTRIBUTE");
-
-			Log.d("DASAPERE", "EventDetailToKnowAdapter --> toKnow TYPE: " + toKnow.getType() );
-			Log.d("DASAPERE", "EventDetailToKnowAdapter --> toKnow MULTIVALUE: " + toKnow.getMultiValue());
-			Log.d("DASAPERE", "EventDetailToKnowAdapter --> toKnow BOLD: " + toKnow.getTextInBold() );
-			Log.d("DASAPERE", "EventDetailToKnowAdapter --> toKnow ADDEDBYUSER: " + toKnow.getAddedbyUser() );
+//			Log.d("DASAPERE", "EventDetailToKnowAdapter --> toKnow is ATTRIBUTE");
+//
+//			Log.d("DASAPERE", "EventDetailToKnowAdapter --> toKnow TYPE: " + toKnow.getType() );
+//			Log.d("DASAPERE", "EventDetailToKnowAdapter --> toKnow MULTIVALUE: " + toKnow.getMultiValue());
+//			Log.d("DASAPERE", "EventDetailToKnowAdapter --> toKnow BOLD: " + toKnow.getTextInBold() );
+//			Log.d("DASAPERE", "EventDetailToKnowAdapter --> toKnow ADDEDBYUSER: " + toKnow.getAddedbyUser() );
 
 
 		} else {
 			//the element is a value or an attribute added by a user
 
-			Log.d("DASAPERE", "EventDetailToKnowAdapter --> toKnow TYPE: " + toKnow.getType() );
-			Log.d("DASAPERE", "EventDetailToKnowAdapter --> toKnow MULTIVALUE: " + toKnow.getMultiValue());
-			Log.d("DASAPERE", "EventDetailToKnowAdapter --> toKnow BOLD: " + toKnow.getTextInBold() );
-			Log.d("DASAPERE", "EventDetailToKnowAdapter --> toKnow ADDEDBYUSER: " + toKnow.getAddedbyUser() );
+//			Log.d("DASAPERE", "EventDetailToKnowAdapter --> toKnow TYPE: " + toKnow.getType() );
+//			Log.d("DASAPERE", "EventDetailToKnowAdapter --> toKnow MULTIVALUE: " + toKnow.getMultiValue());
+//			Log.d("DASAPERE", "EventDetailToKnowAdapter --> toKnow BOLD: " + toKnow.getTextInBold() );
+//			Log.d("DASAPERE", "EventDetailToKnowAdapter --> toKnow ADDEDBYUSER: " + toKnow.getAddedbyUser() );
 
 			eventChildViewHolder.text.setText(toKnow.getName());
 		}
@@ -136,8 +136,10 @@ public class EventDetailToKnowAdapter extends ArrayAdapter<ToKnow> {
 			eventChildViewHolder.text.setTypeface(null, Typeface.BOLD);
 			eventChildViewHolder.text.setTextColor(mContext.getResources().getColor(toKnow.getDividerColor()));
 		}
-		else
+		else{
 			eventChildViewHolder.text.setTypeface(null, Typeface.NORMAL);
+			eventChildViewHolder.text.setTextColor(mContext.getResources().getColor(toKnow.getDefault_text_color()));
+		}
 
 
 		// set icon on the left side

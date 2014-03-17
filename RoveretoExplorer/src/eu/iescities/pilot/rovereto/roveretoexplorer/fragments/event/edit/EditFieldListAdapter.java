@@ -31,7 +31,7 @@ public class EditFieldListAdapter extends ArrayAdapter<String> {
 
 	int edit_field_layout;
 	String edit_field_type;
-	String event_field_type;
+	String event_field_type = null;
 
 	ViewHolder holder = null;
 
@@ -171,7 +171,8 @@ public class EditFieldListAdapter extends ArrayAdapter<String> {
 	}
 
 	private String getFieldTypeRemoveRequest(String field_value){
-		String remove_request;
+
+		String remove_request = null;
 
 		if(this.edit_field_type.matches(Utils.EDIT_FIELD_PHONE_TYPE)){
 			remove_request = context.getResources().getString(R.string.phone_remove_request, field_value);
@@ -180,13 +181,13 @@ public class EditFieldListAdapter extends ArrayAdapter<String> {
 
 		}
 
-		if(this.event_field_type.equals("Tags")){
-			remove_request = context.getResources().getString(R.string.tag_remove_request, field_value);
+		if (this.event_field_type!= null){
+			if(this.event_field_type.equals("Tags")){
+				remove_request = context.getResources().getString(R.string.tag_remove_request, field_value);
+			}
+			else 
+				remove_request = context.getResources().getString(R.string.info_remove_request, field_value);
 		}
-		else 
-			remove_request = context.getResources().getString(R.string.info_remove_request, field_value);
-
-
 
 
 
