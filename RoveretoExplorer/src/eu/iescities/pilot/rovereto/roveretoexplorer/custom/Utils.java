@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -29,6 +30,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.Address;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.Constants;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.DTHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.CommunityData;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ExplorerObject;
@@ -62,6 +64,7 @@ public class Utils {
 
 	public static final String ARG_EVENT_ID = "event_id";
 	public static final String ARG_EVENT_FIELD_TYPE = "event_field_type";
+	public static final String ARG_EVENT_FIELD_TYPE_IS_MANDATORY = "event_field_type_is_mandatory";
 	public static final String ARG_EVENT_IMAGE_URL = "event_image";
 
 	public static final String ROVERETO_REGION = "it";
@@ -76,9 +79,9 @@ public class Utils {
 
 	public static final String EMAIL_CONTACT_TYPE = "email";
 	public static final String PHONE_CONTACT_TYPE = "phone";
-	
-	
-	public static final String[] stopWordsForOrigin = new String[]{"A cura"};
+
+
+	public static final String[] stopWordsForOrigin = new String[]{"a cura", "acura"};
 
 
 
@@ -705,28 +708,137 @@ public class Utils {
 		return from.compareTo(now) < 0 ? false : true;
 	}
 
-	public static List<ToKnow> toKnowMapToList(Map<String, String> map) {
+	//	public static List<ToKnow> toKnowMapToList(Map<String, String> map) {
+	//		List<ToKnow> list = new ArrayList<ToKnow>();
+	//
+	//		for (Entry<String, String> entry : map.entrySet()) {
+	//			ToKnow toKnow = new ToKnow(entry.getKey(), entry.getValue());
+	//			list.add(toKnow);
+	//		}
+	//
+	//		return list;
+	//	}
+
+
+
+	public static List<ToKnow> toKnowMapToList(Map<String, List<String>> map) {
+
+
 		List<ToKnow> list = new ArrayList<ToKnow>();
 
-		for (Entry<String, String> entry : map.entrySet()) {
-			ToKnow toKnow = new ToKnow(entry.getKey(), entry.getValue());
-			list.add(toKnow);
+		for (Entry<String, List<String>> entry : map.entrySet()) {
+
+			List<String> values = new LinkedList<String>((List<String>) entry.getValue());
+			values.remove("");
+
+			if (entry.getKey().startsWith("_toknow_"))
+				list.add((values.size()!=0) ? ToKnow.newCustomDataAttributeField(entry.getKey(), false, 2) : 
+					ToKnow.newCustomDataAttributeField(entry.getKey(), false, 3));
+			else			
+				list.add((values.size()!=0) ? ToKnow.newCustomDataAttributeField(entry.getKey(), true, 2) :
+					ToKnow.newCustomDataAttributeField(entry.getKey(), true, 3));
+
+
+			for (int i = 0; i < values.size(); i++) {
+				String value = values.get(i);
+
+				if (i == (values.size() - 1)) {
+					// Last item...
+					list.add(ToKnow.newCustomDataValueField(value,3));
+				}else{
+					list.add(ToKnow.newCustomDataValueField(value,2));
+				}
+			}
+
+
 		}
 
 		return list;
 	}
 
-	public static Map<String, String> toKnowListToMap(List<ToKnow> list) {
-		Map<String, String> map = new LinkedHashMap<String, String>();
+
+
+
+
+
+
+
+
+
+
+
+
+	public static Map<String, List<String>> toKnowListToMap(List<ToKnow> list) {
+
+		Map<String, List<String>> map = new LinkedHashMap<String, List<String>>();
+
+		String previousAttrName = null;
 
 		if (list != null) {
+
+			previousAttrName = list.get(0).getName();
+			List<String> values = new ArrayList<String>();		
 			for (ToKnow toKnow : list) {
-				map.put(toKnow.getTitle(), toKnow.getContent());
+
+				String currentAttrName = (toKnow.getType().matches(Constants.CUSTOM_TOKNOW_TYPE_ATTRIBUTE)) ? toKnow.getName() : previousAttrName;  
+
+				if ((currentAttrName.matches(previousAttrName)) && (toKnow.getType().matches(Constants.CUSTOM_TOKNOW_TYPE_VALUE)))
+					values.add(toKnow.getName());
+
+				if (!currentAttrName.matches(previousAttrName)){
+					map.put(previousAttrName, values);
+					values = new ArrayList<String>();		
+					previousAttrName = currentAttrName;
+				} 
 			}
 		}
 
 		return map;
 	}
+
+
+
+	public static   Map<String, List<String>> convert(Map<String, String> oldMap) {
+		Map<String, List<String>> ret = new HashMap<String, List<String>>();
+		for (String key : oldMap.keySet()) {
+			ret.put(key, Arrays.asList(new String[]{oldMap.get(key)}));
+		}
+		return ret;
+	}
+
+
+	public static boolean isOldMapType(Map<String,Object> map){
+
+		boolean isOld = false;
+
+		for (Entry<String, Object> entry : map.entrySet()) {
+			if(!(entry.getValue() instanceof List<?>)) {
+				isOld=true;
+				break;
+			}
+		}
+		return isOld;
+	}
+
+
+	public static Map<String,List<String>> getCustomToKnowDataFromEvent(ExplorerObject event){
+		Map<String,List<String>> toKnowMap = null;
+		if (event.getCustomData().containsKey(Constants.CUSTOM_TOKNOW)){
+
+			//eventually convert the old map type with the new one
+			if (Utils.isOldMapType((Map<String,Object>) event.getCustomData().get(Constants.CUSTOM_TOKNOW))){
+				toKnowMap = Utils.convert((Map<String,String>) event.getCustomData().get(Constants.CUSTOM_TOKNOW));
+			}
+			else{
+				toKnowMap = (Map<String,List<String>>) event.getCustomData().get(Constants.CUSTOM_TOKNOW);
+			}
+		}
+
+
+		return toKnowMap;
+	}
+
+
 
 	/**
 	 * This is used to check the given email is valid or not.
@@ -793,7 +905,7 @@ public class Utils {
 	}
 
 
-	
+
 	//delete an unwanted word from a sentence
 	public static String removeWord(String unwanted, String sentence)
 	{

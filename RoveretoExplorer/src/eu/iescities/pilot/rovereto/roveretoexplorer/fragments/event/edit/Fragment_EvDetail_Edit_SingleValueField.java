@@ -1,4 +1,10 @@
-package eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info.edit;
+package eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.edit;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 import android.app.Activity;
 import android.content.Context;
@@ -21,12 +27,13 @@ import android.widget.Toast;
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.AbstractAsyncTaskProcessor;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.Utils;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.Constants;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.DTHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ExplorerObject;
 import eu.trentorise.smartcampus.android.common.SCAsyncTask;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 
-public class Fragment_EvDetail_Info_What extends Fragment {
+public class Fragment_EvDetail_Edit_SingleValueField extends Fragment {
 
 	//private Context mContext;
 
@@ -35,6 +42,8 @@ public class Fragment_EvDetail_Info_What extends Fragment {
 	private ExplorerObject mEvent = null;
 	private String mEventId;
 	private String mEventFieldType;
+
+	private Map<String,List<String>> toKnowMap=null; 
 
 	TextView formLabel;
 	TextView eventFieldLabel;
@@ -75,7 +84,7 @@ public class Fragment_EvDetail_Info_What extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
 		Log.d("FRAGMENT LC", "Fragment_evDetail_Info_What --> onCreateView");
-		return inflater.inflate(R.layout.frag_ev_detail_info_edit_what, container, false);
+		return inflater.inflate(R.layout.frag_ev_detail_edit_singlevalue_field, container, false);
 	}
 
 	@Override
@@ -88,11 +97,11 @@ public class Fragment_EvDetail_Info_What extends Fragment {
 			Log.i("FRAGMENT LC", "Fragment_evDetail_Info_What --> MY EVENT null");
 
 			mEvent = DTHelper.findEventById(mEventId);
-			
+
 		}
 
 		formLabel = (TextView) getActivity().findViewById(R.id.form_label);
-		
+
 		Log.i("FRAGMENT LC", "Fragment_evDetail_Info_What --> EVENT title  activity created: " + mEvent.getTitle());
 		Log.i("FRAGMENT LC", "Fragment_evDetail_Info_What --> VIEW ID: " + R.id.form_label);
 
@@ -108,44 +117,69 @@ public class Fragment_EvDetail_Info_What extends Fragment {
 			if ((mEvent.getDescription() != null) && (!mEvent.getDescription().matches(""))) {
 				txtEventField.setText(Html.fromHtml(mEvent.getDescription()));
 			}
-		}
-		if (mEventFieldType.equals("origin")) {
-			getActivity().getActionBar().setTitle(
-					getResources().getString(R.string.modify) + " " + getResources().getString(R.string.origin_txt));
-			eventFieldLabel.setText(getResources().getString(R.string.origin_txt));
-			// get event data
-			if ((mEvent.getOrigin() != null) && (!mEvent.getOrigin().matches(""))) {
-				txtEventField.setText(mEvent.getOrigin());
-			}
-		}
-		if (mEventFieldType.equals("title")) {
-			getActivity().getActionBar().setTitle(
-					getResources().getString(R.string.modify) + " " + getResources().getString(R.string.title_txt));
-			eventFieldLabel.setText(getResources().getString(R.string.title_txt));
-			// get event data
-			if ((mEvent.getTitle() != null) && (!mEvent.getTitle().matches(""))) {
-				txtEventField.setText(mEvent.getTitle());
-			}
-
-			txtEventField.addTextChangedListener(new TextWatcher() {
-				@Override
-				public void onTextChanged(CharSequence s, int start, int before, int count) {
+		}else
+			if (mEventFieldType.equals("origin")) {
+				getActivity().getActionBar().setTitle(
+						getResources().getString(R.string.modify) + " " + getResources().getString(R.string.origin_txt));
+				eventFieldLabel.setText(getResources().getString(R.string.origin_txt));
+				// get event data
+				if ((mEvent.getOrigin() != null) && (!mEvent.getOrigin().matches(""))) {
+					txtEventField.setText(mEvent.getOrigin());
 				}
-
-				@Override
-				public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-				}
-
-				@Override
-				public void afterTextChanged(Editable s) {
-					if (txtEventField.getText().length() >= 0) {
-						formLabel.setText("Evento: " + txtEventField.getText().toString());
-						// formLabel.setText(txtEventField.getText().toString());
+			}else
+				if (mEventFieldType.equals("title")) {
+					getActivity().getActionBar().setTitle(
+							getResources().getString(R.string.modify) + " " + getResources().getString(R.string.title_txt));
+					eventFieldLabel.setText(getResources().getString(R.string.title_txt));
+					// get event data
+					if ((mEvent.getTitle() != null) && (!mEvent.getTitle().matches(""))) {
+						txtEventField.setText(mEvent.getTitle());
 					}
-				}
-			});
 
-		}
+					txtEventField.addTextChangedListener(new TextWatcher() {
+						@Override
+						public void onTextChanged(CharSequence s, int start, int before, int count) {
+						}
+
+						@Override
+						public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+						}
+
+						@Override
+						public void afterTextChanged(Editable s) {
+							if (txtEventField.getText().length() >= 0) {
+								formLabel.setText("Evento: " + txtEventField.getText().toString());
+								// formLabel.setText(txtEventField.getText().toString());
+							}
+						}
+					});
+
+				}else
+					//edit a custom field
+				{
+					getActivity().getActionBar().setTitle(
+							getResources().getString(R.string.modify) + " " + getResources().getString(R.string.info_txt));
+
+					if (mEventFieldType.startsWith("_toknow_")) {
+						//edit a custom "toknow" field
+						Integer resId = getResources().getIdentifier(mEventFieldType, "string",
+								"eu.iescities.pilot.rovereto.roveretoexplorer");
+						if (resId != null && resId != 0) {
+							String mandatoryTitle =getResources().getString(resId);
+							eventFieldLabel.setText(mandatoryTitle);
+						}
+					}else
+						eventFieldLabel.setText(mEventFieldType);
+
+					// get event data
+					toKnowMap = Utils.getCustomToKnowDataFromEvent(mEvent);
+					
+					txtEventField.setText((toKnowMap.get(mEventFieldType).size()!=0) ? toKnowMap.get(mEventFieldType).get(0) : "");
+					
+					//txtEventField.setText(toKnowMap.get(mEventFieldType).get(0));
+				}
+
+
 
 		Button modifyBtn = (Button) getView().findViewById(R.id.edit_field_modify_button);
 		modifyBtn.setOnClickListener(new OnClickListener() {
@@ -158,20 +192,25 @@ public class Fragment_EvDetail_Info_What extends Fragment {
 				// set the new fields
 				if (mEventFieldType.equals("description")) {
 					mEvent.setDescription(txtEventField.getText().toString());
-				}
-				if (mEventFieldType.equals("origin")) {
-					mEvent.setOrigin(txtEventField.getText().toString());
-				}
-				if (mEventFieldType.equals("title")) {
-					mEvent.setTitle(txtEventField.getText().toString());
-				}
+				}else
+					if (mEventFieldType.equals("origin")) {
+						mEvent.setOrigin(txtEventField.getText().toString());
+					}else
+						if (mEventFieldType.equals("title")) {
+							mEvent.setTitle(txtEventField.getText().toString());
+						}else{ //set edited custom field
+							toKnowMap.put(mEventFieldType, Arrays.asList(txtEventField.getText().toString()));
+							Map<String, Object> customData = mEvent.getCustomData();
+							customData.put(Constants.CUSTOM_TOKNOW, toKnowMap);
+							mEvent.setCustomData(customData);
+						}
 
 				((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(
 						txtEventField.getWindowToken(), 0);
-				
+
 				// persist the modified field
 				new SCAsyncTask<ExplorerObject, Void, Boolean>(getActivity(), new UpdateEventProcessor(getActivity()))
-						.execute(mEvent);
+				.execute(mEvent);
 				// Utils.appEvents.set(index2, mEvent);
 			}
 		});

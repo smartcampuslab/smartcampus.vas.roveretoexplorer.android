@@ -40,7 +40,7 @@ public class BaseDTObject extends BasicObject {
 	private Long toTime;
 	private String timing;
 
-	private Map<String,Object> customData;
+	private Map<String,Object> customData = null;
 	
 	public BaseDTObject() {
 		super();

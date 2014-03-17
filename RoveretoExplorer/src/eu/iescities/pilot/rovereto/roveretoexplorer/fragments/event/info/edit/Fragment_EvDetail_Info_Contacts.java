@@ -35,6 +35,8 @@ import eu.iescities.pilot.rovereto.roveretoexplorer.custom.AbstractAsyncTaskProc
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.Utils;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.DTHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ExplorerObject;
+import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.edit.EditFieldListAdapter;
+import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.edit.EditedFieldListView;
 import eu.trentorise.smartcampus.android.common.SCAsyncTask;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 
@@ -52,8 +54,6 @@ public class Fragment_EvDetail_Info_Contacts extends Fragment {
 
 	private eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ExplorerObject mEvent = null;
 	private String mEventId;
-
-
 
 	TextView formLabel;
 	EditText txtPhone;

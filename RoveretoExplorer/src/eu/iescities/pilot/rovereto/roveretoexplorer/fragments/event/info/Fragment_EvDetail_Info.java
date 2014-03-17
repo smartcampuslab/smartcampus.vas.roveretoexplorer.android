@@ -35,7 +35,7 @@ import eu.iescities.pilot.rovereto.roveretoexplorer.custom.Utils;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.Address;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.DTHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ExplorerObject;
-import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info.edit.Fragment_EvDetail_Info_What;
+ 
 
 public class Fragment_EvDetail_Info extends Fragment {
 
@@ -51,15 +51,12 @@ public class Fragment_EvDetail_Info extends Fragment {
 	private EventDetailInfoAdapter eventDetailInfoAdapter;
 	View header;
 
-	private static final String ARG_POSITION = "position";
 	public static final String ARG_INDEX = "index_adapter";
 
 	private Integer indexAdapter;
 	protected String mEventId;
 	private String mEventImageUrl;
 
-	private static final DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-	private static final DateFormat extDateFormat = new SimpleDateFormat("EEEEEE dd/MM/yyyy");
 
 	// Initialize variables
 	protected int ParentClickStatus = -1;
@@ -70,7 +67,6 @@ public class Fragment_EvDetail_Info extends Fragment {
 	protected HashMap<Integer, List<Integer>> childType2Images;
 	protected HashMap<Integer, Integer> childType1Images;
 
-	private View _lastColored;
 
 	Activity infoActivity = null;
 
@@ -133,49 +129,49 @@ public class Fragment_EvDetail_Info extends Fragment {
 
 	}
 
-	private void editField(String field_type) {
-
-		Log.d("FRAGMENT LC", "Fragment_evDetail_Info --> INFO ACTIVITY: " + infoActivity.toString());
-		Log.i("CONTACTS", "Fragment_EvDetail_Info --> event selected ID: " + mEventId + "!!");
-
-		String frag_description = "event_details_info_edit_" + field_type;
-		Bundle args = new Bundle();
-		args.putString(Utils.ARG_EVENT_ID, mEventId);
-		args.putString(Utils.ARG_EVENT_FIELD_TYPE, field_type);
-
-		Fragment edit_fragment = new Fragment_EvDetail_Info_What();
-
-		// FragmentTransaction transaction =
-		// getChildFragmentManager().beginTransaction();
-		// if (edit_fragment != null) {
-		// edit_fragment.setArguments(args);
-		// transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-		// // fragmentTransaction.detach(this);
-		// //transaction.replace(R.id.content_frame, edit_fragment,
-		// frag_description);
-		// transaction.add(edit_fragment, frag_description);
-		// //transaction.addToBackStack(edit_fragment.getTag());
-		// transaction.commit();
-		// // reset event and event id
-		// mEvent = null;
-		// mEventId = null;
-		// }
-
-		FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-		if (edit_fragment != null) {
-			// reset event and event id
-			mEvent = null;
-			mEventId = null;
-			edit_fragment.setArguments(args);
-			fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-			// fragmentTransaction.detach(this);
-			fragmentTransaction.replace(R.id.content_frame, edit_fragment, frag_description);
-			fragmentTransaction.addToBackStack(getTag());
-			fragmentTransaction.commit();
-
-		}
-
-	}
+//	private void editField(String field_type) {
+//
+//		Log.d("FRAGMENT LC", "Fragment_evDetail_Info --> INFO ACTIVITY: " + infoActivity.toString());
+//		Log.i("CONTACTS", "Fragment_EvDetail_Info --> event selected ID: " + mEventId + "!!");
+//
+//		String frag_description = "event_details_info_edit_" + field_type;
+//		Bundle args = new Bundle();
+//		args.putString(Utils.ARG_EVENT_ID, mEventId);
+//		args.putString(Utils.ARG_EVENT_FIELD_TYPE, field_type);
+//
+//		Fragment edit_fragment = new Fragment_EvDetail_Info_What();
+//
+//		// FragmentTransaction transaction =
+//		// getChildFragmentManager().beginTransaction();
+//		// if (edit_fragment != null) {
+//		// edit_fragment.setArguments(args);
+//		// transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+//		// // fragmentTransaction.detach(this);
+//		// //transaction.replace(R.id.content_frame, edit_fragment,
+//		// frag_description);
+//		// transaction.add(edit_fragment, frag_description);
+//		// //transaction.addToBackStack(edit_fragment.getTag());
+//		// transaction.commit();
+//		// // reset event and event id
+//		// mEvent = null;
+//		// mEventId = null;
+//		// }
+//
+//		FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+//		if (edit_fragment != null) {
+//			// reset event and event id
+//			mEvent = null;
+//			mEventId = null;
+//			edit_fragment.setArguments(args);
+//			fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+//			// fragmentTransaction.detach(this);
+//			fragmentTransaction.replace(R.id.content_frame, edit_fragment, frag_description);
+//			fragmentTransaction.addToBackStack(getTag());
+//			fragmentTransaction.commit();
+//
+//		}
+//
+//	}
 
 	@Override
 	public void onStart() {
@@ -228,8 +224,9 @@ public class Fragment_EvDetail_Info extends Fragment {
 		
 		
 		if (mEvent.getOrigin() != null && !mEvent.getOrigin().matches("")) {
+			String origin = mEvent.getOrigin().substring(0, 1).toLowerCase() + mEvent.getOrigin().substring(1);
 			String text = getResources().getString(R.string.event_category, category, 
-					Utils.removeWords(Arrays.asList(Utils.stopWordsForOrigin), mEvent.getOrigin()));
+					Utils.removeWords(Arrays.asList(Utils.stopWordsForOrigin), origin));
 			categoryTextView.setText(text);
 			//add the edit icon besides the text
 			//			text += " ";
@@ -347,6 +344,9 @@ public class Fragment_EvDetail_Info extends Fragment {
 		expListView.expandGroup(0);
 		expListView.expandGroup(1);
 
+		
+		
+		//this is not useful now
 		expListView.setOnChildClickListener(new OnChildClickListener() {
 
 			@Override
@@ -411,29 +411,6 @@ public class Fragment_EvDetail_Info extends Fragment {
 
 	}
 
-	private void setAdapter(final ArrayList<EventInfoParent> newParents) {
-		if (newParents == null)
-			return;
-
-		parents = newParents;
-
-		// Check for ExpandableListAdapter object
-		if (this.getExpandableListAdapter() == null) {
-			// Create ExpandableListAdapter Object
-			// final EventDetailInfoAdapter mAdapter = new
-			// EventDetailInfoAdapter();
-			// EventDetailInfoAdapter mAdapter = new
-			// EventDetailInfoAdapter(context, parents,
-			// Fragment_EvDetail_Info.this);
-			EventDetailInfoAdapter mAdapter = new EventDetailInfoAdapter(Fragment_EvDetail_Info.this);
-
-			// Set Adapter to ExpandableList Adapter
-			this.setListAdapter(mAdapter);
-		} else {
-			// Refresh ExpandableListView data
-			((EventDetailInfoAdapter) getExpandableListAdapter()).notifyDataSetChanged();
-		}
-	}
 
 	protected void resetEvent() {
 		mEvent = null;
@@ -454,10 +431,10 @@ public class Fragment_EvDetail_Info extends Fragment {
 			// Create parent class object
 			EventInfoParent parent = new EventInfoParent();
 
-			// if (event.getImage() != null) {
-			// Log.i("EVENT", "Fragment_EvDetail_Info --> image: " +
-			// event.getImage() + "!!");
-			// }
+			 if (event.getImage() != null) {
+			 Log.i("EVENT", "Fragment_EvDetail_Info --> image: " +
+			 event.getImage() + "!!");
+			 }
 			//
 			//
 			// if (event.getCategory() != null) {
@@ -575,14 +552,14 @@ public class Fragment_EvDetail_Info extends Fragment {
 
 					// compute duration or get in from the Explorer Object when
 					// there will be such info!!!
-					String duration = null;
-					if (duration != null) {
-						child = new EventInfoChild();
-						child.setName(getResources().getString(R.string.duration));
-						child.setText("Durata: " + duration);
-						child.setType(0);
-						parent.getChildren().add(child);
-					}
+//					String duration = null;
+//					if (duration != null) {
+//						child = new EventInfoChild();
+//						child.setName(getResources().getString(R.string.duration));
+//						child.setText("Durata: " + duration);
+//						child.setType(0);
+//						parent.getChildren().add(child);
+//					}
 				}
 			} else if (i == 2) { // field COSA
 				parent.setName("" + i);
@@ -777,35 +754,7 @@ public class Fragment_EvDetail_Info extends Fragment {
 		return list;
 	}
 
-	// private String getDateString(Long fromTime) {
-	// String newdateformatted = new String("");
-	//
-	// Date dateToday = new Date();
-	// String stringToday = (dateFormat.format(dateToday));
-	// String stringEvent = (dateFormat.format(new Date(fromTime)));
-	//
-	// Calendar cal = Calendar.getInstance();
-	// cal.setTime(dateToday);
-	// cal.add(Calendar.DAY_OF_YEAR, 1); // <--
-	// Date tomorrow = cal.getTime();
-	// String stringTomorrow = (dateFormat.format(tomorrow));
-	// // check actual date
-	// if (stringToday.equals(stringEvent)) {
-	// // if equal put the Today string
-	// newdateformatted = stringToday;
-	// newdateformatted = this.context.getString(R.string.list_event_today) +
-	// " " + newdateformatted;
-	// } else if (stringTomorrow.equals(stringEvent)) {
-	// // else if it's tomorrow, cat that string
-	// newdateformatted = stringTomorrow;
-	// newdateformatted = this.context.getString(R.string.list_event_tomorrow) +
-	// " " + newdateformatted;
-	// }
-	// // else put the day's name
-	// else
-	// newdateformatted = extDateFormat.format(new Date(fromTime));
-	// return newdateformatted;
-	// }
+	
 
 	/**
 	 * Get the ExpandableListAdapter associated with this activity's

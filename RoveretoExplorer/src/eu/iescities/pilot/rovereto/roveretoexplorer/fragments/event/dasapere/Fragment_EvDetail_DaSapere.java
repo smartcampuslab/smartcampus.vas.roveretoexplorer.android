@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import android.app.Activity;
 import android.content.Context;
@@ -19,7 +20,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.AbstractAsyncTaskProcessor;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.Utils;
@@ -80,6 +80,8 @@ public class Fragment_EvDetail_DaSapere extends ListFragment {
 		return inflater.inflate(R.layout.frag_ev_detail_dasapere, container, false);
 	}
 
+
+
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
@@ -87,36 +89,92 @@ public class Fragment_EvDetail_DaSapere extends ListFragment {
 
 		mEvent = getEvent();
 
-		adapter = new EventDetailToKnowAdapter(getActivity(), R.layout.toknow_row, getTag(), mEventId);
+		//adapter = new EventDetailToKnowAdapter(getActivity(), R.layout.event_toknow_row_item, getTag(), mEventId);
+		adapter = new EventDetailToKnowAdapter(getActivity(), R.layout.event_info_child_item, getTag(), mEventId);
+
+
+		getListView().setDivider(null);
+		getListView().setDivider(getResources().getDrawable(R.color.transparent));
 		setListAdapter(adapter);
+
+		//List<ToKnow> toKnowList = Utils.toKnowMapToList(getToKnowEventData());
+
+		List<ToKnow> toKnowList = Utils.toKnowMapToList(getToKnowEventData());
+
+		adapter.addAll(toKnowList);
+		adapter.notifyDataSetChanged();
+
+
+
+		//handle the creation of new type of information by the user
+		Button toKnowAddButton = (Button) getActivity().findViewById(R.id.toKnowAddButton);
+		toKnowAddButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+
+				FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+				Bundle args = new Bundle();
+				String frag_description = null;
+
+				Fragment editFragment = new Fragment_EvDetail_AddNew_FieldType();
+				Log.i("CONTACTS", "EventDetailInfoAdapter --> event selected ID: " + mEventId + "!!");
+				args.putString(Utils.ARG_EVENT_ID, mEventId);
+				frag_description = "event_details_custom_addnew_fieldtype";
+
+				editFragment.setArguments(args);
+				fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+				// fragmentTransaction.detach(this);
+				fragmentTransaction.replace(R.id.content_frame, editFragment, frag_description);
+				fragmentTransaction.addToBackStack(getTag());
+				fragmentTransaction.commit();
+
+
+
+
+				// reset event and event id
+				// mEvent = null;
+				// mEventId = null;
+			}
+		});
+	}
+
+
+
+
+	private Map<String, List<String>> getToKnowEventData(){
+
 
 		if (mEvent.getCustomData() == null) {
 			mEvent.setCustomData(new HashMap<String, Object>());
 		}
 
-		Map<String, String> toKnowMap = (Map<String, String>) mEvent.getCustomData().get(Constants.CUSTOM_TOKNOW);
+		Map<String, List<String>> toKnowMap = Utils.getCustomToKnowDataFromEvent(mEvent);
+
 
 		if (toKnowMap == null) {
+
+
 			Map<String, Object> customData = mEvent.getCustomData();
-			customData.put(Constants.CUSTOM_TOKNOW, new LinkedHashMap<String, String>());
+
+
+			customData.put(Constants.CUSTOM_TOKNOW, new LinkedHashMap<String, List<String>>());
 			mEvent.setCustomData(customData);
-			toKnowMap = (Map<String, String>) mEvent.getCustomData().get(Constants.CUSTOM_TOKNOW);
+			toKnowMap = (Map<String, List<String>>) mEvent.getCustomData().get(Constants.CUSTOM_TOKNOW);
+
 		}
 
 		if (toKnowMap.isEmpty()) {
+
+			Log.i("DASAPERE", "DaSapere--> toKnowMap EMPTY");
+
+
+
 			try {
+
 				List<ToKnow> toKnowList = new ArrayList<ToKnow>();
 				for (String field : CUSTOM_TOKNOW_FIELDS) {
-					toKnowList.add(new ToKnow(field, ""));
+					toKnowList.add(ToKnow.newCustomDataAttributeField(field, false, 3));
 				}
-
-				// MOCKUP: fill to know map
-				// for (int i = 0; i < 15; i++) {
-				// ToKnow toKnow = new ToKnow("The title " + (i + 1),
-				// "This is the content " + (i + 1));
-				// toKnowList.add(toKnow);
-				// }
-				// MOCKUP: end
 
 				Map<String, Object> customData = new HashMap<String, Object>();
 				toKnowMap = Utils.toKnowListToMap(toKnowList);
@@ -125,44 +183,18 @@ public class Fragment_EvDetail_DaSapere extends ListFragment {
 
 				// persistence
 				new SCAsyncTask<ExplorerObject, Void, Boolean>(getActivity(), new UpdateEventProcessor(getActivity()))
-						.execute(mEvent);
+				.execute(mEvent);
 			} catch (Exception e) {
 				Log.e(getClass().getName(), e.getMessage() != null ? e.getMessage() : "");
 			}
 		}
 
-		// List<ToKnow> toKnowList = Utils.toKnowMapToList((Map<String, String>)
-		// mEvent.getCustomData().get(
-		// Constants.CUSTOM_TOKNOW));
-		List<ToKnow> toKnowList = Utils.toKnowMapToList(toKnowMap);
-		adapter.addAll(toKnowList);
-		adapter.notifyDataSetChanged();
 
-		Button toKnowAddButton = (Button) getActivity().findViewById(R.id.toKnowAddButton);
-		toKnowAddButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-				Bundle args = new Bundle();
-				String frag_description = null;
 
-				Fragment editFragment = new Fragment_EvDetail_DaSapere_Form();
-				Log.i("CONTACTS", "EventDetailInfoAdapter --> event selected ID: " + mEventId + "!!");
-				args.putString(Fragment_EvDetail_DaSapere_Form.ARG_EVENT_ID, mEventId);
-				frag_description = "Fragment_EvDetail_DaSapere_Form";
-
-				editFragment.setArguments(args);
-				fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-				// fragmentTransaction.detach(this);
-				fragmentTransaction.replace(R.id.content_frame, editFragment, frag_description);
-				fragmentTransaction.addToBackStack(getTag());
-				fragmentTransaction.commit();
-				// reset event and event id
-				// mEvent = null;
-				// mEventId = null;
-			}
-		});
+		return toKnowMap;		
 	}
+
+
 
 	@Override
 	public void onStart() {

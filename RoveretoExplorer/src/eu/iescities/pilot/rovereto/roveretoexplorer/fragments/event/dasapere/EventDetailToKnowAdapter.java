@@ -4,11 +4,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
+import android.text.Html;
+import android.text.Spannable;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,8 +24,11 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.TextView.BufferType;
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.AbstractAsyncTaskProcessor;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.Utils;
@@ -25,6 +36,10 @@ import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.Constants;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.DTHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ExplorerObject;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ToKnow;
+import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.edit.Fragment_EvDetail_Edit_MultiValueField;
+import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.edit.Fragment_EvDetail_Edit_SingleValueField;
+import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info.EventDetailInfoAdapter;
+import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info.EventInfoChild;
 import eu.trentorise.smartcampus.android.common.SCAsyncTask;
 import eu.trentorise.smartcampus.network.RemoteException;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
@@ -36,6 +51,12 @@ public class EventDetailToKnowAdapter extends ArrayAdapter<ToKnow> {
 	private String mTag;
 	private String mEventId;
 
+	private View row = null;
+	private EventInfoChildViewHolder eventChildViewHolder = null;
+
+
+
+
 	public EventDetailToKnowAdapter(Context mContext, int layoutResourceId, String mTag, String mEventId) {
 		super(mContext, layoutResourceId);
 		this.mContext = mContext;
@@ -46,93 +67,125 @@ public class EventDetailToKnowAdapter extends ArrayAdapter<ToKnow> {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		View row = convertView;
-		DaSapereHolder holder = null;
-
-		final int pos = position;
 
 		final ToKnow toKnow = getItem(position);
 
+		row = convertView;
+
 		if (row == null) {
+			// Inflate event_info_child_item.xml file for child rows
+
 			LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();
 			row = inflater.inflate(layoutResourceId, parent, false);
-			holder = new DaSapereHolder();
-			holder.toKnowTitle = (TextView) row.findViewById(R.id.daSapereTitleTextView);
-			holder.toKnowContent = (TextView) row.findViewById(R.id.daSapereContentTextView);
-			holder.toKnowDelete = (ImageButton) row.findViewById(R.id.daSapereDeleteButton);
-			holder.toKnowEdit = (ImageButton) row.findViewById(R.id.daSapereEditButton);
-			row.setTag(holder);
+			eventChildViewHolder = new EventInfoChildViewHolder();
+			eventChildViewHolder.text = (TextView) row
+					.findViewById(R.id.event_info_attribute_values);
+			eventChildViewHolder.imgsDx1 = (ImageView) row
+					.findViewById(R.id.event_info_action1);
+
+			eventChildViewHolder.divider = (View) row
+					.findViewById(R.id.event_info_item_divider);
+
+			//this will be added again when it will be possible to cancel/edit the single items
+			//			eventChildViewHolder.imgsDx2 = (ImageView) row
+			//					.findViewById(R.id.event_info_action2);
+			//			eventChildViewHolder.imgsDx3 = (ImageView) row
+			//					.findViewById(R.id.event_info_action3);
+
+			row.setTag(eventChildViewHolder);
 		} else {
-			holder = (DaSapereHolder) row.getTag();
+			eventChildViewHolder = (EventInfoChildViewHolder) row.getTag();
 		}
 
-		if (toKnow.getTitle().startsWith("_toknow_")) {
-			holder.toKnowDelete.setVisibility(ImageButton.GONE);
-			Integer resId = getContext().getResources().getIdentifier(toKnow.getTitle(), "string",
+		// Get event_info_child_item.xml file elements and set values
+
+		Log.d("DASAPERE", "EventDetailToKnowAdapter --> toKnow NAME: " + toKnow.getName() );
+
+
+		if (toKnow.getName().startsWith("_toknow_")) {
+			Integer resId = getContext().getResources().getIdentifier(toKnow.getName(), "string",
 					"eu.iescities.pilot.rovereto.roveretoexplorer");
 			if (resId != null && resId != 0) {
 				String mandatoryTitle = getContext().getResources().getString(resId);
-				holder.toKnowTitle.setText(mandatoryTitle);
+				eventChildViewHolder.text.setText(mandatoryTitle);
 			}
+
+			//the element is an attribute
+//			Log.d("DASAPERE", "EventDetailToKnowAdapter --> toKnow is ATTRIBUTE");
+//
+//			Log.d("DASAPERE", "EventDetailToKnowAdapter --> toKnow TYPE: " + toKnow.getType() );
+//			Log.d("DASAPERE", "EventDetailToKnowAdapter --> toKnow MULTIVALUE: " + toKnow.getMultiValue());
+//			Log.d("DASAPERE", "EventDetailToKnowAdapter --> toKnow BOLD: " + toKnow.getTextInBold() );
+//			Log.d("DASAPERE", "EventDetailToKnowAdapter --> toKnow ADDEDBYUSER: " + toKnow.getAddedbyUser() );
+
+
 		} else {
-			holder.toKnowDelete.setVisibility(ImageButton.VISIBLE);
-			holder.toKnowTitle.setText(toKnow.getTitle());
+			//the element is a value or an attribute added by a user
+
+//			Log.d("DASAPERE", "EventDetailToKnowAdapter --> toKnow TYPE: " + toKnow.getType() );
+//			Log.d("DASAPERE", "EventDetailToKnowAdapter --> toKnow MULTIVALUE: " + toKnow.getMultiValue());
+//			Log.d("DASAPERE", "EventDetailToKnowAdapter --> toKnow BOLD: " + toKnow.getTextInBold() );
+//			Log.d("DASAPERE", "EventDetailToKnowAdapter --> toKnow ADDEDBYUSER: " + toKnow.getAddedbyUser() );
+
+			eventChildViewHolder.text.setText(toKnow.getName());
 		}
 
-		holder.toKnowContent.setText(toKnow.getContent());
 
-		holder.toKnowEdit.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				FragmentTransaction fragmentTransaction = ((FragmentActivity) getContext()).getSupportFragmentManager()
-						.beginTransaction();
-				Bundle args = new Bundle();
-				String frag_description = null;
+		//set the typeface for text
+		if (toKnow.getTextInBold()){
+			eventChildViewHolder.text.setTypeface(null, Typeface.BOLD);
+			eventChildViewHolder.text.setTextColor(mContext.getResources().getColor(toKnow.getDividerColor()));
+		}
+		else{
+			eventChildViewHolder.text.setTypeface(null, Typeface.NORMAL);
+			eventChildViewHolder.text.setTextColor(mContext.getResources().getColor(toKnow.getDefault_text_color()));
+		}
 
-				Fragment editFragment = new Fragment_EvDetail_DaSapere_Form();
-				Log.i("CONTACTS", "EventDetailInfoAdapter --> event selected ID: " + mEventId + "!!");
-				args.putString(Fragment_EvDetail_DaSapere_Form.ARG_EVENT_ID, mEventId);
-				args.putInt(Fragment_EvDetail_DaSapere_Form.ARG_TOKNOW_INDEX, pos);
-				frag_description = "Fragment_EvDetail_DaSapere_Form";
 
-				editFragment.setArguments(args);
-				fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-				// fragmentTransaction.detach(this);
-				fragmentTransaction.replace(R.id.content_frame, editFragment, frag_description);
-				fragmentTransaction.addToBackStack(mTag);
-				fragmentTransaction.commit();
-				// reset event and event id
-				// fragment.mEvent = null;
-				// fragment.mEventId = null;
-			}
-		});
+		// set icon on the left side
+		if (toKnow.getLeftIconId() != -1) {
+			eventChildViewHolder.text.setCompoundDrawablesWithIntrinsicBounds(toKnow.getLeftIconId(), 0, 0, 0);
+		}else
+			eventChildViewHolder.text.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
 
-		holder.toKnowDelete.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				List<ToKnow> newList = new ArrayList<ToKnow>();
-				for (int i = 0; i < getCount(); i++) {
-					if (getItem(i) != toKnow) {
-						newList.add(getItem(i));
-					}
-				}
 
-				ExplorerObject mEvent = DTHelper.findEventById(mEventId);
-				mEvent.getCustomData().put(Constants.CUSTOM_TOKNOW, Utils.toKnowListToMap(newList));
-				new SCAsyncTask<ExplorerObject, Void, Boolean>((Activity) getContext(), new UpdateEventProcessor(
-						(Activity) getContext(), toKnow)).execute(mEvent);
-			}
-		});
+		// set icons on the right side for the items of type 1 (telefono, email, )
+		if ((toKnow.getRightIconIds() != null)) {
+			//			Log.i("TOKNOW", "CHILD DX1 ICON ID: "
+			//					+ toKnow.getRightIconIds()[0]);
+			//eventChildViewHolder.text.setTypeface(null, Typeface.BOLD);
+
+			eventChildViewHolder.imgsDx1.setVisibility(View.VISIBLE);
+			eventChildViewHolder.imgsDx1.setImageResource(toKnow.getRightIconIds()[0]);
+			eventChildViewHolder.imgsDx1.setOnClickListener(new EditClickListener(toKnow));
+		} else {
+			eventChildViewHolder.imgsDx1.setVisibility(View.INVISIBLE);
+		}
+
+
+		//set divider line height and color
+		eventChildViewHolder.divider.setBackgroundColor(mContext.getResources().getColor(toKnow.getDividerColor()));
+
+		eventChildViewHolder.divider.setLayoutParams(new LinearLayout.LayoutParams(
+				LinearLayout.LayoutParams.MATCH_PARENT,
+				toKnow.getDividerHeight()));
+		
+		
+		
 
 		return row;
 	}
 
-	public static class DaSapereHolder {
-		TextView toKnowTitle;
-		TextView toKnowContent;
-		ImageButton toKnowDelete;
-		ImageButton toKnowEdit;
+
+	private static class EventInfoChildViewHolder {
+		TextView text;
+		ImageView imgsDx1;
+		ImageView imgsDx2;
+		ImageView imgsDx3;
+		View divider;
+		int position;
 	}
+
 
 	private class UpdateEventProcessor extends AbstractAsyncTaskProcessor<ExplorerObject, Boolean> {
 
@@ -162,4 +215,69 @@ public class EventDetailToKnowAdapter extends ArrayAdapter<ToKnow> {
 			}
 		}
 	}
+
+
+	/******************* Checkbox Checked Change Listener ********************/
+
+	private final class EditClickListener implements OnClickListener {
+		private final ToKnow row;
+
+		private EditClickListener(ToKnow row) {
+			this.row = row;
+		}
+
+		@Override
+		public void onClick(View v) {
+
+			Log.i("DASAPERE", "Right Icon Pressed!");
+
+			FragmentTransaction fragmentTransaction = ((FragmentActivity) getContext()).getSupportFragmentManager()
+					.beginTransaction();
+
+			Fragment edit_fragment=null;
+			Bundle args = new Bundle();
+			String frag_description=null;
+
+			if(!row.getMultiValue()){
+				//call a fragment where only one values is shown
+				edit_fragment = new Fragment_EvDetail_Edit_SingleValueField();
+				//Log.i("CONTACTS", "EventDetailToKnowAdapter --> event selected ID: " + mEventId + "!!");
+				args.putString(Utils.ARG_EVENT_ID, mEventId);
+				args.putString(Utils.ARG_EVENT_FIELD_TYPE, row.getName());
+			
+				frag_description = "event_details_custom_edit_singlevalue";
+			}else{
+				//call a fragment where multivalues are allowed
+				edit_fragment = new Fragment_EvDetail_Edit_MultiValueField();
+				//Log.i("CONTACTS", "EventDetailToKnowAdapter  --> event selected ID: " + mEventId + "!!");
+				args.putString(Utils.ARG_EVENT_ID, mEventId);
+				args.putString(Utils.ARG_EVENT_FIELD_TYPE, row.getName());
+				args.putBoolean(Utils.ARG_EVENT_FIELD_TYPE_IS_MANDATORY, !row.getAddedbyUser());
+				frag_description = "event_details_custom_edit_multivalue";
+			}
+
+
+			if (edit_fragment!=null){
+				edit_fragment.setArguments(args);
+				fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+				// fragmentTransaction.detach(this);
+				fragmentTransaction.replace(R.id.content_frame, edit_fragment, frag_description);
+				fragmentTransaction.addToBackStack(edit_fragment.getTag());
+				fragmentTransaction.commit();
+				//reset event and event id
+				//				mEvent=null;
+				//				mEventId=null;
+			}
+
+
+
+
+
+		}
+
+	}
+
+
+
+
 }

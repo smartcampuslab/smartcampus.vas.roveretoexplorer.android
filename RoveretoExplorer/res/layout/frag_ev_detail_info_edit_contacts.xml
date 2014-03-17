@@ -71,7 +71,7 @@
                         android:src="@drawable/ic_action_new_phone" />
                 </LinearLayout>
 
-                <eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info.edit.EditedFieldListView
+                <eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.edit.EditedFieldListView
                     android:id="@+id/phone_list"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -111,7 +111,7 @@
                         android:src="@drawable/ic_action_new_email" />
                 </LinearLayout>
 
-                <eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info.edit.EditedFieldListView
+                <eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.edit.EditedFieldListView
                     android:id="@+id/email_list"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

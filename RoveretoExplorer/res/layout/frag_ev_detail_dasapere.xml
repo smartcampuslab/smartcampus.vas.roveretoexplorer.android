@@ -17,6 +17,8 @@
         android:id="@+id/toKnowAddButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/jungle_green"
+        android:textColor="@android:color/white"
         android:text="@string/toknow_button_add" />
 
 </LinearLayout>

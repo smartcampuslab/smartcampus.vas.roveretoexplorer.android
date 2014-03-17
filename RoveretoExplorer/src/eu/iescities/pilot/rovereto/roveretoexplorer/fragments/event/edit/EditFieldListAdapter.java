@@ -1,4 +1,4 @@
-package eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info.edit;
+package eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.edit;
 
 
 import java.util.List;
@@ -14,6 +14,7 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.method.DigitsKeyListener;
+import android.text.method.TextKeyListener;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,10 +27,11 @@ import android.widget.ImageView;
 public class EditFieldListAdapter extends ArrayAdapter<String> {
 
 	Context context;
-	List<String> tags;
+	List<String> values;
 
 	int edit_field_layout;
 	String edit_field_type;
+	String event_field_type = null;
 
 	ViewHolder holder = null;
 
@@ -37,9 +39,21 @@ public class EditFieldListAdapter extends ArrayAdapter<String> {
 			List<String> items, String edit_field_type) {
 		super(context, resourceId, items);
 		this.context = context;
-		this.tags = items;
+		this.values = items;
 		this.edit_field_layout = resourceId;
 		this.edit_field_type = edit_field_type;
+
+	}
+
+
+	public EditFieldListAdapter(Context context, int resourceId,
+			List<String> items, String edit_field_type, String event_field_type) {
+		super(context, resourceId, items);
+		this.context = context;
+		this.values = items;
+		this.edit_field_layout = resourceId;
+		this.edit_field_type = edit_field_type;
+		this.event_field_type = event_field_type;
 
 	}
 
@@ -53,14 +67,11 @@ public class EditFieldListAdapter extends ArrayAdapter<String> {
 
 	public View getView(int position, View convertView, ViewGroup parent) {
 
-		String tagItem = getItem(position);
 
 		View view = null;
 		if (convertView == null) {
 			LayoutInflater mInflater = (LayoutInflater) context
 					.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);  
-
-			//view = mInflater.inflate(R.layout.frag_ev_detail_info_edit_tags_list_row, null);
 			view = mInflater.inflate(this.edit_field_layout, null);
 			final ViewHolder viewHolder = new ViewHolder();
 
@@ -72,8 +83,10 @@ public class EditFieldListAdapter extends ArrayAdapter<String> {
 			}else if(this.edit_field_type.matches(Utils.EDIT_FIELD_EMAIL_TYPE)){
 				viewHolder.txtName.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
 			}
-			else
+			else{
 				viewHolder.txtName.setInputType(InputType.TYPE_CLASS_TEXT);
+				//viewHolder.txtName.setInputType(InputType.TYPE_CLASS_PHONE);
+			}
 
 
 			viewHolder.delete = (ImageView) view.findViewById(R.id.delete_icon);
@@ -97,24 +110,24 @@ public class EditFieldListAdapter extends ArrayAdapter<String> {
 					// TODO Auto-generated method stub
 					String  element = (String) viewHolder.txtName.getTag();
 					//					Log.i("TAG", "TagListAdapter --> TextWatcher --> old edited string: " + element);
-					int id = tags.indexOf(element);
+					int id = values.indexOf(element);
 					element = s.toString();
 					if (id!=-1){
-						tags.set(id, element);
-						viewHolder.txtName.setTag(tags.get(id));
+						values.set(id, element);
+						viewHolder.txtName.setTag(values.get(id));
 					}
 				}
 
 			});
 
 			view.setTag(viewHolder);
-			viewHolder.txtName.setTag(tags.get(position));
+			viewHolder.txtName.setTag(values.get(position));
 		} else {
 			view = convertView;
-			((ViewHolder) view.getTag()).txtName.setTag(tags.get(position));
+			((ViewHolder) view.getTag()).txtName.setTag(values.get(position));
 		}
 		ViewHolder holder = (ViewHolder) view.getTag();
-		holder.txtName.setText(tags.get(position));
+		holder.txtName.setText(values.get(position));
 		holder.delete.setOnClickListener(new DeleteIconClickListener(position));
 
 		return view;
@@ -124,25 +137,25 @@ public class EditFieldListAdapter extends ArrayAdapter<String> {
 
 	private final class DeleteIconClickListener implements OnClickListener {
 		private final int position;
-		
+
 
 		private DeleteIconClickListener(int position) {
 			this.position = position;
 		}
 
-		
+
 		@Override
 		public void onClick(View v) {
-			Log.i("FRAGMENT LC", "TagListAdapter --> Delete button pressed!");
+			Log.i("FRAGMENT LC", "EditFieldListAdapter --> Delete button pressed!");
 
 			AlertDialog.Builder builder = new AlertDialog.Builder(context);
 			//set msg to show
-			builder.setMessage(getFieldTypeRemoveRequest(tags.get(position)));
+			builder.setMessage(getFieldTypeRemoveRequest(values.get(position)));
 			builder.setCancelable(false);
 			builder.setPositiveButton(R.string.yes,
 					new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int id) {
-					tags.remove(position);
+					values.remove(position);
 					notifyDataSetChanged();
 				}
 			});
@@ -158,21 +171,30 @@ public class EditFieldListAdapter extends ArrayAdapter<String> {
 	}
 
 	private String getFieldTypeRemoveRequest(String field_value){
-		String remove_request;
-		
+
+		String remove_request = null;
+
 		if(this.edit_field_type.matches(Utils.EDIT_FIELD_PHONE_TYPE)){
 			remove_request = context.getResources().getString(R.string.phone_remove_request, field_value);
 		}else if(this.edit_field_type.matches(Utils.EDIT_FIELD_EMAIL_TYPE)){
 			remove_request = context.getResources().getString(R.string.email_remove_request, field_value);
-				
+
 		}
-		else
-			remove_request = context.getResources().getString(R.string.tag_remove_request, field_value);
-		
+
+		if (this.event_field_type!= null){
+			if(this.event_field_type.equals("Tags")){
+				remove_request = context.getResources().getString(R.string.tag_remove_request, field_value);
+			}
+			else 
+				remove_request = context.getResources().getString(R.string.info_remove_request, field_value);
+		}
+
+
+
 		return remove_request;
 
 	}
-	
-	
+
+
 
 }

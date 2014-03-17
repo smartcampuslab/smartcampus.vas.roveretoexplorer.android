@@ -47,9 +47,9 @@ import android.widget.Toast;
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.Utils;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ExplorerObject;
+import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.edit.Fragment_EvDetail_Edit_MultiValueField;
+import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.edit.Fragment_EvDetail_Edit_SingleValueField;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info.edit.Fragment_EvDetail_Info_Contacts;
-import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info.edit.Fragment_EvDetail_Info_Tags;
-import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info.edit.Fragment_EvDetail_Info_What;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info.edit.Fragment_EvDetail_Info_WhenWhere;
 import eu.trentorise.smartcampus.android.common.tagging.TaggingDialog;
 
@@ -294,15 +294,12 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 			eventChildViewHolder.imgsDx1.setVisibility(View.INVISIBLE);
 		}
 
-
 	
 		//set divider line height and color
-		eventChildViewHolder.divider.setBackgroundColor(child.getDividerColor());
+		eventChildViewHolder.divider.setBackgroundColor(fragment.getResources().getColor(child.getDividerColor()));
 		eventChildViewHolder.divider.setLayoutParams(new LinearLayout.LayoutParams(
 				LinearLayout.LayoutParams.MATCH_PARENT,
 				child.getDividerHeight()));
-
-
 
 
 
@@ -338,23 +335,6 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 
 		//		Log.i("GROUPVIEW", "child view: group  POS: " + groupPosition + "!!");
 		//		Log.i("GROUPVIEW", "child view: child POS: " + childPosition + "!!");
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 		countChildViewCall++;
 
@@ -610,6 +590,8 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 			//					Toast.LENGTH_LONG).show();
 
 			FragmentTransaction fragmentTransaction = fragment.getActivity().getSupportFragmentManager().beginTransaction();
+			
+			
 			Fragment edit_fragment=null;
 			Bundle args = new Bundle();
 			String frag_description=null;
@@ -625,17 +607,19 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 				args.putString(Utils.ARG_EVENT_ID, fragment.mEventId);
 				frag_description = "event_details_info_edit_where";
 			}else if(parent.getText1()=="Cosa"){
-				edit_fragment = new Fragment_EvDetail_Info_What();
+				//edit_fragment = new Fragment_EvDetail_Info_What();
+				edit_fragment = new Fragment_EvDetail_Edit_SingleValueField();
 				Log.i("CONTACTS", "EventDetailInfoAdapter --> event selected ID: " + fragment.mEventId + "!!");
 				args.putString(Utils.ARG_EVENT_ID, fragment.mEventId);
 				args.putString(Utils.ARG_EVENT_FIELD_TYPE, "description");
 				frag_description = "event_details_info_edit_what";
 			}else if(parent.getText1()=="Tags"){
-				edit_fragment = new Fragment_EvDetail_Info_Tags();
+				edit_fragment = new Fragment_EvDetail_Edit_MultiValueField();
 				Log.i("CONTACTS", "EventDetailInfoAdapter --> event selected ID: " + fragment.mEventId + "!!");
 				args.putString(Utils.ARG_EVENT_ID, fragment.mEventId);
+				args.putString(Utils.ARG_EVENT_FIELD_TYPE, "Tags");
+				args.putBoolean(Utils.ARG_EVENT_FIELD_TYPE_IS_MANDATORY, true);
 				frag_description = "event_details_info_edit_tags";
-
 			}
 
 
@@ -745,6 +729,8 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 
 	/***********************************************************************/
 
+
+	
 	private static class EventInfoChildViewHolder {
 		TextView text;
 		//ImageView imgSx;

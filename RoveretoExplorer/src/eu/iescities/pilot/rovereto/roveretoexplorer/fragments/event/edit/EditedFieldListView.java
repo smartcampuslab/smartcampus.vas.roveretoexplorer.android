@@ -1,4 +1,4 @@
-package eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info.edit;
+package eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.edit;
 
 import android.content.Context;
 import android.graphics.Canvas;
