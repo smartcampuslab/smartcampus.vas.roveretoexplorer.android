@@ -427,7 +427,13 @@ public class MapFragment extends Fragment implements MapItemsHandler, OnCameraCh
 
 					}
 					if (eventsCleaned.length!=0)
-						newList.addAll(DTHelper.getEventsByCategories(0, -1, eventsCleaned));
+//						newList.addAll(DTHelper.getEventsByCategories(0, -1, eventsCleaned));
+					{
+						SortedMap<String, Integer> sort = new TreeMap<String, Integer>();
+						sort.put("fromTime", 1);
+						newList.addAll(DTHelper.searchInGeneral(0, -1, null,  null, null, false, ExplorerObject.class,
+								 sort, eventsCleaned));
+				}
 					Iterator<ExplorerObject> i = newList.iterator();
 					while (i.hasNext()) {
 						ExplorerObject obj = i.next();

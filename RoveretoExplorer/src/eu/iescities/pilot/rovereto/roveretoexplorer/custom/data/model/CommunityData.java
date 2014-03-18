@@ -15,6 +15,7 @@
  ******************************************************************************/
 package eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -24,7 +25,7 @@ import java.util.Set;
 
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.Rating;
 
-public class CommunityData {
+public class CommunityData implements Serializable{
 	private static final long serialVersionUID = 5926048335916274968L;
 
 	protected List<String> tags = new ArrayList<String>();

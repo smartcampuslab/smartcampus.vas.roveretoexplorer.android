@@ -1,7 +1,11 @@
 package eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event;
 
+import java.util.ArrayList;
+import java.util.Locale;
+
 import android.app.ActionBar;
 import android.app.Activity;
+import android.location.Address;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -14,15 +18,19 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.google.android.maps.GeoPoint;
+
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.PagerSlidingTabStrip;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.Utils;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.DTHelper;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.BaseDTObject;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ExplorerObject;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.community.Fragment_EvDetail_Community;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.dasapere.Fragment_EvDetail_DaSapere;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info.Fragment_EvDetail_Info;
-import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.multimedia.Fragment_EvDetail_Multimedia;
+import eu.iescities.pilot.rovereto.roveretoexplorer.map.MapManager;
 
 public class Fragment_EventDetails extends Fragment {
 
@@ -216,32 +224,32 @@ public class Fragment_EventDetails extends Fragment {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// if (item.getItemId() == R.id.map_view) {
-		// ArrayList<BaseDTObject> list = new ArrayList<BaseDTObject>();
-		// getEvent().setLocation(mEvent.getLocation());
-		// list.add(getEvent());
-		// MapManager.switchToMapView(list, mFragment);
-		// return true;
-		// } else if (item.getItemId() == R.id.direction_action) {
-		// callBringMeThere();
-		//
-		// return true;
-		// }
+		 if (item.getItemId() == R.id.map_view) {
+		 ArrayList<BaseDTObject> list = new ArrayList<BaseDTObject>();
+		 getEvent().setLocation(mEvent.getLocation());
+		 list.add(getEvent());
+		 MapManager.switchToMapView(list, this);
+		 return true;
+		 } else if (item.getItemId() == R.id.direction_action) {
+		 callBringMeThere();
+		
+		 return true;
+		 }
 		return true;
 	}
 
 	protected void callBringMeThere() {
-		// Address to = new Address(Locale.getDefault());
-		// to.setLatitude(mEvent.getLocation()[0]);
-		// to.setLongitude(mEvent.getLocation()[1]);
-		// Address from = null;
-		// GeoPoint mylocation = MapManager.requestMyLocation(getActivity());
-		// if (mylocation != null) {
-		// from = new Address(Locale.getDefault());
-		// from.setLatitude(mylocation.getLatitudeE6() / 1E6);
-		// from.setLongitude(mylocation.getLongitudeE6() / 1E6);
-		// }
-		// DTHelper.bringmethere(getActivity(), from, to);
+		 Address to = new Address(Locale.getDefault());
+		 to.setLatitude(mEvent.getLocation()[0]);
+		 to.setLongitude(mEvent.getLocation()[1]);
+		 Address from = null;
+		 GeoPoint mylocation = MapManager.requestMyLocation(getActivity());
+		 if (mylocation != null) {
+		 from = new Address(Locale.getDefault());
+		 from.setLatitude(mylocation.getLatitudeE6() / 1E6);
+		 from.setLongitude(mylocation.getLongitudeE6() / 1E6);
+		 }
+		 DTHelper.bringmethere(getActivity(), from, to);
 	}
 
 	@Override
@@ -251,19 +259,31 @@ public class Fragment_EventDetails extends Fragment {
 		//
 		// // menu.clear();
 		//
-		// getActivity().getMenuInflater().inflate(R.menu.event_detail_menu,
-		// menu);
-		// if (getEvent()== null || getEvent().getLocation() == null ||
-		// (getEvent().getLocation()[0] == 0 && getEvent().getLocation()[1] ==
-		// 0)) {
-		// menu.findItem(R.id.map_view).setVisible(false);
-		// menu.findItem(R.id.direction_action).setVisible(false);
-		// }
+		 getActivity().getMenuInflater().inflate(R.menu.event_detail_menu,
+		 menu);
+		 if (getEvent()== null || getEvent().getLocation() == null ||
+		 (getEvent().getLocation()[0] == 0 && getEvent().getLocation()[1] ==
+		 0)) {
+		 menu.findItem(R.id.map_view).setVisible(false);
+		 menu.findItem(R.id.direction_action).setVisible(false);
+		 }
 		// /*
 		// * if (category == null) { category = (getArguments() != null) ?
 		// * getArguments().getString(SearchFragment.ARG_CATEGORY) : null; }
 		// */
 		super.onPrepareOptionsMenu(menu);
+	}
+	
+	private ExplorerObject getEvent() {
+		if (mEventId == null) {
+			mEventId = getArguments().getString(Utils.ARG_EVENT_ID);
+		}
+
+		// if (mEvent == null) {
+		mEvent = DTHelper.findEventById(mEventId);
+		// }
+
+		return mEvent;
 	}
 
 }
