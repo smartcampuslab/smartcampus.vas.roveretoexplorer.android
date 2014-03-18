@@ -237,6 +237,9 @@ public class Fragment_EvDetail_Edit_MultiValueField extends Fragment {
 				//set the modified fields
 				if (mEventFieldType.equals("Tags")) {
 					mEvent.getCommunityData().setTags(list);
+					// persist the modified field
+					new SCAsyncTask<ExplorerObject, Void, Boolean>(getActivity(), new UpdateEventProcessor(getActivity()))
+					.execute(mEvent);
 				}else{
 					
 					Map<String, Object> customData = mEvent.getCustomData();
@@ -261,9 +264,6 @@ public class Fragment_EvDetail_Edit_MultiValueField extends Fragment {
 						.execute(mEvent);
 
 					}
-						
-					
-					
 				}
 
 
