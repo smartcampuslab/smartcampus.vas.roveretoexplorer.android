@@ -516,7 +516,7 @@ public class MapFragment extends Fragment implements MapItemsHandler, OnCameraCh
 
 		if (list.size() == 1) {
 			onBaseDTObjectTap(list.get(0));
-		} else if (getSupportMap().getCameraPosition().zoom >= getSupportMap().getMaxZoomLevel()) {
+		} else if (getSupportMap().getCameraPosition().zoom >= maxZoomOnMap) {
 			onBaseDTObjectsTap(list);
 		} else {
 			MapManager.fitMapWithOverlays(list, getSupportMap());
