@@ -100,7 +100,7 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 	protected int size = DEFAULT_ELEMENTS_NUMBER;
 	private Long oldFromTime = null;
 	private Long oldToTime = null;
-
+	private boolean today=false;
 	// For the expandable list view
 	List<String> dateGroupList = new ArrayList<String>();
 
@@ -448,9 +448,18 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 				addEvent(expObj, date_with_day);
 			}
 		} else {
+			List<Date> listOfDate=null;
 			// get the list of dates
-			List<Date> listOfDate = Utils.getDatesBetweenInterval(new Date(expObj.getFromTime()),
+			if (!today)
+			listOfDate = Utils.getDatesBetweenInterval(new Date(expObj.getFromTime()),
 					new Date(expObj.getToTime()));
+			else {
+				   //get only today 
+				listOfDate = new ArrayList<Date>() {{
+				    add(new Date());
+
+				}};
+			}
 			// get event-dates
 			for (Date date : listOfDate) {
 				date_with_day = Utils.getDateTimeString(context, date.getTime(), Utils.DATE_FORMAT_2, true, true)[0];
@@ -538,7 +547,7 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 						(WhenForSearch) bundle.getParcelable(SearchFragment.ARG_WHEN_SEARCH), my, ExplorerObject.class,
 						sort, categories);
 			} else if (bundle.containsKey(ARG_QUERY_TODAY)) {
-
+				today=true;
 				result = DTHelper.searchTodayEvents(0, -1, bundle.getString(SearchFragment.ARG_QUERY));
 			} else if (bundle.containsKey(SearchFragment.ARG_LIST)) {
 				result = (Collection<ExplorerObject>) bundle.get(SearchFragment.ARG_LIST);

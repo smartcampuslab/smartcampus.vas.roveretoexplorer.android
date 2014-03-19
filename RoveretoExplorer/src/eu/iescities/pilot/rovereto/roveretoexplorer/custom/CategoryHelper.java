@@ -54,6 +54,7 @@ public class CategoryHelper {
 					R.string.categories_event_social),
 			/* 4 */new CategoryDescriptor(R.drawable.ic_altri_eventi_map, R.drawable.ic_altri_eventi,
 					EVENT_NONCATEGORIZED, R.string.categories_event_altri_eventi),
+					
 
 	};
 
@@ -64,10 +65,14 @@ public class CategoryHelper {
 		for (CategoryDescriptor event : EVENT_CATEGORIES) {
 			descriptorMap.put(event.category, event);
 		}
+		
+		descriptorMap.put("Ambiente", EVENT_CATEGORIES[3]);
+
 
 		for (String s : descriptorMap.keySet()) {
 			categoryMapping.put(s, s);
 		}
+		categoryMapping.put("Ambiente", EVENT_NONCATEGORIZED);
 
 	}
 

@@ -1,6 +1,12 @@
 package eu.iescities.pilot.rovereto.roveretoexplorer.custom.data;
 
-public class Address {
+import java.io.Serializable;
+
+public class Address implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5208827143798230153L;
 	private String luogo=null;
 	private String via=null;
 	private String citta=null;

@@ -42,7 +42,7 @@ public class EventStorageHelper implements BeanStorageHelper<ExplorerObject> {
 		event.setTwitterUrl(cursor.getString(cursor.getColumnIndex("twitterurl")));
 		event.setOrigin(cursor.getString(cursor.getColumnIndex("origin")));
 		event.setImage(cursor.getString(cursor.getColumnIndex("image")));
-		event.setCategory(cursor.getString(cursor.getColumnIndex("category")));
+		event.setCategory(Utils.convertJSONToObjects(cursor.getString(cursor.getColumnIndex("category")), String.class));
 		@SuppressWarnings("unchecked")
 		Map<String, Object> map = Utils.convertJSONToObject(cursor.getString(cursor.getColumnIndex("contacts")),
 				Map.class);
@@ -68,7 +68,7 @@ public class EventStorageHelper implements BeanStorageHelper<ExplorerObject> {
 		values.put("twitterurl", event.getTwitterUrl());
 		values.put("facebookurl", event.getFacebookUrl());
 		values.put("origin", event.getOrigin());
-		values.put("category", event.getCategory());
+		values.put("category", Utils.convertToJSON(event.getCategory()));
 		if (event.getContacts()!= null) {
 			values.put("contacts", Utils.convertToJSON(event.getContacts()));
 		}

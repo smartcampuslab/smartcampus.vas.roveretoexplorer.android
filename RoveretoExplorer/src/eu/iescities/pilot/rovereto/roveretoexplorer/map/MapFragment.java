@@ -81,7 +81,7 @@ public class MapFragment extends Fragment implements MapItemsHandler, OnCameraCh
 	private boolean listmenu = false;
 
 	private static View view;
-    float maxZoomOnMap = 19.0f;
+	float maxZoomOnMap = 19.0f;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -132,8 +132,8 @@ public class MapFragment extends Fragment implements MapItemsHandler, OnCameraCh
 			 */// if (item.getItemId() == R.id.action_poi) {
 		if (item.getTitle() == "filtro") {
 			MapFilterDialogFragment psf = MapFilterDialogFragment.istantiate(this, R.array.map_items_events_labels,
-					R.array.map_items_events_icons, REQUEST_TYPE.EVENT,eventsCategories,
-					CategoryHelper.getEventCategoriesForMapFilters() );
+					R.array.map_items_events_icons, REQUEST_TYPE.EVENT, eventsCategories,
+					CategoryHelper.getEventCategoriesForMapFilters());
 			psf.show(getFragmentManager(), TAG_FRAGMENT_POI_SELECT);
 			return true;
 		} /*
@@ -418,22 +418,20 @@ public class MapFragment extends Fragment implements MapItemsHandler, OnCameraCh
 					if (isTodayIncluded()) {
 						newList.addAll(DTHelper.searchTodayEvents(0, -1, ""));
 
-					} 
+					}
 					if (isMyIncluded()) {
 						SortedMap<String, Integer> sort = new TreeMap<String, Integer>();
 						sort.put("fromTime", 1);
-							newList.addAll(DTHelper.searchInGeneral(0, -1, null,  null, null, true, ExplorerObject.class,
-									 sort, null));
+						newList.addAll(DTHelper.searchInGeneral(0, -1, null, null, null, true, ExplorerObject.class,
+								sort, null));
 
 					}
-					if (eventsCleaned.length!=0)
-//						newList.addAll(DTHelper.getEventsByCategories(0, -1, eventsCleaned));
-					{
+					if (eventsCleaned.length != 0 && !Arrays.asList(eventsCleaned).contains("Today")) {
 						SortedMap<String, Integer> sort = new TreeMap<String, Integer>();
 						sort.put("fromTime", 1);
-						newList.addAll(DTHelper.searchInGeneral(0, -1, null,  null, null, false, ExplorerObject.class,
-								 sort, eventsCleaned));
-				}
+						newList.addAll(DTHelper.searchInGeneral(0, -1, null, null, null, false, ExplorerObject.class,
+								sort, eventsCleaned));
+					}
 					Iterator<ExplorerObject> i = newList.iterator();
 					while (i.hasNext()) {
 						ExplorerObject obj = i.next();
@@ -486,7 +484,7 @@ public class MapFragment extends Fragment implements MapItemsHandler, OnCameraCh
 	private GoogleMap getSupportMap() {
 		if (mMap == null) {
 			if (getFragmentManager().findFragmentById(R.id.map) != null
-					&& getFragmentManager().findFragmentById(R.id.map) instanceof SupportMapFragment){
+					&& getFragmentManager().findFragmentById(R.id.map) instanceof SupportMapFragment) {
 				mMap = ((SupportMapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
 			}
 			if (mMap != null)
@@ -496,24 +494,24 @@ public class MapFragment extends Fragment implements MapItemsHandler, OnCameraCh
 		return mMap;
 	}
 
-	 private void setUpMap() {
-	        mMap.setMapType(GoogleMap.MAP_TYPE_NONE);
-	        TileProvider tileProvider = new UrlTileProvider(256, 256) {
-			    @Override
-			    public URL getTileUrl(int x, int y, int z) {
-			        try {
-//			        	if (z>17) 
-//			        		z=17;
-			            return new URL(String.format(osmUrl, z, x, y));
-			        }
-			        catch (MalformedURLException e) {
-			            return null;
-			        }
-			    }
-	        };
+	private void setUpMap() {
+		mMap.setMapType(GoogleMap.MAP_TYPE_NONE);
+		TileProvider tileProvider = new UrlTileProvider(256, 256) {
+			@Override
+			public URL getTileUrl(int x, int y, int z) {
+				try {
+					// if (z>17)
+					// z=17;
+					return new URL(String.format(osmUrl, z, x, y));
+				} catch (MalformedURLException e) {
+					return null;
+				}
+			}
+		};
 
-	        mMap.addTileOverlay(new TileOverlayOptions().tileProvider(tileProvider));
-	    }
+		mMap.addTileOverlay(new TileOverlayOptions().tileProvider(tileProvider));
+	}
+
 	@Override
 	public boolean onMarkerClick(Marker marker) {
 		List<BaseDTObject> list = MapManager.ClusteringHelper.getFromGridId(marker.getTitle());
@@ -533,13 +531,13 @@ public class MapFragment extends Fragment implements MapItemsHandler, OnCameraCh
 	@Override
 	public void onCameraChange(CameraPosition position) {
 		manageMaxLevelOfZoom(position);
-	    render(objects);
+		render(objects);
 	}
 
 	private void manageMaxLevelOfZoom(CameraPosition position) {
-		/*check if the zoom level is too high*/
-	    if (position.zoom > maxZoomOnMap)
-	    	getSupportMap().animateCamera(CameraUpdateFactory.zoomTo(maxZoomOnMap));
+		/* check if the zoom level is too high */
+		if (position.zoom > maxZoomOnMap)
+			getSupportMap().animateCamera(CameraUpdateFactory.zoomTo(maxZoomOnMap));
 	}
 
 	@Override
@@ -553,13 +551,13 @@ public class MapFragment extends Fragment implements MapItemsHandler, OnCameraCh
 
 	private void render(Collection<? extends BaseDTObject> objects) {
 		if (getSupportMap() != null) {
-//			if (MapManager.getMapView()!=null)
-//			{
-//				MapManager.getMapView().getOverlays().clear();
-//				MapManager.getMapView().invalidate();
-//			}
-//			getSupportMap().clear();
-//			setUpMap();
+			// if (MapManager.getMapView()!=null)
+			// {
+			// MapManager.getMapView().getOverlays().clear();
+			// MapManager.getMapView().invalidate();
+			// }
+			// getSupportMap().clear();
+			// setUpMap();
 
 			if (objects != null && getActivity() != null) {
 				List<MarkerOptions> cluster = MapManager.ClusteringHelper.cluster(
@@ -568,7 +566,6 @@ public class MapFragment extends Fragment implements MapItemsHandler, OnCameraCh
 				MapManager.ClusteringHelper.render(getActivity(), getSupportMap(), cluster, objects);
 			}
 		}
-
 
 	}
 

@@ -220,7 +220,7 @@ public class Fragment_EvDetail_Info extends Fragment {
 
 		// display the event category plus the "promoted by" attribute
 		TextView categoryTextView = (TextView) getActivity().findViewById(R.id.event_placeholder_category);
-		String category = mEvent.getCategory();
+		String category = mEvent.categoryString(getActivity());
 		
 		
 		if (mEvent.getOrigin() != null && !mEvent.getOrigin().matches("")) {
@@ -500,7 +500,7 @@ public class Fragment_EvDetail_Info extends Fragment {
 					if (addressStr.startsWith(","))
 						addressStr = addressStr.substring(1);
 					
-					if (addressStr.isEmpty())
+					if (addressStr.length()==0)
 						addressStr = context.getString(R.string.city_hint);
 	 				
 					

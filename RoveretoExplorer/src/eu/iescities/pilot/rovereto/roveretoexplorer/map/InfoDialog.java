@@ -64,17 +64,17 @@ public class InfoDialog extends DialogFragment {
 			msgText += event.getTitle();
 			msgText += "</h2><br/><p>";
 			if (event.getType() != null) {
-				msgText += "<p>";
-				msgText += getString(CategoryHelper.getCategoryDescriptorByCategoryFiltered(
-						CategoryHelper.CATEGORY_TYPE_EVENTS, event.getCategory()).description);
-				msgText += "</p><br/>";
+				String categoryString=event.categoryString(getActivity());
+				if (categoryString!=null) {
+					msgText += "<p>" + categoryString +"</p><br/>";
+
+				}
 			}
 			msgText += "<p>" + event.dateTimeString() + "</p>";
 
-
-				String place = Utils.getEventShortAddress(event);
-				if (place != null) {
-					msgText += "<p>" + place + "</p>";
+			String place = Utils.getEventShortAddress(event);
+			if (place != null) {
+				msgText += "<p>" + place + "</p>";
 			}
 			msg.setText(Html.fromHtml(msgText));
 		}

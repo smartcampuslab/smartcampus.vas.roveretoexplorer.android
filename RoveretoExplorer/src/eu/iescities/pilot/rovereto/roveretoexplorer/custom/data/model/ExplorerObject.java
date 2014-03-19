@@ -17,14 +17,12 @@ package eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import android.util.Log;
-
-
+import android.content.Context;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.CategoryHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.Address;
 
 public class ExplorerObject extends BaseDTObject {
@@ -40,7 +38,7 @@ public class ExplorerObject extends BaseDTObject {
 	private String twitterUrl = null;
 
 	private String origin = null;
-	private String category = null;
+	private List<String> category = null;
 	private Map<String, Object> contacts = null;
 
 	private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
@@ -54,11 +52,11 @@ public class ExplorerObject extends BaseDTObject {
 	}
 
 
-	public String getCategory() {
+	public List<String> getCategory() {
 		return category;
 	}
 
-	public void setCategory(String category) {
+	public void setCategory(List<String> category) {
 		this.category = category;
 	}
 
@@ -184,5 +182,17 @@ public class ExplorerObject extends BaseDTObject {
 		return contacts;
 	}
 
+	public String categoryString(Context ctx){
+		String msgText = "";
+		if (getCategory() != null && !getCategory().isEmpty()) {
+
+			for (String category : getCategory()) {
+				msgText += " "+ctx.getString(CategoryHelper.getCategoryDescriptorByCategoryFiltered(
+						CategoryHelper.CATEGORY_TYPE_EVENTS, category).description);
+			}
+			return msgText.trim();
+		}
+		return null;
+	}
 	
 }

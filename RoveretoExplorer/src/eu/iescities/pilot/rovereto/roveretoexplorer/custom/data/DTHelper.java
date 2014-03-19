@@ -415,7 +415,8 @@ public class DTHelper {
 	 * @throws AACException
 	 */
 	public static Boolean saveEvent(ExplorerObject event) throws RemoteException, DataException,
-			StorageConfigurationException, ConnectionException, ProtocolException, SecurityException, AACException, eu.trentorise.smartcampus.network.RemoteException {
+			StorageConfigurationException, ConnectionException, ProtocolException, SecurityException, AACException,
+			eu.trentorise.smartcampus.network.RemoteException {
 		Boolean result = null;
 		if (event.getId() == null) {
 			// TO DO
@@ -469,13 +470,14 @@ public class DTHelper {
 		return result;
 	}
 
-	private static ExplorerObject updateEvent(String id, ExplorerObject event) throws SecurityException, eu.trentorise.smartcampus.network.RemoteException{
+	private static ExplorerObject updateEvent(String id, ExplorerObject event) throws SecurityException,
+			eu.trentorise.smartcampus.network.RemoteException {
 		if (event != null) {
 
-				Log.i("POST EDIT", JsonUtils.toJSON(event));
-				String string = RemoteConnector.postJSON(getAppUrl(),
-						 "/social/edit" , JsonUtils.toJSON(event), getAuthToken());
-				return JsonUtils.toObject(string, ExplorerObject.class);
+			Log.i("POST EDIT", JsonUtils.toJSON(event));
+			String string = RemoteConnector.postJSON(getAppUrl(), "/social/edit", JsonUtils.toJSON(event),
+					getAuthToken());
+			return JsonUtils.toObject(string, ExplorerObject.class);
 		}
 		return null;
 	}
@@ -571,7 +573,16 @@ public class DTHelper {
 		c.add(Calendar.DATE, -1);
 		return c.getTimeInMillis();
 	}
-	
+
+	public static long getEveningDateTimeForSearching() {
+		Calendar c = Calendar.getInstance();
+		c.set(Calendar.HOUR_OF_DAY, 23);
+		c.set(Calendar.MINUTE, 59);
+		c.set(Calendar.SECOND, 59);
+		c.set(Calendar.MILLISECOND, 999);
+		return c.getTimeInMillis();
+	}
+
 	public static long getCurrentDateTime() {
 		Calendar c = Calendar.getInstance();
 		c.set(Calendar.HOUR_OF_DAY, 0);
@@ -597,8 +608,8 @@ public class DTHelper {
 				if (where.length() > 0)
 					where += " or ";
 				if (categories[i] != null) {
-					nonNullCategories.add(categories[i]);
-					where += " category = ?";
+//					nonNullCategories.add(categories[i]);
+					where += " category like '%\""+categories[i]+"\"%'";
 				} else {
 					where += " type is null";
 				}
@@ -641,8 +652,8 @@ public class DTHelper {
 				if (where.length() > 0)
 					where += " or ";
 				if (categories[i] != null) {
-					nonNullCategories.add(categories[i]);
-					where += " category = ?";
+//					nonNullCategories.add(categories[i]);
+					where += " category like '%\""+categories[i]+"\"%'";
 				} else {
 					where += " category is null";
 				}
@@ -789,10 +800,14 @@ public class DTHelper {
 		Date tomorrow = cal.getTime();
 
 		if (Utils.getObjectVersion(instance.mContext, DTParamsHelper.getAppToken(), Constants.SYNC_DB_NAME) > 0) {
-//			return getInstance().storage.query(ExplorerObject.class, "( (toTime > " + getCurrentDateTimeForSearching()+" OR toTime = 0 )"
-//					+ " AND (fromTime < " + tomorrow.getTime() + " OR toTime >" + today.getTime() + " )) ", null, position, size, "fromTime ASC");
+			// return getInstance().storage.query(ExplorerObject.class,
+			// "( (toTime > " +
+			// getCurrentDateTimeForSearching()+" OR toTime = 0 )"
+			// + " AND (fromTime < " + tomorrow.getTime() + " OR toTime >" +
+			// today.getTime() + " )) ", null, position, size, "fromTime ASC");
 			return getInstance().storage.query(ExplorerObject.class, "( toTime > " + getCurrentDateTimeForSearching()
-					+ " AND (fromTime < " + tomorrow.getTime() + " ) OR (fromTime < " + tomorrow.getTime() + " AND fromTime >" + today.getTime() + " )) ", null, position, size, "fromTime ASC");
+					+ " AND (fromTime < " + tomorrow.getTime() + " ) OR (fromTime < " + tomorrow.getTime()
+					+ " AND fromTime >" + today.getTime() + " )) ", null, position, size, "fromTime ASC");
 		} else {
 			ObjectFilter filter = new ObjectFilter();
 			Map<String, Object> criteria = new HashMap<String, Object>(1);
@@ -910,10 +925,12 @@ public class DTHelper {
 		if (id != null) {
 			try {
 				Map<String, Object> params = Collections.<String, Object> singletonMap("rating", rating);
-//				getAppUrl(), "social/attend/" + id+"/"+JsonUtils.toJSON(add),"", getAuthToken()
-//				String json = RemoteConnector.putJSON(getAppUrl(), String.format(RATE, id), null, authToken, params);
+				// getAppUrl(), "social/attend/" +
+				// id+"/"+JsonUtils.toJSON(add),"", getAuthToken()
+				// String json = RemoteConnector.putJSON(getAppUrl(),
+				// String.format(RATE, id), null, authToken, params);
 
-				String json = RemoteConnector.putJSON(getAppUrl(),  "social/rate/" + id, null, authToken, params);
+				String json = RemoteConnector.putJSON(getAppUrl(), "social/rate/" + id, null, authToken, params);
 				return Integer.parseInt(json);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -926,9 +943,8 @@ public class DTHelper {
 			ProtocolException, SecurityException, DataException, RemoteException, StorageConfigurationException,
 			AACException, java.lang.SecurityException, eu.trentorise.smartcampus.network.RemoteException {
 
-
-		String string = RemoteConnector.postJSON(getAppUrl(),
-				 "social/review/" + object.getId(), JsonUtils.toJSON(review), getAuthToken());
+		String string = RemoteConnector.postJSON(getAppUrl(), "social/review/" + object.getId(),
+				JsonUtils.toJSON(review), getAuthToken());
 		synchronize();
 
 		return JsonUtils.toObject(string, CommunityData.class);
@@ -941,7 +957,6 @@ public class DTHelper {
 		return JsonUtils.toObject(string, ReviewObject.class).getReviews();
 	}
 
-
 	public static ExplorerObject attend(BaseDTObject event) throws ConnectionException, ProtocolException,
 			SecurityException, DataException, RemoteException, StorageConfigurationException, AACException {
 		// TO DO
@@ -952,7 +967,7 @@ public class DTHelper {
 	}
 
 	public static ExplorerObject notAttend(BaseDTObject event) throws ConnectionException, ProtocolException,
-			SecurityException, DataException, RemoteException, StorageConfigurationException,AACException {
+			SecurityException, DataException, RemoteException, StorageConfigurationException, AACException {
 		// TO DO
 
 		ExplorerObject newEvent = myEvent(event.getId(), false, getAuthToken());
@@ -964,8 +979,8 @@ public class DTHelper {
 	private static ExplorerObject myEvent(String id, boolean add, String authToken) {
 		if (id != null) {
 			try {
-				String json = RemoteConnector.postJSON(getAppUrl(), "social/attend/" + id+"/"+JsonUtils.toJSON(add),
-						"", getAuthToken());
+				String json = RemoteConnector.postJSON(getAppUrl(),
+						"social/attend/" + id + "/" + JsonUtils.toJSON(add), "", getAuthToken());
 
 				return JsonUtils.toObject(json, ExplorerObject.class);
 			} catch (Exception e) {
@@ -974,8 +989,6 @@ public class DTHelper {
 		}
 		return null;
 	}
-
-
 
 	public static ExplorerObject findEventByEntityId(String entityId) throws DataException,
 			StorageConfigurationException, ConnectionException, ProtocolException, SecurityException {
@@ -1012,8 +1025,6 @@ public class DTHelper {
 		}
 
 	}
-
-
 
 	public static LocationHelper getLocationHelper() {
 		return mLocationHelper;
@@ -1080,7 +1091,7 @@ public class DTHelper {
 
 			/* if sync create the query */
 			String where = "";
-			if (inCategories!=null && inCategories[0] != null) {
+			if (inCategories != null && inCategories[0] != null) {
 				args = new ArrayList<String>();
 				where = addCategoriesToWhere(where, inCategories, args);
 			}
@@ -1301,16 +1312,19 @@ public class DTHelper {
 			if (whereReturns.length() > 0)
 				whereReturns += " or ";
 			if (categories[i] != null) {
-				nonNullCategories.add(categories[i]);
-				whereReturns += " category = ?";
+//				nonNullCategories.add(categories[i]);
+				whereReturns += " category like '%\""+categories[i]+"\"%'";
 			} else {
 				whereReturns += " category is null";
 			}
 		}
-		if (where.length() > 0) {
-			return where += " and (" + whereReturns + ")";
-		} else
-			return where += "( " + whereReturns + " ) ";
+		if (whereReturns.length() > 0) {
+			if (where.length() > 0) {
+				return where += " and (" + whereReturns + ")";
+			} else
+				return where += "( " + whereReturns + " ) ";
+		}
+		else return "";
 
 	}
 
@@ -1384,11 +1398,5 @@ public class DTHelper {
 			NavigationHelper.bringMeThere(activity, from, to);
 
 	}
-
-
-
-	
-
-
 
 }
