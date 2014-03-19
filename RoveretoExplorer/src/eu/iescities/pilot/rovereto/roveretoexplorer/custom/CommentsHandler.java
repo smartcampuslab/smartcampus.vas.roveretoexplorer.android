@@ -196,7 +196,7 @@ public class CommentsHandler {
 			object.setCommunityData(result);
 			updateRating();
 			if (activity != null)
-				Toast.makeText(activity, R.string.rating_success, Toast.LENGTH_SHORT).show();
+				Toast.makeText(activity, R.string.comment_success, Toast.LENGTH_SHORT).show();
 		}
 
 		@Override

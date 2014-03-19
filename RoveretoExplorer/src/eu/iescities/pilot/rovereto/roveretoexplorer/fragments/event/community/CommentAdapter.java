@@ -133,7 +133,7 @@ public class CommentAdapter extends BaseExpandableListAdapter {
 			@Override
 			public void onClick(View v) {
 				ReviewHelper.reviewDialog(_context, 0, new ReviewProcessor(activity),
-						R.string.rating_event_dialog_title);
+						R.string.comment_event_dialog_title);
 
 			}
 		});
@@ -155,7 +155,7 @@ public class CommentAdapter extends BaseExpandableListAdapter {
 		public void handleResult(CommunityData result) {
 			mEvent.setCommunityData(result);
 			if (_context != null)
-				Toast.makeText(_context, R.string.rating_success, Toast.LENGTH_SHORT).show();
+				Toast.makeText(_context, R.string.comment_success, Toast.LENGTH_SHORT).show();
 			// return community data instead a review
 //			notifyDataSetChanged();
 			if (refreshcomment != null)

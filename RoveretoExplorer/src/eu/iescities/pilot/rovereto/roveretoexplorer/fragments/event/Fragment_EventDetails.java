@@ -111,14 +111,7 @@ public class Fragment_EventDetails extends Fragment {
 		tabs.setUnderlineColor(currentColor);
 		tabs.setDividerColor(currentColor);
 
-		tabs.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-			@Override
-			public void onPageScrollStateChanged(int state) {
-				if (state == ViewPager.SCROLL_STATE_IDLE && adapter.getPrimaryItem() instanceof Fragment_EvDetail_Community) {
-					((Fragment_EvDetail_Community) adapter.getPrimaryItem()).updateCommentsList();
-				}
-			}
-		});
+
 	}
 
 	@Override

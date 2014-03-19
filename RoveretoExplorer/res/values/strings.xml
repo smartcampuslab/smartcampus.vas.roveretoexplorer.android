@@ -173,7 +173,9 @@
     <string name="ratingtext_raters">Total rates: %s</string>
     <string name="rating_place_dialog_title">Rate this place:</string>
     <string name="rating_event_dialog_title">Rate this event:</string>
+    <string name="comment_event_dialog_title">Comment this event:</string>
     <string name="rating_success">Your rating has been saved</string>
+    <string name="comment_success">Your comment has been saved</string>
     <string name="rate_button">Rate it!</string>
     <string name="hotel_level">Family level: %s</string>
     <string name="hotel_cat">Category: %s stars</string>

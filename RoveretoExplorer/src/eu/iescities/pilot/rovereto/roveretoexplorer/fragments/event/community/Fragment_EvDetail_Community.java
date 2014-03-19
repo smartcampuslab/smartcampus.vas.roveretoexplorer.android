@@ -61,6 +61,12 @@ public class Fragment_EvDetail_Community extends Fragment implements RefreshComm
 	}
 
 	@Override
+	public void setUserVisibleHint(boolean isVisibleToUser) {
+		super.setUserVisibleHint(isVisibleToUser);
+		if (isVisibleToUser)
+			updateCommentsList();
+	}
+	@Override
 	public void onStart() {
 		super.onStart();
 		// get param

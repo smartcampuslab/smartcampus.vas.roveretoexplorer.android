@@ -100,7 +100,7 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 	protected int size = DEFAULT_ELEMENTS_NUMBER;
 	private Long oldFromTime = null;
 	private Long oldToTime = null;
-	private boolean today=false;
+	private boolean today = false;
 	// For the expandable list view
 	List<String> dateGroupList = new ArrayList<String>();
 
@@ -426,15 +426,15 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 
 		}
 
-		private void updateCollectionAndGetImages(List<ExplorerObject> result) {
-			String date_with_day = null;
-			dateGroupList = new ArrayList<String>();
-			for (ExplorerObject expObj : result) {
-				updateSingleEvent(expObj);
+	}
 
-			}
+	private void updateCollectionAndGetImages(List<ExplorerObject> result) {
+		String date_with_day = null;
+		dateGroupList = new ArrayList<String>();
+		for (ExplorerObject expObj : result) {
+			updateSingleEvent(expObj);
+
 		}
-
 	}
 
 	private void updateSingleEvent(ExplorerObject expObj) {
@@ -448,17 +448,19 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 				addEvent(expObj, date_with_day);
 			}
 		} else {
-			List<Date> listOfDate=null;
+			List<Date> listOfDate = null;
 			// get the list of dates
 			if (!today)
-			listOfDate = Utils.getDatesBetweenInterval(new Date(expObj.getFromTime()),
-					new Date(expObj.getToTime()));
+				listOfDate = Utils
+						.getDatesBetweenInterval(new Date(expObj.getFromTime()), new Date(expObj.getToTime()));
 			else {
-				   //get only today 
-				listOfDate = new ArrayList<Date>() {{
-				    add(new Date());
+				// get only today
+				listOfDate = new ArrayList<Date>() {
+					{
+						add(new Date());
 
-				}};
+					}
+				};
 			}
 			// get event-dates
 			for (Date date : listOfDate) {
@@ -547,7 +549,7 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 						(WhenForSearch) bundle.getParcelable(SearchFragment.ARG_WHEN_SEARCH), my, ExplorerObject.class,
 						sort, categories);
 			} else if (bundle.containsKey(ARG_QUERY_TODAY)) {
-				today=true;
+				today = true;
 				result = DTHelper.searchTodayEvents(0, -1, bundle.getString(SearchFragment.ARG_QUERY));
 			} else if (bundle.containsKey(SearchFragment.ARG_LIST)) {
 				result = (Collection<ExplorerObject>) bundle.get(SearchFragment.ARG_LIST);
@@ -650,8 +652,23 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 		protected void handleSuccess(List<ExplorerObject> result) {
 			super.handleSuccess(result);
 			// eventsAdapter.notifyDataSetInvalidated();
+			if (!result.isEmpty()) {
 
-			eventsAdapter.notifyDataSetChanged();
+				// order data by date
+				updateCollectionAndGetImages(result);
+				eventsAdapter.setDateGroupList(dateGroupList);
+				eventsAdapter.setEventCollection(eventCollection);
+				// eventsAdapter.notifyDataSetInvalidated();
+
+				eventsAdapter.notifyDataSetChanged();
+				if (expListView.getExpandableListAdapter().getGroupCount() > 0)
+					expListView.expandGroup(0);
+
+			} else {
+				TextView no_result = (TextView) getActivity().findViewById(R.id.events_no_results);
+				no_result.setVisibility(View.VISIBLE);
+				expListView.setVisibility(View.GONE);
+			}
 		}
 	}
 
