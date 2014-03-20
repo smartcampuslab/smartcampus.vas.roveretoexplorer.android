@@ -10,6 +10,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
 import android.text.Html;
 import android.text.TextWatcher;
@@ -110,8 +111,10 @@ public class Fragment_EvDetail_Edit_SingleValueField extends Fragment {
 		txtEventField = (EditText) getActivity().findViewById(R.id.event_field_text);
 
 		if (mEventFieldType.equals("description")) {
-			getActivity().getActionBar().setTitle(
-					getResources().getString(R.string.modify) + " " + getResources().getString(R.string.what_txt));
+			((ActionBarActivity) getActivity()).getSupportActionBar().setTitle(getResources().getString(R.string.modify) + " " + getResources().getString(R.string.what_txt));
+
+//			getActivity().getActionBar().setTitle(
+//					getResources().getString(R.string.modify) + " " + getResources().getString(R.string.what_txt));
 			eventFieldLabel.setText(getResources().getString(R.string.what_txt));
 			// get event data
 			if ((mEvent.getDescription() != null) && (!mEvent.getDescription().matches(""))) {
@@ -119,8 +122,10 @@ public class Fragment_EvDetail_Edit_SingleValueField extends Fragment {
 			}
 		}else
 			if (mEventFieldType.equals("origin")) {
-				getActivity().getActionBar().setTitle(
-						getResources().getString(R.string.modify) + " " + getResources().getString(R.string.origin_txt));
+				((ActionBarActivity) getActivity()).getSupportActionBar().setTitle(getResources().getString(R.string.modify) + " " + getResources().getString(R.string.origin_txt));
+
+//				getActivity().getActionBar().setTitle(
+//						getResources().getString(R.string.modify) + " " + getResources().getString(R.string.origin_txt));
 				eventFieldLabel.setText(getResources().getString(R.string.origin_txt));
 				// get event data
 				if ((mEvent.getOrigin() != null) && (!mEvent.getOrigin().matches(""))) {
@@ -128,8 +133,10 @@ public class Fragment_EvDetail_Edit_SingleValueField extends Fragment {
 				}
 			}else
 				if (mEventFieldType.equals("title")) {
-					getActivity().getActionBar().setTitle(
-							getResources().getString(R.string.modify) + " " + getResources().getString(R.string.title_txt));
+					((ActionBarActivity) getActivity()).getSupportActionBar().setTitle(getResources().getString(R.string.modify) + " " + getResources().getString(R.string.title_txt));
+
+//					getActivity().getActionBar().setTitle(
+//							getResources().getString(R.string.modify) + " " + getResources().getString(R.string.title_txt));
 					eventFieldLabel.setText(getResources().getString(R.string.title_txt));
 					// get event data
 					if ((mEvent.getTitle() != null) && (!mEvent.getTitle().matches(""))) {
@@ -157,8 +164,10 @@ public class Fragment_EvDetail_Edit_SingleValueField extends Fragment {
 				}else
 					//edit a custom field
 				{
-					getActivity().getActionBar().setTitle(
-							getResources().getString(R.string.modify) + " " + getResources().getString(R.string.info_txt));
+					((ActionBarActivity) getActivity()).getSupportActionBar().setTitle(getResources().getString(R.string.modify) + " " + getResources().getString(R.string.info_txt));
+
+//					getActivity().getActionBar().setTitle(
+//							getResources().getString(R.string.modify) + " " + getResources().getString(R.string.info_txt));
 
 					if (mEventFieldType.startsWith("_toknow_")) {
 						//edit a custom "toknow" field

@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
 import android.text.Html;
 import android.text.TextWatcher;
@@ -157,15 +158,18 @@ public class Fragment_EvDetail_Edit_MultiValueField extends Fragment {
 
 		if (mEventFieldType.equals("Tags")) {
 			//set the action bar title
-			getActivity().getActionBar().setTitle(
-					getResources().getString(R.string.modify) + " " + getResources().getString(R.string.create_tags));
+//			GETACTIVITY().GETACTIONBAR().SETTITLE(
+//					getResources().getString(R.string.modify) + " " + getResources().getString(R.string.create_tags));
+			((ActionBarActivity) getActivity()).getSupportActionBar().setTitle(getResources().getString(R.string.modify) + " " + getResources().getString(R.string.create_tags));
+
 			iconImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_new_label));
 			eventFieldLabel.setText(mEventFieldType);
 
 		}else{
 			//set the action bar title
-			getActivity().getActionBar().setTitle(
-					getResources().getString(R.string.modify) + " " + getResources().getString(R.string.info_txt));
+//			getActivity().getActionBar().setTitle(
+//					getResources().getString(R.string.modify) + " " + getResources().getString(R.string.info_txt));
+			((ActionBarActivity) getActivity()).getSupportActionBar().setTitle(getResources().getString(R.string.modify) + " " + getResources().getString(R.string.info_txt));
 
 			if (mEventFieldType.startsWith("_toknow_")) {
 				//edit a custom "toknow" field

@@ -15,6 +15,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBarActivity;
 import android.telephony.PhoneNumberUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -125,8 +126,10 @@ public class Fragment_EvDetail_Info_Contacts extends Fragment {
 
 		//getActivity().getActionBar().setTitle(mEvent.getTitle()); 
 		//getActivity().getActionBar().setTitle("Modifica Contatti"); 
-		getActivity().getActionBar().setTitle(
-				getResources().getString(R.string.modify) + " " + getResources().getString(R.string.contacts_txt));
+		((ActionBarActivity) getActivity()).getSupportActionBar().setTitle(getResources().getString(R.string.modify) + " " + getResources().getString(R.string.contacts_txt));
+
+//		getActivity().getActionBar().setTitle(
+//				getResources().getString(R.string.modify) + " " + getResources().getString(R.string.contacts_txt));
 
 		formLabel = (TextView) getActivity().findViewById(R.id.title_contacts_label);
 

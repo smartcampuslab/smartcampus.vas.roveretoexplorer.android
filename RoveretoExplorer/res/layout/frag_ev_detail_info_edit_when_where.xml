@@ -131,25 +131,6 @@
                         android:focusableInTouchMode="false"
                         android:inputType="time" />
                 </LinearLayout>
-
-                <!--
-                <TextView
-                    android:id="@+id/duration_label"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="@string/duration"
-                    android:textColor="@color/jungle_green"
-                    android:textStyle="bold" />
-
-                <EditText
-                    android:id="@+id/duration_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:enabled="false"
-                    android:focusable="false"
-                    android:inputType="text" />
-                -->
             </LinearLayout>
 
             <LinearLayout
@@ -189,7 +170,8 @@
                     android:id="@+id/street_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text" >
+                    android:inputType="text"
+                    android:textColor="@android:color/primary_text_light" >
                 </AutoCompleteTextView>
 
                 <LinearLayout

@@ -3,7 +3,6 @@ package eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event;
 import java.util.ArrayList;
 import java.util.Locale;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.location.Address;
 import android.os.Bundle;
@@ -11,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -89,8 +89,9 @@ public class Fragment_EventDetails extends Fragment {
 		// getActivity().getActionBar().setTitle(mEvent.getTitle());
 
 		// Set up the action bar.
-		final ActionBar actionBar = getActivity().getActionBar();
-		actionBar.setTitle(mEvent.getTitle());
+//		final ActionBar actionBar = getActivity().getActionBar();
+		((ActionBarActivity) getActivity()).getSupportActionBar().setTitle(mEvent.getTitle());
+//		actionBar.setTitle(mEvent.getTitle());
 		// Specify that the Home/Up button should not be enabled, since there is
 		// no hierarchical
 		// parent.

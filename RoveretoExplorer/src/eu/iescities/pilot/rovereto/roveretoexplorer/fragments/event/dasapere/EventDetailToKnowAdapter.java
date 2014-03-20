@@ -1,6 +1,7 @@
 package eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.dasapere;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import android.app.Activity;
@@ -65,6 +66,12 @@ public class EventDetailToKnowAdapter extends ArrayAdapter<ToKnow> {
 		this.mEventId = mEventId;
 	}
 
+	@Override
+	public void addAll(Collection<? extends ToKnow> collection) {
+		for (ToKnow toknowItem: collection){
+			add(toknowItem);
+		}
+	}
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 

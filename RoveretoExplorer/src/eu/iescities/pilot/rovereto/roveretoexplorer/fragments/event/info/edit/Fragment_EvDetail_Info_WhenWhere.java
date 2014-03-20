@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -112,8 +113,10 @@ public class Fragment_EvDetail_Info_WhenWhere extends Fragment {
 
 		Log.d("FRAGMENT LC", "Fragment_evDetail_Info_Where --> onActivityCreated");
 
-		getActivity().getActionBar().setTitle(
-				getResources().getString(R.string.modify) + " " + getResources().getString(R.string.date_place_name));
+		((ActionBarActivity) getActivity()).getSupportActionBar().setTitle(getResources().getString(R.string.modify) + " " + getResources().getString(R.string.date_place_name));
+
+//		getActivity().getActionBar().setTitle(
+//				getResources().getString(R.string.modify) + " " + getResources().getString(R.string.date_place_name));
 
 		txtWhenWhere= (EditText) getActivity().findViewById(R.id.when_where_text);
 		txtStartDay = (EditText) getActivity().findViewById(R.id.start_day_text);

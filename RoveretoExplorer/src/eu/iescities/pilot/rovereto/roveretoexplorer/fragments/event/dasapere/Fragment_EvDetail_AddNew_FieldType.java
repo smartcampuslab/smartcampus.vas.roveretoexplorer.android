@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
 import android.text.Html;
 import android.text.TextWatcher;
@@ -128,7 +129,8 @@ public class Fragment_EvDetail_AddNew_FieldType extends Fragment {
 
 
 		//set the action bar title
-		getActivity().getActionBar().setTitle(getResources().getString(R.string.addnewinfo));
+//		getActivity().getActionBar().setTitle(getResources().getString(R.string.addnewinfo));
+		((ActionBarActivity) getActivity()).getSupportActionBar().setTitle(getResources().getString(R.string.addnewinfo));
 
 		//set event name
 		formLabel = (TextView) getActivity().findViewById(R.id.form_label);

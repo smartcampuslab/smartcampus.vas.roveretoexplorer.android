@@ -27,6 +27,7 @@ import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -52,7 +53,7 @@ import eu.trentorise.smartcampus.android.common.geo.OSMGeocoder;
 import eu.trentorise.smartcampus.android.map.InfoDialog;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 
-public class AddressSelectActivity extends FragmentActivity implements OnMapLongClickListener {
+public class AddressSelectActivity extends ActionBarActivity implements OnMapLongClickListener {
 
 	private GoogleMap mMap = null;
 	private String url = "https://vas.smartcampuslab.it";
@@ -64,9 +65,10 @@ public class AddressSelectActivity extends FragmentActivity implements OnMapLong
 		setContentView(R.layout.mapcontainer);
 
 		// getActionBar().setDisplayShowTitleEnabled(false);
-		getActionBar().setDisplayHomeAsUpEnabled(true);
-		if (getActionBar().getNavigationMode() != ActionBar.NAVIGATION_MODE_STANDARD) {
-			getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		if (getSupportActionBar().getNavigationMode() != ActionBar.NAVIGATION_MODE_STANDARD) {
+			getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 		}
 		if (((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap() != null) {
 			mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();

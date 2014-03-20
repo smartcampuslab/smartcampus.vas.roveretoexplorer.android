@@ -307,7 +307,7 @@ public class MapFragment extends Fragment implements MapItemsHandler, OnCameraCh
 		// ovItem.setIcon(getResources().getDrawable(R.drawable.ic_location_actionbar));
 		filter.setIcon(getResources().getDrawable(R.drawable.ic_filter));
 		filter.setVisible(true);
-		filter.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+//		filter.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 
 		super.onPrepareOptionsMenu(menu);
 	}
