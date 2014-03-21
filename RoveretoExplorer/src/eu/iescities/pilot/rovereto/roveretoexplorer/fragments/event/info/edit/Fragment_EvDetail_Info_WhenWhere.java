@@ -141,8 +141,9 @@ public class Fragment_EvDetail_Info_WhenWhere extends Fragment {
 
 				Log.i("ADDRESS", "Fragment_EvDetail_Info_WhenWhere --> onAddressSelected");
 
-				//savePosition(address);
-				savePosition(selectedAddress);
+				//convert from address to OsmAddress
+				
+				savePosition(Utils.getOsmAddressFromAddress(address));
 
 			}
 
@@ -424,10 +425,10 @@ public class Fragment_EvDetail_Info_WhenWhere extends Fragment {
 
 	private void savePosition(OSMAddress address) {
 		if (address!=null){
-			if (!selectedAddress.getName().matches(selectedAddress.getStreet()))
-				txtPlaceName.setText(selectedAddress.getName());
-			txtCity.setText(selectedAddress.city());
-			txtStreet.setText(selectedAddress.getStreet());
+			if (address.getName()!=null && !address.getName().matches(address.getStreet()))
+				txtPlaceName.setText(address.getName());
+			txtCity.setText(address.city());
+			txtStreet.setText(address.getStreet());
 			mEvent.setLocation(address.getLocation());
 		}
 	}

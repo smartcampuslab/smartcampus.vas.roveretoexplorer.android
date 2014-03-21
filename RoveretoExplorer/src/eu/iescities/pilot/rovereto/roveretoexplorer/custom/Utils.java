@@ -36,6 +36,7 @@ import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.CommunityD
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ExplorerObject;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ToKnow;
 import eu.trentorise.smartcampus.android.common.follow.model.Concept;
+import eu.trentorise.smartcampus.android.common.geo.OSMAddress;
 import eu.trentorise.smartcampus.android.common.tagging.SemanticSuggestion;
 import eu.trentorise.smartcampus.android.common.tagging.SemanticSuggestion.TYPE;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.ConnectionException;
@@ -920,6 +921,28 @@ public class Utils {
 		for (String word : unwanted)
 			sentence = removeWord(word, sentence);
 		return sentence;
+	}
+
+	public static OSMAddress getOsmAddressFromAddress(android.location.Address address) {
+		OSMAddress returnAddress = new OSMAddress();
+		if (address!=null){
+
+			//city
+			Map<String,String> cities = new HashMap<String, String>();
+			cities.put("", address.getLocality());
+			returnAddress.setCity(cities);
+
+			//name
+			returnAddress.setName(address.getLocality());
+			//street
+			returnAddress.setStreet(address.getAddressLine(0));
+			//location
+			double[] addressLocation = {address.getLatitude(),address.getLongitude()};
+			returnAddress.setLocation(addressLocation);
+
+			return returnAddress;
+		}
+		return null;
 	}
 
 

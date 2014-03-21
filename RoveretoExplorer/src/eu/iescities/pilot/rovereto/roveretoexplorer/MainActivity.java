@@ -326,8 +326,8 @@ public class MainActivity extends AbstractNavDrawerActivity{
 			ft.setCustomAnimations(R.anim.enter, R.anim.exit);
 			ft.replace(R.id.content_frame, (Fragment) objects[0],
 					objects[1].toString());
-			ft.addToBackStack(objects[1].toString());
-
+//			ft.addToBackStack(objects[1].toString());
+			mFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 			ft.commit();
 		}
 	}
