@@ -44,7 +44,7 @@ import eu.trentorise.smartcampus.android.common.GlobalConfig;
 import eu.trentorise.smartcampus.android.common.SCAsyncTask;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 
-public class MainActivity extends AbstractNavDrawerActivity{
+public class MainActivity extends AbstractNavDrawerActivity {
 
 	public static final String TAG_FRAGMENT_MAP = "fragmap";
 	public static final String TAG_FRAGMENT_EVENT_LIST = "fragevent";
@@ -58,9 +58,9 @@ public class MainActivity extends AbstractNavDrawerActivity{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		//Log.i("AB TITLE", "MainActivity start on create!!!");
+		// Log.i("AB TITLE", "MainActivity start on create!!!");
 		mFragmentManager = getSupportFragmentManager();
-//		signedIn();
+		// signedIn();
 		if (signedIn()) {
 			initDataManagement();
 		}
@@ -68,25 +68,19 @@ public class MainActivity extends AbstractNavDrawerActivity{
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		// this is a class created to avoid an Android bug
 		// see the class for further infos.
-		mDrawerToggle =  new ActionBarDrawerToggle(this, mDrawerLayout,
-                R.drawable.ic_drawer, R.string.drawer_open, R.string.drawer_close){
-			
+		mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.drawable.ic_drawer, R.string.drawer_open,
+				R.string.drawer_close) {
 
+			@Override
+			public void onDrawerSlide(View drawerView, float slideOffset) {
+				super.onDrawerSlide(drawerView, slideOffset);
+				mDrawerLayout.bringChildToFront(drawerView);
+				mDrawerLayout.requestLayout();
+			}
 
-
-				@Override
-				public void onDrawerSlide(View drawerView, float slideOffset)
-				{
-				    super.onDrawerSlide(drawerView, slideOffset);
-				    mDrawerLayout.bringChildToFront(drawerView);
-				    mDrawerLayout.requestLayout();
-				}
-		
 		};
 		mDrawerLayout.setDrawerListener(mDrawerToggle);
-    }
-
-	
+	}
 
 	protected boolean signedIn() {
 		SCAccessProvider provider = SCAccessProvider.getInstance(this);
@@ -99,10 +93,10 @@ public class MainActivity extends AbstractNavDrawerActivity{
 			e.printStackTrace();
 			return false;
 		}
-		
+
 		return false;
 	}
-	
+
 	private void showLoginDialog(final SCAccessProvider accessprovider) {
 		// dialogbox for registration
 		DialogInterface.OnClickListener updateDialogClickListener;
@@ -116,7 +110,7 @@ public class MainActivity extends AbstractNavDrawerActivity{
 						accessprovider.login(MainActivity.this, null);
 						break;
 					} catch (AACException e) {
-						
+
 						e.printStackTrace();
 					}
 					break;
@@ -131,16 +125,17 @@ public class MainActivity extends AbstractNavDrawerActivity{
 				.setPositiveButton(android.R.string.yes, updateDialogClickListener)
 				.setNegativeButton(android.R.string.no, updateDialogClickListener).show();
 	}
+
 	private void initDataManagement() {
 		try {
-			
+
 			initGlobalConstants();
 
 			try {
-				//				if (!SCAccessProvider.getInstance(this).login(this, null)) {
+				// if (!SCAccessProvider.getInstance(this).login(this, null)) {
 				DTHelper.init(getApplicationContext());
-				initData(); 
-				//				}
+				initData();
+				// }
 
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -155,7 +150,6 @@ public class MainActivity extends AbstractNavDrawerActivity{
 		}
 	}
 
-
 	private void initGlobalConstants() throws NameNotFoundException, NotFoundException {
 		GlobalConfig.setAppUrl(this, getResources().getString(R.string.smartcampus_app_url));
 	}
@@ -164,24 +158,25 @@ public class MainActivity extends AbstractNavDrawerActivity{
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		if (requestCode == SCAccessProvider.SC_AUTH_ACTIVITY_REQUEST_CODE) {
-		if (resultCode == RESULT_OK) {
-			String token = data.getExtras().getString(AccountManager.KEY_AUTHTOKEN);
-			if (token == null) {
-				Toast.makeText(this, R.string.app_failure_security, Toast.LENGTH_LONG).show();
-				finish();
-			} else {
-				initDataManagement();
+			if (resultCode == RESULT_OK) {
+				String token = data.getExtras().getString(AccountManager.KEY_AUTHTOKEN);
+				if (token == null) {
+					Toast.makeText(this, R.string.app_failure_security, Toast.LENGTH_LONG).show();
+					finish();
+				} else {
+					initDataManagement();
+				}
+			} else if (resultCode == RESULT_CANCELED && requestCode == SCAccessProvider.SC_AUTH_ACTIVITY_REQUEST_CODE) {
+				DTHelper.endAppFailure(this, R.string.app_failure_security);
 			}
-		} else if (resultCode == RESULT_CANCELED && requestCode == SCAccessProvider.SC_AUTH_ACTIVITY_REQUEST_CODE) {
-			DTHelper.endAppFailure(this, R.string.app_failure_security);
 		}
-	}
 	}
 
 	private boolean initData() {
 		try {
 			// to start with the map.
-			mFragmentManager.beginTransaction().replace(R.id.content_frame, new MapFragment(), TAG_FRAGMENT_MAP).commit();
+			mFragmentManager.beginTransaction().replace(R.id.content_frame, new MapFragment(), TAG_FRAGMENT_MAP)
+					.commit();
 			new SCAsyncTask<Void, Void, BaseDTObject>(this, new LoadDataProcessor(this)).execute();
 		} catch (Exception e1) {
 			Toast.makeText(this, R.string.app_failure_init, Toast.LENGTH_LONG).show();
@@ -189,9 +184,6 @@ public class MainActivity extends AbstractNavDrawerActivity{
 		}
 		return true;
 	}
-
-
-
 
 	private class LoadDataProcessor extends AbstractAsyncTaskProcessor<Void, BaseDTObject> {
 
@@ -208,7 +200,7 @@ public class MainActivity extends AbstractNavDrawerActivity{
 			Exception res = null;
 
 			try {
-				syncRequired = DTHelper.SYNC_REQUIRED;//DTHelper.syncRequired();
+				syncRequired = DTHelper.SYNC_REQUIRED;// DTHelper.syncRequired();
 			} catch (Exception e) {
 				res = e;
 			}
@@ -252,11 +244,10 @@ public class MainActivity extends AbstractNavDrawerActivity{
 				}).start();
 			} else {
 				setSupportProgressBarIndeterminateVisibility(false);
-				//				DTHelper.activateAutoSync();
+				// DTHelper.activateAutoSync();
 			}
 		}
 	}
-
 
 	/**
 	 * @param items
@@ -274,46 +265,36 @@ public class MainActivity extends AbstractNavDrawerActivity{
 		TypedArray drawIds = getResources().obtainTypedArray((ids[1]));
 		for (int j = 0; j < labels.length; j++) {
 			int imgd = drawIds.getResourceId(j, -1);
-			menu_items.add(NavMenuItem.create(j+1,
-					labels[j], abTitles[j],
-					((imgd != -1) ? imgd : null), true, false, this));
+			menu_items.add(NavMenuItem.create(j + 1, labels[j], abTitles[j], ((imgd != -1) ? imgd : null), true, false,
+					this));
 		}
 		drawIds.recycle();
 		return menu_items;
 	}
 
-
 	@Override
 	protected NavDrawerActivityConfiguration getNavDrawerConfiguration() {
-
 
 		NavDrawerActivityConfiguration navDrawerActivityConfiguration = new NavDrawerActivityConfiguration();
 		navDrawerActivityConfiguration.setMainLayout(R.layout.activity_main);
 		navDrawerActivityConfiguration.setDrawerLayoutId(R.id.drawer_layout);
 		navDrawerActivityConfiguration.setLeftDrawerId(R.id.left_drawer);
 
-
-		navDrawerActivityConfiguration
-		.setDrawerShadow(R.drawable.drawer_shadow);
+		navDrawerActivityConfiguration.setDrawerShadow(R.drawable.drawer_shadow);
 		navDrawerActivityConfiguration.setDrawerOpenDesc(R.string.drawer_open);
-		navDrawerActivityConfiguration
-		.setDrawerCloseDesc(R.string.drawer_close);
+		navDrawerActivityConfiguration.setDrawerCloseDesc(R.string.drawer_close);
 
-		ArrayList<NavDrawerItem> menu_items =  getMenuItems(R.array.drawer_items_labels,
-				R.array.drawer_items_icons, R.array.drawer_items_actionbar_titles);
+		ArrayList<NavDrawerItem> menu_items = getMenuItems(R.array.drawer_items_labels, R.array.drawer_items_icons,
+				R.array.drawer_items_actionbar_titles);
 
 		navDrawerActivityConfiguration.setMenuItems(menu_items);
 
-
-		navDrawerActivityConfiguration.setBaseAdapter(new NavDrawerAdapter(
-				this, R.layout.navdrawer_item, menu_items));
-
+		navDrawerActivityConfiguration.setBaseAdapter(new NavDrawerAdapter(this, R.layout.navdrawer_item, menu_items));
 
 		navDrawerActivityConfiguration.setDrawerIcon(R.drawable.ic_drawer);
 
 		return navDrawerActivityConfiguration;
 	}
-
 
 	@Override
 	protected void onNavItemSelected(int id) {
@@ -324,14 +305,12 @@ public class MainActivity extends AbstractNavDrawerActivity{
 		if (objects != null) {
 			FragmentTransaction ft = mFragmentManager.beginTransaction();
 			ft.setCustomAnimations(R.anim.enter, R.anim.exit);
-			ft.replace(R.id.content_frame, (Fragment) objects[0],
-					objects[1].toString());
-//			ft.addToBackStack(objects[1].toString());
+			ft.replace(R.id.content_frame, (Fragment) objects[0], objects[1].toString());
+			// ft.addToBackStack(objects[1].toString());
 			mFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 			ft.commit();
 		}
 	}
-
 
 	private Object[] getFragmentAndTag(int pos_in_list) {
 		Object[] out = new Object[2];
@@ -340,7 +319,7 @@ public class MainActivity extends AbstractNavDrawerActivity{
 		EventsListingFragment elf = null;
 
 		switch (pos_in_list) {
-		case 1: // click on "I miei eventi" item 
+		case 1: // click on "I miei eventi" item
 			args = new Bundle();
 			elf = new EventsListingFragment();
 			args.putBoolean(SearchFragment.ARG_MY, true);
@@ -348,7 +327,7 @@ public class MainActivity extends AbstractNavDrawerActivity{
 			out[0] = elf;
 			out[1] = TAG_FRAGMENT_EVENT_LIST;
 			break;
-		case 2: // click on "Oggi" item 
+		case 2: // click on "Oggi" item
 			args = new Bundle();
 			elf = new EventsListingFragment();
 			args.putString(EventsListingFragment.ARG_QUERY_TODAY, "");
@@ -356,7 +335,7 @@ public class MainActivity extends AbstractNavDrawerActivity{
 			out[0] = elf;
 			out[1] = TAG_FRAGMENT_EVENT_LIST;
 			break;
-		case 3: // click on "Cultura" item 
+		case 3: // click on "Cultura" item
 			cat = CategoryHelper.CAT_CULTURA;
 			args = new Bundle();
 			elf = new EventsListingFragment();
@@ -365,7 +344,7 @@ public class MainActivity extends AbstractNavDrawerActivity{
 			out[0] = elf;
 			out[1] = TAG_FRAGMENT_EVENT_LIST;
 			break;
-		case 4: // click on "Sport" item 
+		case 4: // click on "Sport" item
 			cat = CategoryHelper.CAT_SPORT;
 			args = new Bundle();
 			elf = new EventsListingFragment();
@@ -374,7 +353,7 @@ public class MainActivity extends AbstractNavDrawerActivity{
 			out[0] = elf;
 			out[1] = TAG_FRAGMENT_EVENT_LIST;
 			break;
-		case 5: // click on "Svago" item 
+		case 5: // click on "Svago" item
 			cat = CategoryHelper.CAT_SOCIALE;
 			args = new Bundle();
 			elf = new EventsListingFragment();
@@ -383,7 +362,7 @@ public class MainActivity extends AbstractNavDrawerActivity{
 			out[0] = elf;
 			out[1] = TAG_FRAGMENT_EVENT_LIST;
 			break;
-		case 6: // click on "Altri eventi" item 
+		case 6: // click on "Altri eventi" item
 			cat = CategoryHelper.EVENT_NONCATEGORIZED;
 			args = new Bundle();
 			elf = new EventsListingFragment();
@@ -392,12 +371,13 @@ public class MainActivity extends AbstractNavDrawerActivity{
 			out[0] = elf;
 			out[1] = TAG_FRAGMENT_EVENT_LIST;
 			break;
+		default:
+			return null;
 		}
 		return out;
-	}  
+	}
 
-
-	//to handle action bar menu
+	// to handle action bar menu
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		Log.i("MENU", "start on Create Options Menu MAIN frag");
@@ -405,28 +385,27 @@ public class MainActivity extends AbstractNavDrawerActivity{
 
 		inflater.inflate(R.menu.global_menu, menu);
 
-		//if (listmenu) {
-		//Log.i("MENU", "ITEM 0" + menu.getItem(0).toString());
-		//menu.getItem(0).setVisible(false);
-		//} 
+		// if (listmenu) {
+		// Log.i("MENU", "ITEM 0" + menu.getItem(0).toString());
+		// menu.getItem(0).setVisible(false);
+		// }
 
-		//else {
-		//Log.i("MENU", "ITEM 1" + menu.getItem(1).toString());
-		//menu.getItem(1).setVisible(false);
-		//}
-		//super.onCreateOptionsMenu(menu, inflater);
+		// else {
+		// Log.i("MENU", "ITEM 1" + menu.getItem(1).toString());
+		// menu.getItem(1).setVisible(false);
+		// }
+		// super.onCreateOptionsMenu(menu, inflater);
 
 		return true;
-	} 
-
-
+	}
 
 	@Override
 	public void onBackPressed() {
 
 		Log.i("BACKPRESSED", "MainActivity --> OnBackPressed ");
 
-		// See bug: http://stackoverflow.com/questions/13418436/android-4-2-back-stack-behaviour-with-nested-fragments/14030872#14030872
+		// See bug:
+		// http://stackoverflow.com/questions/13418436/android-4-2-back-stack-behaviour-with-nested-fragments/14030872#14030872
 		// If the fragment exists and has some back-stack entry
 		FragmentManager fm = getSupportFragmentManager();
 		Fragment currentFragment = fm.findFragmentById(R.id.content_frame);
@@ -437,28 +416,25 @@ public class MainActivity extends AbstractNavDrawerActivity{
 		// Else, nothing in the direct fragment back stack
 		else {
 
-			Log.i("BACKPRESSED", "MainActivity --> current fragment: " + currentFragment.getTag() +"!");
+			Log.i("BACKPRESSED", "MainActivity --> current fragment: " + currentFragment.getTag() + "!");
 
-			if ( !this.TAG_FRAGMENT_MAP.equals(currentFragment.getTag())) 
+			if (!this.TAG_FRAGMENT_MAP.equals(currentFragment.getTag()))
 				this.setTitleWithDrawerTitle();
-			
-			if ( this.TAG_FRAGMENT_EVENT_LIST.equals(currentFragment.getTag())) 
+
+			if (this.TAG_FRAGMENT_EVENT_LIST.equals(currentFragment.getTag()))
 				AnimateFirstDisplayListener.displayedImages.clear();
 
-			
-			
-
 			super.onBackPressed();
-
 
 		}
 	}
 
-		/*public void goHomeFragment( AbstractNavDrawerActivity activity) {
-        activity.getSupportFragmentManager().beginTransaction()
-                .replace(R.id.content_frame, new MainFragment(), HOME_FRAGMENT_TAG).commit();
-        activity.setTitleWithDrawerTitle();
-    }*/
+	/*
+	 * public void goHomeFragment( AbstractNavDrawerActivity activity) {
+	 * activity.getSupportFragmentManager().beginTransaction()
+	 * .replace(R.id.content_frame, new MainFragment(),
+	 * HOME_FRAGMENT_TAG).commit(); activity.setTitleWithDrawerTitle(); }
+	 */
 
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
@@ -482,6 +458,4 @@ public class MainActivity extends AbstractNavDrawerActivity{
 		return false;
 	}
 
-
-
-	}
+}
