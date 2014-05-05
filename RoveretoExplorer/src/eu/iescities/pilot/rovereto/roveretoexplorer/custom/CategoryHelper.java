@@ -67,12 +67,18 @@ public class CategoryHelper {
 		}
 		
 		descriptorMap.put("Ambiente", EVENT_CATEGORIES[3]);
+		descriptorMap.put("NaturaMenteVino", EVENT_CATEGORIES[3]);
+		descriptorMap.put("Biblioteca", EVENT_CATEGORIES[3]);
+		descriptorMap.put("Urban Center", EVENT_CATEGORIES[3]);
 
 
 		for (String s : descriptorMap.keySet()) {
 			categoryMapping.put(s, s);
 		}
 		categoryMapping.put("Ambiente", EVENT_NONCATEGORIZED);
+		categoryMapping.put("NaturaMenteVino", EVENT_NONCATEGORIZED);
+		categoryMapping.put("Biblioteca", EVENT_NONCATEGORIZED);
+		categoryMapping.put("Urban Center", EVENT_NONCATEGORIZED);
 
 	}
 
@@ -154,8 +160,8 @@ public class CategoryHelper {
 	}
 
 	public static CategoryDescriptor getCategoryDescriptorByCategoryFiltered(String type, String cat) {
-		return descriptorMap.get(cat);
-
+		if (descriptorMap.containsKey(cat)) return descriptorMap.get(cat);
+		return descriptorMap.get(EVENT_NONCATEGORIZED);
 	}
 
 }
