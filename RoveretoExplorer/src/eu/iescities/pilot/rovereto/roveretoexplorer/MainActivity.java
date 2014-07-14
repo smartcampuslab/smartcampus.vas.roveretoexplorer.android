@@ -2,6 +2,8 @@ package eu.iescities.pilot.rovereto.roveretoexplorer;
 
 import java.util.ArrayList;
 
+import org.apache.http.HttpStatus;
+
 import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -11,6 +13,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
 import android.content.res.Resources.NotFoundException;
 import android.content.res.TypedArray;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
@@ -61,9 +64,7 @@ public class MainActivity extends AbstractNavDrawerActivity {
 		// Log.i("AB TITLE", "MainActivity start on create!!!");
 		mFragmentManager = getSupportFragmentManager();
 		// signedIn();
-		if (signedIn()) {
-			initDataManagement();
-		}
+		signedIn();
 
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		// this is a class created to avoid an Android bug
@@ -82,19 +83,33 @@ public class MainActivity extends AbstractNavDrawerActivity {
 		mDrawerLayout.setDrawerListener(mDrawerToggle);
 	}
 
-	protected boolean signedIn() {
-		SCAccessProvider provider = SCAccessProvider.getInstance(this);
+	protected void signedIn() {
 		try {
-			if (provider.isLoggedIn(this)) {
-				return true;
+			SCAccessProvider provider = SCAccessProvider.getInstance(this);
+//			if (!provider.isLoggedIn(this)) {
+			if (!provider.isLoggedIn(MainActivity.this)) {
+				showLoginDialog(SCAccessProvider.getInstance(MainActivity.this));
+				// new TokenTask().execute();
 			}
-			showLoginDialog(provider);
-		} catch (AACException e) {
+			initDataManagement();
+		} catch (Exception e) {
 			e.printStackTrace();
-			return false;
+			Toast.makeText(MainActivity.this, getString(R.string.auth_failed), Toast.LENGTH_SHORT).show();
+			finish();
 		}
 
-		return false;
+		// SCAccessProvider provider = SCAccessProvider.getInstance(this);
+		// try {
+		// if (provider.isLoggedIn(this)) {
+		// return true;
+		// }
+		// showLoginDialog(provider);
+		// } catch (AACException e) {
+		// e.printStackTrace();
+		// return false;
+		// }
+		//
+		// return false;
 	}
 
 	private void showLoginDialog(final SCAccessProvider accessprovider) {
@@ -107,14 +122,24 @@ public class MainActivity extends AbstractNavDrawerActivity {
 				switch (which) {
 				case DialogInterface.BUTTON_POSITIVE:
 					try {
-						accessprovider.login(MainActivity.this, null);
-						break;
-					} catch (AACException e) {
-
+						if (!SCAccessProvider.getInstance(MainActivity.this).login(MainActivity.this, null)) {
+							new TokenTask().execute();
+						}
+					} catch (Exception e) {
 						e.printStackTrace();
+						Toast.makeText(MainActivity.this, getString(R.string.auth_failed), Toast.LENGTH_SHORT).show();
+						finish();
 					}
+					// try {
+					// accessprovider.login(MainActivity.this, null);
+					// break;
+					// } catch (AACException e) {
+					//
+					// e.printStackTrace();
+					// }
 					break;
 				case DialogInterface.BUTTON_NEGATIVE:
+					MainActivity.this.finish();
 					break;
 				}
 			}
@@ -458,4 +483,44 @@ public class MainActivity extends AbstractNavDrawerActivity {
 		return false;
 	}
 
+	private class TokenTask extends AsyncTask<Void, Void, String> {
+
+		@Override
+		protected String doInBackground(Void... params) {
+			SCAccessProvider provider = SCAccessProvider.getInstance(MainActivity.this);
+			try {
+				return provider.readToken(MainActivity.this);
+			} catch (AACException e) {
+				Log.e(MainActivity.class.getName(), "" + e.getMessage());
+				switch (e.getStatus()) {
+				case HttpStatus.SC_UNAUTHORIZED:
+					try {
+						provider.logout(MainActivity.this);
+					} catch (AACException e1) {
+						e1.printStackTrace();
+					}
+				default:
+					break;
+				}
+				return null;
+			}
+		}
+
+		@Override
+		protected void onPostExecute(String result) {
+			if (result == null) {
+				SCAccessProvider provider = SCAccessProvider.getInstance(MainActivity.this);
+				try {
+					provider.login(MainActivity.this, null);
+					initDataManagement();
+
+				} catch (AACException e) {
+					Log.e(MainActivity.class.getName(), "" + e.getMessage());
+				}
+			} else
+				initDataManagement();
+
+		}
+
+	}
 }

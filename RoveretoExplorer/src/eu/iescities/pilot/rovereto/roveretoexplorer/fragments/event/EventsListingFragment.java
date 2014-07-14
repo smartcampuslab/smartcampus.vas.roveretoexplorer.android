@@ -16,9 +16,9 @@
 package eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -102,6 +102,7 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 	private Long oldToTime = null;
 	private boolean today = false;
 	// For the expandable list view
+	private WhenForSearch whenForSearch = null;
 	List<String> dateGroupList = new ArrayList<String>();
 
 	private List<ExplorerObject> listEvents = new ArrayList<ExplorerObject>();
@@ -463,15 +464,40 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 				};
 			}
 			// get event-dates
+
 			for (Date date : listOfDate) {
-				date_with_day = Utils.getDateTimeString(context, date.getTime(), Utils.DATE_FORMAT_2, true, true)[0];
-				if (getArguments().getBoolean(SearchFragment.ARG_MY)
-						|| (date.getTime() >= DTHelper.getCurrentDateTimeForSearching())) {
-					addEvent(expObj, date_with_day);
+				if (date.before(nextSixMonthsDate())) {
+					if (!(whenForSearch != null
+							&& (date.before(startLimitChoosen(whenForSearch)) || date
+									.after(endLimitChoosen(whenForSearch))))) {
+						date_with_day = Utils.getDateTimeString(context, date.getTime(), Utils.DATE_FORMAT_2, true,
+								true)[0];
+						if (getArguments().getBoolean(SearchFragment.ARG_MY)
+								|| (date.getTime() >= DTHelper.getCurrentDateTimeForSearching())) {
+							addEvent(expObj, date_with_day);
+						}
+					}
+				} else {
+					return;
 				}
 			}
 
 		}
+	}
+
+	private Date endLimitChoosen(WhenForSearch whenForSearch2) {
+		return new Date(whenForSearch2.getTo());
+
+	}
+
+	private Date startLimitChoosen(WhenForSearch whenForSearch2) {
+		return new Date(whenForSearch2.getFrom());
+	}
+
+	private Date nextSixMonthsDate() {
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.MONTH, 6); // to get previous year add -1
+		return cal.getTime();
 	}
 
 	private void addEvent(ExplorerObject expObj, String date_with_day) {
@@ -525,6 +551,7 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 			String categories = bundle.getString(SearchFragment.ARG_CATEGORY);
 			SortedMap<String, Integer> sort = new TreeMap<String, Integer>();
 			sort.put("fromTime", 1);
+			whenForSearch = bundle.getParcelable(SearchFragment.ARG_WHEN_SEARCH);
 			if (bundle.containsKey(SearchFragment.ARG_CATEGORY)
 					&& (bundle.getString(SearchFragment.ARG_CATEGORY) != null)) {
 

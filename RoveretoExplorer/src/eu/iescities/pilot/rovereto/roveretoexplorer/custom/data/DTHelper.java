@@ -555,7 +555,7 @@ public class DTHelper {
 				params = Collections.<String, Object> emptyMap();
 			else
 				params = Collections.<String, Object> singletonMap("filter", JsonUtils.toJSON(filter));
-			String json = RemoteConnector.getJSON(serviceUrl, EVENTS, authToken, params);
+			String json = RemoteConnector.getJSON(serviceUrl, EVENTS, getAuthToken(), params);
 			return JsonUtils.toObjectList(json, ExplorerObject.class);
 
 		} catch (Exception e) {
@@ -1153,7 +1153,7 @@ public class DTHelper {
 				filter.setText(what);
 			}
 			if (inCategories[0] != null) {
-				filter.setTypes(Arrays.asList(CategoryHelper.getAllCategories(new HashSet<String>(Arrays
+				filter.setCriteria(Collections.<String,Object>singletonMap("category", CategoryHelper.getAllCategories(new HashSet<String>(Arrays
 						.asList(inCategories)))));
 			}
 			filter.setSkip(position);
@@ -1162,7 +1162,7 @@ public class DTHelper {
 			if (sort != null)
 				filter.setSort(sort);
 			// TO DO
-			Collection<T> result = new ArrayList<T>();
+//			Collection<T> result = new ArrayList<T>();
 			Collection<ExplorerObject> events = null;
 			events = getEventsRemote(filter, null);
 
@@ -1173,16 +1173,17 @@ public class DTHelper {
 			// }
 			// result = (Collection<T>) eventsbean;
 
-			if (result != null) {
+			if (events != null) {
 				synchronize();
 			}
-			return result;
+			return (Collection<T>) events;
 			// List<T> returnevents =
 			// eu.trentorise.smartcampus.android.common.Utils.convertJSONToObjects(eventsReturn,
 			// cls);
 			// return returnevents;
 
 		} catch (Exception e) {
+			e.printStackTrace();
 			return null;
 		}
 	}
@@ -1262,10 +1263,13 @@ public class DTHelper {
 	private static String addWhenToWhere(String where, long whenFrom, long whenTo) {
 		String whereReturns = null;
 		if ((whenTo != 0)) {
-			whereReturns = new String("( fromTime > " + whenFrom + " AND fromTime < " + whenTo + " ) OR (  toTime < "
-					+ whenTo + " AND toTime > " + whenFrom + " )");
-			// whereReturns = " (  fromTime <= " + whenTo + " AND toTime >= " +
-			// whenFrom + " )";+
+			whereReturns = new String("(  toTime > " + whenFrom
+			+ " AND (fromTime < " + whenTo + " ) OR (fromTime < " + whenTo
+			+ " AND fromTime >" + whenFrom + " ))");
+//			whereReturns = new String("( fromTime > " + whenFrom + " AND fromTime < " + whenTo + " ) OR (  toTime < "
+//					+ whenTo + " AND toTime > " + whenFrom + " )");
+//			 whereReturns = " (  fromTime <= " + whenTo + " AND toTime >= " +
+//			 whenFrom + " )";
 		} else
 			whereReturns = new String(" ( fromTime > " + whenFrom + "  ) OR ( toTime > " + whenFrom + " )");
 
@@ -1388,10 +1392,10 @@ public class DTHelper {
 
 	public static void bringmethere(FragmentActivity activity, Address from, Address to) {
 		Intent intent = activity.getPackageManager().getLaunchIntentForPackage(
-				"eu.trentorise.smartcampus.viaggiatrento");
+				"eu.trentorise.smartcampus.viaggiarovereto");
 		if (intent == null) {
 			intent = new Intent(Intent.ACTION_VIEW,
-					Uri.parse("market://details?id=eu.trentorise.smartcampus.viaggiatrento"));
+					Uri.parse("market://details?id=eu.trentorise.smartcampus.viaggiarovereto"));
 			activity.startActivity(intent);
 		} else
 			// startActivity(intent);
