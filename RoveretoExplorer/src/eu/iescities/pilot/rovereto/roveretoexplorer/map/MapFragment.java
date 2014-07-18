@@ -193,6 +193,10 @@ public class MapFragment extends Fragment implements MapItemsHandler, OnCameraCh
 				initView();
 			}
 			loaded = true;
+			
+			if (mMap != null)
+				mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(MapManager.DEFAULT_POINT, MapManager.ZOOM_DEFAULT));
+
 		}
 	}
 
@@ -307,7 +311,7 @@ public class MapFragment extends Fragment implements MapItemsHandler, OnCameraCh
 		// ovItem.setIcon(getResources().getDrawable(R.drawable.ic_location_actionbar));
 		filter.setIcon(getResources().getDrawable(R.drawable.ic_filter));
 		filter.setVisible(true);
-//		filter.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+		// filter.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 
 		super.onPrepareOptionsMenu(menu);
 	}
@@ -319,30 +323,32 @@ public class MapFragment extends Fragment implements MapItemsHandler, OnCameraCh
 		this.poiCategories = pcat;
 		final String[] ecat = eventCategories.toArray(new String[eventCategories.size()]);
 		this.eventsCategories = ecat;
+		if (getSupportMap() != null) {
+			new SCAsyncTask<Void, Void, Collection<? extends BaseDTObject>>(getActivity(), new MapLoadProcessor(
+					getActivity(), this, getSupportMap()) {
+				@Override
+				protected Collection<? extends BaseDTObject> getObjects() {
+					try {
+						/*
+						 * check if todays is checked and cat with
+						 * searchTodayEvents
+						 */
+						Collection<BaseDTObject> list = new ArrayList<BaseDTObject>();
 
-		new SCAsyncTask<Void, Void, Collection<? extends BaseDTObject>>(getActivity(), new MapLoadProcessor(
-				getActivity(), this, getSupportMap()) {
-			@Override
-			protected Collection<? extends BaseDTObject> getObjects() {
-				try {
-					/*
-					 * check if todays is checked and cat with searchTodayEvents
-					 */
-					Collection<BaseDTObject> list = new ArrayList<BaseDTObject>();
+						if (ecat.length > 0)
+							list.addAll(DTHelper.getEventsByCategories(0, -1, ecat));
+						SortedMap<String, Integer> sort = new TreeMap<String, Integer>();
+						sort.put("title", 1);
+						return list;
 
-					if (ecat.length > 0)
-						list.addAll(DTHelper.getEventsByCategories(0, -1, ecat));
-					SortedMap<String, Integer> sort = new TreeMap<String, Integer>();
-					sort.put("title", 1);
-					return list;
-
-				} catch (Exception e) {
-					e.printStackTrace();
-					return Collections.emptyList();
+					} catch (Exception e) {
+						e.printStackTrace();
+						return Collections.emptyList();
+					}
 				}
-			}
 
-		}).execute();
+			}).execute();
+		}
 	}
 
 	@Override
@@ -401,52 +407,54 @@ public class MapFragment extends Fragment implements MapItemsHandler, OnCameraCh
 		this.poiCategories = null;
 
 		// mItemizedoverlay.clearMarkers();
+		if (getSupportMap() != null) {
+			getSupportMap().clear();
+			setUpMap();
+			new SCAsyncTask<Void, Void, Collection<? extends BaseDTObject>>(getActivity(), new MapLoadProcessor(
+					getActivity(), this, getSupportMap()) {
+				@Override
+				protected Collection<? extends BaseDTObject> getObjects() {
+					try {
+						/*
+						 * check if todays is checked and cat with
+						 * searchTodayEvents
+						 */
+						Collection<ExplorerObject> newList;
+						newList = new ArrayList<ExplorerObject>();
 
-		getSupportMap().clear();
-		setUpMap();
-		new SCAsyncTask<Void, Void, Collection<? extends BaseDTObject>>(getActivity(), new MapLoadProcessor(
-				getActivity(), this, getSupportMap()) {
-			@Override
-			protected Collection<? extends BaseDTObject> getObjects() {
-				try {
-					/*
-					 * check if todays is checked and cat with searchTodayEvents
-					 */
-					Collection<ExplorerObject> newList;
-					newList = new ArrayList<ExplorerObject>();
+						if (isTodayIncluded()) {
+							newList.addAll(DTHelper.searchTodayEvents(0, -1, ""));
 
-					if (isTodayIncluded()) {
-						newList.addAll(DTHelper.searchTodayEvents(0, -1, ""));
+						}
+						if (isMyIncluded()) {
+							SortedMap<String, Integer> sort = new TreeMap<String, Integer>();
+							sort.put("fromTime", 1);
+							newList.addAll(DTHelper.searchInGeneral(0, -1, null, null, null, true,
+									ExplorerObject.class, sort, null));
 
+						}
+						if (eventsCleaned.length != 0 && !Arrays.asList(eventsCleaned).contains("Today")) {
+							SortedMap<String, Integer> sort = new TreeMap<String, Integer>();
+							sort.put("fromTime", 1);
+							newList.addAll(DTHelper.searchInGeneral(0, -1, null, null, null, false,
+									ExplorerObject.class, sort, eventsCleaned));
+						}
+						Iterator<ExplorerObject> i = newList.iterator();
+						while (i.hasNext()) {
+							ExplorerObject obj = i.next();
+							obj.getLocation();
+							if (obj.getLocation()[0] == 0 && obj.getLocation()[1] == 0)
+								i.remove();
+						}
+						return newList;
+					} catch (Exception e) {
+						e.printStackTrace();
+						return Collections.emptyList();
 					}
-					if (isMyIncluded()) {
-						SortedMap<String, Integer> sort = new TreeMap<String, Integer>();
-						sort.put("fromTime", 1);
-						newList.addAll(DTHelper.searchInGeneral(0, -1, null, null, null, true, ExplorerObject.class,
-								sort, null));
-
-					}
-					if (eventsCleaned.length != 0 && !Arrays.asList(eventsCleaned).contains("Today")) {
-						SortedMap<String, Integer> sort = new TreeMap<String, Integer>();
-						sort.put("fromTime", 1);
-						newList.addAll(DTHelper.searchInGeneral(0, -1, null, null, null, false, ExplorerObject.class,
-								sort, eventsCleaned));
-					}
-					Iterator<ExplorerObject> i = newList.iterator();
-					while (i.hasNext()) {
-						ExplorerObject obj = i.next();
-						obj.getLocation();
-						if (obj.getLocation()[0] == 0 && obj.getLocation()[1] == 0)
-							i.remove();
-					}
-					return newList;
-				} catch (Exception e) {
-					e.printStackTrace();
-					return Collections.emptyList();
 				}
-			}
 
-		}).execute();
+			}).execute();
+		}
 	}
 
 	private boolean isTodayIncluded() {
@@ -487,8 +495,20 @@ public class MapFragment extends Fragment implements MapItemsHandler, OnCameraCh
 					&& getFragmentManager().findFragmentById(R.id.map) instanceof SupportMapFragment) {
 				mMap = ((SupportMapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
 			}
-			if (mMap != null)
-				mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(MapManager.DEFAULT_POINT, MapManager.ZOOM_DEFAULT));
+
+			if (mMap != null){
+				
+				mMap.setOnCameraChangeListener(new OnCameraChangeListener() {
+
+				    @Override
+				    public void onCameraChange(CameraPosition arg0) {
+				        // Move camera.
+				    	mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(MapManager.DEFAULT_POINT, MapManager.ZOOM_DEFAULT));
+				        // Remove listener to prevent position reset on camera move.
+				    	mMap.setOnCameraChangeListener(null);
+				    }
+				});
+			}
 
 		}
 		return mMap;
@@ -514,16 +534,18 @@ public class MapFragment extends Fragment implements MapItemsHandler, OnCameraCh
 
 	@Override
 	public boolean onMarkerClick(Marker marker) {
-		List<BaseDTObject> list = MapManager.ClusteringHelper.getFromGridId(marker.getTitle());
-		if (list == null || list.isEmpty())
-			return true;
+		if (getSupportMap() != null) {
+			List<BaseDTObject> list = MapManager.ClusteringHelper.getFromGridId(marker.getTitle());
+			if (list == null || list.isEmpty())
+				return true;
 
-		if (list.size() == 1) {
-			onBaseDTObjectTap(list.get(0));
-		} else if (getSupportMap().getCameraPosition().zoom >= maxZoomOnMap) {
-			onBaseDTObjectsTap(list);
-		} else {
-			MapManager.fitMapWithOverlays(list, getSupportMap());
+			if (list.size() == 1) {
+				onBaseDTObjectTap(list.get(0));
+			} else if (getSupportMap().getCameraPosition().zoom >= maxZoomOnMap) {
+				onBaseDTObjectsTap(list);
+			} else {
+				MapManager.fitMapWithOverlays(list, getSupportMap());
+			}
 		}
 		return true;
 	}
@@ -537,7 +559,9 @@ public class MapFragment extends Fragment implements MapItemsHandler, OnCameraCh
 	private void manageMaxLevelOfZoom(CameraPosition position) {
 		/* check if the zoom level is too high */
 		if (position.zoom > maxZoomOnMap)
-			getSupportMap().animateCamera(CameraUpdateFactory.zoomTo(maxZoomOnMap));
+			if (getSupportMap() != null) {
+				getSupportMap().animateCamera(CameraUpdateFactory.zoomTo(maxZoomOnMap));
+			}
 	}
 
 	@Override

@@ -467,9 +467,8 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 
 			for (Date date : listOfDate) {
 				if (date.before(nextSixMonthsDate())) {
-					if (!(whenForSearch != null
-							&& (date.before(startLimitChoosen(whenForSearch)) || date
-									.after(endLimitChoosen(whenForSearch))))) {
+					if (!(whenForSearch != null && (date.before(startLimitChoosen(whenForSearch)) || date
+							.after(endLimitChoosen(whenForSearch))))) {
 						date_with_day = Utils.getDateTimeString(context, date.getTime(), Utils.DATE_FORMAT_2, true,
 								true)[0];
 						if (getArguments().getBoolean(SearchFragment.ARG_MY)
@@ -486,12 +485,17 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 	}
 
 	private Date endLimitChoosen(WhenForSearch whenForSearch2) {
-		return new Date(whenForSearch2.getTo());
+		if (whenForSearch2.getTo() != 0)
+			return new Date(whenForSearch2.getTo());
+		else
+			return nextSixMonthsDate();
 
 	}
 
 	private Date startLimitChoosen(WhenForSearch whenForSearch2) {
-		return new Date(whenForSearch2.getFrom());
+		if (whenForSearch2.getFrom() != 0)
+			return new Date(whenForSearch2.getFrom());
+		else return new Date();
 	}
 
 	private Date nextSixMonthsDate() {
