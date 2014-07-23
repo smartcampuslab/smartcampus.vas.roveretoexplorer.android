@@ -90,7 +90,7 @@ public class DTParamsHelper {
 
 	public static CategoryDescriptor[] getDefaultArrayByParams(String type) {
 		if (type.equalsIgnoreCase(CategoryHelper.CATEGORY_TYPE_EVENTS)) {
-			if (getInstance().getParamsAsset().containsKey(KEY_EVENTS_DEFAULT)) {
+			if (getInstance()!=null && getInstance().getParamsAsset()!=null && getInstance().getParamsAsset().containsKey(KEY_EVENTS_DEFAULT)) {
 				return orderArrayByKey(CategoryHelper.EVENT_CATEGORIES, (List<Integer>) getInstance().getParamsAsset()
 						.get(KEY_EVENTS_DEFAULT), type);
 			}
