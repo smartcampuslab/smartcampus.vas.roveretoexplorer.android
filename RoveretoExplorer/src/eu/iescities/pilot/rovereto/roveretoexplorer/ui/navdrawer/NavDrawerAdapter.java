@@ -2,8 +2,6 @@ package eu.iescities.pilot.rovereto.roveretoexplorer.ui.navdrawer;
 
 import java.util.ArrayList;
 
-import eu.iescities.pilot.rovereto.roveretoexplorer.R;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import eu.iescities.pilot.rovereto.roveretoexplorer.R;
 
 public class NavDrawerAdapter extends ArrayAdapter<NavDrawerItem> {
 

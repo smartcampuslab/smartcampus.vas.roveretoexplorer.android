@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import android.content.Context;
-import eu.trentorise.smartcampus.android.common.params.ParamsHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.CategoryHelper.CategoryDescriptor;
+import eu.trentorise.smartcampus.android.common.params.ParamsHelper;
 
 public class DTParamsHelper {
 	private static final String TAG = "DTParamsHelper";

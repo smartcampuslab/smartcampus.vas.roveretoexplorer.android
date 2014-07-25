@@ -3,7 +3,6 @@ package eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.edit;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.widget.ListView;
 
 public class EditedFieldListView extends ListView {

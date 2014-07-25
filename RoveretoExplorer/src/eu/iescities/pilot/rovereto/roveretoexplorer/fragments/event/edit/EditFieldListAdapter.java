@@ -3,9 +3,6 @@ package eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.edit;
 
 import java.util.List;
 
-import eu.iescities.pilot.rovereto.roveretoexplorer.R;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.Utils;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -14,15 +11,16 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.method.DigitsKeyListener;
-import android.text.method.TextKeyListener;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import eu.iescities.pilot.rovereto.roveretoexplorer.R;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.Utils;
 
 public class EditFieldListAdapter extends ArrayAdapter<String> {
 

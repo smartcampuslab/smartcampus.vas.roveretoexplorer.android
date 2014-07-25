@@ -19,8 +19,6 @@ import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.Utils;
-
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
@@ -28,6 +26,7 @@ import android.support.v4.app.DialogFragment;
 import android.text.format.DateFormat;
 import android.widget.EditText;
 import android.widget.TimePicker;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.Utils;
 
 public class TimePickerDialogFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener {
 

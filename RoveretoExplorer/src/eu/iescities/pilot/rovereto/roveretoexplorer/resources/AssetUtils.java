@@ -1,9 +1,9 @@
 package eu.iescities.pilot.rovereto.roveretoexplorer.resources;
 
-import android.content.res.AssetManager;
-
 import java.io.IOException;
 import java.util.Arrays;
+
+import android.content.res.AssetManager;
 
 public class AssetUtils {
 

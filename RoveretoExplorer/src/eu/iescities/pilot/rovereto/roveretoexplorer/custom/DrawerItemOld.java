@@ -1,12 +1,6 @@
 package eu.iescities.pilot.rovereto.roveretoexplorer.custom;
 
-import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-import eu.iescities.pilot.rovereto.roveretoexplorer.R;
 
 public class DrawerItemOld {
 	public String text;

@@ -8,7 +8,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -51,12 +50,9 @@ import eu.iescities.pilot.rovereto.roveretoexplorer.custom.Utils;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.DTHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.BaseDTObject;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ExplorerObject;
-import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.EventDetailsFragment;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.EventsListingFragment;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.Fragment_EventDetails;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.search.SearchFragment;
-import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.search.WhenForSearch;
-import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.search.WhereForSearch;
 import eu.iescities.pilot.rovereto.roveretoexplorer.map.MapFilterDialogFragment.REQUEST_TYPE;
 import eu.trentorise.smartcampus.android.common.SCAsyncTask;
 

@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.location.Address;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -31,7 +30,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,9 +37,7 @@ import android.widget.Toast;
 import com.google.android.maps.GeoPoint;
 
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.CategoryHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.CommentsHandler;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.Utils;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.DTHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.BaseDTObject;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ExplorerObject;

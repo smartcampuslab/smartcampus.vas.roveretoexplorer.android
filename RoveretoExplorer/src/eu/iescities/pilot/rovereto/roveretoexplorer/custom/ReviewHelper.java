@@ -20,7 +20,6 @@ import android.content.Context;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RatingBar;
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.Review;
 

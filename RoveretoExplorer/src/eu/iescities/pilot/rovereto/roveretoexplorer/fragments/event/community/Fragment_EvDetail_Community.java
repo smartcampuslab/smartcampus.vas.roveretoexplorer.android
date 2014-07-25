@@ -31,7 +31,6 @@ import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.Rating;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.CommunityData;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ExplorerObject;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.Review;
-import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.Fragment_EventDetails;
 import eu.trentorise.smartcampus.android.common.SCAsyncTask;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 

@@ -37,7 +37,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -51,7 +50,6 @@ import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.edit.Fragmen
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.edit.Fragment_EvDetail_Edit_SingleValueField;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info.edit.Fragment_EvDetail_Info_Contacts;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info.edit.Fragment_EvDetail_Info_WhenWhere;
-import eu.trentorise.smartcampus.android.common.tagging.TaggingDialog;
 
 //in Fragment_EvDetail_Info
 public class EventDetailInfoAdapter extends BaseExpandableListAdapter {

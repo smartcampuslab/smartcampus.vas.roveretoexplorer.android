@@ -102,6 +102,9 @@ public class DTHelper {
 	public static final int SYNC_ONGOING = 1;
 	private static final int CURR_DB = 4;
 
+	
+	private static final String SHOWED_T_D = "showed terms dialog";
+	public static final String T_D_PREFS = "t_d_prefs";
 	// tutorial's stuff
 
 	private static final String TUT_PREFS = "dt_tut_prefs";
@@ -1401,6 +1404,24 @@ public class DTHelper {
 			// startActivity(intent);
 			NavigationHelper.bringMeThere(activity, from, to);
 
+	}
+	
+	public static boolean showTermsDialog(SharedPreferences sp) {
+		SharedPreferences sharedPreferences = sp;
+		if (sharedPreferences.contains(SHOWED_T_D)) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	public static void setShowedTermsDialog(SharedPreferences sp) {
+		SharedPreferences sharedPreferences = sp;
+		if (!sharedPreferences.contains(SHOWED_T_D)) {
+			Editor editor = sharedPreferences.edit();
+			editor.putBoolean(SHOWED_T_D, true);
+			editor.commit();
+		}
 	}
 
 }

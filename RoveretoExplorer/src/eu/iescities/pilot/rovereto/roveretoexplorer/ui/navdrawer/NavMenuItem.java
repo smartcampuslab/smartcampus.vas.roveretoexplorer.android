@@ -1,6 +1,5 @@
 package eu.iescities.pilot.rovereto.roveretoexplorer.ui.navdrawer;
 
-import eu.iescities.pilot.rovereto.roveretoexplorer.resources.ResourceUtils;
 import android.content.Context;
 import android.util.Log;
 

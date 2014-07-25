@@ -1,6 +1,5 @@
 package eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info;
 
-import android.view.View;
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
 
 

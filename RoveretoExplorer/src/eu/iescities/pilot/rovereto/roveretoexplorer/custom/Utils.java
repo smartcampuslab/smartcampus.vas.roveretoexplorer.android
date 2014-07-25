@@ -16,34 +16,22 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.http.impl.cookie.DateUtils;
-
 import android.content.Context;
-import android.util.Log;
 import android.util.Patterns;
 
 import com.google.android.gms.maps.model.LatLng;
 
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.Address;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.Constants;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.DTHelper;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.CommunityData;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ExplorerObject;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ToKnow;
 import eu.trentorise.smartcampus.android.common.follow.model.Concept;
 import eu.trentorise.smartcampus.android.common.geo.OSMAddress;
 import eu.trentorise.smartcampus.android.common.tagging.SemanticSuggestion;
 import eu.trentorise.smartcampus.android.common.tagging.SemanticSuggestion.TYPE;
-import eu.trentorise.smartcampus.protocolcarrier.exceptions.ConnectionException;
-import eu.trentorise.smartcampus.protocolcarrier.exceptions.ProtocolException;
-import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
-import eu.trentorise.smartcampus.storage.DataException;
-import eu.trentorise.smartcampus.storage.StorageConfigurationException;
 
 public class Utils {
 	public static final String userPoiObject = "eu.trentorise.smartcampus.dt.model.UserPOIObject";

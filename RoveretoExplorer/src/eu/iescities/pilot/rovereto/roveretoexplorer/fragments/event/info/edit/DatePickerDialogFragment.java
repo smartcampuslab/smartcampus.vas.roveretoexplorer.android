@@ -18,16 +18,14 @@ package eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info.edit;
 import java.util.Calendar;
 import java.util.Date;
 
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.Utils;
-
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.net.ParseException;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.Utils;
 
 public class DatePickerDialogFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 

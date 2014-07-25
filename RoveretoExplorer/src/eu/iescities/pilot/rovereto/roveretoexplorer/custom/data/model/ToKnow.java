@@ -1,7 +1,5 @@
 package eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model;
 
-import java.util.List;
-
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.Constants;
 

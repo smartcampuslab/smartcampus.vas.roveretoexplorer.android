@@ -1,47 +1,32 @@
 package eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.dasapere;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import android.app.Activity;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Typeface;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
-import android.text.Html;
-import android.text.Spannable;
-import android.text.method.LinkMovementMethod;
-import android.text.style.ClickableSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.TextView.BufferType;
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.AbstractAsyncTaskProcessor;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.Utils;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.Constants;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.DTHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ExplorerObject;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ToKnow;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.edit.Fragment_EvDetail_Edit_MultiValueField;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.edit.Fragment_EvDetail_Edit_SingleValueField;
-import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info.EventDetailInfoAdapter;
-import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info.EventInfoChild;
-import eu.trentorise.smartcampus.android.common.SCAsyncTask;
 import eu.trentorise.smartcampus.network.RemoteException;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 
