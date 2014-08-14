@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="questions">
+        <item>Are you a citizen or a visitor of Trento?</item>
+        <item>Did the app enhance your experience of the Trento?</item>
+        <item>How would you rate the usefulness of this app?</item>
+        <item>How would you rate the friendliness of this app?</item>
+        <item>How would you rate the appearance of this app?</item>
+        <item>How would you rate the usability of this app?</item>
+        <item>How would you rate the information in this app?</item>
+        <item>How would you rate the speed of this app?</item>
+        <item>How would you like to see the app improved?</item>
+        <item>Please leave your email address if you would be prepared to take part in a more detailed survey</item>
+    </string-array>
+    <string-array name="answers01">
+        <item>Citizen</item>
+        <item>Visitor</item>
+    </string-array>
+    <string-array name="answers02">
+        <item>Yes</item>
+        <item>No</item>
+        <item>Don\'t know</item>
+    </string-array>
+    <string-array name="answers03">
+        <item>Poor</item>
+        <item>Below average</item>
+        <item>Average</item>
+        <item>Above average</item>
+        <item>Excellent</item>
+    </string-array>
+    <string-array name="answers04">
+        <item> Poor</item>
+        <item>Below average</item>
+        <item>Average</item>
+        <item>Above average</item>
+        <item>Excellent</item>
+    </string-array>
+    <string-array name="answers05">
+        <item>Poor</item>
+        <item>Below average</item>
+        <item>Average</item>
+        <item>Above average</item>
+        <item>Excellent</item>
+    </string-array>
+    <string-array name="answers06">
+        <item>Poor</item>
+        <item>Below average</item>
+        <item>Average</item>
+        <item>Above average</item>
+        <item>Excellent</item>
+    </string-array>
+    <string-array name="answers07">
+        <item>Poor</item>
+        <item>Below average</item>
+        <item>Average</item>
+        <item>Above average</item>
+        <item>Excellent</item>
+    </string-array>
+    <string-array name="answers08">
+        <item>Poor</item>
+        <item>Below average</item>
+        <item>Average</item>
+        <item>Above average</item>
+        <item>Excellent</item>
+    </string-array>
+    <string-array name="answers09"></string-array>
+    <string-array name="answers10"></string-array>
+
+    <array name="answers">
+        <item>@array/answers01</item>
+        <item>@array/answers02</item>
+        <item>@array/answers03</item>
+        <item>@array/answers04</item>
+        <item>@array/answers05</item>
+        <item>@array/answers06</item>
+        <item>@array/answers07</item>
+        <item>@array/answers08</item>
+        <item>@array/answers09</item>
+        <item>@array/answers10</item>
+    </array>
+
+</resources>
