@@ -34,7 +34,7 @@ public class QuizActivity extends Activity implements QuizInterface{
 	private RadioButton radioButton;
 	private TextView quizQuestion;
 	// private int rowIndex = 0;
-	private int questNo = -1;
+	private int questNo = 0;
 	private int answerNo = 0;
 	private SharedPreferences prefs = null;
 	private LinearLayout introLayout, questionsLayout, endLayout;
@@ -197,14 +197,14 @@ public class QuizActivity extends Activity implements QuizInterface{
 			startActivity(new Intent(QuizActivity.this, MainActivity.class));
 			finish();
 			SharedPreferences.Editor editor = QuizActivity.this.getSharedPreferences(QuizHelper.MY_PREFERENCES, Context.MODE_PRIVATE).edit();
-			editor.remove(MainActivity.TIME_TO_QUIZ);
+			editor.remove(QuizHelper.TIME_TO_QUIZ);
 			editor.commit();
 		}
 	};
 
 	private void displayQuestion() {
 		// Fetching data quiz data and incrementing on each click
-		questNo++;
+//		questNo++;
 		questions = db.getQuestion(questNo);
 		answers = db.getAnswers(questNo);
 		quizQuestion.setText(questions);

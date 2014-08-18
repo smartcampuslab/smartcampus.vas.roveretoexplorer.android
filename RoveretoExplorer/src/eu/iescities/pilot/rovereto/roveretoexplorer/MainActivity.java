@@ -59,7 +59,6 @@ import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 public class MainActivity extends AbstractNavDrawerActivity {
 
 	private SharedPreferences sp;
-	public static final String TIME_TO_QUIZ = "time to quiz";
 	public static final String TAG_FRAGMENT_MAP = "fragmap";
 	public static final String TAG_FRAGMENT_EVENT_LIST = "fragevent";
 
@@ -93,37 +92,10 @@ public class MainActivity extends AbstractNavDrawerActivity {
 		};
 		mDrawerLayout.setDrawerListener(mDrawerToggle);
 		// check if the quiz has to be showed
-		checkQuiz();
+		QuizHelper.checkQuiz(this);
 	}
 
-	private void checkQuiz() {
-		DateFormat readFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
-		Date oldDate, newDate;
-		sp = getSharedPreferences(QuizHelper.MY_PREFERENCES, Context.MODE_PRIVATE);
-		if (sp.contains(TIME_TO_QUIZ)) {
-			// check if time is finished and starty quiz activity
-			try {
-				oldDate = readFormat.parse(sp.getString(TIME_TO_QUIZ, readFormat.format(new Date())));
-			} catch (ParseException e) {
-				e.printStackTrace();
-				oldDate = new Date();
-			}
-			newDate = new Date();
-			Calendar c = Calendar.getInstance();
-			c.setTime(oldDate); // Now use today date.
-			c.add(Calendar.DATE, 5); // Adding 5 days
 
-			if (newDate.after(c.getTime())) {
-				// we are after 5 days so do the quiz
-				startActivity(new Intent(MainActivity.this, QuizActivity.class));
-			}
-		} else {
-			// put the date
-			SharedPreferences.Editor editor = sp.edit();
-			editor.putString(TIME_TO_QUIZ, readFormat.format(new Date()));
-			editor.commit();
-		}
-	}
 
 	protected void signedIn() {
 		try {

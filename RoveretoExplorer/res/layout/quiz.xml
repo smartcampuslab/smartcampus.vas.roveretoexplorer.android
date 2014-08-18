@@ -7,31 +7,35 @@
     <LinearLayout
         android:id="@+id/quizIntro"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical" >
 
         <TextView
             android:id="@+id/introText"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:text="Questionario.Ti va?"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <LinearLayout
             android:id="@+id/linearLayout01"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            android:weightSum="1" >
 
             <Button
                 android:id="@+id/btnIntroNo"
-                android:layout_width="wrap_content"
+                android:layout_width="0dip"
                 android:layout_height="wrap_content"
+                android:layout_weight="0.5"
                 android:text="@string/not_now" />
 
             <Button
                 android:id="@+id/btnIntroOk"
-                android:layout_width="wrap_content"
+                android:layout_width="0dip"
                 android:layout_height="wrap_content"
+                android:layout_weight="0.5"
                 android:text="@android:string/ok" />
         </LinearLayout>
     </LinearLayout>
@@ -39,65 +43,81 @@
     <LinearLayout
         android:id="@+id/quizQuestions"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical" >
 
         <TextView
             android:id="@+id/TextView01"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            
             android:text="Question" />
 
-        <RadioGroup
-            android:id="@+id/rdbGp1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
-        </RadioGroup>
+        <ScrollView
+            android:id="@+id/scrollView1"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" >
 
-        <EditText
-            android:id="@+id/editOpenQuestion"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <RadioGroup
+                    android:id="@+id/rdbGp1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" >
+                </RadioGroup>
+
+                <EditText
+                    android:id="@+id/editOpenQuestion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10" />
+            </LinearLayout>
+        </ScrollView>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10" >
+            android:layout_gravity="center"
+            android:orientation="vertical" >
 
-            <requestFocus />
-        </EditText>
-
-
-
-        <Button
-            android:id="@+id/btnNext"
-            android:layout_width="100dip"
-            android:layout_height="wrap_content"
-            android:text="Next" />
+            <Button
+                android:id="@+id/btnNext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Next" />
+        </LinearLayout>
     </LinearLayout>
 
- <LinearLayout
+    <LinearLayout
         android:id="@+id/quizEnd"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical" >
 
         <TextView
             android:id="@+id/textExit"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:text="@string/exit_quiz"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <LinearLayout
             android:id="@+id/linearLayout01"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
-
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
 
             <Button
                 android:id="@+id/btnExit"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/ok" />
         </LinearLayout>
     </LinearLayout>
+
 </LinearLayout>

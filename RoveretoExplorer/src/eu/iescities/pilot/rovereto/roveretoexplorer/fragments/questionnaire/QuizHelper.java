@@ -1,27 +1,34 @@
 package eu.iescities.pilot.rovereto.roveretoexplorer.fragments.questionnaire;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.Calendar;
+import java.util.Date;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.os.AsyncTask;
-import android.widget.TextView;
+import eu.iescities.pilot.rovereto.roveretoexplorer.MainActivity;
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
 import eu.trentorise.smartcampus.network.RemoteConnector;
-import eu.trentorise.smartcampus.network.RemoteException;
 
 public class QuizHelper {
 
 	public static final String MY_PREFERENCES = "Questionnaire";
 	public static final String QUESTIONS_STORED = "Question stored";
+	public static final String TIME_TO_QUIZ = "time to quiz";
 	public static final String HOST = "http://150.241.239.65:8080/IESCities/api";
 	public static final String SERVICE_RESPONSE = "/log/rating/response";
 	public static final String APP_ID = "5";
+	private static final int QUIZ_SKIP_DAYS = 5;
 
 	private static String[][] answers;
 	private String[] questions;
@@ -130,4 +137,32 @@ public class QuizHelper {
 		return sp;
 	}
 
+	public static void checkQuiz(Activity activity) {
+		DateFormat readFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
+		Date oldDate, newDate;
+		sp = activity.getSharedPreferences(QuizHelper.MY_PREFERENCES, Context.MODE_PRIVATE);
+		if (sp.contains(TIME_TO_QUIZ)) {
+			// check if time is finished and starty quiz activity
+			try {
+				oldDate = readFormat.parse(sp.getString(TIME_TO_QUIZ, readFormat.format(new Date())));
+			} catch (ParseException e) {
+				e.printStackTrace();
+				oldDate = new Date();
+			}
+			newDate = new Date();
+			Calendar c = Calendar.getInstance();
+			c.setTime(oldDate); // Now use today date.
+			c.add(Calendar.SECOND, QUIZ_SKIP_DAYS); // Adding 5 days
+
+			if (newDate.after(c.getTime())) {
+				// we are after 5 days so do the quiz
+				activity.startActivity(new Intent(activity, QuizActivity.class));
+			}
+		} else {
+			// put the date
+			SharedPreferences.Editor editor = sp.edit();
+			editor.putString(TIME_TO_QUIZ, readFormat.format(new Date()));
+			editor.commit();
+		}
+	}
 }
