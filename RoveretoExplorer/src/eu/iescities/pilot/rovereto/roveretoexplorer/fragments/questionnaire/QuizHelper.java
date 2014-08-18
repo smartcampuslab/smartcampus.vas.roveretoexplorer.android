@@ -16,18 +16,16 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.os.AsyncTask;
-import eu.iescities.pilot.rovereto.roveretoexplorer.MainActivity;
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
-import eu.trentorise.smartcampus.network.RemoteConnector;
 
 public class QuizHelper {
 
 	public static final String MY_PREFERENCES = "Questionnaire";
 	public static final String QUESTIONS_STORED = "Question stored";
 	public static final String TIME_TO_QUIZ = "time to quiz";
-	public static final String HOST = "http://150.241.239.65:8080/IESCities/api";
-	public static final String SERVICE_RESPONSE = "/log/rating/response";
-	public static final String APP_ID = "5";
+	public static final String HOST = "http://150.241.239.65:8080";
+	public static final String SERVICE_RESPONSE = "/IESCities/api/log/rating/response";
+	public static final String APP_ID = "RoveretoExplorer";
 	private static final int QUIZ_SKIP_DAYS = 5;
 
 	private static String[][] answers;
@@ -92,14 +90,17 @@ public class QuizHelper {
 			answerTosend = (String) params[2];
 			quizActivityInterface = (QuizInterface) params[3];
 
-
-			String url = SERVICE_RESPONSE + "/"+ APP_ID + "/"+ questionNumber + "/"+ answerNumber+"/"+ answerTosend;
+			if ("".equals(answerTosend))
+			{
+				answerTosend="multiplechoice";
+			}
+			String url = SERVICE_RESPONSE + "/"+ APP_ID + "/"+ (questionNumber+1) + "/"+ (answerNumber+1)+"/"+ answerTosend;
 			try {
 				RemoteConnector.postJSON(HOST, url, "", null);
 			} catch (Exception e) {
 				e.printStackTrace();
 				// to be fixed with real data
-				return true;
+				return false;
 			}
 			return true;
 		}
