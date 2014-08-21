@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -24,7 +25,7 @@ import eu.iescities.pilot.rovereto.roveretoexplorer.MainActivity;
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
 import eu.trentorise.smartcampus.network.RemoteConnector;
 
-public class QuizActivity extends Activity implements QuizInterface{
+public class QuizActivity extends Activity implements QuizInterface {
 	/** Called when the activity is first created. */
 	private static final String PREF_QUIZ = "Quiz";
 	private static final String PREF_INTRO = "Intro";
@@ -33,24 +34,18 @@ public class QuizActivity extends Activity implements QuizInterface{
 
 	private RadioButton radioButton;
 	private TextView quizQuestion;
-	// private int rowIndex = 0;
 	private int questNo = 0;
 	private int answerNo = 0;
 	private SharedPreferences prefs = null;
 	private LinearLayout introLayout, questionsLayout, endLayout;
 	private RadioGroup radioGroup;
 	private EditText openQuestion;
-
-	String[] corrAns = new String[5];
-
-	QuizHelper db = null;
-
-	String questions;
-	ArrayList<String> answers;
-	// Cursor c3;
-
-	int counter = 1;
-	String label;
+//	private String[] corrAns = new String[5];
+	private QuizHelper db = null;
+	private String questions;
+	private ArrayList<String> answers;
+//	private int counter = 1;
+//	private String label;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -97,7 +92,7 @@ public class QuizActivity extends Activity implements QuizInterface{
 		questionsLayout.setVisibility(View.GONE);
 		endLayout.setVisibility(View.GONE);
 		quizQuestion = (TextView) findViewById(R.id.introText);
-		quizQuestion.setText("Bentornato, vuoi ripartire?");
+		quizQuestion.setText(R.string.questionnaire_welcome_back);
 		Button btnClose = (Button) findViewById(R.id.btnIntroNo);
 		btnClose.setOnClickListener(btnEnd_Listener);
 		Button btnNext = (Button) findViewById(R.id.btnIntroOk);
@@ -165,8 +160,9 @@ public class QuizActivity extends Activity implements QuizInterface{
 		public void onClick(View v) {
 			// send the question and answer selected
 			answerNo = radioGroup.getCheckedRadioButtonId();
-			if ((openQuestion.getVisibility()==View.GONE && answerNo != -1)||(openQuestion!= null && !openQuestion.getText().toString().equals(""))) {
-				QuizHelper.sendData(questNo, answerNo, openQuestion.getText().toString(),QuizActivity.this);
+			if ((openQuestion.getVisibility() == View.GONE && answerNo != -1)
+					|| (openQuestion != null && !openQuestion.getText().toString().equals(""))) {
+				QuizHelper.sendData(questNo, answerNo, openQuestion.getText().toString(), QuizActivity.this);
 			} else {
 				Toast.makeText(QuizActivity.this, "Mancano i dati", Toast.LENGTH_LONG).show();
 			}
@@ -187,7 +183,6 @@ public class QuizActivity extends Activity implements QuizInterface{
 
 	};
 
-	
 	/* Called when save button is clicked */
 	private View.OnClickListener btnEnd_Listener = new View.OnClickListener() {
 
@@ -196,15 +191,33 @@ public class QuizActivity extends Activity implements QuizInterface{
 			// close everything and goodbye
 			startActivity(new Intent(QuizActivity.this, MainActivity.class));
 			finish();
-			SharedPreferences.Editor editor = QuizActivity.this.getSharedPreferences(QuizHelper.MY_PREFERENCES, Context.MODE_PRIVATE).edit();
+			SharedPreferences.Editor editor = QuizActivity.this.getSharedPreferences(QuizHelper.MY_PREFERENCES,
+					Context.MODE_PRIVATE).edit();
 			editor.remove(QuizHelper.TIME_TO_QUIZ);
 			editor.commit();
+		}
+	};
+	private CompoundButton.OnCheckedChangeListener rbChange_Listener = new CompoundButton.OnCheckedChangeListener() {
+
+		@Override
+		public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+			// if button is "others", show the openquestion
+			if (buttonView.getText().toString().equals(getString(R.string.open_answer))) {
+				if (isChecked) {
+					openQuestion.setVisibility(View.VISIBLE);
+				} else {
+					openQuestion.setVisibility(View.GONE);
+
+				}
+			}
+
 		}
 	};
 
 	private void displayQuestion() {
 		// Fetching data quiz data and incrementing on each click
-//		questNo++;
+		// questNo++;
+		openQuestion.setText("");
 		questions = db.getQuestion(questNo);
 		answers = db.getAnswers(questNo);
 		quizQuestion.setText(questions);
@@ -219,6 +232,7 @@ public class QuizActivity extends Activity implements QuizInterface{
 				radioButton = new RadioButton(this);
 				radioButton.setText(answers.get(i));
 				radioButton.setId(i);
+				radioButton.setOnCheckedChangeListener(rbChange_Listener);
 				radioGroup.addView(radioButton);
 
 			}

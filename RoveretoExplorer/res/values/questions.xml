@@ -10,6 +10,8 @@
         <item>How would you rate the usability of this app?</item>
         <item>How would you rate the information in this app?</item>
         <item>How would you rate the speed of this app?</item>
+        <item>How would you order the list of events?</item>
+        <item>What do you think about changing and adding information on events?</item>
         <item>How would you like to see the app improved?</item>
         <item>Please leave your email address if you would be prepared to take part in a more detailed survey</item>
     </string-array>
@@ -64,8 +66,18 @@
         <item>Above average</item>
         <item>Excellent</item>
     </string-array>
-    <string-array name="answers09"></string-array>
-    <string-array name="answers10"></string-array>
+    <string-array name="answers09">
+        <item>By date</item>
+        <item>By type</item>
+        <item>@string/open_answer</item>
+    </string-array>
+    <string-array name="answers10">
+        <item>I would let the user to change all the event\'s information</item>
+        <item>I would let the user to add new information but not to change the old ones</item>
+        <item>@string/open_answer</item>
+    </string-array>
+    <string-array name="answers11"></string-array>
+    <string-array name="answers12"></string-array>
 
     <array name="answers">
         <item>@array/answers01</item>

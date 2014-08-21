@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="questions">
+        <item>Sei un cittadino o un visitatore di Trento?</item>
+        <item>L\'app ha migliorato la tua esperienza di Trento?</item>
+        <item>Come valuteresti l\'utilità di questa app?</item>
+        <item>Come valuteresti la facilità di utilizzo di quest\'app?</item>
+        <item>Come valuteresti l\'aspetto di quest\'app?</item>
+        <item>Come valuteresti l\'usabilità di quest’app?</item>
+        <item>Come valuteresti le informazioni fornite da quest\'app?</item>
+        <item>Come valuteresti  la velocità di quest\'app?</item>
+        <item>Come preferiresti ordinare la lista degli eventi ?</item>
+        <item>Cosa pensi della possibilità di modificare o aggiungere informazioni?</item>
+        <item>Quali funzioni aggiuntive vorresti vedere nell’app?</item>
+        <item>Prego, lascia il tuo indirizzo email se vuoi prendere parte ad un questionario più dettagliato</item>
+    </string-array>
+    <string-array name="answers01">
+        <item>Cittadino</item>
+        <item>Visitatore</item>
+    </string-array>
+    <string-array name="answers02">
+        <item>Si</item>
+        <item>No</item>
+        <item>Non so</item>
+    </string-array>
+    <string-array name="answers03">
+        <item>Scarsa</item>
+        <item>Sotto la media</item>
+        <item>Nella media</item>
+        <item>Sopra la media</item>
+        <item>Eccellente</item>
+    </string-array>
+    <string-array name="answers04">
+        <item>Scarsa</item>
+        <item>Sotto la media</item>
+        <item>Nella media</item>
+        <item>Sopra la media</item>
+        <item>Eccellente</item>
+    </string-array>
+    <string-array name="answers05">
+        <item>Scarso</item>
+        <item>Sotto la media</item>
+        <item>Nella media</item>
+        <item>Sopra la media</item>
+        <item>Eccellente</item>
+    </string-array>
+    <string-array name="answers06">
+        <item>Scarsa</item>
+        <item>Sotto la media</item>
+        <item>Nella media</item>
+        <item>Sopra la media</item>
+        <item>Eccellente</item>
+    </string-array>
+    <string-array name="answers07">
+        <item>Scarsa</item>
+        <item>Sotto la media</item>
+        <item>Nella media</item>
+        <item>Sopra la media</item>
+        <item>Eccellente</item>
+    </string-array>
+    <string-array name="answers08">
+        <item>Scarsa</item>
+        <item>Sotto la media</item>
+        <item>Nella media</item>
+        <item>Sopra la media</item>
+        <item>Eccellente</item>
+    </string-array>
+    <string-array name="answers09">
+        <item>Per data</item>
+        <item>Per tipo</item>
+        <item>@string/open_answer</item>
+    </string-array>
+    <string-array name="answers10">
+        <item>lascerei la possibilità di modificare tutte le informazioni dell\'evento</item>
+        <item>lascerei solo la possibilità di aggiungere informazioni in più senza modificare quelle già inserite</item>
+        <item>@string/open_answer</item>
+    </string-array>
+    <string-array name="answers11"></string-array>
+    <string-array name="answers12"></string-array>
+
+    <array name="answers">
+        <item>@array/answers01</item>
+        <item>@array/answers02</item>
+        <item>@array/answers03</item>
+        <item>@array/answers04</item>
+        <item>@array/answers05</item>
+        <item>@array/answers06</item>
+        <item>@array/answers07</item>
+        <item>@array/answers08</item>
+        <item>@array/answers09</item>
+        <item>@array/answers10</item>
+        <item>@array/answers11</item>
+        <item>@array/answers12</item>
+    </array>
+
+</resources>
