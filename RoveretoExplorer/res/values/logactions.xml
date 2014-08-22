@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- App is Launched -->
+    <string name="log_applaunch">AppLaunch</string>
+    <!-- App is run or brought to the foreground -->
+    <string name="log_appstart">AppStart</string>
+    <!-- App is exited or moved away from -->
+    <string name="log_appstop">AppStop</string>
+    <!-- User consumes data	Message: 	More detail on consumption event -->
+    <string name="log_appconsume">AppConsume</string>
+    <!-- User provides content	Message: 	More detail on prosumption event -->
+    <string name="log_appprosume">AppProsume</string>
+    <!-- User consumes a source of Open Data	Message: 	More detail on consumption event -->
+    <string name="log_appodconsume">AppODConsume</string>
+    <!-- User performs a collaborative action	Message: 	More detail on collaborative action -->
+    <string name="log_appcollaborate">AppCollaborate</string>
+    <!-- User initiates a query of a Dataset	Message: 	Query string -->
+    <string name="log_appdataqueryinitiate">AppDataQueryInitiate</string>
+    <!-- Dataset query completes -->
+    <string name="log_appdataquerycomplete">AppDataQueryComplete</string>
+    <!-- There is some problem with the data returned	Message: 	Detail of the issue -->
+    <string name="log_appdataqueryerror">AppDataQueryError</string>
+    <!-- User completes an in app questionnaire -->
+    <string name="log_appquestionnaire">AppQuestionnaire</string>
+    <!-- Custom event	Message: Add a full explanation of the event -->
+    <string name="log_appcustom">AppCustom</string>
+
+</resources>

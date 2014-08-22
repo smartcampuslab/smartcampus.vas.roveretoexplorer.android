@@ -1,18 +1,12 @@
 package eu.iescities.pilot.rovereto.roveretoexplorer;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 
 import org.apache.http.HttpStatus;
 
 import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -40,9 +34,9 @@ import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.DTHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.BaseDTObject;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.AnimateFirstDisplayListener;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.EventsListingFragment;
-import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.questionnaire.QuizActivity;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.questionnaire.QuizHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.search.SearchFragment;
+import eu.iescities.pilot.rovereto.roveretoexplorer.log.LogHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.map.MapFragment;
 import eu.iescities.pilot.rovereto.roveretoexplorer.ui.navdrawer.AbstractNavDrawerActivity;
 import eu.iescities.pilot.rovereto.roveretoexplorer.ui.navdrawer.NavDrawerActivityConfiguration;
@@ -93,9 +87,16 @@ public class MainActivity extends AbstractNavDrawerActivity {
 		mDrawerLayout.setDrawerListener(mDrawerToggle);
 		// check if the quiz has to be showed
 		QuizHelper.checkQuiz(this);
+		LogHelper.init(this);
+		LogHelper.createSessionId();
+		LogHelper.sendStartLog();
 	}
 
-
+@Override
+protected void onDestroy() {
+	super.onDestroy();
+	LogHelper.deleteSessionId();
+}
 
 	protected void signedIn() {
 		try {
