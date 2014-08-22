@@ -2,8 +2,8 @@
 <resources>
 
     <string-array name="questions">
-        <item>Are you a citizen or a visitor of Trento?</item>
-        <item>Did the app enhance your experience of the Trento?</item>
+        <item>Are you a citizen or a visitor of Rovereto?</item>
+        <item>Did the app enhance your experience of the Rovereto?</item>
         <item>How would you rate the usefulness of this app?</item>
         <item>How would you rate the friendliness of this app?</item>
         <item>How would you rate the appearance of this app?</item>
@@ -90,6 +90,8 @@
         <item>@array/answers08</item>
         <item>@array/answers09</item>
         <item>@array/answers10</item>
+        <item>@array/answers11</item>
+        <item>@array/answers12</item>
     </array>
 
 </resources>

@@ -2,8 +2,8 @@
 <resources>
 
     <string-array name="questions">
-        <item>Sei un cittadino o un visitatore di Trento?</item>
-        <item>L\'app ha migliorato la tua esperienza di Trento?</item>
+        <item>Sei un cittadino o un visitatore di Rovereto?</item>
+        <item>L\'app ha migliorato la tua esperienza di Rovereto?</item>
         <item>Come valuteresti l\'utilità di questa app?</item>
         <item>Come valuteresti la facilità di utilizzo di quest\'app?</item>
         <item>Come valuteresti l\'aspetto di quest\'app?</item>

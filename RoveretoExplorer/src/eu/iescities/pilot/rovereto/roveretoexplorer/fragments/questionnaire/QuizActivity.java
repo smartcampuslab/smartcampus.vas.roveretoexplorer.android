@@ -1,17 +1,12 @@
 package eu.iescities.pilot.rovereto.roveretoexplorer.fragments.questionnaire;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.gesture.Prediction;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -23,7 +18,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import eu.iescities.pilot.rovereto.roveretoexplorer.MainActivity;
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
-import eu.trentorise.smartcampus.network.RemoteConnector;
 
 public class QuizActivity extends Activity implements QuizInterface {
 	/** Called when the activity is first created. */
@@ -40,12 +34,13 @@ public class QuizActivity extends Activity implements QuizInterface {
 	private LinearLayout introLayout, questionsLayout, endLayout;
 	private RadioGroup radioGroup;
 	private EditText openQuestion;
-//	private String[] corrAns = new String[5];
+	// private String[] corrAns = new String[5];
 	private QuizHelper db = null;
 	private String questions;
 	private ArrayList<String> answers;
-//	private int counter = 1;
-//	private String label;
+
+	// private int counter = 1;
+	// private String label;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -162,7 +157,16 @@ public class QuizActivity extends Activity implements QuizInterface {
 			answerNo = radioGroup.getCheckedRadioButtonId();
 			if ((openQuestion.getVisibility() == View.GONE && answerNo != -1)
 					|| (openQuestion != null && !openQuestion.getText().toString().equals(""))) {
-				QuizHelper.sendData(questNo, answerNo, openQuestion.getText().toString(), QuizActivity.this);
+				// if last question check email
+				if (questNo == db.getQuestions().length - 1) {
+					if (QuizHelper.isEmailValid(openQuestion.getText().toString())) {
+						QuizHelper.sendData(questNo, answerNo, openQuestion.getText().toString(), QuizActivity.this);
+					} else {
+						Toast.makeText(QuizActivity.this, "Email non valida", Toast.LENGTH_LONG).show();
+					}
+				} else {
+					QuizHelper.sendData(questNo, answerNo, openQuestion.getText().toString(), QuizActivity.this);
+				}
 			} else {
 				Toast.makeText(QuizActivity.this, "Mancano i dati", Toast.LENGTH_LONG).show();
 			}
@@ -250,6 +254,7 @@ public class QuizActivity extends Activity implements QuizInterface {
 		if (questNo < db.getQuestions().length) {
 			displayQuestion();
 		} else {
+			QuizHelper.finished();
 			setupEndLayout();
 		}
 	}

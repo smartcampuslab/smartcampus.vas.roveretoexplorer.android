@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -25,6 +27,7 @@ public class QuizHelper {
 	public static final String QUESTIONS_STORED = "Question stored";
 	public static final String TIME_TO_QUIZ = "time to quiz";
 	private static final int QUIZ_SKIP_DAYS = 5;
+	private static final String QUIZ_FINISHED = "quiz finished";
 
 	private static String[][] answers;
 	private String[] questions;
@@ -88,11 +91,11 @@ public class QuizHelper {
 			answerTosend = (String) params[2];
 			quizActivityInterface = (QuizInterface) params[3];
 
-			if ("".equals(answerTosend))
-			{
-				answerTosend="multiplechoice";
+			if ("".equals(answerTosend)) {
+				answerTosend = "multiplechoice";
 			}
-			String url = LogConstants.SERVICE_QUESTIONS_RESPONSE + "/"+ LogConstants.APP_ID + "/"+ (questionNumber+1) + "/"+ (answerNumber+1)+"/"+ answerTosend;
+			String url = LogConstants.SERVICE_QUESTIONS_RESPONSE + "/" + LogConstants.APP_ID + "/"
+					+ (questionNumber + 1) + "/" + (answerNumber + 1) + "/" + answerTosend;
 			try {
 				RemoteConnector.postJSON(LogConstants.HOST, url, "", null);
 			} catch (Exception e) {
@@ -115,8 +118,8 @@ public class QuizHelper {
 		protected void onPostExecute(Boolean result) {
 			super.onPostExecute(result);
 			// to be fixed with real data
-//			if (true) {
-				 if (result == true) {
+			// if (true) {
+			if (result == true) {
 				// store on SharedPreferences number of question
 				SharedPreferences.Editor editor = sp.edit();
 				editor.putLong(QUESTIONS_STORED, questionNumber);
@@ -158,10 +161,33 @@ public class QuizHelper {
 				activity.startActivity(new Intent(activity, QuizActivity.class));
 			}
 		} else {
-			// put the date
-			SharedPreferences.Editor editor = sp.edit();
-			editor.putString(TIME_TO_QUIZ, readFormat.format(new Date()));
-			editor.commit();
+			// check if is done
+			if (!sp.contains(QUIZ_FINISHED)) {
+				// put the date
+				SharedPreferences.Editor editor = sp.edit();
+				editor.putString(TIME_TO_QUIZ, readFormat.format(new Date()));
+				editor.commit();
+			}
 		}
+	}
+
+	public static boolean isEmailValid(String email) {
+	    boolean isValid = false;
+
+	    String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
+	    CharSequence inputStr = email;
+
+	    Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+	    Matcher matcher = pattern.matcher(inputStr);
+	    if (matcher.matches()) {
+	        isValid = true;
+	    }
+	    return isValid;
+	}
+	public static void finished() {
+		SharedPreferences.Editor editor = sp.edit();
+		editor.putBoolean(QUIZ_FINISHED, true);
+		editor.commit();
+
 	}
 }

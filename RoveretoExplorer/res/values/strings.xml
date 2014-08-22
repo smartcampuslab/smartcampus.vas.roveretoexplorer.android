@@ -221,5 +221,5 @@
     <string name="questionnaire_welcome_back">Welcome back, do you want to restart with the questionnaire?</string>
     <string name="questionnary_intro">Do you want to do a questionnaire? </string>
     <string name="questionnaire_exit">Thank you for your contribute</string>
-
+	<string name="city_application">Rovereto</string>
 </resources>
