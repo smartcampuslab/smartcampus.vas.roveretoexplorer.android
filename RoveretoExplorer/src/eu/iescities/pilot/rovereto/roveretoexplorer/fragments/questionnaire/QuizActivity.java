@@ -59,7 +59,7 @@ public class QuizActivity extends Activity implements QuizInterface {
 		openQuestion = (EditText) findViewById(R.id.editOpenQuestion);
 		// check previous question if it was done
 		if (prefs != null) {
-			if (prefs.contains(QuizHelper.QUESTIONS_STORED)) {
+			if (prefs.contains(QuizHelper.NEXT_QUESTION)) {
 				restoreQuestionnaire();
 				return;
 			}
@@ -78,7 +78,7 @@ public class QuizActivity extends Activity implements QuizInterface {
 		SharedPreferences.Editor editor = prefs.edit();
 		editor.putString(PREF_QUIZ, PREF_QUESTIONS);
 		editor.commit();
-		questNo = (int) prefs.getLong(QuizHelper.QUESTIONS_STORED, 0);
+		questNo = (int) prefs.getLong(QuizHelper.NEXT_QUESTION, 0);
 		welcomeBackLayout();
 	}
 
@@ -142,12 +142,20 @@ public class QuizActivity extends Activity implements QuizInterface {
 		radioGroup = (RadioGroup) findViewById(R.id.rdbGp1);
 		quizQuestion = (TextView) findViewById(R.id.TextView01);
 		displayQuestion();
-
+		
 		/* Displays the next options and sets listener on next button */
 		Button btnNext = (Button) findViewById(R.id.btnNext);
 		btnNext.setOnClickListener(btnNext_Listener);
 	}
 
+	private View.OnClickListener btnSkip_Listener = new View.OnClickListener() {
+
+		@Override
+		public void onClick(View v) {
+			nextQuestion();
+		}
+
+	};
 	/* Called when next button is clicked */
 	private View.OnClickListener btnNext_Listener = new View.OnClickListener() {
 
@@ -157,8 +165,9 @@ public class QuizActivity extends Activity implements QuizInterface {
 			answerNo = radioGroup.getCheckedRadioButtonId();
 			if ((openQuestion.getVisibility() == View.GONE && answerNo != -1)
 					|| (openQuestion != null && !openQuestion.getText().toString().equals(""))) {
-				// if last question check email
-				if (questNo == db.getQuestions().length - 1) {
+				// if last question, check email
+				if (isTheLastQuestion()) {
+
 					if (QuizHelper.isEmailValid(openQuestion.getText().toString())) {
 						QuizHelper.sendData(questNo, answerNo, openQuestion.getText().toString(), QuizActivity.this);
 					} else {
@@ -219,8 +228,14 @@ public class QuizActivity extends Activity implements QuizInterface {
 	};
 
 	private void displayQuestion() {
+		
+		if (isTheLastQuestion()) {
+			//if last question you can also skip the answer
+			Button skipButton = (Button) findViewById(R.id.btnSkip);
+			skipButton.setVisibility(View.VISIBLE);
+			skipButton.setOnClickListener(btnSkip_Listener);
+		}
 		// Fetching data quiz data and incrementing on each click
-		// questNo++;
 		openQuestion.setText("");
 		questions = db.getQuestion(questNo);
 		answers = db.getAnswers(questNo);
@@ -245,6 +260,10 @@ public class QuizActivity extends Activity implements QuizInterface {
 			radioGroup.setVisibility(View.GONE);
 		}
 
+	}
+
+	private boolean isTheLastQuestion() {
+		return questNo == db.getQuestions().length - 1;
 	}
 
 	@Override

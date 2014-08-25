@@ -24,7 +24,7 @@ import eu.iescities.pilot.rovereto.roveretoexplorer.log.LogConstants;
 public class QuizHelper {
 
 	public static final String MY_PREFERENCES = "Questionnaire";
-	public static final String QUESTIONS_STORED = "Question stored";
+	public static final String NEXT_QUESTION = "Question stored";
 	public static final String TIME_TO_QUIZ = "time to quiz";
 	private static final int QUIZ_SKIP_DAYS = 5;
 	private static final String QUIZ_FINISHED = "quiz finished";
@@ -122,7 +122,7 @@ public class QuizHelper {
 			if (result == true) {
 				// store on SharedPreferences number of question
 				SharedPreferences.Editor editor = sp.edit();
-				editor.putLong(QUESTIONS_STORED, questionNumber);
+				editor.putLong(NEXT_QUESTION, questionNumber+1);
 				editor.commit();
 				// next question
 				quizActivityInterface.nextQuestion();
