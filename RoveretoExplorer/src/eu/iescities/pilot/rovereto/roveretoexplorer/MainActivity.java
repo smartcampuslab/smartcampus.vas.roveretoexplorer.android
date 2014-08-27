@@ -88,15 +88,19 @@ public class MainActivity extends AbstractNavDrawerActivity {
 		// check if the quiz has to be showed
 		QuizHelper.checkQuiz(this);
 		LogHelper.init(this);
-		LogHelper.createSessionId();
+		if (!LogHelper.isPresentSessionId(this)) {
+			LogHelper.createSessionId();
+		}
+
 		LogHelper.sendStartLog();
 	}
 
-@Override
-protected void onDestroy() {
-	super.onDestroy();
-	LogHelper.deleteSessionId();
-}
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		LogHelper.sendStopLog();
+		LogHelper.deleteSessionId();
+	}
 
 	protected void signedIn() {
 		try {
@@ -113,18 +117,6 @@ protected void onDestroy() {
 			finish();
 		}
 
-		// SCAccessProvider provider = SCAccessProvider.getInstance(this);
-		// try {
-		// if (provider.isLoggedIn(this)) {
-		// return true;
-		// }
-		// showLoginDialog(provider);
-		// } catch (AACException e) {
-		// e.printStackTrace();
-		// return false;
-		// }
-		//
-		// return false;
 	}
 
 	private void showLoginDialog(final SCAccessProvider accessprovider) {

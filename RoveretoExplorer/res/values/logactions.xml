@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- App is Launched -->
-    <string name="log_applaunch">AppLaunch</string>
     <!-- App is run or brought to the foreground -->
     <string name="log_appstart">AppStart</string>
     <!-- App is exited or moved away from -->

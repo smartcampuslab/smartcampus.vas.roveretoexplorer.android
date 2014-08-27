@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import eu.iescities.pilot.rovereto.roveretoexplorer.MainActivity;
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
+import eu.iescities.pilot.rovereto.roveretoexplorer.log.LogHelper;
 
 public class QuizActivity extends Activity implements QuizInterface {
 	/** Called when the activity is first created. */
@@ -208,6 +209,7 @@ public class QuizActivity extends Activity implements QuizInterface {
 					Context.MODE_PRIVATE).edit();
 			editor.remove(QuizHelper.TIME_TO_QUIZ);
 			editor.commit();
+			LogHelper.sendQuestionnarieFinished();
 		}
 	};
 	private CompoundButton.OnCheckedChangeListener rbChange_Listener = new CompoundButton.OnCheckedChangeListener() {

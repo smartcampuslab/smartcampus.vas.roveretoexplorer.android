@@ -10,13 +10,13 @@ import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.questionnaire.Remo
 
 public class LogHelper {
 
-//	Modify an existing event (prosumer)
-//
-//	• Add new information category (super-prosumer?)
-//
-//	• Follow/participate an event (consumer).
-//
-//	• Rate/comment an event (prosumer)
+	// Modify an existing event (prosumer)
+	//
+	// • Add new information category (super-prosumer?)
+	//
+	// • Follow/participate an event (consumer).
+	//
+	// • Rate/comment an event (prosumer)
 	private static SharedPreferences sp;
 	private static Context ctx;
 	private static LogHelper instance;
@@ -26,22 +26,37 @@ public class LogHelper {
 		sp = ctx.getSharedPreferences(LogConstants.LOG_PREFERENCES, Context.MODE_PRIVATE);
 
 	}
+
 	public static void init(final Context mContext) {
 		if (instance == null)
 			instance = new LogHelper(mContext);
 
-	
 	}
-	
-	
+
+	public static void sendQuestionnarieFinished() {
+		SendLogTask ast = new SendLogTask();
+		String[] params = new String[2];
+		params[0] = ctx.getString(R.string.log_appquestionnaire);
+		params[1] = "";
+		ast.execute(params);
+	}
+
+	public static void sendStopLog() {
+		SendLogTask ast = new SendLogTask();
+		String[] params = new String[2];
+		params[0] = ctx.getString(R.string.log_appstop);
+		params[1] = "";
+		ast.execute(params);
+	}
+
 	public static void sendStartLog() {
 		SendLogTask ast = new SendLogTask();
 		String[] params = new String[2];
-		params[0]=ctx.getString(R.string.log_appstart);
-		params[1]="";
+		params[0] = ctx.getString(R.string.log_appstart);
+		params[1] = "";
 		ast.execute(params);
 	}
-	
+
 	private static class SendLogTask extends AsyncTask<Object, Void, Boolean> {
 		private long timestamp;
 		private String appid;
@@ -49,23 +64,22 @@ public class LogHelper {
 		private String type = null;
 		private String message = null;
 
-		
-		
 		@Override
 		protected Boolean doInBackground(Object... params) {
-//			/event/{timestamp}/{appid}/{session}/{type}/{message}
+			// /event/{timestamp}/{appid}/{session}/{type}/{message}
 
-			timestamp=System.currentTimeMillis();
-			appid=LogConstants.APP_ID;
-			//get sessionId from SharedPreferences
+			timestamp = System.currentTimeMillis();
+			appid = LogConstants.APP_ID;
+			// get sessionId from SharedPreferences
 			session = getSessionId(ctx);
-			//getType
+			// getType
 			type = (String) params[0];
 
-			//getMessage
+			// getMessage
 			message = (String) params[1];
 
-			String url = LogConstants.SERVICE_LOG_RESPONSE + "/"+ timestamp+"/"+LogConstants.APP_ID + "/"+ session + "/"+ type+"/"+ message;
+			String url = LogConstants.SERVICE_LOG_RESPONSE + "/" + timestamp + "/" + LogConstants.APP_ID + "/"
+					+ session + "/" + type + "/" + message;
 			try {
 				RemoteConnector.postJSON(LogConstants.HOST, url, "", null);
 			} catch (Exception e) {
@@ -88,24 +102,31 @@ public class LogHelper {
 
 	public static void createSessionId() {
 		sp = ctx.getSharedPreferences(LogConstants.LOG_PREFERENCES, Context.MODE_PRIVATE);
-		Random r=new Random();
+		Random r = new Random();
 		SharedPreferences.Editor editor = sp.edit();
 		editor.putInt(LogConstants.SESSION_ID, r.nextInt());
 		editor.commit();
-		
+
 	}
 
-	public static int getSessionId(Context ctx ) {
+	public static boolean isPresentSessionId(Context ctx) {
 		sp = ctx.getSharedPreferences(LogConstants.LOG_PREFERENCES, Context.MODE_PRIVATE);
-		Random r=new Random();
-		int sessionid=sp.getInt(LogConstants.SESSION_ID, r.nextInt());
-		return sessionid;
-		
+		return (sp.contains(LogConstants.LOG_PREFERENCES));
+
 	}
+
+	public static int getSessionId(Context ctx) {
+		sp = ctx.getSharedPreferences(LogConstants.LOG_PREFERENCES, Context.MODE_PRIVATE);
+		Random r = new Random();
+		int sessionid = sp.getInt(LogConstants.SESSION_ID, r.nextInt());
+		return sessionid;
+
+	}
+
 	public static void deleteSessionId() {
 		sp = ctx.getSharedPreferences(LogConstants.LOG_PREFERENCES, Context.MODE_PRIVATE);
 		SharedPreferences.Editor editor = sp.edit();
 		editor.remove(LogConstants.SESSION_ID);
-		editor.commit();		
+		editor.commit();
 	}
 }
