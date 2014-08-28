@@ -90,7 +90,7 @@ public class QuizActivity extends Activity implements QuizInterface {
 		quizQuestion = (TextView) findViewById(R.id.introText);
 		quizQuestion.setText(R.string.questionnaire_welcome_back);
 		Button btnClose = (Button) findViewById(R.id.btnIntroNo);
-		btnClose.setOnClickListener(btnEnd_Listener);
+		btnClose.setOnClickListener(btnNextTime_Listener);
 		Button btnNext = (Button) findViewById(R.id.btnIntroOk);
 		btnNext.setOnClickListener(btnIntro_Listener);
 	}
@@ -112,7 +112,7 @@ public class QuizActivity extends Activity implements QuizInterface {
 		endLayout.setVisibility(View.GONE);
 		quizQuestion = (TextView) findViewById(R.id.TextView01);
 		Button btnClose = (Button) findViewById(R.id.btnIntroNo);
-		btnClose.setOnClickListener(btnEnd_Listener);
+		btnClose.setOnClickListener(btnNextTime_Listener);
 		Button btnNext = (Button) findViewById(R.id.btnIntroOk);
 		btnNext.setOnClickListener(btnIntro_Listener);
 	}
@@ -149,6 +149,25 @@ public class QuizActivity extends Activity implements QuizInterface {
 		btnNext.setOnClickListener(btnNext_Listener);
 	}
 
+	
+	private View.OnClickListener btnNextTime_Listener = new View.OnClickListener() {
+
+		@Override
+		public void onClick(View v) {
+			// close everything and goodbye
+			Intent mIntent = new Intent(QuizActivity.this, MainActivity.class);
+			Bundle mBundle = new Bundle();
+			mBundle.putBoolean(QuizHelper.TIME_TO_QUIZ, true);
+			mIntent.putExtras(mBundle);
+			startActivity(mIntent);
+			finish();
+			SharedPreferences.Editor editor = QuizActivity.this.getSharedPreferences(QuizHelper.MY_PREFERENCES,
+					Context.MODE_PRIVATE).edit();
+			editor.remove(QuizHelper.TIME_TO_QUIZ);
+			editor.commit();
+		}
+
+	};
 	private View.OnClickListener btnSkip_Listener = new View.OnClickListener() {
 
 		@Override
@@ -203,7 +222,11 @@ public class QuizActivity extends Activity implements QuizInterface {
 		@Override
 		public void onClick(View v) {
 			// close everything and goodbye
-			startActivity(new Intent(QuizActivity.this, MainActivity.class));
+			Intent mIntent = new Intent(QuizActivity.this, MainActivity.class);
+			Bundle mBundle = new Bundle();
+			mBundle.putBoolean(QuizHelper.TIME_TO_QUIZ, true);
+			mIntent.putExtras(mBundle);
+			startActivity(mIntent);
 			finish();
 			SharedPreferences.Editor editor = QuizActivity.this.getSharedPreferences(QuizHelper.MY_PREFERENCES,
 					Context.MODE_PRIVATE).edit();

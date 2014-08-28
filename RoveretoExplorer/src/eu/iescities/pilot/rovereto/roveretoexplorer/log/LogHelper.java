@@ -1,6 +1,7 @@
 package eu.iescities.pilot.rovereto.roveretoexplorer.log;
 
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -21,6 +22,9 @@ public class LogHelper {
 	private static Context ctx;
 	private static LogHelper instance;
 
+
+	private static long MAX_SESSION_ID = 2147483648L;
+
 	protected LogHelper(Context ctx) {
 		this.ctx = ctx;
 		sp = ctx.getSharedPreferences(LogConstants.LOG_PREFERENCES, Context.MODE_PRIVATE);
@@ -32,6 +36,87 @@ public class LogHelper {
 			instance = new LogHelper(mContext);
 
 	}
+
+//	public static void sendViaggiaRequest() {
+//		SendLogTask ast = new SendLogTask();
+//		String[] params = new String[2];
+//		params[0] = ctx.getString(R.string.log_appcustom);
+//		viaggiaRovereto
+//		params[1] = "";
+//		ast.execute(params);
+//	}
+//
+//	public static void sendSearch() {
+//		SendLogTask ast = new SendLogTask();
+//		String[] params = new String[2];
+//		params[0] = ctx.getString(R.string.log_appdataqueryinitiate);
+//		search+params???
+//		params[1] = "";
+//		ast.execute(params);
+//	}
+//
+//	public static void sendRating() {
+//		SendLogTask ast = new SendLogTask();
+//		String[] params = new String[2];
+//		params[0] = ctx.getString(R.string.log_appcollaborate);
+//		rating+idevent
+//		params[1] = "";
+//		ast.execute(params);
+//	}
+//
+//	public static void sendAttending() {
+//		SendLogTask ast = new SendLogTask();
+//		String[] params = new String[2];
+//		params[0] = ctx.getString(R.string.log_appcollaborate);
+//		attending+idevent
+//		params[1] = "";
+//		ast.execute(params);
+//	}
+//
+//	public static void sendComment() {
+//		SendLogTask ast = new SendLogTask();
+//		String[] params = new String[2];
+//		params[0] = ctx.getString(R.string.log_appcollaborate);
+//		comment+idevent
+//
+//		params[1] = "";
+//		ast.execute(params);
+//	}
+//
+//	public static void sendDBSynch() {
+//		SendLogTask ast = new SendLogTask();
+//		String[] params = new String[2];
+//		params[0] = ctx.getString(R.string.log_appodconsume);
+//		params[1] = "";
+//		ast.execute(params);
+//	}
+//
+//	public static void sendEventModified() {
+//		SendLogTask ast = new SendLogTask();
+//		String[] params = new String[2];
+//		params[0] = ctx.getString(R.string.log_appprosume);
+//		add event Id modified 
+//		params[1] = "";
+//		ast.execute(params);
+//	}
+//
+//	public static void sendListViewed() {
+//		SendLogTask ast = new SendLogTask();
+//		String[] params = new String[2];
+//		params[0] = ctx.getString(R.string.log_appconsume);
+//		add params of type of list 
+//		params[1] = "";
+//		ast.execute(params);
+//	}
+//
+//	public static void sendEventViewed() {
+//		SendLogTask ast = new SendLogTask();
+//		String[] params = new String[2];
+//		params[0] = ctx.getString(R.string.log_appconsume);
+//		add params of idevent?
+//		params[1] = "";
+//		ast.execute(params);
+//	}
 
 	public static void sendQuestionnarieFinished() {
 		SendLogTask ast = new SendLogTask();
@@ -60,7 +145,7 @@ public class LogHelper {
 	private static class SendLogTask extends AsyncTask<Object, Void, Boolean> {
 		private long timestamp;
 		private String appid;
-		private int session;
+		private long session;
 		private String type = null;
 		private String message = null;
 
@@ -68,7 +153,8 @@ public class LogHelper {
 		protected Boolean doInBackground(Object... params) {
 			// /event/{timestamp}/{appid}/{session}/{type}/{message}
 
-			timestamp = System.currentTimeMillis();
+			long timestampMS = System.currentTimeMillis();
+			timestamp =TimeUnit.MILLISECONDS.toSeconds(timestampMS);
 			appid = LogConstants.APP_ID;
 			// get sessionId from SharedPreferences
 			session = getSessionId(ctx);
@@ -77,7 +163,10 @@ public class LogHelper {
 
 			// getMessage
 			message = (String) params[1];
-
+			if ("".equals(message))
+			{
+				message="NoParams";
+			}
 			String url = LogConstants.SERVICE_LOG_RESPONSE + "/" + timestamp + "/" + LogConstants.APP_ID + "/"
 					+ session + "/" + type + "/" + message;
 			try {
@@ -104,21 +193,21 @@ public class LogHelper {
 		sp = ctx.getSharedPreferences(LogConstants.LOG_PREFERENCES, Context.MODE_PRIVATE);
 		Random r = new Random();
 		SharedPreferences.Editor editor = sp.edit();
-		editor.putInt(LogConstants.SESSION_ID, r.nextInt());
+		editor.putLong(LogConstants.SESSION_ID, (long)(r.nextDouble()*(MAX_SESSION_ID)));
 		editor.commit();
 
 	}
 
 	public static boolean isPresentSessionId(Context ctx) {
 		sp = ctx.getSharedPreferences(LogConstants.LOG_PREFERENCES, Context.MODE_PRIVATE);
-		return (sp.contains(LogConstants.LOG_PREFERENCES));
+		return (sp.contains(LogConstants.SESSION_ID));
 
 	}
 
-	public static int getSessionId(Context ctx) {
+	public static long getSessionId(Context ctx) {
 		sp = ctx.getSharedPreferences(LogConstants.LOG_PREFERENCES, Context.MODE_PRIVATE);
 		Random r = new Random();
-		int sessionid = sp.getInt(LogConstants.SESSION_ID, r.nextInt());
+		long sessionid = sp.getLong(LogConstants.SESSION_ID, (long)(r.nextDouble()*(MAX_SESSION_ID)));
 		return sessionid;
 
 	}

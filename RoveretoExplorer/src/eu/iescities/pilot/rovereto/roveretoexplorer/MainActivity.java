@@ -88,11 +88,14 @@ public class MainActivity extends AbstractNavDrawerActivity {
 		// check if the quiz has to be showed
 		QuizHelper.checkQuiz(this);
 		LogHelper.init(this);
-		if (!LogHelper.isPresentSessionId(this)) {
+ 		if (!LogHelper.isPresentSessionId(this)) {
 			LogHelper.createSessionId();
-		}
+ 		}
+ 		if (getIntent().getExtras()==null )
+			LogHelper.sendStartLog();
 
-		LogHelper.sendStartLog();
+		
+
 	}
 
 	@Override
