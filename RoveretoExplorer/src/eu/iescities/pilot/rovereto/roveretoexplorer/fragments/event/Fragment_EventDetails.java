@@ -30,6 +30,7 @@ import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ExplorerOb
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.community.Fragment_EvDetail_Community;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.dasapere.Fragment_EvDetail_DaSapere;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info.Fragment_EvDetail_Info;
+import eu.iescities.pilot.rovereto.roveretoexplorer.log.LogHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.map.MapManager;
 
 public class Fragment_EventDetails extends Fragment {
@@ -111,7 +112,7 @@ public class Fragment_EventDetails extends Fragment {
 		tabs.setIndicatorColor(currentColor);
 		tabs.setUnderlineColor(currentColor);
 		tabs.setDividerColor(currentColor);
-
+		LogHelper.sendEventViewed(mEventId);
 
 	}
 
@@ -244,6 +245,7 @@ public class Fragment_EventDetails extends Fragment {
 		 from.setLongitude(mylocation.getLongitudeE6() / 1E6);
 		 }
 		 DTHelper.bringmethere(getActivity(), from, to);
+		 LogHelper.sendViaggiaRequest();
 	}
 
 	@Override

@@ -88,21 +88,30 @@ public class MainActivity extends AbstractNavDrawerActivity {
 		// check if the quiz has to be showed
 		QuizHelper.checkQuiz(this);
 		LogHelper.init(this);
- 		if (!LogHelper.isPresentSessionId(this)) {
+		if (!LogHelper.isPresentSessionId(this)) {
 			LogHelper.createSessionId();
- 		}
- 		if (getIntent().getExtras()==null )
-			LogHelper.sendStartLog();
-
-		
+		}
 
 	}
 
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		LogHelper.sendStopLog();
 		LogHelper.deleteSessionId();
+	}
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+		LogHelper.sendStopLog();
+
+	}
+
+	@Override
+	protected void onStart() {
+		super.onStart();
+		if (getIntent().getExtras() == null)
+			LogHelper.sendStartLog();
 	}
 
 	protected void signedIn() {
@@ -370,7 +379,15 @@ public class MainActivity extends AbstractNavDrawerActivity {
 			out[0] = elf;
 			out[1] = TAG_FRAGMENT_EVENT_LIST;
 			break;
-		case 3: // click on "Cultura" item
+		case 3: // click on "All" item
+			args = new Bundle();
+			elf = new EventsListingFragment();
+			args.putBoolean(SearchFragment.ARG_ALL, true);
+			elf.setArguments(args);
+			out[0] = elf;
+			out[1] = TAG_FRAGMENT_EVENT_LIST;
+			break;
+		case 4: // click on "Cultura" item
 			cat = CategoryHelper.CAT_CULTURA;
 			args = new Bundle();
 			elf = new EventsListingFragment();
@@ -379,7 +396,7 @@ public class MainActivity extends AbstractNavDrawerActivity {
 			out[0] = elf;
 			out[1] = TAG_FRAGMENT_EVENT_LIST;
 			break;
-		case 4: // click on "Sport" item
+		case 5: // click on "Sport" item
 			cat = CategoryHelper.CAT_SPORT;
 			args = new Bundle();
 			elf = new EventsListingFragment();
@@ -388,7 +405,7 @@ public class MainActivity extends AbstractNavDrawerActivity {
 			out[0] = elf;
 			out[1] = TAG_FRAGMENT_EVENT_LIST;
 			break;
-		case 5: // click on "Svago" item
+		case 6: // click on "Svago" item
 			cat = CategoryHelper.CAT_SOCIALE;
 			args = new Bundle();
 			elf = new EventsListingFragment();
@@ -397,7 +414,7 @@ public class MainActivity extends AbstractNavDrawerActivity {
 			out[0] = elf;
 			out[1] = TAG_FRAGMENT_EVENT_LIST;
 			break;
-		case 6: // click on "Altri eventi" item
+		case 7: // click on "Altri eventi" item
 			cat = CategoryHelper.EVENT_NONCATEGORIZED;
 			args = new Bundle();
 			elf = new EventsListingFragment();

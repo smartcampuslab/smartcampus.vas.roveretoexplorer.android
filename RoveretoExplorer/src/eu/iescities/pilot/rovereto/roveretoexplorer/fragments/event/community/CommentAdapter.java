@@ -22,6 +22,7 @@ import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.DTHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.CommunityData;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ExplorerObject;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.Review;
+import eu.iescities.pilot.rovereto.roveretoexplorer.log.LogHelper;
 import eu.trentorise.smartcampus.android.common.SCAsyncTask;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 
@@ -141,13 +142,14 @@ public class CommentAdapter extends BaseExpandableListAdapter {
 	}
 
 	private class ReviewProcessor extends AbstractAsyncTaskProcessor<Review, CommunityData> implements ReviewHandler {
-
+		private String comment;
 		public ReviewProcessor(Activity activity) {
 			super(activity);
 		}
 
 		@Override
 		public CommunityData performAction(Review... params) throws SecurityException, Exception {
+			comment = params[0].getComment();
 			return DTHelper.writeReview(mEvent, params[0]);
 		}
 
@@ -160,7 +162,7 @@ public class CommentAdapter extends BaseExpandableListAdapter {
 //			notifyDataSetChanged();
 			if (refreshcomment != null)
 				refreshcomment.refresh();
-
+			LogHelper.sendComment(mEvent.getId(), comment);
 		}
 
 		@Override

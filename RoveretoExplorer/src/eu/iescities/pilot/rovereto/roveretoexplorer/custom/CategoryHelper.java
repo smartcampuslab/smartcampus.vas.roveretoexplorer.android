@@ -38,13 +38,17 @@ public class CategoryHelper {
 
 	public static final String CATEGORY_TODAY = "Today";
 	public static final String CATEGORY_MY = "My";
+	public static final String CATEGORY_ALL = "ALL";
 
 	public static CategoryDescriptor EVENTS_TODAY = new CategoryDescriptor(R.drawable.ic_altri_eventi,
 			R.drawable.ic_altri_eventi_map, CATEGORY_TODAY, R.string.categories_event_today);
 
 	public static CategoryDescriptor EVENTS_MY = new CategoryDescriptor(R.drawable.ic_altri_eventi,
 			R.drawable.ic_altri_eventi_map, CATEGORY_MY, R.string.categories_event_my);
-
+	
+	public static CategoryDescriptor EVENTS_ALL = new CategoryDescriptor(R.drawable.ic_altri_eventi,
+			R.drawable.ic_altri_eventi_map, CATEGORY_ALL, R.string.categories_event_all);
+	
 	public static CategoryDescriptor[] EVENT_CATEGORIES = new CategoryDescriptor[] {
 			/* 1 */new CategoryDescriptor(R.drawable.ic_cultura_map, R.drawable.ic_cultura, CAT_CULTURA,
 					R.string.categories_event_cultura),
@@ -143,12 +147,13 @@ public class CategoryHelper {
 	}
 
 	public static String[] getEventCategoriesForMapFilters() {
-		String[] res = new String[EVENT_CATEGORIES.length + 2];
+		String[] res = new String[EVENT_CATEGORIES.length + 3];
 		res[0] = EVENTS_MY.category;
 		res[1] = EVENTS_TODAY.category;
+		res[1] = EVENTS_ALL.category;
 
-		for (int i = 2; i < EVENT_CATEGORIES.length + 2; i++) {
-			res[i] = EVENT_CATEGORIES[i - 2].category;
+		for (int i = 3; i < EVENT_CATEGORIES.length + 3; i++) {
+			res[i] = EVENT_CATEGORIES[i - 3].category;
 		}
 
 		Log.i("MENU", "EVENT CATEGORIES: " + res.toString() + "\n--- lenght: " + res.length);

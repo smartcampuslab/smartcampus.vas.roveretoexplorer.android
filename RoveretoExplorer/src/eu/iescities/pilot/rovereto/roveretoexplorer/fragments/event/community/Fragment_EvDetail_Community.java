@@ -31,6 +31,7 @@ import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.Rating;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.CommunityData;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ExplorerObject;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.Review;
+import eu.iescities.pilot.rovereto.roveretoexplorer.log.LogHelper;
 import eu.trentorise.smartcampus.android.common.SCAsyncTask;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 
@@ -217,12 +218,14 @@ public class Fragment_EvDetail_Community extends Fragment implements RefreshComm
 	}
 
 	private class RatingProcessor extends AbstractAsyncTaskProcessor<Integer, Integer> implements RatingHandler {
+		private int rating;
 		public RatingProcessor(Activity activity) {
 			super(activity);
 		}
 
 		@Override
 		public Integer performAction(Integer... params) throws SecurityException, Exception {
+			rating = params[0];
 			return DTHelper.rate(getEvent(), params[0]);
 		}
 
@@ -233,6 +236,7 @@ public class Fragment_EvDetail_Community extends Fragment implements RefreshComm
 			updateRating();
 			if (getActivity() != null)
 				Toast.makeText(getActivity(), R.string.rating_success, Toast.LENGTH_SHORT).show();
+			LogHelper.sendRating(getEvent().getId(), rating);
 		}
 
 		@Override
@@ -345,6 +349,7 @@ public class Fragment_EvDetail_Community extends Fragment implements RefreshComm
 					tv.setText("0 ");
 				}
 			}
+			LogHelper.sendAttending(getEvent().getId(), attend);
 		}
 
 		@Override

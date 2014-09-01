@@ -111,4 +111,6 @@
     <string name="questionnaire_exit">Grazie per il tuo contributo</string>
     <string name="next_quiz">Avanti</string>
     <string name="skip_quiz">Salta</string>
+    <string name="categories_event_all">Tutti gli eventi</string>
+
 </resources>

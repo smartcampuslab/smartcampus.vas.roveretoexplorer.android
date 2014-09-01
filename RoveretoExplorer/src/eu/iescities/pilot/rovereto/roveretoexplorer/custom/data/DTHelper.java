@@ -59,6 +59,7 @@ import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.Review;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ReviewObject;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.search.WhenForSearch;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.search.WhereForSearch;
+import eu.iescities.pilot.rovereto.roveretoexplorer.log.LogHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.map.MapManager;
 import eu.trentorise.smartcampus.ac.AACException;
 import eu.trentorise.smartcampus.ac.SCAccessProvider;
@@ -469,6 +470,7 @@ public class DTHelper {
 		// ExplorerObject eventreturn =
 		// eu.trentorise.smartcampus.android.common.Utils.convertJSONToObject(msg.getBody(),
 		// ExplorerObject.class);
+		LogHelper.sendEventModified(event.getId());
 		synchronize();
 		return result;
 	}

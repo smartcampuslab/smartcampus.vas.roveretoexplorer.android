@@ -4,13 +4,13 @@
     <!-- The names of the menu items -->
 
     <string-array name="drawer_items_labels">
-        <item>My events</item>
-        <item>Today</item>
-        <item>All</item>
-        <item>Culture</item>
+        <item>I miei eventi</item>
+        <item>Oggi</item>
+        <item>Tutti</item>
+        <item>Cultura</item>
         <item>Sport</item>
-        <item>People</item>
-        <item>Others</item>
+        <item>Persona</item>
+        <item>Altri eventi</item>
     </string-array>
 
     <!-- The icons associated to the menu items -->
@@ -28,13 +28,13 @@
     <!-- The icons associated to the menu items -->
 
     <string-array name="drawer_items_actionbar_titles">
-        <item>My events</item>
-        <item>Today</item>
-        <item>All</item>
-        <item>Culture</item>
-        <item>Sport</item>
-        <item>People</item>
-        <item>Others</item>
+        <item>I miei eventi</item>
+        <item>Eventi di oggi</item>
+        <item>Tutti gli eventi</item>
+        <item>Eventi culturali</item>
+        <item>Eventi sportivi</item>
+        <item>Eventi per la persona</item>
+        <item>Altri eventi</item>
     </string-array>
 
 </resources>

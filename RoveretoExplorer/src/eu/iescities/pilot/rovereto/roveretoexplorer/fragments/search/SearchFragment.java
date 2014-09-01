@@ -49,6 +49,7 @@ public class SearchFragment extends Fragment {
 	public static final String ARG_WHEN_SEARCH = "when_search";
 	public static final String ARG_WHERE_SEARCH = "where_search";
 	public static final String ARG_MY = "my";
+	public static final String ARG_ALL= "all";
 	public static final String ARG_CATEGORY = "category";
 	public static final String ARG_LIST = "list";
 	public static final String ARG_CATEGORY_SEARCH = "category_search";
@@ -68,6 +69,7 @@ public class SearchFragment extends Fragment {
 	private WhereForSearch selectedWhere;
 	private WhenForSearch selectedWhen;
 	private Boolean selectedMy;
+	private Boolean selectedAll;
 	private String selectedCategory;
 	private boolean isonline = true;
 	private String type = "";
@@ -140,6 +142,8 @@ public class SearchFragment extends Fragment {
 					args.putParcelable(ARG_WHERE_SEARCH, selectedWhere);
 				if (selectedMy != null)
 					args.putBoolean(ARG_MY, selectedMy);
+				if (selectedAll != null)
+					args.putBoolean(ARG_ALL, selectedAll);
 				if (selectedCategory != null)
 					args.putString(ARG_CATEGORY, selectedCategory);
 				if (selectedWhat != null)

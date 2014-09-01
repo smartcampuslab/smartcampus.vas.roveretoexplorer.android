@@ -60,6 +60,7 @@ import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ExplorerOb
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.search.SearchFragment;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.search.WhenForSearch;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.search.WhereForSearch;
+import eu.iescities.pilot.rovereto.roveretoexplorer.log.LogHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.map.MapFragment;
 import eu.iescities.pilot.rovereto.roveretoexplorer.map.MapManager;
 import eu.trentorise.smartcampus.android.common.SCAsyncTask;
@@ -546,12 +547,14 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 
 			Bundle bundle = getArguments();
 			boolean my = false;
+			boolean all = false;
 
 			if (bundle == null) {
 				return Collections.emptyList();
 			}
 			if (bundle.getBoolean(SearchFragment.ARG_MY))
 				my = true;
+
 			String categories = bundle.getString(SearchFragment.ARG_CATEGORY);
 			SortedMap<String, Integer> sort = new TreeMap<String, Integer>();
 			sort.put("fromTime", 1);
@@ -563,6 +566,7 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 						(WhereForSearch) bundle.getParcelable(SearchFragment.ARG_WHERE_SEARCH),
 						(WhenForSearch) bundle.getParcelable(SearchFragment.ARG_WHEN_SEARCH), my, ExplorerObject.class,
 						sort, categories);
+				LogHelper.sendListViewed(category);
 
 			} else if (bundle.containsKey(ARG_POI) && (bundle.getString(ARG_POI) != null)) {
 				result = DTHelper.getEventsByPOI(0, -1, bundle.getString(ARG_POI));
@@ -572,6 +576,15 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 						(WhereForSearch) bundle.getParcelable(SearchFragment.ARG_WHERE_SEARCH),
 						(WhenForSearch) bundle.getParcelable(SearchFragment.ARG_WHEN_SEARCH), my, ExplorerObject.class,
 						sort, categories);
+				LogHelper.sendListViewed(SearchFragment.ARG_MY);
+
+			} else if (bundle.containsKey(SearchFragment.ARG_ALL)) {
+
+				result = DTHelper.searchInGeneral(0, -1, bundle.getString(SearchFragment.ARG_QUERY),
+						(WhereForSearch) bundle.getParcelable(SearchFragment.ARG_WHERE_SEARCH),
+						(WhenForSearch) bundle.getParcelable(SearchFragment.ARG_WHEN_SEARCH), my, ExplorerObject.class,
+						sort, "");
+				LogHelper.sendListViewed(SearchFragment.ARG_ALL);
 
 			} else if (bundle.containsKey(SearchFragment.ARG_QUERY)) {
 
@@ -579,9 +592,13 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 						(WhereForSearch) bundle.getParcelable(SearchFragment.ARG_WHERE_SEARCH),
 						(WhenForSearch) bundle.getParcelable(SearchFragment.ARG_WHEN_SEARCH), my, ExplorerObject.class,
 						sort, categories);
+				LogHelper.sendSearch(bundle.getString(SearchFragment.ARG_QUERY));
+
 			} else if (bundle.containsKey(ARG_QUERY_TODAY)) {
 				today = true;
 				result = DTHelper.searchTodayEvents(0, -1, bundle.getString(SearchFragment.ARG_QUERY));
+				LogHelper.sendListViewed(ARG_QUERY_TODAY);
+
 			} else if (bundle.containsKey(SearchFragment.ARG_LIST)) {
 				result = (Collection<ExplorerObject>) bundle.get(SearchFragment.ARG_LIST);
 			} else {
@@ -626,6 +643,8 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 				category = CategoryHelper.EVENTS_MY.category;
 			if (category == null && (getArguments() != null) && getArguments().getString(ARG_QUERY_TODAY) != null)
 				category = CategoryHelper.EVENTS_TODAY.category;
+			if (category == null && (getArguments() != null) && getArguments().containsKey(SearchFragment.ARG_ALL))
+				category = CategoryHelper.EVENTS_ALL.category;
 			boolean query = getArguments().containsKey(SearchFragment.ARG_QUERY);
 
 			if (category != null && !query) {

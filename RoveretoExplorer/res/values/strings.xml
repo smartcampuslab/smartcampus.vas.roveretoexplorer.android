@@ -223,4 +223,5 @@
     <string name="questionnaire_exit">Thank you for your contribute</string>
 	<string name="next_quiz">Next</string>
 	<string name="skip_quiz">Skip</string>
+	<string name="categories_event_all">All events</string>
 </resources>

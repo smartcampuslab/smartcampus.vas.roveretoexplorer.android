@@ -37,52 +37,46 @@ public class LogHelper {
 
 	}
 
-//	public static void sendViaggiaRequest() {
-//		SendLogTask ast = new SendLogTask();
-//		String[] params = new String[2];
-//		params[0] = ctx.getString(R.string.log_appcustom);
-//		viaggiaRovereto
-//		params[1] = "";
-//		ast.execute(params);
-//	}
-//
-//	public static void sendSearch() {
-//		SendLogTask ast = new SendLogTask();
-//		String[] params = new String[2];
-//		params[0] = ctx.getString(R.string.log_appdataqueryinitiate);
-//		search+params???
-//		params[1] = "";
-//		ast.execute(params);
-//	}
-//
-//	public static void sendRating() {
-//		SendLogTask ast = new SendLogTask();
-//		String[] params = new String[2];
-//		params[0] = ctx.getString(R.string.log_appcollaborate);
-//		rating+idevent
-//		params[1] = "";
-//		ast.execute(params);
-//	}
-//
-//	public static void sendAttending() {
-//		SendLogTask ast = new SendLogTask();
-//		String[] params = new String[2];
-//		params[0] = ctx.getString(R.string.log_appcollaborate);
-//		attending+idevent
-//		params[1] = "";
-//		ast.execute(params);
-//	}
-//
-//	public static void sendComment() {
-//		SendLogTask ast = new SendLogTask();
-//		String[] params = new String[2];
-//		params[0] = ctx.getString(R.string.log_appcollaborate);
-//		comment+idevent
-//
-//		params[1] = "";
-//		ast.execute(params);
-//	}
-//
+	public static void sendViaggiaRequest() {
+		SendLogTask ast = new SendLogTask();
+		String[] params = new String[2];
+		params[0] = ctx.getString(R.string.log_appcustom);
+		params[1] = "viaggiaRovereto";
+		ast.execute(params);
+	}
+
+	public static void sendSearch(String what) {
+		SendLogTask ast = new SendLogTask();
+		String[] params = new String[2];
+		params[0] = ctx.getString(R.string.log_appdataqueryinitiate);
+		params[1] = what;
+		ast.execute(params);
+	}
+
+	public static void sendRating(String idEvent, int rate) {
+		SendLogTask ast = new SendLogTask();
+		String[] params = new String[2];
+		params[0] = ctx.getString(R.string.log_appcollaborate);
+		params[1] = idEvent+"+rate+"+rate;
+		ast.execute(params);
+	}
+
+	public static void sendAttending(String idEvent, boolean attend) {
+		SendLogTask ast = new SendLogTask();
+		String[] params = new String[2];
+		params[0] = ctx.getString(R.string.log_appcollaborate);
+		params[1] = idEvent+"+attend+"+attend;
+		ast.execute(params);
+	}
+
+	public static void sendComment(String idEvent, String comment) {
+		SendLogTask ast = new SendLogTask();
+		String[] params = new String[2];
+		params[0] = ctx.getString(R.string.log_appcollaborate);
+		params[1] = idEvent+"+comment+"+comment;
+		ast.execute(params);
+	}
+
 //	public static void sendDBSynch() {
 //		SendLogTask ast = new SendLogTask();
 //		String[] params = new String[2];
@@ -90,33 +84,30 @@ public class LogHelper {
 //		params[1] = "";
 //		ast.execute(params);
 //	}
-//
-//	public static void sendEventModified() {
-//		SendLogTask ast = new SendLogTask();
-//		String[] params = new String[2];
-//		params[0] = ctx.getString(R.string.log_appprosume);
-//		add event Id modified 
-//		params[1] = "";
-//		ast.execute(params);
-//	}
-//
-//	public static void sendListViewed() {
-//		SendLogTask ast = new SendLogTask();
-//		String[] params = new String[2];
-//		params[0] = ctx.getString(R.string.log_appconsume);
-//		add params of type of list 
-//		params[1] = "";
-//		ast.execute(params);
-//	}
-//
-//	public static void sendEventViewed() {
-//		SendLogTask ast = new SendLogTask();
-//		String[] params = new String[2];
-//		params[0] = ctx.getString(R.string.log_appconsume);
-//		add params of idevent?
-//		params[1] = "";
-//		ast.execute(params);
-//	}
+
+	public static void sendEventModified(String idEvent) {
+		SendLogTask ast = new SendLogTask();
+		String[] params = new String[2];
+		params[0] = ctx.getString(R.string.log_appprosume);
+		params[1] = idEvent;
+		ast.execute(params);
+	}
+
+	public static void sendListViewed(String category) {
+		SendLogTask ast = new SendLogTask();
+		String[] params = new String[2];
+		params[0] = ctx.getString(R.string.log_appconsume);
+		params[1] = category+"+list";
+		ast.execute(params);
+	}
+
+	public static void sendEventViewed(String idEvent) {
+		SendLogTask ast = new SendLogTask();
+		String[] params = new String[2];
+		params[0] = ctx.getString(R.string.log_appconsume);
+		params[1] = idEvent+"+event";
+		ast.execute(params);
+	}
 
 	public static void sendQuestionnarieFinished() {
 		SendLogTask ast = new SendLogTask();
