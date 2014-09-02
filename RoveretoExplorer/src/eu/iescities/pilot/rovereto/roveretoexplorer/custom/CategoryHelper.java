@@ -46,7 +46,7 @@ public class CategoryHelper {
 	public static CategoryDescriptor EVENTS_MY = new CategoryDescriptor(R.drawable.ic_altri_eventi,
 			R.drawable.ic_altri_eventi_map, CATEGORY_MY, R.string.categories_event_my);
 	
-	public static CategoryDescriptor EVENTS_ALL = new CategoryDescriptor(R.drawable.ic_altri_eventi,
+	public static CategoryDescriptor EVENTS_ALL = new CategoryDescriptor(R.drawable.ic_all_events,
 			R.drawable.ic_altri_eventi_map, CATEGORY_ALL, R.string.categories_event_all);
 	
 	public static CategoryDescriptor[] EVENT_CATEGORIES = new CategoryDescriptor[] {

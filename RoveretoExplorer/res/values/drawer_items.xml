@@ -18,7 +18,7 @@
     <string-array name="drawer_items_icons">
         <item>@drawable/ic_miei_eventi</item>
         <item>@drawable/ic_eventi_oggi</item>
-        <item>@drawable/ic_altri_eventi</item>
+        <item>@drawable/ic_all_events</item>
         <item>@drawable/ic_cultura</item>
         <item>@drawable/ic_sport</item>
         <item>@drawable/ic_person</item>
