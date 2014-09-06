@@ -566,7 +566,7 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 						(WhereForSearch) bundle.getParcelable(SearchFragment.ARG_WHERE_SEARCH),
 						(WhenForSearch) bundle.getParcelable(SearchFragment.ARG_WHEN_SEARCH), my, ExplorerObject.class,
 						sort, categories);
-				LogHelper.sendListViewed(category);
+				LogHelper.sendListViewed(category,getActivity());
 
 			} else if (bundle.containsKey(ARG_POI) && (bundle.getString(ARG_POI) != null)) {
 				result = DTHelper.getEventsByPOI(0, -1, bundle.getString(ARG_POI));
@@ -576,7 +576,7 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 						(WhereForSearch) bundle.getParcelable(SearchFragment.ARG_WHERE_SEARCH),
 						(WhenForSearch) bundle.getParcelable(SearchFragment.ARG_WHEN_SEARCH), my, ExplorerObject.class,
 						sort, categories);
-				LogHelper.sendListViewed(SearchFragment.ARG_MY);
+				LogHelper.sendListViewed(SearchFragment.ARG_MY,getActivity());
 
 			} else if (bundle.containsKey(SearchFragment.ARG_ALL)) {
 
@@ -584,7 +584,7 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 						(WhereForSearch) bundle.getParcelable(SearchFragment.ARG_WHERE_SEARCH),
 						(WhenForSearch) bundle.getParcelable(SearchFragment.ARG_WHEN_SEARCH), my, ExplorerObject.class,
 						sort, "");
-				LogHelper.sendListViewed(SearchFragment.ARG_ALL);
+				LogHelper.sendListViewed(SearchFragment.ARG_ALL,getActivity());
 
 			} else if (bundle.containsKey(SearchFragment.ARG_QUERY)) {
 
@@ -592,12 +592,12 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 						(WhereForSearch) bundle.getParcelable(SearchFragment.ARG_WHERE_SEARCH),
 						(WhenForSearch) bundle.getParcelable(SearchFragment.ARG_WHEN_SEARCH), my, ExplorerObject.class,
 						sort, categories);
-				LogHelper.sendSearch(bundle.getString(SearchFragment.ARG_QUERY));
+				LogHelper.sendSearch(bundle.getString(SearchFragment.ARG_QUERY),getActivity());
 
 			} else if (bundle.containsKey(ARG_QUERY_TODAY)) {
 				today = true;
 				result = DTHelper.searchTodayEvents(0, -1, bundle.getString(SearchFragment.ARG_QUERY));
-				LogHelper.sendListViewed(ARG_QUERY_TODAY);
+				LogHelper.sendListViewed(ARG_QUERY_TODAY,getActivity());
 
 			} else if (bundle.containsKey(SearchFragment.ARG_LIST)) {
 				result = (Collection<ExplorerObject>) bundle.get(SearchFragment.ARG_LIST);

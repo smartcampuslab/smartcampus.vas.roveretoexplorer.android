@@ -86,32 +86,34 @@ public class MainActivity extends AbstractNavDrawerActivity {
 		};
 		mDrawerLayout.setDrawerListener(mDrawerToggle);
 		// check if the quiz has to be showed
-		QuizHelper.checkQuiz(this);
 		LogHelper.init(this);
-		if (!LogHelper.isPresentSessionId(this)) {
-			LogHelper.createSessionId();
-		}
 
 	}
 
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		LogHelper.deleteSessionId();
+
 	}
 
 	@Override
 	protected void onStop() {
 		super.onStop();
-		LogHelper.sendStopLog();
-
+		LogHelper.sendStopLog(this);
 	}
 
 	@Override
 	protected void onStart() {
 		super.onStart();
-		if (getIntent().getExtras() == null)
-			LogHelper.sendStartLog();
+
+		// if (getIntent().getExtras() == null)
+//		if (!LogHelper.isPresentSessionId(this)) {
+//			LogHelper.createSessionId(this);
+//		}
+		LogHelper.deleteSessionId(this);
+		LogHelper.sendStartLog(this);
+		QuizHelper.checkQuiz(this);
+
 	}
 
 	protected void signedIn() {

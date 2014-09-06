@@ -470,7 +470,7 @@ public class DTHelper {
 		// ExplorerObject eventreturn =
 		// eu.trentorise.smartcampus.android.common.Utils.convertJSONToObject(msg.getBody(),
 		// ExplorerObject.class);
-		LogHelper.sendEventModified(event.getId());
+		LogHelper.sendEventModified(event.getId(),mContext);
 		synchronize();
 		return result;
 	}

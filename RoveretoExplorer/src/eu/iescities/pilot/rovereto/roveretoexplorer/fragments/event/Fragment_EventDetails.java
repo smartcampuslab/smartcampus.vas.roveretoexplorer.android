@@ -112,7 +112,7 @@ public class Fragment_EventDetails extends Fragment {
 		tabs.setIndicatorColor(currentColor);
 		tabs.setUnderlineColor(currentColor);
 		tabs.setDividerColor(currentColor);
-		LogHelper.sendEventViewed(mEventId);
+		LogHelper.sendEventViewed(mEventId,getActivity());
 
 	}
 
@@ -245,7 +245,7 @@ public class Fragment_EventDetails extends Fragment {
 		 from.setLongitude(mylocation.getLongitudeE6() / 1E6);
 		 }
 		 DTHelper.bringmethere(getActivity(), from, to);
-		 LogHelper.sendViaggiaRequest();
+		 LogHelper.sendViaggiaRequest(getActivity());
 	}
 
 	@Override

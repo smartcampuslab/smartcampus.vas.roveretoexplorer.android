@@ -36,8 +36,10 @@ import android.util.SparseArray;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnCameraChangeListener;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -127,11 +129,23 @@ public class MapManager {
 		return llrr;
 	}
 
-	private static void fit(GoogleMap map, double[] ll, double[] rr, boolean zoomIn) {
+	private static void fit(final GoogleMap map, double[] ll, double[] rr, boolean zoomIn) {
 		if (ll != null && rr != null) {
-			LatLngBounds bounds = LatLngBounds.builder().include(new LatLng(rr[0], rr[1]))
+			final LatLngBounds bounds = LatLngBounds.builder().include(new LatLng(rr[0], rr[1]))
 					.include(new LatLng(ll[0], ll[1])).build();
-			map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 64));
+			map.setOnCameraChangeListener(new OnCameraChangeListener() {
+
+			    @Override
+			    public void onCameraChange(CameraPosition arg0) {
+					map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 64));
+
+			        // Move camera.
+//			        map.moveCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 10));
+			        // Remove listener to prevent position reset on camera move.
+			        map.setOnCameraChangeListener(null);
+			    }
+			});
+//			map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 64));
 		}
 	}
 

@@ -10,7 +10,6 @@ import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -18,14 +17,21 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.os.AsyncTask;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
 import eu.iescities.pilot.rovereto.roveretoexplorer.log.LogConstants;
+import eu.iescities.pilot.rovereto.roveretoexplorer.log.LogHelper;
+
 
 public class QuizHelper {
 
 	public static final String MY_PREFERENCES = "Questionnaire";
 	public static final String NEXT_QUESTION = "Question stored";
 	public static final String TIME_TO_QUIZ = "time to quiz";
+	public static final String QUIZ_IS_RUNNING = "quiz is running";
 	private static final int QUIZ_SKIP_DAYS = 5;
 	private static final String QUIZ_FINISHED = "quiz finished";
 
@@ -139,7 +145,7 @@ public class QuizHelper {
 		return sp;
 	}
 
-	public static void checkQuiz(Activity activity) {
+	public static void checkQuiz(FragmentActivity activity) {
 		DateFormat readFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
 		Date oldDate, newDate;
 		sp = activity.getSharedPreferences(QuizHelper.MY_PREFERENCES, Context.MODE_PRIVATE);
@@ -158,7 +164,15 @@ public class QuizHelper {
 
 			if (newDate.after(c.getTime())) {
 				// we are after 5 days so do the quiz
-				activity.startActivity(new Intent(activity, QuizActivity.class));
+//				activity.startActivity(new Intent(activity, QuizFragment.class));
+				FragmentTransaction ft = activity.getSupportFragmentManager().beginTransaction();
+				ft.setCustomAnimations(R.anim.enter, R.anim.exit);
+				Fragment fragment = QuizFragment.newInstance();
+				// fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+				ft.replace(R.id.content_frame, fragment, fragment.getTag());
+				ft.addToBackStack(fragment.getTag());
+				ft.commit();
+				LogHelper.startedQuestionnaire(activity);
 			}
 		} else {
 			// check if is done

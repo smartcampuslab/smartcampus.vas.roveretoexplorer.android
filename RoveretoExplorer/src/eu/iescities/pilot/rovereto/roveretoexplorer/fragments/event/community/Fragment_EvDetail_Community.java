@@ -236,7 +236,7 @@ public class Fragment_EvDetail_Community extends Fragment implements RefreshComm
 			updateRating();
 			if (getActivity() != null)
 				Toast.makeText(getActivity(), R.string.rating_success, Toast.LENGTH_SHORT).show();
-			LogHelper.sendRating(getEvent().getId(), rating);
+			LogHelper.sendRating(getEvent().getId(), rating,getActivity());
 		}
 
 		@Override
@@ -349,7 +349,7 @@ public class Fragment_EvDetail_Community extends Fragment implements RefreshComm
 					tv.setText("0 ");
 				}
 			}
-			LogHelper.sendAttending(getEvent().getId(), attend);
+			LogHelper.sendAttending(getEvent().getId(), attend,getActivity());
 		}
 
 		@Override

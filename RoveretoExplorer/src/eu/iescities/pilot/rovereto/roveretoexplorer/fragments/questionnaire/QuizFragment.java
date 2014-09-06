@@ -2,12 +2,15 @@ package eu.iescities.pilot.rovereto.roveretoexplorer.fragments.questionnaire;
 
 import java.util.ArrayList;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -19,8 +22,9 @@ import android.widget.Toast;
 import eu.iescities.pilot.rovereto.roveretoexplorer.MainActivity;
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
 import eu.iescities.pilot.rovereto.roveretoexplorer.log.LogHelper;
+import eu.iescities.pilot.rovereto.roveretoexplorer.map.MapFragment;
 
-public class QuizActivity extends Activity implements QuizInterface {
+public class QuizFragment extends Fragment implements QuizInterface {
 	/** Called when the activity is first created. */
 	private static final String PREF_QUIZ = "Quiz";
 	private static final String PREF_INTRO = "Intro";
@@ -43,21 +47,37 @@ public class QuizActivity extends Activity implements QuizInterface {
 	// private int counter = 1;
 	// private String label;
 
+
+	public static QuizFragment newInstance() {
+		QuizFragment f = new QuizFragment();
+		return f;
+	}
+
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		db = new QuizHelper(this);
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		return inflater.inflate(R.layout.quiz, container, false);
+	}
+
+	@Override
+	public void onStart() {
+		super.onStart();
+		db = new QuizHelper(getActivity());
 		prefs = db.getQuizPreferences();
-		setContentView(R.layout.quiz);
 		setupLayout();
+	}
+
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+//		LogHelper.removeStartedQuestionnaire();
 
 	}
 
 	private void setupLayout() {
-		introLayout = (LinearLayout) findViewById(R.id.quizIntro);
-		questionsLayout = (LinearLayout) findViewById(R.id.quizQuestions);
-		endLayout = (LinearLayout) findViewById(R.id.quizEnd);
-		openQuestion = (EditText) findViewById(R.id.editOpenQuestion);
+		introLayout = (LinearLayout) getActivity().findViewById(R.id.quizIntro);
+		questionsLayout = (LinearLayout) getActivity().findViewById(R.id.quizQuestions);
+		endLayout = (LinearLayout) getActivity().findViewById(R.id.quizEnd);
+		openQuestion = (EditText) getActivity().findViewById(R.id.editOpenQuestion);
 		// check previous question if it was done
 		if (prefs != null) {
 			if (prefs.contains(QuizHelper.NEXT_QUESTION)) {
@@ -87,11 +107,11 @@ public class QuizActivity extends Activity implements QuizInterface {
 		introLayout.setVisibility(View.VISIBLE);
 		questionsLayout.setVisibility(View.GONE);
 		endLayout.setVisibility(View.GONE);
-		quizQuestion = (TextView) findViewById(R.id.introText);
+		quizQuestion = (TextView) getActivity().findViewById(R.id.introText);
 		quizQuestion.setText(R.string.questionnaire_welcome_back);
-		Button btnClose = (Button) findViewById(R.id.btnIntroNo);
+		Button btnClose = (Button) getActivity().findViewById(R.id.btnIntroNo);
 		btnClose.setOnClickListener(btnNextTime_Listener);
-		Button btnNext = (Button) findViewById(R.id.btnIntroOk);
+		Button btnNext = (Button) getActivity().findViewById(R.id.btnIntroOk);
 		btnNext.setOnClickListener(btnIntro_Listener);
 	}
 
@@ -101,8 +121,8 @@ public class QuizActivity extends Activity implements QuizInterface {
 		endLayout.setVisibility(View.VISIBLE);
 
 		// setta label fine
-		quizQuestion = (TextView) findViewById(R.id.TextView01);
-		Button btnNext = (Button) findViewById(R.id.btnExit);
+		quizQuestion = (TextView) getActivity().findViewById(R.id.TextView01);
+		Button btnNext = (Button) getActivity().findViewById(R.id.btnExit);
 		btnNext.setOnClickListener(btnEnd_Listener);
 	}
 
@@ -110,10 +130,10 @@ public class QuizActivity extends Activity implements QuizInterface {
 		introLayout.setVisibility(View.VISIBLE);
 		questionsLayout.setVisibility(View.GONE);
 		endLayout.setVisibility(View.GONE);
-		quizQuestion = (TextView) findViewById(R.id.TextView01);
-		Button btnClose = (Button) findViewById(R.id.btnIntroNo);
+		quizQuestion = (TextView) getActivity().findViewById(R.id.TextView01);
+		Button btnClose = (Button) getActivity().findViewById(R.id.btnIntroNo);
 		btnClose.setOnClickListener(btnNextTime_Listener);
-		Button btnNext = (Button) findViewById(R.id.btnIntroOk);
+		Button btnNext = (Button) getActivity().findViewById(R.id.btnIntroOk);
 		btnNext.setOnClickListener(btnIntro_Listener);
 	}
 
@@ -140,28 +160,34 @@ public class QuizActivity extends Activity implements QuizInterface {
 		introLayout.setVisibility(View.GONE);
 		questionsLayout.setVisibility(View.VISIBLE);
 		endLayout.setVisibility(View.GONE);
-		radioGroup = (RadioGroup) findViewById(R.id.rdbGp1);
-		quizQuestion = (TextView) findViewById(R.id.TextView01);
+		radioGroup = (RadioGroup) getActivity().findViewById(R.id.rdbGp1);
+		quizQuestion = (TextView) getActivity().findViewById(R.id.TextView01);
 		displayQuestion();
-		
+
 		/* Displays the next options and sets listener on next button */
-		Button btnNext = (Button) findViewById(R.id.btnNext);
+		Button btnNext = (Button) getActivity().findViewById(R.id.btnNext);
 		btnNext.setOnClickListener(btnNext_Listener);
 	}
 
-	
 	private View.OnClickListener btnNextTime_Listener = new View.OnClickListener() {
 
 		@Override
 		public void onClick(View v) {
 			// close everything and goodbye
-			Intent mIntent = new Intent(QuizActivity.this, MainActivity.class);
-			Bundle mBundle = new Bundle();
-			mBundle.putBoolean(QuizHelper.TIME_TO_QUIZ, true);
-			mIntent.putExtras(mBundle);
-			startActivity(mIntent);
-			finish();
-			SharedPreferences.Editor editor = QuizActivity.this.getSharedPreferences(QuizHelper.MY_PREFERENCES,
+//			Intent mIntent = new Intent(getActivity(), MainActivity.class);
+//			Bundle mBundle = new Bundle();
+//			mBundle.putBoolean(QuizHelper.TIME_TO_QUIZ, true);
+//			mIntent.putExtras(mBundle);
+//			startActivity(mIntent);
+//			getActivity().finish();
+			FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+			ft.setCustomAnimations(R.anim.enter, R.anim.exit);
+			Fragment fragment = QuizFragment.newInstance();
+			// fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+			ft.replace(R.id.content_frame, new MapFragment(), MainActivity.TAG_FRAGMENT_MAP);
+			ft.addToBackStack(fragment.getTag());
+			ft.commit();
+			SharedPreferences.Editor editor = getActivity().getSharedPreferences(QuizHelper.MY_PREFERENCES,
 					Context.MODE_PRIVATE).edit();
 			editor.remove(QuizHelper.TIME_TO_QUIZ);
 			editor.commit();
@@ -189,15 +215,15 @@ public class QuizActivity extends Activity implements QuizInterface {
 				if (isTheLastQuestion()) {
 
 					if (QuizHelper.isEmailValid(openQuestion.getText().toString())) {
-						QuizHelper.sendData(questNo, answerNo, openQuestion.getText().toString(), QuizActivity.this);
+						QuizHelper.sendData(questNo, answerNo, openQuestion.getText().toString(), QuizFragment.this);
 					} else {
-						Toast.makeText(QuizActivity.this, "Email non valida", Toast.LENGTH_LONG).show();
+						Toast.makeText(getActivity(), "Email non valida", Toast.LENGTH_LONG).show();
 					}
 				} else {
-					QuizHelper.sendData(questNo, answerNo, openQuestion.getText().toString(), QuizActivity.this);
+					QuizHelper.sendData(questNo, answerNo, openQuestion.getText().toString(), QuizFragment.this);
 				}
 			} else {
-				Toast.makeText(QuizActivity.this, "Mancano i dati", Toast.LENGTH_LONG).show();
+				Toast.makeText(getActivity(), "Mancano i dati", Toast.LENGTH_LONG).show();
 			}
 
 		}
@@ -222,17 +248,17 @@ public class QuizActivity extends Activity implements QuizInterface {
 		@Override
 		public void onClick(View v) {
 			// close everything and goodbye
-			Intent mIntent = new Intent(QuizActivity.this, MainActivity.class);
+			Intent mIntent = new Intent(getActivity(), MainActivity.class);
 			Bundle mBundle = new Bundle();
 			mBundle.putBoolean(QuizHelper.TIME_TO_QUIZ, true);
 			mIntent.putExtras(mBundle);
 			startActivity(mIntent);
-			finish();
-			SharedPreferences.Editor editor = QuizActivity.this.getSharedPreferences(QuizHelper.MY_PREFERENCES,
+			getActivity().finish();
+			SharedPreferences.Editor editor = getActivity().getSharedPreferences(QuizHelper.MY_PREFERENCES,
 					Context.MODE_PRIVATE).edit();
 			editor.remove(QuizHelper.TIME_TO_QUIZ);
 			editor.commit();
-//			LogHelper.sendQuestionnarieFinished(this);
+			LogHelper.sendQuestionnarieFinished(getActivity());
 		}
 	};
 	private CompoundButton.OnCheckedChangeListener rbChange_Listener = new CompoundButton.OnCheckedChangeListener() {
@@ -253,10 +279,10 @@ public class QuizActivity extends Activity implements QuizInterface {
 	};
 
 	private void displayQuestion() {
-		
+
 		if (isTheLastQuestion()) {
-			//if last question you can also skip the answer
-			Button skipButton = (Button) findViewById(R.id.btnSkip);
+			// if last question you can also skip the answer
+			Button skipButton = (Button) getActivity().findViewById(R.id.btnSkip);
 			skipButton.setVisibility(View.VISIBLE);
 			skipButton.setOnClickListener(btnSkip_Listener);
 		}
@@ -273,7 +299,7 @@ public class QuizActivity extends Activity implements QuizInterface {
 			radioGroup.removeAllViews();
 
 			for (int i = 0; i < answers.size(); i++) {
-				radioButton = new RadioButton(this);
+				radioButton = new RadioButton(getActivity());
 				radioButton.setText(answers.get(i));
 				radioButton.setId(i);
 				radioButton.setOnCheckedChangeListener(rbChange_Listener);

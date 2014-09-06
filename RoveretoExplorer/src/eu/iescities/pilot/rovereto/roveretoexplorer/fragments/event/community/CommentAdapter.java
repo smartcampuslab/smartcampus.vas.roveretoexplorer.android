@@ -162,7 +162,7 @@ public class CommentAdapter extends BaseExpandableListAdapter {
 //			notifyDataSetChanged();
 			if (refreshcomment != null)
 				refreshcomment.refresh();
-			LogHelper.sendComment(mEvent.getId(), comment);
+			LogHelper.sendComment(mEvent.getId(), comment,activity);
 		}
 
 		@Override
