@@ -248,12 +248,14 @@ public class QuizFragment extends Fragment implements QuizInterface {
 		@Override
 		public void onClick(View v) {
 			// close everything and goodbye
-			Intent mIntent = new Intent(getActivity(), MainActivity.class);
-			Bundle mBundle = new Bundle();
-			mBundle.putBoolean(QuizHelper.TIME_TO_QUIZ, true);
-			mIntent.putExtras(mBundle);
-			startActivity(mIntent);
-			getActivity().finish();
+
+			FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+			ft.setCustomAnimations(R.anim.enter, R.anim.exit);
+			Fragment fragment = QuizFragment.newInstance();
+			// fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+			ft.replace(R.id.content_frame, new MapFragment(), MainActivity.TAG_FRAGMENT_MAP);
+			ft.addToBackStack(fragment.getTag());
+			ft.commit();
 			SharedPreferences.Editor editor = getActivity().getSharedPreferences(QuizHelper.MY_PREFERENCES,
 					Context.MODE_PRIVATE).edit();
 			editor.remove(QuizHelper.TIME_TO_QUIZ);
