@@ -12,21 +12,13 @@ import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.questionnaire.Remo
 
 public class LogHelper {
 
-	// Modify an existing event (prosumer)
-	//
-	// • Add new information category (super-prosumer?)
-	//
-	// • Follow/participate an event (consumer).
-	//
-	// • Rate/comment an event (prosumer)
+
 	private static SharedPreferences sp;
-	// private static Context ctx;
 	private static LogHelper instance;
 
 	private static long MAX_SESSION_ID = 2147483648L;
 
 	protected LogHelper(Context ctx) {
-		// this.ctx = ctx;
 		sp = ctx.getSharedPreferences(LogConstants.LOG_PREFERENCES, Context.MODE_PRIVATE);
 
 	}
@@ -87,14 +79,6 @@ public class LogHelper {
 		ast.execute(params);
 	}
 
-	// public static void sendDBSynch() {
-	// SendLogTask ast = new SendLogTask();
-	// String[] params = new String[2];
-	// params[0] = ctx.getString(R.string.log_appodconsume);
-	// params[1] = "";
-	// ast.execute(params); params[2] = ctx;
-
-	// }
 
 	public static void sendEventModified(String idEvent, Context ctx) {
 		SendLogTask ast = new SendLogTask();

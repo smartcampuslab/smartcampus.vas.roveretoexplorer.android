@@ -65,9 +65,7 @@ public class MainActivity extends AbstractNavDrawerActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		// Log.i("AB TITLE", "MainActivity start on create!!!");
 		mFragmentManager = getSupportFragmentManager();
-		// signedIn();
 		signedIn();
 
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -85,7 +83,7 @@ public class MainActivity extends AbstractNavDrawerActivity {
 
 		};
 		mDrawerLayout.setDrawerListener(mDrawerToggle);
-		// check if the quiz has to be showed
+		//init the class for sending Log (Shared preferences are created)
 		LogHelper.init(this);
 
 	}
@@ -105,13 +103,10 @@ public class MainActivity extends AbstractNavDrawerActivity {
 	@Override
 	protected void onStart() {
 		super.onStart();
-
-		// if (getIntent().getExtras() == null)
-//		if (!LogHelper.isPresentSessionId(this)) {
-//			LogHelper.createSessionId(this);
-//		}
+		//every new start a new session Id is generated
 		LogHelper.deleteSessionId(this);
 		LogHelper.sendStartLog(this);
+		//check if still a quiz to be done
 		QuizHelper.checkQuiz(this);
 
 	}
@@ -119,10 +114,8 @@ public class MainActivity extends AbstractNavDrawerActivity {
 	protected void signedIn() {
 		try {
 			SCAccessProvider provider = SCAccessProvider.getInstance(this);
-			// if (!provider.isLoggedIn(this)) {
 			if (!provider.isLoggedIn(MainActivity.this)) {
 				showLoginDialog(SCAccessProvider.getInstance(MainActivity.this));
-				// new TokenTask().execute();
 			}
 			initDataManagement();
 		} catch (Exception e) {
@@ -151,13 +144,6 @@ public class MainActivity extends AbstractNavDrawerActivity {
 						Toast.makeText(MainActivity.this, getString(R.string.auth_failed), Toast.LENGTH_SHORT).show();
 						finish();
 					}
-					// try {
-					// accessprovider.login(MainActivity.this, null);
-					// break;
-					// } catch (AACException e) {
-					//
-					// e.printStackTrace();
-					// }
 					break;
 				case DialogInterface.BUTTON_NEGATIVE:
 					MainActivity.this.finish();
@@ -178,10 +164,8 @@ public class MainActivity extends AbstractNavDrawerActivity {
 			initGlobalConstants();
 
 			try {
-				// if (!SCAccessProvider.getInstance(this).login(this, null)) {
 				DTHelper.init(getApplicationContext());
 				initData();
-				// }
 
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -246,7 +230,7 @@ public class MainActivity extends AbstractNavDrawerActivity {
 			Exception res = null;
 
 			try {
-				syncRequired = DTHelper.SYNC_REQUIRED;// DTHelper.syncRequired();
+				syncRequired = DTHelper.SYNC_REQUIRED;
 			} catch (Exception e) {
 				res = e;
 			}

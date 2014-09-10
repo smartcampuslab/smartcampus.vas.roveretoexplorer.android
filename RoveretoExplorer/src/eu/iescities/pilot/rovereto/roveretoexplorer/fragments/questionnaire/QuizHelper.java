@@ -32,7 +32,7 @@ public class QuizHelper {
 	public static final String NEXT_QUESTION = "Question stored";
 	public static final String TIME_TO_QUIZ = "time to quiz";
 	public static final String QUIZ_IS_RUNNING = "quiz is running";
-	private static final int QUIZ_SKIP_DAYS = 5;
+	private static final int QUIZ_SKIP_DAYS = 7;
 	private static final String QUIZ_FINISHED = "quiz finished";
 
 	private static String[][] answers;
@@ -160,7 +160,7 @@ public class QuizHelper {
 			newDate = new Date();
 			Calendar c = Calendar.getInstance();
 			c.setTime(oldDate); // Now use today date.
-			c.add(Calendar.SECOND, QUIZ_SKIP_DAYS); // Adding 5 days
+			c.add(Calendar.DATE, QUIZ_SKIP_DAYS); // Adding 5 days
 
 			if (newDate.after(c.getTime())) {
 				// we are after 5 days so do the quiz

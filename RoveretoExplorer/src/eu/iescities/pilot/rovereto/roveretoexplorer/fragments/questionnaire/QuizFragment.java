@@ -247,12 +247,11 @@ public class QuizFragment extends Fragment implements QuizInterface {
 
 		@Override
 		public void onClick(View v) {
-			// close everything and goodbye
-
+			
+			// close everything and show the map fragment
 			FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
 			ft.setCustomAnimations(R.anim.enter, R.anim.exit);
 			Fragment fragment = QuizFragment.newInstance();
-			// fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
 			ft.replace(R.id.content_frame, new MapFragment(), MainActivity.TAG_FRAGMENT_MAP);
 			ft.addToBackStack(fragment.getTag());
 			ft.commit();
@@ -321,7 +320,8 @@ public class QuizFragment extends Fragment implements QuizInterface {
 
 	@Override
 	public void nextQuestion() {
-		// if it is sended store the new value on sharedPreferences
+		// if it is sent store the new value
+		//on sharedPreferences used for restoring
 		questNo++;
 		if (questNo < db.getQuestions().length) {
 			displayQuestion();
