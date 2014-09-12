@@ -85,6 +85,7 @@ public class LogHelper {
 		Object[] params = new Object[3];
 		params[0] = ctx.getString(R.string.log_appprosume);
 		params[1] = idEvent;
+		params[2] = ctx;
 		ast.execute(params);
 	}
 

@@ -160,7 +160,7 @@ public class QuizHelper {
 			newDate = new Date();
 			Calendar c = Calendar.getInstance();
 			c.setTime(oldDate); // Now use today date.
-			c.add(Calendar.DATE, QUIZ_SKIP_DAYS); // Adding 5 days
+			c.add(Calendar.SECOND, QUIZ_SKIP_DAYS); // Adding 5 days
 
 			if (newDate.after(c.getTime())) {
 				// we are after 5 days so do the quiz

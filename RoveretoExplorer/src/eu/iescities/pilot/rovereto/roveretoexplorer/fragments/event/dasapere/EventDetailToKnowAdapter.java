@@ -191,7 +191,7 @@ public class EventDetailToKnowAdapter extends ArrayAdapter<ToKnow> {
 		@Override
 		public Boolean performAction(ExplorerObject... params) throws SecurityException, RemoteException, Exception {
 			// to be enabled when the connection with the server is ok
-			return DTHelper.saveEvent(params[0]);
+			return DTHelper.saveEvent(params[0],mContext);
 		}
 
 		@Override

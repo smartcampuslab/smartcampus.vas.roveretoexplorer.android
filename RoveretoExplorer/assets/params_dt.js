@@ -13,7 +13,7 @@
 	                         3
 	                 	],
 
-	"events_default" : [3],
+	"events_default" : [1,2,3,4],
    "center_map":[
                  	45.89096,
                  	11.04014

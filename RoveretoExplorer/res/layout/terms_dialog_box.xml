@@ -80,10 +80,11 @@
             android:layout_height="wrap_content"
             android:orientation="vertical" >
 
-            <TextView
+            <WebView
+                android:id="@+id/textview_terms_of_service"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/loren_ipsum" />
+                android:text="@string/terms_of_service" />
         </LinearLayout>
     </ScrollView>
 

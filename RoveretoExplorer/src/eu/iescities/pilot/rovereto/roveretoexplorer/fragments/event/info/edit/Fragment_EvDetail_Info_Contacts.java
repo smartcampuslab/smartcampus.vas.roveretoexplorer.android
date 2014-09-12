@@ -527,7 +527,7 @@ public class Fragment_EvDetail_Info_Contacts extends Fragment {
 		@Override
 		public Boolean performAction(ExplorerObject... params) throws SecurityException, Exception {
 
-			return DTHelper.saveEvent(params[0]);
+			return DTHelper.saveEvent(params[0],getActivity());
 
 		}
 

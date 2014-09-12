@@ -206,15 +206,69 @@
     <string name="address_select_toast">Select an address</string>
     <string name="toast_time_wrong">Event\'s time is wrong</string>
     <string name="when_where">When and where</string>
-    <string name="loren_ipsum">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, 
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, 
-        sunt in culpa qui officia deserunt mollit anim id est laborum.sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, 
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, 
-        sunt in culpa qui officia deserunt mollit anim id est laborum.sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, 
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, 
-        sunt in culpa qui officia deserunt mollit anim id est laborum.sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, 
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, 
-        sunt in culpa qui officia deserunt mollit anim id est laborum.sunt in culpa qui officia deserunt mollit anim id est laborum.</string>
+   <string name="terms_of_service"><![CDATA[
+       <b>Introduction<br>
+        Applicable worldwide except where we publish specific territorial terms and conditions.</b><br>
+These terms and conditions ("Terms") set important information regarding the rights, obligations and restrictions that may apply you as user ("User") when you access to the Internet site at  <a href="http://www.iescities.eu/server">http://www.iescities.eu/server</a> ("Website") or when you access to, download and use the application IES Cities Player ("Application") or whatever the services provided by using it. The application act as a marketplace for those applications developed within the IES Cities framework, allowing users to discover which applications are available on their surroundings making use of public data. Moreover the Application and the Website allow the access to other Applications and Websites. The Website and the Application, where no specifically provided, are supplied by all the partners that make up IES Cities Consortium. IES Cities Project ( <a href="http://www.iescities.eu">http://www.iescities.eu</a>) has received funding from the European Union\'s Competitiveness and Innovation Framework Programme under grant agreement n 325097.
+These Terms and conditions are available in the Application installed in your device or in the Website.
+The definitive version of this text is the Spanish version any translation of these Terms are provided as a courtesy to you.
+You must accept the Terms and other applicable laws regarding the use of IES Cities in case you want to use of the Application, the Website and IES Cities Platform ("Services") 
+If you do not agree with these Terms or consider that possible future changes of them will make unacceptable for you, please do not use IES Cities. By using IES Cities including, but not limiting to, the Website, the Application, the Services, updates, etc. we will consider that you accept these Terms and any change we make to them. You accept to use IES Cities only for purposes that are legal, proper and in accordance with these Terms and with any applicable regulation.
+We consider you accept the Terms, when you expressly accept them in the installation process of the Application, when you download or update it o when you use it with your device.
+<br><br><b>Policy of Use</b><br>
+IES Cities is a free application which allows using it with no limitations. You commit to make a reasonable use of the Application and services. Flood or affect the system performance by reading or writing data in excess that affects to the use of the Service by other users, it is a violation of the Terms.
+The Application allows you to publish some information. You will be responsible for the information, opinion, comments, etc. you express in IES Cities, directly or by using the Application and/or services. The user commits not to publish, or encourage the publication of:<br> 
+a) information that is offensive, discriminatory, humiliating, obscene, etc. or which may cause offence to others in terms of race, religion, sex or ethnicity;<br> 
+b) any material which incites the commission of crime; <br>
+c) any material is not yours, you don\'t have authorization to publish it or infringes copyrights, patents or marks;<br> 
+d) advertising, spam, pyramid scheme; <br>
+e) information to deceive other users; <br>
+f) information on how to exploit security breaches; <br>
+g) files containing virus, Trojans or another type of malicious code which can affect to the performance of the Service or to other Users;<br> 
+h) files, links or other material which tries to stole other users accounts; <br>
+i) any piece of software to collect information from other user; <br>
+j) any other thing that circumvents or doesn\'t comply with current local laws.<br>
+Sometimes you will need to register at the Website and/or some of the applications in order to be able to use them. The User commits to provide real information during the registration process and whenever the Service asks for it. You must update the information when there are any changes in it. In case of suspicion about the veracity of your data we are entitled to suspend your account.
+The infringement of the policy of use will cause the cancelation of the user account and the rejection to the creation of a new one and we could also apply some methods to avoid the future use of the Application by the banned user.
+We can change the Service at any time, adding, modifying or suppressing some of them. We\'ll try to communicate those changes in a reasonable way. If you continue using the Service, we understand then you have accepted the changes and the Terms.
+<br><br><b> Pay for the Service</b><br>
+The Application and the Service provided by IES Cities are cost free.
+In case we decide to change the Service or part of it into a pay per use Service we would communicate it and the prices in a reasonable way and enough time to allow the users stop using the Service if they do not want to pay.
+The Application may need access to a network for a correct operation. The access to a network may mean additional costs for the use of data networks. These costs aren\'t attributable to IES Cities and the User must deal on them.
+<br><br><b> Data Privacy</b><br>
+When you fill out the registration form in the Website or in some of the applications, you provide some personal data you expect we manage them diligently. Fondazione Buno Kessler ("FBK") and the rest of the partners of the IES Cities consortium will manage data in a suitable way and always in accordance with local regulations or, when applicable, European regulations regarding data protection.
+Additionally the User must protect provided account using security means supplied for it, including but no limiting to:  Build a strong password; Change the password frequently; Not to share login data; etc.
+FBK and the partners from IES Cities consortium will use data, provided by Users, to manage the use of Website and Application. We do not trade with the data of the users.
+FBK and the partners from IES Cities consortium will not collect personal data from users during the use of the Service. They can collect some anonymous statistical data regarding the use of the Service in order to improve the Service or evaluate the use of the different Services
+Users can customize the use of the Application and searches determining some filters (they may involve personal data). The filters are stored in the device and never are sent through the network. They are not also collected for any reason.
+<br><br><b>  Property of Data</b><br>
+The data provided by the Service and accessible through the Website and the Application come from publicly accessible sources or their proprietors allow the use of the by the public, and therefore they maintain the ownership of data.
+The collection of data and/or creation of databases from them is not allowed, they are for consult only.
+User may access data with no cost. Any derivative works that access these data should allow the access to them with no cost.
+Sometimes Users will be able to update, modify, and insert new data into the platform through the Website or the Application. These new data will become part of the public domain as it is the data they are working with. If you intend to publish data in other sites as social networks or third parties websites, please refer to their own privacy policy before publishing anything. We do not pay any reward for the data published by users. We inform you that FBK and the partners from IES Cities consortium may revise all data published by users and remove them when they consider that data are wrong or they violate site goals.
+If you intend to retain some rights on your data or obtain any reward for them, please don\'t publish in our site.
+<br><br><b>  Data Accuracy</b><br>
+Data is provided "as is" provided by the data sources. FBK and partners from IES Cities consortium are not responsible for the accuracy of the data or any damage and direct or indirect costs, caused by the use of this information.
+<br><br><b> Third Parties</b><br>
+Sometimes the user can access some other sites and social networks, external to FBK and partners from IES Cities Consortium and managed by third parties, from the Website or from some of the Application. FBK and partners from IES Cities consortium are not responsible for the privacy policy of those sites.
+If you use your social network account to access our Website or to use the Application, FBK and partners from IES Cities consortium will not collect any other information than needed to manage the account and the access to it.
+If you publish any information on social networks, through the Application or Website, please note that the data will be subject to the privacy policy and to the terms and conditions of that social network.
+<br><br><b> Property of the Application</b> <br>
+The Application is property of its authors. The authors grant a non-exclusive and revocable license to copy, install and use the Application in the user devices and to use the Service at no cost. This license does not give to the User any right on the Application property which it will remain on the authors.
+<br><br><b>  Availability</b><br>
+FBK and partners from IES Cities consortium do not acquire any commitment on the availability of the Website or the information. In any case they will put all their effort to avoid or minimize any interruption of the Service, trying to maximize uptime. Service provider will inform of any scheduled service interruption in a suitable way and it will try to minimize downtime.
+FBK and partners form IES Cities consortium aren\'t responsible for the damage and direct or indirect costs caused for the service unavailability.<br>
+<br><br><b> Legal Protection</b> <br>
+We grant to the user a non-exclusive and revocable license to install, copy and use the Application in your devices and to use the Service at no cost.
+You agree that you will not use the application to: <br>
+a) interfere or manipulate the Service; <br>
+b) modify data maliciously; <br>
+c) collect data of the users of the application; <br>
+d) threaten, disturb, extort to other users; <br>
+e) Interfere third parties services; <br>
+f) affect third parties copyrights.<br>
+The Application is provided "as is" and you use it under your own responsibility. FBK and partners from IES Cities consortium disclaims liability for errors, malfunctions in your terminal, interruptions to other applications, data loss and unavailability, if you use the Application.]]></string>
+ 
     <string name="exit_quiz">Thank you for your contribute</string>
     <string name="not_now">Not now</string>
     <string name="open_answer">Other</string>

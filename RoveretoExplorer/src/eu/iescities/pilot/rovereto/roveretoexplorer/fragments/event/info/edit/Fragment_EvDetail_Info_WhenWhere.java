@@ -551,7 +551,7 @@ public class Fragment_EvDetail_Info_WhenWhere extends Fragment {
 		public Boolean performAction(ExplorerObject... params) throws SecurityException, Exception {
 
 			// to be enabled when the connection with the server is ok
-			return DTHelper.saveEvent(params[0]);
+			return DTHelper.saveEvent(params[0],getActivity());
 			// store the modified event
 			// int index = Utils.appEvents.indexOf(params[0]);
 			// Utils.appEvents.set(index, params[0]);

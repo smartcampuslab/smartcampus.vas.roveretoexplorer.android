@@ -418,7 +418,7 @@ public class DTHelper {
 	 * @throws TerritoryServiceException
 	 * @throws AACException
 	 */
-	public static Boolean saveEvent(ExplorerObject event) throws RemoteException, DataException,
+	public static Boolean saveEvent(ExplorerObject event, Context ctx) throws RemoteException, DataException,
 			StorageConfigurationException, ConnectionException, ProtocolException, SecurityException, AACException,
 			eu.trentorise.smartcampus.network.RemoteException {
 		Boolean result = null;
@@ -431,57 +431,20 @@ public class DTHelper {
 			event = updateEvent(event.getId(), event);
 			result = false;
 		}
-		// String requestService = null;
-		// Method method = null;
-		// Boolean result = null;
-		// if (event.getId() == null) {
-		// if (event.createdByUser())
-		// requestService = Constants.SERVICE +
-		// "/eu.trentorise.smartcampus.dt.model.UserExplorerObject";
-		// else
-		// throw new DataException("cannot create service object");
-		// method = Method.POST;
-		// result = true;
-		// } else {
-		// if (event.createdByUser())
-		// requestService = Constants.SERVICE +
-		// "/eu.trentorise.smartcampus.dt.model.UserExplorerObject/"
-		// + event.getId();
-		// else
-		// requestService = Constants.SERVICE +
-		// "/eu.trentorise.smartcampus.dt.model.ServiceExplorerObject/"
-		// + event.getId();
-		// method = Method.PUT;
-		// result = false;
-		// }
-		// MessageRequest request = new
-		// MessageRequest(GlobalConfig.getAppUrl(mContext),
-		// requestService);
-		// request.setMethod(method);
-		// String json =
-		// eu.trentorise.smartcampus.android.common.Utils.convertToJSON(event);
-		// request.setBody(json);
-		//
-		// MessageResponse msg =
-		// getInstance().mProtocolCarrier.invokeSync(request,
-		// DTParamsHelper.getAppToken(),
-		// getAuthToken());
-		// // getRemote(instance.mContext, instance.token).create(poi);
-		// ExplorerObject eventreturn =
-		// eu.trentorise.smartcampus.android.common.Utils.convertJSONToObject(msg.getBody(),
-		// ExplorerObject.class);
-		LogHelper.sendEventModified(event.getId(),mContext);
-		synchronize();
+		
+		LogHelper.sendEventModified(event.getId(),ctx);
+		
 		return result;
 	}
 
 	private static ExplorerObject updateEvent(String id, ExplorerObject event) throws SecurityException,
-			eu.trentorise.smartcampus.network.RemoteException {
+			eu.trentorise.smartcampus.network.RemoteException, RemoteException, DataException, StorageConfigurationException, ConnectionException, ProtocolException, AACException {
 		if (event != null) {
 
 			Log.i("POST EDIT", JsonUtils.toJSON(event));
 			String string = RemoteConnector.postJSON(getAppUrl(), "/social/edit", JsonUtils.toJSON(event),
 					getAuthToken());
+			synchronize();
 			return JsonUtils.toObject(string, ExplorerObject.class);
 		}
 		return null;
@@ -492,6 +455,7 @@ public class DTHelper {
 			try {
 				String json = RemoteConnector.postJSON(serviceUrl, EVENTS, JsonUtils.toJSON(event).toString(),
 						authToken);
+				synchronize();
 				return JsonUtils.toObject(json, ExplorerObject.class);
 
 			} catch (Exception e) {
@@ -502,56 +466,56 @@ public class DTHelper {
 
 	}
 
-	public static Collection<ExplorerObject> searchEventsByCategory(int position, int size, String text,
-			String... inCategories) throws DataException, StorageConfigurationException, ConnectionException,
-			ProtocolException, SecurityException, AACException {
-		ArrayList<ExplorerObject> returnlist = new ArrayList<ExplorerObject>();
-
-		if (inCategories == null || inCategories.length == 0)
-			return Collections.emptyList();
-
-		String[] categories = CategoryHelper.getAllCategories(new HashSet<String>(Arrays.asList(inCategories)));
-
-		if (Utils.getObjectVersion(mContext, DTParamsHelper.getAppToken(), Constants.SYNC_DB_NAME) > 0) {
-			List<String> nonNullCategories = new ArrayList<String>();
-			String where = "";
-			for (int i = 0; i < categories.length; i++) {
-				if (where.length() > 0)
-					where += " or ";
-				if (categories[i] != null) {
-					nonNullCategories.add(categories[i]);
-					where += " type = ?";
-				} else {
-					where += " type is null";
-				}
-			}
-			if (where.length() > 0) {
-				where = "(" + where + ")";
-			}
-			List<String> parameters = nonNullCategories;
-
-			if (text != null) {
-				where += "AND ( events MATCH ? ) AND fromTime > " + getCurrentDateTimeForSearching();
-				parameters.add(text);
-			}
-			Collection<ExplorerObject> events = getInstance().storage.query(ExplorerObject.class, where,
-					parameters.toArray(new String[parameters.size()]), position, size, "fromTime ASC");
-			for (ExplorerObject event : events) {
-				returnlist.add(event);
-			}
-			return returnlist;
-		} else {
-			for (int c = 0; c < categories.length; c++) {
-				ObjectFilter filter = new ObjectFilter();
-				filter.setTypes(Arrays.asList(categories));
-				filter.setSkip(position);
-				filter.setLimit(size);
-				// TO DO
-				returnlist.addAll(getEventsRemote(filter, getAuthToken()));
-			}
-			return returnlist;
-		}
-	}
+//	public static Collection<ExplorerObject> searchEventsByCategory(int position, int size, String text,
+//			String... inCategories) throws DataException, StorageConfigurationException, ConnectionException,
+//			ProtocolException, SecurityException, AACException {
+//		ArrayList<ExplorerObject> returnlist = new ArrayList<ExplorerObject>();
+//
+//		if (inCategories == null || inCategories.length == 0)
+//			return Collections.emptyList();
+//
+//		String[] categories = CategoryHelper.getAllCategories(new HashSet<String>(Arrays.asList(inCategories)));
+//
+//		if (Utils.getObjectVersion(mContext, DTParamsHelper.getAppToken(), Constants.SYNC_DB_NAME) > 0) {
+//			List<String> nonNullCategories = new ArrayList<String>();
+//			String where = "";
+//			for (int i = 0; i < categories.length; i++) {
+//				if (where.length() > 0)
+//					where += " or ";
+//				if (categories[i] != null) {
+//					nonNullCategories.add(categories[i]);
+//					where += " type = ?";
+//				} else {
+//					where += " type is null";
+//				}
+//			}
+//			if (where.length() > 0) {
+//				where = "(" + where + ")";
+//			}
+//			List<String> parameters = nonNullCategories;
+//
+//			if (text != null) {
+//				where += "AND ( events MATCH ? ) AND fromTime > " + getCurrentDateTimeForSearching();
+//				parameters.add(text);
+//			}
+//			Collection<ExplorerObject> events = getInstance().storage.query(ExplorerObject.class, where,
+//					parameters.toArray(new String[parameters.size()]), position, size, "fromTime ASC");
+//			for (ExplorerObject event : events) {
+//				returnlist.add(event);
+//			}
+//			return returnlist;
+//		} else {
+//			for (int c = 0; c < categories.length; c++) {
+//				ObjectFilter filter = new ObjectFilter();
+//				filter.setTypes(Arrays.asList(categories));
+//				filter.setSkip(position);
+//				filter.setLimit(size);
+//				// TO DO
+//				returnlist.addAll(getEventsRemote(filter, getAuthToken()));
+//			}
+//			return returnlist;
+//		}
+//	}
 
 	private static List<ExplorerObject> getEventsRemote(ObjectFilter filter, String authToken) {
 		try {

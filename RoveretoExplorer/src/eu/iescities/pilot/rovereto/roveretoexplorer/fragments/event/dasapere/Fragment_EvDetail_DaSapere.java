@@ -263,7 +263,7 @@ public class Fragment_EvDetail_DaSapere extends ListFragment {
 		@Override
 		public Boolean performAction(ExplorerObject... params) throws SecurityException, Exception {
 			// to be enabled when the connection with the server is ok
-			return DTHelper.saveEvent(params[0]);
+			return DTHelper.saveEvent(params[0],mContext);
 		}
 
 		@Override
