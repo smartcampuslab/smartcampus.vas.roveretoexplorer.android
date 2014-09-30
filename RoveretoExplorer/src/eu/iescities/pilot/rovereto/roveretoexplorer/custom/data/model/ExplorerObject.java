@@ -174,7 +174,7 @@ public class ExplorerObject extends BaseDTObject {
 	//get email or phone number contacts according to the paramter "contact_type" that can assume values "telefono" or "email"
 	public List<String> getPhoneEmailContacts(String contact_type) {
 		List<String> contacts = null;
-		if (getContacts().containsKey(contact_type)){
+		if (getContacts()!= null && getContacts().containsKey(contact_type)){
 			if((List<String>) getContacts().get(contact_type)!=null)
 				contacts = new ArrayList<String>((List<String>) getContacts().get(contact_type));
 				if (contacts.size()==0) contacts=null;

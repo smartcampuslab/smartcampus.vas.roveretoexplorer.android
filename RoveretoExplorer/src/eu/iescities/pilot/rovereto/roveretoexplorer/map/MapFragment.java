@@ -126,7 +126,7 @@ public class MapFragment extends Fragment implements MapItemsHandler, OnCameraCh
 			 * psf.show(getFragmentManager(), TAG_FRAGMENT_POI_SELECT); return
 			 * true; } else
 			 */// if (item.getItemId() == R.id.action_poi) {
-		if (item.getTitle() == "filtro") {
+		if (item.getTitle() == "Filtro") {
 			MapFilterDialogFragment psf = MapFilterDialogFragment.istantiate(this, R.array.map_items_events_labels,
 					R.array.map_items_events_icons, REQUEST_TYPE.EVENT, eventsCategories,
 					CategoryHelper.getEventCategoriesForMapFilters());
@@ -303,7 +303,7 @@ public class MapFragment extends Fragment implements MapItemsHandler, OnCameraCh
 	public void onPrepareOptionsMenu(Menu menu) {
 		menu.clear();
 		Log.i("MENU", "start on Prepare Options Menu MAP frag: " + menu.toString());
-		MenuItem filter = menu.add(Menu.NONE, Menu.NONE, 1, "filtro");
+		MenuItem filter = menu.add(Menu.NONE, Menu.NONE, 1, "Filtro");
 		// ovItem.setIcon(getResources().getDrawable(R.drawable.ic_location_actionbar));
 		filter.setIcon(getResources().getDrawable(R.drawable.ic_filter));
 		filter.setVisible(true);

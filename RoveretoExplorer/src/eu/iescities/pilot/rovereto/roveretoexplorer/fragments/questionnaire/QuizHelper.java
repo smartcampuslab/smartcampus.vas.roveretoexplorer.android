@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -146,7 +147,7 @@ public class QuizHelper {
 	}
 
 	public static void checkQuiz(FragmentActivity activity) {
-		DateFormat readFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
+		DateFormat readFormat = new SimpleDateFormat("MM dd HH:mm:ss zzz yyyy",Locale.getDefault());
 		Date oldDate, newDate;
 		sp = activity.getSharedPreferences(QuizHelper.MY_PREFERENCES, Context.MODE_PRIVATE);
 		if (sp.contains(TIME_TO_QUIZ)) {

@@ -150,7 +150,7 @@ public class CategoryHelper {
 		String[] res = new String[EVENT_CATEGORIES.length + 3];
 		res[0] = EVENTS_MY.category;
 		res[1] = EVENTS_TODAY.category;
-		res[1] = EVENTS_ALL.category;
+		res[2] = EVENTS_ALL.category;
 
 		for (int i = 3; i < EVENT_CATEGORIES.length + 3; i++) {
 			res[i] = EVENT_CATEGORIES[i - 3].category;

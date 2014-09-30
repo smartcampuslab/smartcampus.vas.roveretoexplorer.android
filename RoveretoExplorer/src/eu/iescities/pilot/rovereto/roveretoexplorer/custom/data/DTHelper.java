@@ -1286,9 +1286,9 @@ public class DTHelper {
 				whereReturns += " or ";
 			if (categories[i] != null) {
 //				nonNullCategories.add(categories[i]);
-				whereReturns += " category like '%\""+categories[i]+"\"%'";
+				whereReturns += " category like '%"+categories[i]+"%'";
 			} else {
-				whereReturns += " category is null";
+				whereReturns += " category is null OR category like'null'";
 			}
 		}
 		if (whereReturns.length() > 0) {
@@ -1363,8 +1363,9 @@ public class DTHelper {
 		Intent intent = activity.getPackageManager().getLaunchIntentForPackage(
 				"eu.trentorise.smartcampus.viaggiarovereto");
 		if (intent == null) {
-			intent = new Intent(Intent.ACTION_VIEW,
-					Uri.parse("market://details?id=eu.trentorise.smartcampus.viaggiarovereto"));
+			intent= new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.smartcampuslab.it/download/VAS/apk/iescities/ViaggiaRovereto.apk"));
+//			intent = new Intent(Intent.ACTION_VIEW,
+//					Uri.parse("market://details?id=eu.trentorise.smartcampus.viaggiarovereto"));
 			activity.startActivity(intent);
 		} else
 			// startActivity(intent);

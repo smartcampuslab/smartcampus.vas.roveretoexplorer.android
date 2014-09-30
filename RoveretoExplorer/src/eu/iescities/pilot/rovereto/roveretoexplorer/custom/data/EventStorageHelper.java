@@ -15,10 +15,12 @@
  ******************************************************************************/
 package eu.iescities.pilot.rovereto.roveretoexplorer.custom.data;
 
+import java.util.Arrays;
 import java.util.Map;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.CategoryHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ExplorerObject;
 import eu.trentorise.smartcampus.android.common.Utils;
 import eu.trentorise.smartcampus.storage.db.BeanStorageHelper;
@@ -43,6 +45,8 @@ public class EventStorageHelper implements BeanStorageHelper<ExplorerObject> {
 		event.setOrigin(cursor.getString(cursor.getColumnIndex("origin")));
 		event.setImage(cursor.getString(cursor.getColumnIndex("image")));
 		event.setCategory(Utils.convertJSONToObjects(cursor.getString(cursor.getColumnIndex("category")), String.class));
+		if (event.getCategory()==null)
+			event.setCategory(Arrays.asList(CategoryHelper.EVENT_NONCATEGORIZED));
 		@SuppressWarnings("unchecked")
 		Map<String, Object> map = Utils.convertJSONToObject(cursor.getString(cursor.getColumnIndex("contacts")),
 				Map.class);
