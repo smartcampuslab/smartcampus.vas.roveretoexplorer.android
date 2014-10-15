@@ -31,6 +31,8 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -623,12 +625,22 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 
 		Log.i("MENU", "start on Prepare Options Menu EVENT LISTING frag: " + menu.toString());
 
-		// menu.clear();
+		 menu.clear();
 
 		getActivity().getMenuInflater().inflate(R.menu.list_menu, menu);
 
 		if (category == null) {
 			category = (getArguments() != null) ? getArguments().getString(SearchFragment.ARG_CATEGORY) : null;
+			ColorDrawable color = null;
+			if (category!=null && !getArguments().containsKey(SearchFragment.ARG_LIST)){
+				color = new ColorDrawable(Color.parseColor(CategoryHelper.getCategoryDescriptorByCategoryFiltered(null, category).color));
+
+			}
+			else {
+				color = new ColorDrawable(Color.parseColor(getString(R.color.actionbar_default)));
+			}
+			getActivity().getActionBar().setBackgroundDrawable(color);
+
 		}
 
 		super.onPrepareOptionsMenu(menu);

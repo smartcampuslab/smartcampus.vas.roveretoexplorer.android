@@ -44,10 +44,10 @@
 
     <application
         android:name="eu.iescities.pilot.rovereto.roveretoexplorer.RoveretoExplorerApplication"
-        android:icon="@drawable/roveretoexplorer_app_launcher"
+        android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:launchMode="singleTask"
-        android:logo="@drawable/roveretoexplorer_app_launcher"
+        android:logo="@drawable/ic_launcher"
         android:theme="@style/AppTheme" >
         <meta-data
             android:name="eu.trentorise.smartcampus.account.SHARED_PACKAGE"
@@ -74,10 +74,10 @@
             android:value="AIzaSyBb2QaLKTYQhsgJu3PIUxWi5zx8HI30Q6c" />
         <meta-data
             android:name="eu.trentorise.smartcampus.account.CLIENT_ID"
-            android:value="4fda1c9f-c15d-41df-a80c-8e986e4d3c6f" />
+            android:value="" />
         <meta-data
             android:name="eu.trentorise.smartcampus.account.CLIENT_SECRET"
-            android:value="659b168c-1d59-4814-ad48-b73ebe089ad9" />
+            android:value="" />
         <meta-data
             android:name="eu.trentorise.smartcampus.account.AUTH_URL"
             android:value="https://vas-dev.smartcampuslab.it/aac" />

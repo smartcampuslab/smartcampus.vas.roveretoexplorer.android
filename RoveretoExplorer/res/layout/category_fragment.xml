@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <ViewFlipper
+        android:id="@+id/category_view_flipper"
+        android:layout_width="fill_parent"
+        android:layout_height="154dp" >
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" >
+
+            <ImageView
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_alignParentBottom="true"
+                android:layout_gravity="center"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                android:src="@drawable/img_home" />
+        </RelativeLayout>
+
+<!--         <RelativeLayout -->
+<!--             android:layout_width="fill_parent" -->
+<!--             android:layout_height="fill_parent" > -->
+
+<!--             <ImageView -->
+<!--                 android:layout_width="fill_parent" -->
+<!--                 android:layout_height="fill_parent" -->
+<!--                 android:layout_gravity="center" -->
+<!--                 android:adjustViewBounds="true" -->
+<!--                 android:scaleType="centerCrop" -->
+<!--                 android:src="@drawable/slide_2" /> -->
+<!--         </RelativeLayout> -->
+    </ViewFlipper>
+
+    <ScrollView
+        android:id="@+id/scrollView1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:weightSum="1" >
+
+            <LinearLayout
+                android:id="@+id/layout_category_all"
+                style="@style/category_button"
+                android:layout_weight=".2"
+                android:background="@color/color_event_all" >
+
+                <ImageView
+                    android:id="@+id/ImageView04"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="16dp"
+                    android:src="@drawable/ic_drower_flag" />
+
+                <TextView
+                    android:id="@+id/TextView04"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/categories_event_all"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="@color/category_text" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_category_cultural"
+                style="@style/category_button"
+                android:layout_weight=".2"
+                android:background="@color/color_event_cultural" >
+
+                <ImageView
+                    android:id="@+id/ImageView03"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="16dp"
+                    android:src="@drawable/ic_category_culture" />
+
+                <TextView
+                    android:id="@+id/TextView03"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/categories_event_cultura"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="@color/category_text" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_category_sport"
+                style="@style/category_button"
+                android:layout_weight=".2"
+                android:background="@color/color_event_sport" >
+
+                <ImageView
+                    android:id="@+id/ImageView02"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="16dp"
+                    android:src="@drawable/ic_category_sport" />
+
+                <TextView
+                    android:id="@+id/TextView02"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/categories_event_sport"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="@color/category_text" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_category_social"
+                style="@style/category_button"
+                android:layout_weight=".2"
+                android:background="@color/color_event_social" >
+
+                <ImageView
+                    android:id="@+id/ImageView01"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="16dp"
+                    android:src="@drawable/ic_category_person" />
+
+                <TextView
+                    android:id="@+id/TextView01"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/categories_event_social"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="@color/category_text" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_category_others"
+                style="@style/category_button"
+                android:layout_weight=".2"
+                android:background="@color/color_event_others" >
+
+                <ImageView
+                    android:id="@+id/imageView1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="16dp"
+                    android:src="@drawable/ic_category_other" />
+
+                <TextView
+                    android:id="@+id/textView1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/categories_event_altri_eventi"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="@color/category_text" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

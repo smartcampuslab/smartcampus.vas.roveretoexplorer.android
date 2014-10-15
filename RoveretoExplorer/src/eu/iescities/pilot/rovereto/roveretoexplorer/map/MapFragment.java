@@ -14,6 +14,8 @@ import java.util.TreeMap;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -22,10 +24,12 @@ import android.util.Log;
 import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -56,8 +60,8 @@ import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.search.SearchFragm
 import eu.iescities.pilot.rovereto.roveretoexplorer.map.MapFilterDialogFragment.REQUEST_TYPE;
 import eu.trentorise.smartcampus.android.common.SCAsyncTask;
 
-public class MapFragment extends Fragment implements MapItemsHandler, OnCameraChangeListener, OnMarkerClickListener,
-		MapObjectContainer {
+public class MapFragment extends Fragment implements MapItemsHandler,
+		OnCameraChangeListener, OnMarkerClickListener, MapObjectContainer {
 
 	private static final String TAG_FRAGMENT_POI_SELECT = "poi_select";
 	public static final String ARG_POI_CATEGORY = "poi category";
@@ -75,12 +79,13 @@ public class MapFragment extends Fragment implements MapItemsHandler, OnCameraCh
 
 	private boolean loaded = false;
 	private boolean listmenu = false;
-
+	private String categoryFilter = null;
 	private static View view;
-	float maxZoomOnMap = 19.0f;
+	float maxZoomOnMap = 17.0f;
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
 		if (view != null) {
 			ViewGroup parent = (ViewGroup) view.getParent();
 			if (parent != null)
@@ -126,13 +131,34 @@ public class MapFragment extends Fragment implements MapItemsHandler, OnCameraCh
 			 * psf.show(getFragmentManager(), TAG_FRAGMENT_POI_SELECT); return
 			 * true; } else
 			 */// if (item.getItemId() == R.id.action_poi) {
-		if (item.getTitle() == "Filtro") {
-			MapFilterDialogFragment psf = MapFilterDialogFragment.istantiate(this, R.array.map_items_events_labels,
-					R.array.map_items_events_icons, REQUEST_TYPE.EVENT, eventsCategories,
-					CategoryHelper.getEventCategoriesForMapFilters());
-			psf.show(getFragmentManager(), TAG_FRAGMENT_POI_SELECT);
+		if (item.getItemId() == R.id.category_cultur) {
+			categoryFilter = CategoryHelper.CAT_CULTURA;
+			setEventCategoriesToLoad(categoryFilter);
 			return true;
-		} /*
+		}
+		if (item.getItemId() == R.id.category_sport) {
+			categoryFilter = CategoryHelper.CAT_SPORT;
+			setEventCategoriesToLoad(categoryFilter);
+			return true;
+		}
+		if (item.getItemId() == R.id.category_social) {
+			categoryFilter = CategoryHelper.CAT_SOCIALE;
+			setEventCategoriesToLoad(categoryFilter);
+			return true;
+
+		}
+		if (item.getItemId() == R.id.category_others) {
+			categoryFilter = CategoryHelper.EVENT_NONCATEGORIZED;
+			setEventCategoriesToLoad(categoryFilter);
+			return true;
+		}
+		if (item.getItemId() == R.id.category_all) {
+			categoryFilter = CategoryHelper.CATEGORY_ALL;
+			setEventCategoriesToLoad(CategoryHelper.getEventCategories());
+			return true;
+		}
+
+		/*
 		 * else if (item.getItemId() == R.id.action_poi_babies) {
 		 * PoiSelectFragment psf = PoiSelectFragment.istantiate(this,
 		 * R.array.map_items_babies_labels, R.array.map_items_babies_icons,
@@ -154,7 +180,8 @@ public class MapFragment extends Fragment implements MapItemsHandler, OnCameraCh
 	}
 
 	private void switchToList() {
-		FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+		FragmentTransaction ft = getActivity().getSupportFragmentManager()
+				.beginTransaction();
 		ft.setCustomAnimations(R.anim.enter, R.anim.exit);
 
 		String cat = null;
@@ -164,7 +191,8 @@ public class MapFragment extends Fragment implements MapItemsHandler, OnCameraCh
 			EventsListingFragment elf = new EventsListingFragment();
 			args.putString(SearchFragment.ARG_CATEGORY, cat);
 			elf.setArguments(args);
-			ft.replace(R.id.content_frame, elf, MainActivity.TAG_FRAGMENT_EVENT_LIST);
+			ft.replace(R.id.content_frame, elf,
+					MainActivity.TAG_FRAGMENT_EVENT_LIST);
 			ft.addToBackStack(MainActivity.TAG_FRAGMENT_EVENT_LIST);
 		}
 
@@ -175,25 +203,32 @@ public class MapFragment extends Fragment implements MapItemsHandler, OnCameraCh
 	public void onStart() {
 		super.onStart();
 		// hide keyboard if it is still open
-		InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-		imm.hideSoftInputFromWindow(getActivity().findViewById(R.id.content_frame).getWindowToken(), 0);
+		InputMethodManager imm = (InputMethodManager) getActivity()
+				.getSystemService(Context.INPUT_METHOD_SERVICE);
+		imm.hideSoftInputFromWindow(
+				getActivity().findViewById(R.id.content_frame).getWindowToken(),
+				0);
 
 		if (!loaded) {
 			String key = getString(R.string.view_intent_arg_object_id);
-			if (getActivity().getIntent() != null && getActivity().getIntent().hasExtra(key)) {
-				new SCAsyncTask<Void, Void, BaseDTObject>(getActivity(), new LoadDataProcessor(getActivity()))
-						.execute();
+			if (getActivity().getIntent() != null
+					&& getActivity().getIntent().hasExtra(key)) {
+				new SCAsyncTask<Void, Void, BaseDTObject>(getActivity(),
+						new LoadDataProcessor(getActivity())).execute();
 				eventsCategories = null;
 				poiCategories = null;
 			} else {
 				initView();
 			}
 			loaded = true;
-			
+
 			if (mMap != null)
-				mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(MapManager.DEFAULT_POINT, MapManager.ZOOM_DEFAULT));
+				mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
+						MapManager.DEFAULT_POINT, MapManager.ZOOM_DEFAULT));
 
 		}
+		getActivity().getActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor(getResources().getString(R.color.actionbar_default))));
+
 	}
 
 	@Override
@@ -205,6 +240,7 @@ public class MapFragment extends Fragment implements MapItemsHandler, OnCameraCh
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
 		CategoryDescriptor[] eventsDefault = DTParamsHelper
 				.getDefaultArrayByParams(CategoryHelper.CATEGORY_TYPE_EVENTS);
 		if (eventsDefault != null) {
@@ -233,14 +269,22 @@ public class MapFragment extends Fragment implements MapItemsHandler, OnCameraCh
 		if (getArguments() != null && getArguments().containsKey(ARG_OBJECTS)) {
 			poiCategories = null;
 			eventsCategories = null;
-			drawTracks((List<BaseDTObject>) getArguments().getSerializable(ARG_OBJECTS));
+			drawTracks((List<BaseDTObject>) getArguments().getSerializable(
+					ARG_OBJECTS));
 			Log.i("MENU", "ARG_OBJECTS");
 
-		} else if (getArguments() != null && getArguments().containsKey(ARG_EVENT_CATEGORY)) {
+		} else if (getArguments() != null
+				&& getArguments().containsKey(ARG_EVENT_CATEGORY)) {
 			listmenu = true;
 			Log.i("MENU", "LIST MENU in ARG_EVENT_CATEGORY");
 			poiCategories = null;
-			setEventCategoriesToLoad(getArguments().getString(ARG_EVENT_CATEGORY));
+			String catArg = getArguments().getString(ARG_EVENT_CATEGORY);
+			categoryFilter = catArg;
+			if (!CategoryHelper.CATEGORY_ALL.equals(catArg)) {
+				setEventCategoriesToLoad(catArg);
+			} else {
+				setEventCategoriesToLoad(CategoryHelper.getEventCategories());
+			}
 		} else {
 			Log.i("MENU", "ELSE");
 
@@ -249,7 +293,6 @@ public class MapFragment extends Fragment implements MapItemsHandler, OnCameraCh
 				Log.i("MENU", "set event categories to load");
 			}
 		}
-
 		Log.i("MENU", "LIST MENU is" + listmenu);
 
 	}
@@ -260,7 +303,8 @@ public class MapFragment extends Fragment implements MapItemsHandler, OnCameraCh
 
 		new AsyncTask<List<? extends BaseDTObject>, Void, List<? extends BaseDTObject>>() {
 			@Override
-			protected List<? extends BaseDTObject> doInBackground(List<? extends BaseDTObject>... params) {
+			protected List<? extends BaseDTObject> doInBackground(
+					List<? extends BaseDTObject>... params) {
 				return params[0];
 			}
 
@@ -300,50 +344,62 @@ public class MapFragment extends Fragment implements MapItemsHandler, OnCameraCh
 	}
 
 	@Override
-	public void onPrepareOptionsMenu(Menu menu) {
-		menu.clear();
-		Log.i("MENU", "start on Prepare Options Menu MAP frag: " + menu.toString());
-		MenuItem filter = menu.add(Menu.NONE, Menu.NONE, 1, "Filtro");
-		// ovItem.setIcon(getResources().getDrawable(R.drawable.ic_location_actionbar));
-		filter.setIcon(getResources().getDrawable(R.drawable.ic_filter));
-		filter.setVisible(true);
-		// filter.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-
-		super.onPrepareOptionsMenu(menu);
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		inflater.inflate(R.menu.map_menu, menu);
+		super.onCreateOptionsMenu(menu, inflater);
 	}
 
-	public void setMiscellaneousListToLoad(final List<String> trackCategories, List<String> poiCategories,
-			List<String> eventCategories) {
+	// @Override
+	// public void onPrepareOptionsMenu(Menu menu) {
+	// menu.clear();
+	// Log.i("MENU",
+	// "start on Prepare Options Menu MAP frag: " + menu.toString());
+	// MenuItem filter = menu.add(Menu.NONE, Menu.NONE, 1, "Filtro");
+	// //
+	// ovItem.setIcon(getResources().getDrawable(R.drawable.ic_location_actionbar));
+	// filter.setIcon(getResources().getDrawable(R.drawable.ic_filter));
+	// filter.setVisible(true);
+	// // filter.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+	//
+	// super.onPrepareOptionsMenu(menu);
+	// }
 
-		final String[] pcat = poiCategories.toArray(new String[poiCategories.size()]);
+	public void setMiscellaneousListToLoad(final List<String> trackCategories,
+			List<String> poiCategories, List<String> eventCategories) {
+
+		final String[] pcat = poiCategories.toArray(new String[poiCategories
+				.size()]);
 		this.poiCategories = pcat;
-		final String[] ecat = eventCategories.toArray(new String[eventCategories.size()]);
+		final String[] ecat = eventCategories
+				.toArray(new String[eventCategories.size()]);
 		this.eventsCategories = ecat;
 		if (getSupportMap() != null) {
-			new SCAsyncTask<Void, Void, Collection<? extends BaseDTObject>>(getActivity(), new MapLoadProcessor(
-					getActivity(), this, getSupportMap()) {
-				@Override
-				protected Collection<? extends BaseDTObject> getObjects() {
-					try {
-						/*
-						 * check if todays is checked and cat with
-						 * searchTodayEvents
-						 */
-						Collection<BaseDTObject> list = new ArrayList<BaseDTObject>();
+			new SCAsyncTask<Void, Void, Collection<? extends BaseDTObject>>(
+					getActivity(), new MapLoadProcessor(getActivity(), this,
+							getSupportMap()) {
+						@Override
+						protected Collection<? extends BaseDTObject> getObjects() {
+							try {
+								/*
+								 * check if todays is checked and cat with
+								 * searchTodayEvents
+								 */
+								Collection<BaseDTObject> list = new ArrayList<BaseDTObject>();
 
-						if (ecat.length > 0)
-							list.addAll(DTHelper.getEventsByCategories(0, -1, ecat));
-						SortedMap<String, Integer> sort = new TreeMap<String, Integer>();
-						sort.put("title", 1);
-						return list;
+								if (ecat.length > 0)
+									list.addAll(DTHelper.getEventsByCategories(
+											0, -1, ecat));
+								SortedMap<String, Integer> sort = new TreeMap<String, Integer>();
+								sort.put("title", 1);
+								return list;
 
-					} catch (Exception e) {
-						e.printStackTrace();
-						return Collections.emptyList();
-					}
-				}
+							} catch (Exception e) {
+								e.printStackTrace();
+								return Collections.emptyList();
+							}
+						}
 
-			}).execute();
+					}).execute();
 		}
 	}
 
@@ -368,6 +424,7 @@ public class MapFragment extends Fragment implements MapItemsHandler, OnCameraCh
 		InfoDialog dtoTap = new InfoDialog();
 		dtoTap.setArguments(args);
 		dtoTap.show(getActivity().getSupportFragmentManager(), "me");
+		
 	}
 
 	private void onBaseDTObjectsTap(List<BaseDTObject> list) {
@@ -377,7 +434,8 @@ public class MapFragment extends Fragment implements MapItemsHandler, OnCameraCh
 			onBaseDTObjectTap(list.get(0));
 			return;
 		}
-		FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+		FragmentTransaction fragmentTransaction = getFragmentManager()
+				.beginTransaction();
 		Fragment fragment = null;
 		Bundle args = new Bundle();
 		if (list.get(0) instanceof ExplorerObject) {
@@ -386,7 +444,8 @@ public class MapFragment extends Fragment implements MapItemsHandler, OnCameraCh
 		}
 		if (fragment != null) {
 			fragment.setArguments(args);
-			fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+			fragmentTransaction
+					.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
 			// fragmentTransaction.detach(this);
 			fragmentTransaction.replace(R.id.content_frame, fragment, "me");
 			fragmentTransaction.addToBackStack(fragment.getTag());
@@ -406,50 +465,58 @@ public class MapFragment extends Fragment implements MapItemsHandler, OnCameraCh
 		if (getSupportMap() != null) {
 			getSupportMap().clear();
 			setUpMap();
-			new SCAsyncTask<Void, Void, Collection<? extends BaseDTObject>>(getActivity(), new MapLoadProcessor(
-					getActivity(), this, getSupportMap()) {
-				@Override
-				protected Collection<? extends BaseDTObject> getObjects() {
-					try {
-						/*
-						 * check if todays is checked and cat with
-						 * searchTodayEvents
-						 */
-						Collection<ExplorerObject> newList;
-						newList = new ArrayList<ExplorerObject>();
+			new SCAsyncTask<Void, Void, Collection<? extends BaseDTObject>>(
+					getActivity(), new MapLoadProcessor(getActivity(), this,
+							getSupportMap()) {
+						@Override
+						protected Collection<? extends BaseDTObject> getObjects() {
+							try {
+								/*
+								 * check if todays is checked and cat with
+								 * searchTodayEvents
+								 */
+								Collection<ExplorerObject> newList;
+								newList = new ArrayList<ExplorerObject>();
 
-						if (isTodayIncluded()) {
-							newList.addAll(DTHelper.searchTodayEvents(0, -1, ""));
+								if (isTodayIncluded()) {
+									newList.addAll(DTHelper.searchTodayEvents(
+											0, -1, ""));
 
-						}
-						if (isMyIncluded()) {
-							SortedMap<String, Integer> sort = new TreeMap<String, Integer>();
-							sort.put("fromTime", 1);
-							newList.addAll(DTHelper.searchInGeneral(0, -1, null, null, null, true,
-									ExplorerObject.class, sort, null));
+								}
+								if (isMyIncluded()) {
+									SortedMap<String, Integer> sort = new TreeMap<String, Integer>();
+									sort.put("fromTime", 1);
+									newList.addAll(DTHelper.searchInGeneral(0,
+											-1, null, null, null, true,
+											ExplorerObject.class, sort, null));
 
+								}
+								if (eventsCleaned.length != 0
+										&& !Arrays.asList(eventsCleaned)
+												.contains("Today")) {
+									SortedMap<String, Integer> sort = new TreeMap<String, Integer>();
+									sort.put("fromTime", 1);
+									newList.addAll(DTHelper.searchInGeneral(0,
+											-1, null, null, null, false,
+											ExplorerObject.class, sort,
+											eventsCleaned));
+								}
+								Iterator<ExplorerObject> i = newList.iterator();
+								while (i.hasNext()) {
+									ExplorerObject obj = i.next();
+									obj.getLocation();
+									if (obj.getLocation()[0] == 0
+											&& obj.getLocation()[1] == 0)
+										i.remove();
+								}
+								return newList;
+							} catch (Exception e) {
+								e.printStackTrace();
+								return Collections.emptyList();
+							}
 						}
-						if (eventsCleaned.length != 0 && !Arrays.asList(eventsCleaned).contains("Today")) {
-							SortedMap<String, Integer> sort = new TreeMap<String, Integer>();
-							sort.put("fromTime", 1);
-							newList.addAll(DTHelper.searchInGeneral(0, -1, null, null, null, false,
-									ExplorerObject.class, sort, eventsCleaned));
-						}
-						Iterator<ExplorerObject> i = newList.iterator();
-						while (i.hasNext()) {
-							ExplorerObject obj = i.next();
-							obj.getLocation();
-							if (obj.getLocation()[0] == 0 && obj.getLocation()[1] == 0)
-								i.remove();
-						}
-						return newList;
-					} catch (Exception e) {
-						e.printStackTrace();
-						return Collections.emptyList();
-					}
-				}
 
-			}).execute();
+					}).execute();
 		}
 	}
 
@@ -465,7 +532,8 @@ public class MapFragment extends Fragment implements MapItemsHandler, OnCameraCh
 					categoriesCleaned.add(eventsCategories[i]);
 
 			}
-		eventsCleaned = categoriesCleaned.toArray(new String[categoriesCleaned.size()]);
+		eventsCleaned = categoriesCleaned.toArray(new String[categoriesCleaned
+				.size()]);
 		return istodayincluded;
 	}
 
@@ -481,7 +549,8 @@ public class MapFragment extends Fragment implements MapItemsHandler, OnCameraCh
 					categoriesCleaned.add(eventsCategories[i]);
 
 			}
-		eventsCleaned = categoriesCleaned.toArray(new String[categoriesCleaned.size()]);
+		eventsCleaned = categoriesCleaned.toArray(new String[categoriesCleaned
+				.size()]);
 		return isMyincluded;
 	}
 
@@ -489,20 +558,24 @@ public class MapFragment extends Fragment implements MapItemsHandler, OnCameraCh
 		if (mMap == null) {
 			if (getFragmentManager().findFragmentById(R.id.map) != null
 					&& getFragmentManager().findFragmentById(R.id.map) instanceof SupportMapFragment) {
-				mMap = ((SupportMapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
+				mMap = ((SupportMapFragment) getFragmentManager()
+						.findFragmentById(R.id.map)).getMap();
 			}
 
-			if (mMap != null){
-				
+			if (mMap != null) {
+
 				mMap.setOnCameraChangeListener(new OnCameraChangeListener() {
 
-				    @Override
-				    public void onCameraChange(CameraPosition arg0) {
-				        // Move camera.
-				    	mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(MapManager.DEFAULT_POINT, MapManager.ZOOM_DEFAULT));
-				        // Remove listener to prevent position reset on camera move.
-				    	mMap.setOnCameraChangeListener(null);
-				    }
+					@Override
+					public void onCameraChange(CameraPosition arg0) {
+						// Move camera.
+						mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
+								MapManager.DEFAULT_POINT,
+								MapManager.ZOOM_DEFAULT));
+						// Remove listener to prevent position reset on camera
+						// move.
+						mMap.setOnCameraChangeListener(null);
+					}
 				});
 			}
 
@@ -531,7 +604,8 @@ public class MapFragment extends Fragment implements MapItemsHandler, OnCameraCh
 	@Override
 	public boolean onMarkerClick(Marker marker) {
 		if (getSupportMap() != null) {
-			List<BaseDTObject> list = MapManager.ClusteringHelper.getFromGridId(marker.getTitle());
+			List<BaseDTObject> list = MapManager.ClusteringHelper
+					.getFromGridId(marker.getTitle());
 			if (list == null || list.isEmpty())
 				return true;
 
@@ -556,12 +630,14 @@ public class MapFragment extends Fragment implements MapItemsHandler, OnCameraCh
 		/* check if the zoom level is too high */
 		if (position.zoom > maxZoomOnMap)
 			if (getSupportMap() != null) {
-				getSupportMap().animateCamera(CameraUpdateFactory.zoomTo(maxZoomOnMap));
+				getSupportMap().animateCamera(
+						CameraUpdateFactory.zoomTo(maxZoomOnMap));
 			}
 	}
 
 	@Override
-	public <T extends BaseDTObject> void addObjects(Collection<? extends BaseDTObject> objects) {
+	public <T extends BaseDTObject> void addObjects(
+			Collection<? extends BaseDTObject> objects) {
 		if (getSupportMap() != null) {
 			this.objects = objects;
 			render(objects);
@@ -580,25 +656,31 @@ public class MapFragment extends Fragment implements MapItemsHandler, OnCameraCh
 			// setUpMap();
 
 			if (objects != null && getActivity() != null) {
-				List<MarkerOptions> cluster = MapManager.ClusteringHelper.cluster(
-						getActivity().getApplicationContext(), getSupportMap(), objects);
+				List<MarkerOptions> cluster = MapManager.ClusteringHelper
+						.cluster(getActivity().getApplicationContext(),
+								getSupportMap(), objects, categoryFilter);
 				MapManager.ClusteringHelper.removeAllMarkers();
-				MapManager.ClusteringHelper.render(getActivity(), getSupportMap(), cluster, objects);
+				MapManager.ClusteringHelper.render(getActivity(),
+						getSupportMap(), cluster, objects);
 			}
 		}
 
 	}
 
-	private class LoadDataProcessor extends AbstractAsyncTaskProcessor<Void, BaseDTObject> {
+	private class LoadDataProcessor extends
+			AbstractAsyncTaskProcessor<Void, BaseDTObject> {
 
 		public LoadDataProcessor(Activity activity) {
 			super(activity);
 		}
 
 		@Override
-		public BaseDTObject performAction(Void... params) throws SecurityException, Exception {
-			String entityId = getActivity().getIntent().getStringExtra(getString(R.string.view_intent_arg_object_id));
-			String type = getActivity().getIntent().getStringExtra(getString(R.string.view_intent_arg_entity_type));
+		public BaseDTObject performAction(Void... params)
+				throws SecurityException, Exception {
+			String entityId = getActivity().getIntent().getStringExtra(
+					getString(R.string.view_intent_arg_object_id));
+			String type = getActivity().getIntent().getStringExtra(
+					getString(R.string.view_intent_arg_entity_type));
 
 			if (entityId != null && type != null) {
 				if ("event".equals(type))
@@ -617,7 +699,9 @@ public class MapFragment extends Fragment implements MapItemsHandler, OnCameraCh
 
 			if (entityId != null) {
 				if (result == null) {
-					Toast.makeText(getActivity(), R.string.app_failure_obj_not_found, Toast.LENGTH_LONG).show();
+					Toast.makeText(getActivity(),
+							R.string.app_failure_obj_not_found,
+							Toast.LENGTH_LONG).show();
 					return;
 				}
 
@@ -633,12 +717,14 @@ public class MapFragment extends Fragment implements MapItemsHandler, OnCameraCh
 				// result.getId());
 				// }
 				if (fragment != null) {
-					FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager()
-							.beginTransaction();
+					FragmentTransaction fragmentTransaction = getActivity()
+							.getSupportFragmentManager().beginTransaction();
 					fragment.setArguments(args);
 
-					fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-					fragmentTransaction.replace(R.id.content_frame, fragment, "me");
+					fragmentTransaction
+							.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+					fragmentTransaction.replace(R.id.content_frame, fragment,
+							"me");
 					fragmentTransaction.addToBackStack(fragment.getTag());
 					fragmentTransaction.commit();
 				}

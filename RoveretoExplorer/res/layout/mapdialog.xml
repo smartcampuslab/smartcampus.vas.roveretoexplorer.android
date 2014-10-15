@@ -12,7 +12,7 @@
   distributed under the License is distributed on an "AS IS" BASIS,
   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either   express or implied.
   See the License for the specific language governing permissions and
-  limitations under the License.
+  limitations under the License.
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/mapdialog"
@@ -21,23 +21,50 @@
     android:orientation="vertical" >
 
     <TextView
-        android:id="@+id/mapdialog_msg"
+        android:id="@+id/infodialog_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="8dp"
+        android:layout_weight="0.7"
         android:maxLines="10"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
-        android:scrollbars="vertical"
-        android:layout_weight="0.7" />
+        android:scrollbars="vertical" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="16dp"
+            android:src="@drawable/ic_drower_flag" />
+
+        <TextView
+            android:id="@+id/infodialog_category"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="TextView" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/infodialog_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.7"
+        android:paddingLeft="16dp"
+        android:text="TextView" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:orientation="horizontal" 
-        android:layout_weight="0.3" >
+        android:layout_weight="0.3"
+        android:orientation="horizontal" >
 
         <Button
             android:id="@+id/mapdialog_cancel"

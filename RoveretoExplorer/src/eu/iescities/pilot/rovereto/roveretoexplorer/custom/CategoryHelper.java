@@ -40,24 +40,24 @@ public class CategoryHelper {
 	public static final String CATEGORY_MY = "My";
 	public static final String CATEGORY_ALL = "ALL";
 
-	public static CategoryDescriptor EVENTS_TODAY = new CategoryDescriptor(R.drawable.ic_altri_eventi,
-			R.drawable.ic_altri_eventi_map, CATEGORY_TODAY, R.string.categories_event_today);
+	public static CategoryDescriptor EVENTS_TODAY = new CategoryDescriptor(R.drawable.ic_drower_flag,
+			R.drawable.ic_drower_flag, CATEGORY_TODAY, R.string.categories_event_today,"#edcc18");
 
-	public static CategoryDescriptor EVENTS_MY = new CategoryDescriptor(R.drawable.ic_altri_eventi,
-			R.drawable.ic_altri_eventi_map, CATEGORY_MY, R.string.categories_event_my);
+	public static CategoryDescriptor EVENTS_MY = new CategoryDescriptor(R.drawable.ic_drower_flag,
+			R.drawable.ic_drower_flag, CATEGORY_MY, R.string.categories_event_my, "#edcc18");
 	
-	public static CategoryDescriptor EVENTS_ALL = new CategoryDescriptor(R.drawable.ic_all_events,
-			R.drawable.ic_altri_eventi_map, CATEGORY_ALL, R.string.categories_event_all);
+	public static CategoryDescriptor EVENTS_ALL = new CategoryDescriptor(R.drawable.ic_flag_events_map,
+			R.drawable.ic_flag_events_map, CATEGORY_ALL, R.string.categories_event_all, "#edcc18");
 	
 	public static CategoryDescriptor[] EVENT_CATEGORIES = new CategoryDescriptor[] {
-			/* 1 */new CategoryDescriptor(R.drawable.ic_cultura_map, R.drawable.ic_cultura, CAT_CULTURA,
-					R.string.categories_event_cultura),
-			/* 2 */new CategoryDescriptor(R.drawable.ic_sport_map, R.drawable.ic_sport, CAT_SPORT,
-					R.string.categories_event_sport),
-			/* 3 */new CategoryDescriptor(R.drawable.ic_svago_map, R.drawable.ic_person, CAT_SOCIALE,
-					R.string.categories_event_social),
-			/* 4 */new CategoryDescriptor(R.drawable.ic_altri_eventi_map, R.drawable.ic_altri_eventi,
-					EVENT_NONCATEGORIZED, R.string.categories_event_altri_eventi),
+			/* 1 */new CategoryDescriptor(R.drawable.ic_flag_culture_map, R.drawable.ic_flag_culture_map, CAT_CULTURA,
+					R.string.categories_event_cultura, "#e89a1a"),
+			/* 2 */new CategoryDescriptor(R.drawable.ic_flag_sport_map, R.drawable.ic_flag_sport_map, CAT_SPORT,
+					R.string.categories_event_sport, "#00b85c"),
+			/* 3 */new CategoryDescriptor(R.drawable.ic_flag_person_map, R.drawable.ic_flag_person_map, CAT_SOCIALE,
+					R.string.categories_event_social, "#30c3a6"),
+			/* 4 */new CategoryDescriptor(R.drawable.ic_flag_other_map, R.drawable.ic_flag_other_map,
+					EVENT_NONCATEGORIZED, R.string.categories_event_altri_eventi, "#1aa099"),
 					
 
 	};
@@ -108,13 +108,13 @@ public class CategoryHelper {
 	public static int getMapIconByType(String type) {
 		if (categoryMapping.containsKey(type))
 			return descriptorMap.get(categoryMapping.get(type)).map_icon;
-		return R.drawable.ic_altri_eventi_map;
+		return R.drawable.ic_flag_events_map;
 	}
 
 	public static int getIconByType(String type) {
 		if (categoryMapping.containsKey(type))
 			return descriptorMap.get(categoryMapping.get(type)).thumbnail;
-		return R.drawable.ic_altri_eventi;
+		return R.drawable.ic_flag_events_map;
 	}
 
 	public static class CategoryDescriptor {
@@ -122,13 +122,15 @@ public class CategoryHelper {
 		public int thumbnail;
 		public String category;
 		public int description;
-
-		public CategoryDescriptor(int map_icon, int thumbnail, String category, int description) {
+		public String color;
+		public CategoryDescriptor(int map_icon, int thumbnail, String category, int description, String color) {
 			super();
 			this.map_icon = map_icon;
 			this.thumbnail = thumbnail;
 			this.category = category;
 			this.description = description;
+			this.color = color;
+
 		}
 	}
 
@@ -165,7 +167,9 @@ public class CategoryHelper {
 	}
 
 	public static CategoryDescriptor getCategoryDescriptorByCategoryFiltered(String type, String cat) {
-		if (descriptorMap.containsKey(cat)) return descriptorMap.get(cat);
+		if (descriptorMap.containsKey(cat)){
+			return descriptorMap.get(cat);
+		}
 		return descriptorMap.get(EVENT_NONCATEGORIZED);
 	}
 

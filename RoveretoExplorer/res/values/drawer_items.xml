@@ -4,37 +4,25 @@
     <!-- The names of the menu items -->
 
     <string-array name="drawer_items_labels">
+        <item>Home</item>
+        <item>Map</item>
         <item>My events</item>
-        <item>Today</item>
-        <item>All</item>
-        <item>Culture</item>
-        <item>Sport</item>
-        <item>People</item>
-        <item>Others</item>
     </string-array>
 
     <!-- The icons associated to the menu items -->
 
     <string-array name="drawer_items_icons">
-        <item>@drawable/ic_miei_eventi</item>
-        <item>@drawable/ic_eventi_oggi</item>
-        <item>@drawable/ic_all_events</item>
-        <item>@drawable/ic_cultura</item>
-        <item>@drawable/ic_sport</item>
-        <item>@drawable/ic_person</item>
-        <item>@drawable/ic_altri_eventi</item>
+        <item>@drawable/ic_drawer_home</item>
+        <item>@drawable/ic_drower_map</item>
+        <item>@drawable/ic_drower_myevents</item>
     </string-array>
 
     <!-- The icons associated to the menu items -->
 
     <string-array name="drawer_items_actionbar_titles">
+        <item>Home</item>
+        <item>Maps</item>
         <item>My events</item>
-        <item>Today</item>
-        <item>All</item>
-        <item>Culture</item>
-        <item>Sport</item>
-        <item>People</item>
-        <item>Others</item>
     </string-array>
 
 </resources>

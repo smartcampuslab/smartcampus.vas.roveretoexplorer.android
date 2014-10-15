@@ -1,5 +1,6 @@
 package eu.iescities.pilot.rovereto.roveretoexplorer;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 import org.apache.http.HttpStatus;
@@ -27,11 +28,13 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.widget.Toast;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.AbstractAsyncTaskProcessor;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.CategoryHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.DTHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.BaseDTObject;
+import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.CategoryFragment;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.AnimateFirstDisplayListener;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.EventsListingFragment;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.questionnaire.QuizHelper;
@@ -65,13 +68,25 @@ public class MainActivity extends AbstractNavDrawerActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		try {
+			ViewConfiguration config = ViewConfiguration.get(this);
+			Field menuKeyField = ViewConfiguration.class
+					.getDeclaredField("sHasPermanentMenuKey");
+			if (menuKeyField != null) {
+				menuKeyField.setAccessible(true);
+				menuKeyField.setBoolean(config, false);
+			}
+		} catch (Exception ex) {
+			// Ignore
+		}
 		mFragmentManager = getSupportFragmentManager();
 		signedIn();
 
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		// this is a class created to avoid an Android bug
 		// see the class for further infos.
-		mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.drawable.ic_drawer, R.string.drawer_open,
+		mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
+				R.drawable.ic_drawer, R.string.drawer_open,
 				R.string.drawer_close) {
 
 			@Override
@@ -83,7 +98,7 @@ public class MainActivity extends AbstractNavDrawerActivity {
 
 		};
 		mDrawerLayout.setDrawerListener(mDrawerToggle);
-		//init the class for sending Log (Shared preferences are created)
+		// init the class for sending Log (Shared preferences are created)
 		LogHelper.init(this);
 
 	}
@@ -103,10 +118,10 @@ public class MainActivity extends AbstractNavDrawerActivity {
 	@Override
 	protected void onStart() {
 		super.onStart();
-		//every new start a new session Id is generated
+		// every new start a new session Id is generated
 		LogHelper.deleteSessionId(this);
 		LogHelper.sendStartLog(this);
-		//check if still a quiz to be done
+		// check if still a quiz to be done
 		QuizHelper.checkQuiz(this);
 
 	}
@@ -120,7 +135,8 @@ public class MainActivity extends AbstractNavDrawerActivity {
 			initDataManagement();
 		} catch (Exception e) {
 			e.printStackTrace();
-			Toast.makeText(MainActivity.this, getString(R.string.auth_failed), Toast.LENGTH_SHORT).show();
+			Toast.makeText(MainActivity.this, getString(R.string.auth_failed),
+					Toast.LENGTH_SHORT).show();
 			finish();
 		}
 
@@ -136,12 +152,15 @@ public class MainActivity extends AbstractNavDrawerActivity {
 				switch (which) {
 				case DialogInterface.BUTTON_POSITIVE:
 					try {
-						if (!SCAccessProvider.getInstance(MainActivity.this).login(MainActivity.this, null)) {
+						if (!SCAccessProvider.getInstance(MainActivity.this)
+								.login(MainActivity.this, null)) {
 							new TokenTask().execute();
 						}
 					} catch (Exception e) {
 						e.printStackTrace();
-						Toast.makeText(MainActivity.this, getString(R.string.auth_failed), Toast.LENGTH_SHORT).show();
+						Toast.makeText(MainActivity.this,
+								getString(R.string.auth_failed),
+								Toast.LENGTH_SHORT).show();
 						finish();
 					}
 					break;
@@ -154,8 +173,10 @@ public class MainActivity extends AbstractNavDrawerActivity {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setCancelable(false);
 		builder.setMessage(getString(R.string.auth_required))
-				.setPositiveButton(android.R.string.yes, updateDialogClickListener)
-				.setNegativeButton(android.R.string.no, updateDialogClickListener).show();
+				.setPositiveButton(android.R.string.yes,
+						updateDialogClickListener)
+				.setNegativeButton(android.R.string.no,
+						updateDialogClickListener).show();
 	}
 
 	private void initDataManagement() {
@@ -169,19 +190,23 @@ public class MainActivity extends AbstractNavDrawerActivity {
 
 			} catch (Exception e) {
 				e.printStackTrace();
-				Toast.makeText(this, getString(R.string.auth_failed), Toast.LENGTH_SHORT).show();
+				Toast.makeText(this, getString(R.string.auth_failed),
+						Toast.LENGTH_SHORT).show();
 				finish();
 			}
 
 		} catch (Exception e) {
-			Toast.makeText(this, R.string.app_failure_init, Toast.LENGTH_LONG).show();
+			Toast.makeText(this, R.string.app_failure_init, Toast.LENGTH_LONG)
+					.show();
 			e.printStackTrace();
 			return;
 		}
 	}
 
-	private void initGlobalConstants() throws NameNotFoundException, NotFoundException {
-		GlobalConfig.setAppUrl(this, getResources().getString(R.string.smartcampus_app_url));
+	private void initGlobalConstants() throws NameNotFoundException,
+			NotFoundException {
+		GlobalConfig.setAppUrl(this,
+				getResources().getString(R.string.smartcampus_app_url));
 	}
 
 	@Override
@@ -189,14 +214,17 @@ public class MainActivity extends AbstractNavDrawerActivity {
 		super.onActivityResult(requestCode, resultCode, data);
 		if (requestCode == SCAccessProvider.SC_AUTH_ACTIVITY_REQUEST_CODE) {
 			if (resultCode == RESULT_OK) {
-				String token = data.getExtras().getString(AccountManager.KEY_AUTHTOKEN);
+				String token = data.getExtras().getString(
+						AccountManager.KEY_AUTHTOKEN);
 				if (token == null) {
-					Toast.makeText(this, R.string.app_failure_security, Toast.LENGTH_LONG).show();
+					Toast.makeText(this, R.string.app_failure_security,
+							Toast.LENGTH_LONG).show();
 					finish();
 				} else {
 					initDataManagement();
 				}
-			} else if (resultCode == RESULT_CANCELED && requestCode == SCAccessProvider.SC_AUTH_ACTIVITY_REQUEST_CODE) {
+			} else if (resultCode == RESULT_CANCELED
+					&& requestCode == SCAccessProvider.SC_AUTH_ACTIVITY_REQUEST_CODE) {
 				DTHelper.endAppFailure(this, R.string.app_failure_security);
 			}
 		}
@@ -205,17 +233,22 @@ public class MainActivity extends AbstractNavDrawerActivity {
 	private boolean initData() {
 		try {
 			// to start with the map.
-			mFragmentManager.beginTransaction().replace(R.id.content_frame, new MapFragment(), TAG_FRAGMENT_MAP)
-					.commit();
-			new SCAsyncTask<Void, Void, BaseDTObject>(this, new LoadDataProcessor(this)).execute();
+			mFragmentManager
+					.beginTransaction()
+					.replace(R.id.content_frame, new CategoryFragment(),
+							TAG_FRAGMENT_MAP).commit();
+			new SCAsyncTask<Void, Void, BaseDTObject>(this,
+					new LoadDataProcessor(this)).execute();
 		} catch (Exception e1) {
-			Toast.makeText(this, R.string.app_failure_init, Toast.LENGTH_LONG).show();
+			Toast.makeText(this, R.string.app_failure_init, Toast.LENGTH_LONG)
+					.show();
 			return false;
 		}
 		return true;
 	}
 
-	private class LoadDataProcessor extends AbstractAsyncTaskProcessor<Void, BaseDTObject> {
+	private class LoadDataProcessor extends
+			AbstractAsyncTaskProcessor<Void, BaseDTObject> {
 
 		private int syncRequired = 0;
 		private FragmentActivity currentRootActivity = null;
@@ -225,7 +258,8 @@ public class MainActivity extends AbstractNavDrawerActivity {
 		}
 
 		@Override
-		public BaseDTObject performAction(Void... params) throws SecurityException, Exception {
+		public BaseDTObject performAction(Void... params)
+				throws SecurityException, Exception {
 
 			Exception res = null;
 
@@ -245,7 +279,9 @@ public class MainActivity extends AbstractNavDrawerActivity {
 		public void handleResult(BaseDTObject result) {
 			if (syncRequired != DTHelper.SYNC_NOT_REQUIRED) {
 				if (syncRequired == DTHelper.SYNC_REQUIRED_FIRST_TIME) {
-					Toast.makeText(MainActivity.this, R.string.initial_data_load, Toast.LENGTH_LONG).show();
+					Toast.makeText(MainActivity.this,
+							R.string.initial_data_load, Toast.LENGTH_LONG)
+							.show();
 				}
 				setSupportProgressBarIndeterminateVisibility(true);
 				isLoading = true;
@@ -253,21 +289,25 @@ public class MainActivity extends AbstractNavDrawerActivity {
 					@Override
 					public void run() {
 						try {
-							currentRootActivity = DTHelper.start(MainActivity.this);
+							currentRootActivity = DTHelper
+									.start(MainActivity.this);
 						} catch (Exception e) {
 							e.printStackTrace();
 						} finally {
 							if (currentRootActivity != null) {
-								currentRootActivity.runOnUiThread(new Runnable() {
-									@Override
-									public void run() {
-										currentRootActivity.setProgressBarIndeterminateVisibility(false);
-										if (MainActivity.this != null) {
-											MainActivity.this.setSupportProgressBarIndeterminateVisibility(false);
-										}
-										isLoading = false;
-									}
-								});
+								currentRootActivity
+										.runOnUiThread(new Runnable() {
+											@Override
+											public void run() {
+												currentRootActivity
+														.setProgressBarIndeterminateVisibility(false);
+												if (MainActivity.this != null) {
+													MainActivity.this
+															.setSupportProgressBarIndeterminateVisibility(false);
+												}
+												isLoading = false;
+											}
+										});
 							}
 						}
 					}
@@ -295,8 +335,8 @@ public class MainActivity extends AbstractNavDrawerActivity {
 		TypedArray drawIds = getResources().obtainTypedArray((ids[1]));
 		for (int j = 0; j < labels.length; j++) {
 			int imgd = drawIds.getResourceId(j, -1);
-			menu_items.add(NavMenuItem.create(j + 1, labels[j], abTitles[j], ((imgd != -1) ? imgd : null), true, false,
-					this));
+			menu_items.add(NavMenuItem.create(j + 1, labels[j], abTitles[j],
+					((imgd != -1) ? imgd : null), true, false, this));
 		}
 		drawIds.recycle();
 		return menu_items;
@@ -310,16 +350,20 @@ public class MainActivity extends AbstractNavDrawerActivity {
 		navDrawerActivityConfiguration.setDrawerLayoutId(R.id.drawer_layout);
 		navDrawerActivityConfiguration.setLeftDrawerId(R.id.left_drawer);
 
-		navDrawerActivityConfiguration.setDrawerShadow(R.drawable.drawer_shadow);
+		navDrawerActivityConfiguration
+				.setDrawerShadow(R.drawable.drawer_shadow);
 		navDrawerActivityConfiguration.setDrawerOpenDesc(R.string.drawer_open);
-		navDrawerActivityConfiguration.setDrawerCloseDesc(R.string.drawer_close);
+		navDrawerActivityConfiguration
+				.setDrawerCloseDesc(R.string.drawer_close);
 
-		ArrayList<NavDrawerItem> menu_items = getMenuItems(R.array.drawer_items_labels, R.array.drawer_items_icons,
+		ArrayList<NavDrawerItem> menu_items = getMenuItems(
+				R.array.drawer_items_labels, R.array.drawer_items_icons,
 				R.array.drawer_items_actionbar_titles);
 
 		navDrawerActivityConfiguration.setMenuItems(menu_items);
 
-		navDrawerActivityConfiguration.setBaseAdapter(new NavDrawerAdapter(this, R.layout.navdrawer_item, menu_items));
+		navDrawerActivityConfiguration.setBaseAdapter(new NavDrawerAdapter(
+				this, R.layout.navdrawer_item, menu_items));
 
 		navDrawerActivityConfiguration.setDrawerIcon(R.drawable.ic_drawer);
 
@@ -335,9 +379,11 @@ public class MainActivity extends AbstractNavDrawerActivity {
 		if (objects != null) {
 			FragmentTransaction ft = mFragmentManager.beginTransaction();
 			ft.setCustomAnimations(R.anim.enter, R.anim.exit);
-			ft.replace(R.id.content_frame, (Fragment) objects[0], objects[1].toString());
+			ft.replace(R.id.content_frame, (Fragment) objects[0],
+					objects[1].toString());
 			// ft.addToBackStack(objects[1].toString());
-			mFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+			mFragmentManager.popBackStack(null,
+					FragmentManager.POP_BACK_STACK_INCLUSIVE);
 			ft.commit();
 		}
 	}
@@ -346,10 +392,26 @@ public class MainActivity extends AbstractNavDrawerActivity {
 		Object[] out = new Object[2];
 		String cat = null;
 		Bundle args = new Bundle();
-		EventsListingFragment elf = null;
+		Fragment elf = null;
 
 		switch (pos_in_list) {
-		case 1: // click on "I miei eventi" item
+		case 1: // click on "Oggi" item
+			args = new Bundle();
+			elf = new CategoryFragment();
+			args.putString(EventsListingFragment.ARG_QUERY_TODAY, "");
+			elf.setArguments(args);
+			out[0] = elf;
+			out[1] = TAG_FRAGMENT_EVENT_LIST;
+			break;
+		case 2: // click on "I miei eventi" item
+			args = new Bundle();
+			elf = new MapFragment();
+			args.putBoolean(SearchFragment.ARG_MY, true);
+			elf.setArguments(args);
+			out[0] = elf;
+			out[1] = TAG_FRAGMENT_EVENT_LIST;
+			break;
+		case 3: // click on "I miei eventi" item
 			args = new Bundle();
 			elf = new EventsListingFragment();
 			args.putBoolean(SearchFragment.ARG_MY, true);
@@ -357,58 +419,8 @@ public class MainActivity extends AbstractNavDrawerActivity {
 			out[0] = elf;
 			out[1] = TAG_FRAGMENT_EVENT_LIST;
 			break;
-		case 2: // click on "Oggi" item
-			args = new Bundle();
-			elf = new EventsListingFragment();
-			args.putString(EventsListingFragment.ARG_QUERY_TODAY, "");
-			elf.setArguments(args);
-			out[0] = elf;
-			out[1] = TAG_FRAGMENT_EVENT_LIST;
-			break;
-		case 3: // click on "All" item
-			args = new Bundle();
-			elf = new EventsListingFragment();
-			args.putBoolean(SearchFragment.ARG_ALL, true);
-			elf.setArguments(args);
-			out[0] = elf;
-			out[1] = TAG_FRAGMENT_EVENT_LIST;
-			break;
-		case 4: // click on "Cultura" item
-			cat = CategoryHelper.CAT_CULTURA;
-			args = new Bundle();
-			elf = new EventsListingFragment();
-			args.putString(SearchFragment.ARG_CATEGORY, cat);
-			elf.setArguments(args);
-			out[0] = elf;
-			out[1] = TAG_FRAGMENT_EVENT_LIST;
-			break;
-		case 5: // click on "Sport" item
-			cat = CategoryHelper.CAT_SPORT;
-			args = new Bundle();
-			elf = new EventsListingFragment();
-			args.putString(SearchFragment.ARG_CATEGORY, cat);
-			elf.setArguments(args);
-			out[0] = elf;
-			out[1] = TAG_FRAGMENT_EVENT_LIST;
-			break;
-		case 6: // click on "Svago" item
-			cat = CategoryHelper.CAT_SOCIALE;
-			args = new Bundle();
-			elf = new EventsListingFragment();
-			args.putString(SearchFragment.ARG_CATEGORY, cat);
-			elf.setArguments(args);
-			out[0] = elf;
-			out[1] = TAG_FRAGMENT_EVENT_LIST;
-			break;
-		case 7: // click on "Altri eventi" item
-			cat = CategoryHelper.EVENT_NONCATEGORIZED;
-			args = new Bundle();
-			elf = new EventsListingFragment();
-			args.putString(SearchFragment.ARG_CATEGORY, cat);
-			elf.setArguments(args);
-			out[0] = elf;
-			out[1] = TAG_FRAGMENT_EVENT_LIST;
-			break;
+
+
 		default:
 			return null;
 		}
@@ -447,14 +459,17 @@ public class MainActivity extends AbstractNavDrawerActivity {
 		// If the fragment exists and has some back-stack entry
 		FragmentManager fm = getSupportFragmentManager();
 		Fragment currentFragment = fm.findFragmentById(R.id.content_frame);
-		if (currentFragment != null && currentFragment.getChildFragmentManager().getBackStackEntryCount() > 0) {
+		if (currentFragment != null
+				&& currentFragment.getChildFragmentManager()
+						.getBackStackEntryCount() > 0) {
 			// Get the fragment fragment manager - and pop the backstack
 			currentFragment.getChildFragmentManager().popBackStack();
 		}
 		// Else, nothing in the direct fragment back stack
 		else {
 
-			Log.i("BACKPRESSED", "MainActivity --> current fragment: " + currentFragment.getTag() + "!");
+			Log.i("BACKPRESSED", "MainActivity --> current fragment: "
+					+ currentFragment.getTag() + "!");
 
 			if (!this.TAG_FRAGMENT_MAP.equals(currentFragment.getTag()))
 				this.setTitleWithDrawerTitle();
@@ -500,7 +515,8 @@ public class MainActivity extends AbstractNavDrawerActivity {
 
 		@Override
 		protected String doInBackground(Void... params) {
-			SCAccessProvider provider = SCAccessProvider.getInstance(MainActivity.this);
+			SCAccessProvider provider = SCAccessProvider
+					.getInstance(MainActivity.this);
 			try {
 				return provider.readToken(MainActivity.this);
 			} catch (AACException e) {
@@ -522,7 +538,8 @@ public class MainActivity extends AbstractNavDrawerActivity {
 		@Override
 		protected void onPostExecute(String result) {
 			if (result == null) {
-				SCAccessProvider provider = SCAccessProvider.getInstance(MainActivity.this);
+				SCAccessProvider provider = SCAccessProvider
+						.getInstance(MainActivity.this);
 				try {
 					provider.login(MainActivity.this, null);
 					initDataManagement();

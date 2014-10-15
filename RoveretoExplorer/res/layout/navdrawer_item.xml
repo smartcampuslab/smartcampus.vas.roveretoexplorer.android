@@ -29,7 +29,7 @@
         android:layout_toRightOf="@id/navmenuitem_icon"
         android:gravity="center_vertical"
         android:text="TextView"
-        android:textColor="#FFFFFF"/>
+        android:textColor="@color/drawer_text"/>
 
 </RelativeLayout>
 

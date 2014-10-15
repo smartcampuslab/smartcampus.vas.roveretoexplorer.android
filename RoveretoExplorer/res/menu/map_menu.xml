@@ -1,13 +1,29 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:eu.iescities.pilot.rovereto.roveretoexplorer="http://schemas.android.com/apk/res-auto" >
 
-    
     <item
-        android:id="@+id/action_overflow"
-        android:icon="@drawable/ic_action_overflow"
+        android:id="@+id/map_filter"
+        android:icon="@drawable/ic_filter"
         android:orderInCategory="2"
-        eu.iescities.pilot.rovereto.roveretoexplorer:showAsAction="always"
-        android:title="@string/overflow">
+        android:title="@string/overflow"
+        eu.iescities.pilot.rovereto.roveretoexplorer:showAsAction="always">
+        <menu>
+            <item
+                android:id="@+id/category_all"
+                android:title="@string/categories_event_all"/>
+            <item
+                android:id="@+id/category_cultur"
+                android:title="@string/categories_event_cultura"/>
+            <item
+                android:id="@+id/category_sport"
+                android:title="@string/categories_event_sport"/>
+            <item
+                android:id="@+id/category_social"
+                android:title="@string/categories_event_social"/>
+            <item
+                android:id="@+id/category_others"
+                android:title="@string/categories_event_altri_eventi"/>
+        </menu>
     </item>
 
 </menu>

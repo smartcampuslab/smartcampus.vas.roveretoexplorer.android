@@ -46,38 +46,53 @@ public class InfoDialog extends DialogFragment {
 		}
 		if (data instanceof ExplorerObject) {
 			getDialog().setTitle(R.string.info_dialog_title_event);
+			
 		}
-		return inflater.inflate(R.layout.mapdialog, container, false);
+		View v =inflater.inflate(R.layout.mapdialog, container, false);
+
+		return v;
 	}
 
 	@Override
 	public void onStart() {
 		super.onStart();
-		TextView msg = (TextView) getDialog().findViewById(R.id.mapdialog_msg);
-
+		TextView msgTitle = (TextView) getDialog().findViewById(R.id.infodialog_title);
+		TextView msgCat = (TextView) getDialog().findViewById(R.id.infodialog_category);
+		TextView msgDate = (TextView) getDialog().findViewById(R.id.infodialog_date);
+		int textViewId = getResources().getIdentifier("android:id/alertTitle", null, null);
+//		TextView tv = (TextView) getDialog().findViewById(textViewId);
+//		tv.setTextColor(getResources().getColor(android.R.color.black));
+//		int dividerId = getResources().getIdentifier("android:id/titleDivider", null, null);
+//		View divider = getDialog().findViewById(dividerId);
+//		divider.setBackgroundColor(getResources().getColor(android.R.color.black));
 		if (data instanceof ExplorerObject) {
 			ExplorerObject event = (ExplorerObject) data;
-			String msgText = "";
-			msgText += "<h2>";
-			msgText += event.getTitle();
-			msgText += "</h2><br/><p>";
+			String strTitle = "";
+			String strCat = "";
+			String strDate = "";
+			strTitle += "<h2>";
+			strTitle += event.getTitle();
+			strTitle += "</h2><br/><p>";
 			if (event.getType() != null) {
 				String categoryString=event.categoryString(getActivity());
 				if (categoryString!=null) {
-					msgText += "<p>" + categoryString +"</p><br/>";
+
+					strCat += "<p>" + categoryString +"</p><br/>";
 
 				}
 			}
-			msgText += "<p>" + event.dateTimeString() + "</p>";
+			strDate += "<p>" + event.dateTimeString() + "</p>";
 
 			String place = Utils.getEventShortAddress(event);
 			if (place != null) {
-				msgText += "<p>" + place + "</p>";
+				strDate += "<p>" + place + "</p>";
 			}
-			msg.setText(Html.fromHtml(msgText));
+			msgTitle.setText(Html.fromHtml(strTitle));
+			msgCat.setText(Html.fromHtml(strCat));
+			msgDate.setText(Html.fromHtml(strDate));
 		}
 
-		msg.setMovementMethod(new ScrollingMovementMethod());
+		msgDate.setMovementMethod(new ScrollingMovementMethod());
 
 		Button b = (Button) getDialog().findViewById(R.id.mapdialog_cancel);
 		b.setOnClickListener(new OnClickListener() {

@@ -34,6 +34,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.util.SparseArray;
 
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnCameraChangeListener;
@@ -54,6 +55,7 @@ import eu.iescities.pilot.rovereto.roveretoexplorer.custom.CategoryHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.DTParamsHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.DTHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.BaseDTObject;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ExplorerObject;
 
 public class MapManager {
 
@@ -90,21 +92,35 @@ public class MapManager {
 		return DTHelper.getLocationHelper().getLocation();
 	}
 
-	public static void fitMapWithOverlays(Collection<? extends BaseDTObject> objects, GoogleMap map) {
-		double[] llrr = null;
+	public static void fitMapWithOverlays(
+			Collection<? extends BaseDTObject> objects, GoogleMap map) {
+		LatLngBounds.Builder b = new LatLngBounds.Builder();
 		if (objects != null && !objects.isEmpty()) {
-			for (BaseDTObject o : objects) {
-
-				llrr = fit(llrr, o.getLocation());
-
+			for (BaseDTObject m : objects) {
+				LatLng latlng = new LatLng(m.getLocation()[0],
+						m.getLocation()[1]);
+				b.include(latlng);
 			}
+			LatLngBounds bounds = b.build();
+			// Change the padding as per needed
+			CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 50);
+			map.animateCamera(cu);
 		}
-		if (llrr != null) {
-			fit(map, new double[] { llrr[0], llrr[1] }, new double[] { llrr[2], llrr[3] },
-					objects != null && objects.size() > 1);
-		} else {
-			fit(map, null, null, objects != null && objects.size() > 1);
-		}
+		// double[] llrr = null;
+		// if (objects != null && !objects.isEmpty()) {
+		// for (BaseDTObject o : objects) {
+		//
+		// llrr = fit(llrr, o.getLocation());
+		//
+		// }
+		// }
+		// if (llrr != null) {
+		// fit(map, new double[] { llrr[0], llrr[1] }, new double[] { llrr[2],
+		// llrr[3] },
+		// objects != null && objects.size() > 1);
+		// } else {
+		// fit(map, null, null, objects != null && objects.size() > 1);
+		// }
 	}
 
 	/**
@@ -129,23 +145,30 @@ public class MapManager {
 		return llrr;
 	}
 
-	private static void fit(final GoogleMap map, double[] ll, double[] rr, boolean zoomIn) {
+	private static void fit(final GoogleMap map, final double[] ll,
+			double[] rr, boolean zoomIn) {
 		if (ll != null && rr != null) {
-			final LatLngBounds bounds = LatLngBounds.builder().include(new LatLng(rr[0], rr[1]))
+			final LatLngBounds bounds = LatLngBounds.builder()
+					.include(new LatLng(rr[0], rr[1]))
 					.include(new LatLng(ll[0], ll[1])).build();
 			map.setOnCameraChangeListener(new OnCameraChangeListener() {
 
-			    @Override
-			    public void onCameraChange(CameraPosition arg0) {
-					map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 64));
+				@Override
+				public void onCameraChange(CameraPosition arg0) {
+					// map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds,
+					// 64));
 
-			        // Move camera.
-//			        map.moveCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), 10));
-			        // Remove listener to prevent position reset on camera move.
-			        map.setOnCameraChangeListener(null);
-			    }
+					// Move camera.
+					map.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds,
+							64));
+					// Remove listener to prevent position reset on camera move.
+					map.setOnCameraChangeListener(null);
+
+				}
 			});
-//			map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 64));
+			map.moveCamera(CameraUpdateFactory.scrollBy(1, 1));
+			// map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds,
+			// 64));
 		}
 	}
 
@@ -184,14 +207,16 @@ public class MapManager {
 		private static List<List<List<BaseDTObject>>> grid = new ArrayList<List<List<BaseDTObject>>>();
 		private static SparseArray<int[]> item2group = new SparseArray<int[]>();
 
-		public synchronized static <T extends BaseDTObject> List<MarkerOptions> cluster(Context mContext,
-				GoogleMap map, Collection<T> objects) {
+		public synchronized static <T extends BaseDTObject> List<MarkerOptions> cluster(
+				Context mContext, GoogleMap map, Collection<T> objects,
+				String categoryFilter) {
 			item2group.clear();
 			// 2D array with some configurable, fixed density
 			grid.clear();
 
 			for (int i = 0; i <= DENSITY_X; i++) {
-				ArrayList<List<BaseDTObject>> column = new ArrayList<List<BaseDTObject>>(DENSITY_Y + 1);
+				ArrayList<List<BaseDTObject>> column = new ArrayList<List<BaseDTObject>>(
+						DENSITY_Y + 1);
 				for (int j = 0; j <= DENSITY_Y; j++) {
 					column.add(new ArrayList<BaseDTObject>());
 				}
@@ -200,7 +225,8 @@ public class MapManager {
 
 			LatLng lu = map.getProjection().getVisibleRegion().farLeft;
 			LatLng rd = map.getProjection().getVisibleRegion().nearRight;
-			int step = (int) (Math.abs((lu.longitude * 1E6) - (rd.longitude * 1E6)) / DENSITY_X);
+			int step = (int) (Math.abs((lu.longitude * 1E6)
+					- (rd.longitude * 1E6)) / DENSITY_X);
 
 			// compute leftmost bound of the affected grid:
 			// this is the bound of the leftmost grid cell that intersects
@@ -222,11 +248,15 @@ public class MapManager {
 				for (BaseDTObject basicObject : objects) {
 					LatLng objLatLng = getLatLngFromBasicObject(basicObject);
 
-					if (objLatLng != null && (objLatLng.longitude * 1E6) >= startX
-							&& (objLatLng.longitude * 1E6) <= endX && (objLatLng.latitude * 1E6) >= startY
+					if (objLatLng != null
+							&& (objLatLng.longitude * 1E6) >= startX
+							&& (objLatLng.longitude * 1E6) <= endX
+							&& (objLatLng.latitude * 1E6) >= startY
 							&& (objLatLng.latitude * 1E6) <= endY) {
-						int binX = (int) (Math.abs((objLatLng.longitude * 1E6) - startX) / step);
-						int binY = (int) (Math.abs((objLatLng.latitude * 1E6) - startY) / step);
+						int binX = (int) (Math.abs((objLatLng.longitude * 1E6)
+								- startX) / step);
+						int binY = (int) (Math.abs((objLatLng.latitude * 1E6)
+								- startY) / step);
 
 						item2group.put(idx, new int[] { binX, binY });
 						// just push the reference
@@ -269,10 +299,12 @@ public class MapManager {
 				for (int j = 0; j < grid.get(i).size(); j++) {
 					List<BaseDTObject> markerList = grid.get(i).get(j);
 					if (markerList.size() > 1) {
-						markers.add(createGroupMarker(mContext, map, markerList, i, j));
+						markers.add(createGroupMarker(mContext, map,
+								markerList, i, j));
 					} else if (markerList.size() == 1) {
 						// draw single marker
-						markers.add(createSingleMarker(markerList.get(0), i, j));
+						markers.add(createSingleMarker(markerList.get(0), i, j,
+								categoryFilter));
 					}
 				}
 			}
@@ -308,7 +340,8 @@ public class MapManager {
 		 * @param markers
 		 * @param objects
 		 */
-		public static void render(Context ctx, GoogleMap map, List<MarkerOptions> markers,
+		public static void render(Context ctx, GoogleMap map,
+				List<MarkerOptions> markers,
 				Collection<? extends BaseDTObject> objects) {
 			if (myMarkers == null)
 				myMarkers = new ArrayList<Marker>();
@@ -325,29 +358,41 @@ public class MapManager {
 					marker.remove();
 		}
 
-		private static MarkerOptions createSingleMarker(BaseDTObject item, int x, int y) {
+		private static MarkerOptions createSingleMarker(BaseDTObject item,
+				int x, int y, String categoryFilter) {
 			LatLng latLng = getLatLngFromBasicObject(item);
-
-			int markerIcon = CategoryHelper.getMapIconByType(item.getType());
+			int markerIcon = 0;
+			if (categoryFilter==null || !categoryFilter.equals(CategoryHelper.CATEGORY_ALL)) {
+				markerIcon = CategoryHelper.getMapIconByType(categoryFilter);
+			} else {
+				if (!((ExplorerObject) item).getCategory().isEmpty()) {
+					markerIcon = CategoryHelper
+							.getMapIconByType(((ExplorerObject) item)
+									.getCategory().get(0));
+				}
+			}
 			// if (CategoryHelper.FAMILY_CATEGORY_POI.equals(item.getType())
 			// || (CategoryHelper.FAMILY_CATEGORY_EVENT.equals(item.getType())))
 			// markerIcon = objectCertified(item);
 
 			MarkerOptions marker = new MarkerOptions().position(latLng)
-					.icon(BitmapDescriptorFactory.fromResource(markerIcon)).title(x + ":" + y);
+					.icon(BitmapDescriptorFactory.fromResource(markerIcon))
+					.title(x + ":" + y);
 			return marker;
 		}
 
-		private static MarkerOptions createGroupMarker(Context mContext, GoogleMap map, List<BaseDTObject> markerList,
-				int x, int y) {
+		private static MarkerOptions createGroupMarker(Context mContext,
+				GoogleMap map, List<BaseDTObject> markerList, int x, int y) {
 			BaseDTObject item = markerList.get(0);
 			LatLng latLng = getLatLngFromBasicObject(item);
 
-			int markerIcon = R.drawable.ic_marker_p_generic;
+			int markerIcon = R.drawable.ic_cluster_map;
 
-			BitmapDescriptor bd = BitmapDescriptorFactory.fromBitmap(writeOnMarker(mContext, markerIcon,
-					Integer.toString(markerList.size())));
-			MarkerOptions marker = new MarkerOptions().position(latLng).icon(bd).title(x + ":" + y);
+			BitmapDescriptor bd = BitmapDescriptorFactory
+					.fromBitmap(writeOnMarker(mContext, markerIcon,
+							Integer.toString(markerList.size())));
+			MarkerOptions marker = new MarkerOptions().position(latLng)
+					.icon(bd).title(x + ":" + y);
 			return marker;
 		}
 
@@ -363,7 +408,8 @@ public class MapManager {
 			}
 		}
 
-		private static boolean checkDistanceAndMerge(int i, int j, List<BaseDTObject> curr) {
+		private static boolean checkDistanceAndMerge(int i, int j,
+				List<BaseDTObject> curr) {
 			List<BaseDTObject> src = grid.get(i).get(j);
 			if (src.size() == 0) {
 				return false;
@@ -375,7 +421,8 @@ public class MapManager {
 			if (srcLatLng != null && currLatLng != null) {
 				float[] dist = new float[3];
 
-				Location.distanceBetween(srcLatLng.latitude, srcLatLng.longitude, currLatLng.latitude,
+				Location.distanceBetween(srcLatLng.latitude,
+						srcLatLng.longitude, currLatLng.latitude,
 						currLatLng.longitude, dist);
 
 				if (dist[0] < 20) {
@@ -389,13 +436,16 @@ public class MapManager {
 
 	}
 
-	public static void switchToMapView(ArrayList<BaseDTObject> list, Fragment src) {
-		FragmentTransaction fragmentTransaction = src.getActivity().getSupportFragmentManager().beginTransaction();
+	public static void switchToMapView(ArrayList<BaseDTObject> list,
+			Fragment src) {
+		FragmentTransaction fragmentTransaction = src.getActivity()
+				.getSupportFragmentManager().beginTransaction();
 		MapFragment fragment = new MapFragment();
 		Bundle args = new Bundle();
 		args.putSerializable(MapFragment.ARG_OBJECTS, list);
 		fragment.setArguments(args);
-		fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+		fragmentTransaction
+				.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
 		// fragmentTransaction.detach(src);
 		fragmentTransaction.replace(R.id.content_frame, fragment, src.getTag());
 		fragmentTransaction.addToBackStack(fragment.getTag());
@@ -403,13 +453,16 @@ public class MapManager {
 
 	}
 
-	public static void switchToMapView(String category, String argType, Fragment src) {
-		FragmentTransaction fragmentTransaction = src.getActivity().getSupportFragmentManager().beginTransaction();
+	public static void switchToMapView(String category, String argType,
+			Fragment src) {
+		FragmentTransaction fragmentTransaction = src.getActivity()
+				.getSupportFragmentManager().beginTransaction();
 		MapFragment fragment = new MapFragment();
 		Bundle args = new Bundle();
 		args.putString(argType, category);
 		fragment.setArguments(args);
-		fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+		fragmentTransaction
+				.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
 		// fragmentTransaction.detach(src);
 		fragmentTransaction.replace(R.id.content_frame, fragment, src.getTag());
 		fragmentTransaction.addToBackStack(fragment.getTag());
@@ -437,11 +490,12 @@ public class MapManager {
 	// return CategoryHelper.getMapIconByType(o.getType());
 	// }
 
-	private static Bitmap writeOnMarker(Context mContext, int drawableId, String text) {
+	private static Bitmap writeOnMarker(Context mContext, int drawableId,
+			String text) {
 		float scale = mContext.getResources().getDisplayMetrics().density;
 
-		Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), drawableId).copy(Bitmap.Config.ARGB_8888,
-				true);
+		Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(),
+				drawableId).copy(Bitmap.Config.ARGB_8888, true);
 
 		Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 		paint.setTextAlign(Align.CENTER);
@@ -459,11 +513,12 @@ public class MapManager {
 		return bitmap;
 	}
 
-	private static Bitmap writeOnStoryMarker(Context mContext, int drawableId, String text) {
+	private static Bitmap writeOnStoryMarker(Context mContext, int drawableId,
+			String text) {
 		float scale = mContext.getResources().getDisplayMetrics().density;
 
-		Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), drawableId).copy(Bitmap.Config.ARGB_8888,
-				true);
+		Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(),
+				drawableId).copy(Bitmap.Config.ARGB_8888, true);
 		Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 		paint.setTextAlign(Align.CENTER);
 		paint.setTextSize(scale * 14);
@@ -474,7 +529,8 @@ public class MapManager {
 		Rect bounds = new Rect();
 		paint.getTextBounds(text, 0, text.length(), bounds);
 		float x = bitmap.getWidth() / 2;
-		float y = bitmap.getHeight() / 2 - ((paint.descent() + paint.ascent()) / 2);
+		float y = bitmap.getHeight() / 2
+				- ((paint.descent() + paint.ascent()) / 2);
 
 		canvas.drawText(text, x, y, paint);
 
@@ -482,11 +538,13 @@ public class MapManager {
 	}
 
 	private static LatLng getLatLngFromBasicObject(BaseDTObject object) {
-		LatLng latLng = new LatLng(object.getLocation()[0], object.getLocation()[1]);
+		LatLng latLng = new LatLng(object.getLocation()[0],
+				object.getLocation()[1]);
 		return latLng;
 	}
 
-	private static boolean draw(GoogleMap map, List<List<LatLng>> legsPoints, Context ctx) {
+	private static boolean draw(GoogleMap map, List<List<LatLng>> legsPoints,
+			Context ctx) {
 		for (int i = 0; i < legsPoints.size(); i++) {
 			// default
 			int color = ctx.getResources().getColor(R.color.path);
@@ -503,7 +561,8 @@ public class MapManager {
 		paint.setStyle(Paint.Style.FILL_AND_STROKE);
 		paint.setStrokeWidth(6);
 
-		PolylineOptions po = new PolylineOptions().addAll(points).width(6).color(color);
+		PolylineOptions po = new PolylineOptions().addAll(points).width(6)
+				.color(color);
 		Polyline pl = map.addPolyline(po);
 		pl.setVisible(true);
 	}
