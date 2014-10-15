@@ -26,7 +26,7 @@ public class EventPlaceholder {
 	public ExplorerObject event;
 	public TextView dateSeparator;
 	public int displayChild=0;
-	public TextView title, description, notes, location, hour, tags, source, attendees;
+	public TextView title, description, notes,  date, tags, source, attendees;
 	public ImageView icon;
 	public RatingBar rating;
 

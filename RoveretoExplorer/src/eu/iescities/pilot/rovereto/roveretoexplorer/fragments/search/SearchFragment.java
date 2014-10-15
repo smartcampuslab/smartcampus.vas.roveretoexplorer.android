@@ -21,6 +21,8 @@ import java.util.List;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -49,7 +51,7 @@ public class SearchFragment extends Fragment {
 	public static final String ARG_WHEN_SEARCH = "when_search";
 	public static final String ARG_WHERE_SEARCH = "where_search";
 	public static final String ARG_MY = "my";
-	public static final String ARG_ALL= "all";
+	public static final String ARG_ALL = "all";
 	public static final String ARG_CATEGORY = "category";
 	public static final String ARG_LIST = "list";
 	public static final String ARG_CATEGORY_SEARCH = "category_search";
@@ -75,7 +77,8 @@ public class SearchFragment extends Fragment {
 	private String type = "";
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
 		return inflater.inflate(R.layout.search, container, false);
 	}
 
@@ -104,6 +107,16 @@ public class SearchFragment extends Fragment {
 			String categoryString = (catDescriptor != null) ? getActivity().getResources().getString(
 					catDescriptor.description) : null;
 			titleSearch.setText(categoryString);
+//			int color = 0;
+//
+//			if (selectedCategory!=null && !getArguments().containsKey(SearchFragment.ARG_LIST)){
+//				color =(Color.parseColor(CategoryHelper.getCategoryDescriptorByCategoryFiltered(null, selectedCategory).color));
+//
+//			}
+//			else {
+//				color = Color.parseColor(getString(R.color.actionbar_default));
+//			}
+//			titleSearch.setBackgroundResource(Color.parseColor(CategoryHelper.getCategoryDescriptorByCategoryFiltered(null, selectedCategory).color));
 		} else
 			titleSearch.setText(R.string.search_txt);
 
@@ -174,10 +187,11 @@ public class SearchFragment extends Fragment {
 	 */
 	private void hideViewDependOnType(Bundle bundle) {
 		/* get the type */
-		if (bundle != null && bundle.containsKey(CategoryHelper.CATEGORY_TYPE_EVENTS)) {
+		if (bundle != null
+				&& bundle.containsKey(CategoryHelper.CATEGORY_TYPE_EVENTS)) {
 			type = CategoryHelper.CATEGORY_TYPE_EVENTS;
 
-		} 
+		}
 
 	}
 
@@ -187,13 +201,16 @@ public class SearchFragment extends Fragment {
 		isonline = DTHelper.checkInternetConnection(getActivity());
 		whereSearchSpinner.setEnabled(isonline);
 		if (!isonline) {
-			new AlertDialog.Builder(getActivity()).setTitle(R.string.dialog_connectivity_title)
+			new AlertDialog.Builder(getActivity())
+					.setTitle(R.string.dialog_connectivity_title)
 					.setMessage(R.string.dialog_connection_search)
-					.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int which) {
-							// continue with delete
-						}
-					}).show();
+					.setPositiveButton(android.R.string.ok,
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int which) {
+									// continue with delete
+								}
+							}).show();
 		}
 	}
 
@@ -201,7 +218,8 @@ public class SearchFragment extends Fragment {
 		SearchHelper.initSpinners(getActivity());
 		whenLabel = (TextView) getView().findViewById(R.id.when_label);
 		whenSearchSpinner = (Spinner) getView().findViewById(R.id.when_spinner);
-		whenAdapter = new ArrayAdapter<WhenForSearch>(getActivity(), R.layout.dd_list, R.id.dd_textview, when);
+		whenAdapter = new ArrayAdapter<WhenForSearch>(getActivity(),
+				R.layout.dd_list, R.id.dd_textview, when);
 		whenAdapter.clear();
 		whenSearchSpinner.setAdapter(whenAdapter);
 		for (WhenForSearch when : SearchHelper.getWhenList()) {
@@ -209,8 +227,10 @@ public class SearchFragment extends Fragment {
 		}
 		whenAdapter.notifyDataSetChanged();
 		whereLabel = (TextView) getView().findViewById(R.id.where_label);
-		whereSearchSpinner = (Spinner) getView().findViewById(R.id.where_spinner);
-		whereAdapter = new WhereAdapter(getActivity(), R.layout.dd_list, R.id.dd_textview, where);
+		whereSearchSpinner = (Spinner) getView().findViewById(
+				R.id.where_spinner);
+		whereAdapter = new WhereAdapter(getActivity(), R.layout.dd_list,
+				R.id.dd_textview, where);
 		whereAdapter.clear();
 		whereSearchSpinner.setAdapter(whereAdapter);
 		for (WhereForSearch when : SearchHelper.getWhereList()) {
@@ -241,17 +261,19 @@ public class SearchFragment extends Fragment {
 		private final int SPINNER_ENABLED = R.layout.simple_spinner_item_enabled;
 		private final int SPINNER_DISABLED = R.layout.simple_spinner_item_disabled;
 
-		public WhereAdapter(Context context, int resource, int textViewResourceId, List<WhereForSearch> objects) {
+		public WhereAdapter(Context context, int resource,
+				int textViewResourceId, List<WhereForSearch> objects) {
 			super(context, resource, textViewResourceId, objects);
 		}
 
 		@Override
-		public final View getView(int position, View convertView, ViewGroup parent) {
+		public final View getView(int position, View convertView,
+				ViewGroup parent) {
 			View newView = null;
 			TextView someText;
 
-			LayoutInflater inflater = (LayoutInflater) parent.getContext().getSystemService(
-					Context.LAYOUT_INFLATER_SERVICE);
+			LayoutInflater inflater = (LayoutInflater) parent.getContext()
+					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			if (isonline)
 				newView = inflater.inflate(SPINNER_ENABLED, null);
 			else {

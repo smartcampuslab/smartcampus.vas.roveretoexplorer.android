@@ -45,7 +45,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
-import android.widget.ExpandableListView;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -110,14 +111,16 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 
 	private List<ExplorerObject> listEvents = new ArrayList<ExplorerObject>();
 	Map<String, List<ExplorerObject>> eventCollection = new LinkedHashMap<String, List<ExplorerObject>>();
-	ExpandableListView expListView;
+	ListView expListView;
 
 	// for loading the images
 	protected DisplayImageOptions imgOptions;
 	private int firstVis;
 	private int lastVis;;
 
-	protected Map<String, List<String>> eventImageUrls = new LinkedHashMap<String, List<String>>();
+//	protected Map<String, List<String>> eventImageUrls = new LinkedHashMap<String, List<String>>();
+	protected Map<String, String> eventImageUrlsbyId = new LinkedHashMap<String, String>();
+
 	private int previousGroup;
 	private int previousItem;;
 
@@ -137,19 +140,19 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 			indexAdapter = 0;
 		}
 
-		try {
-			expListView.setSelectedGroup(previousGroup);
-			expListView.setSelectedChild(previousGroup, previousItem, true);
-			expListView.expandGroup(previousGroup);
-		} catch (IndexOutOfBoundsException e) {
-			// the changes modify the order of the group, so by default open
-			// the first group
-			if (eventsAdapter.getGroupCount() > 0) {
-				expListView.setSelectedGroup(0);
-				expListView.setSelectedChild(0, 0, true);
-				expListView.expandGroup(0);
-			}
-		}
+//		try {
+//			expListView.setSelectedGroup(previousGroup);
+//			expListView.setSelectedChild(previousGroup, previousItem, true);
+//			expListView.expandGroup(previousGroup);
+//		} catch (IndexOutOfBoundsException e) {
+//			// the changes modify the order of the group, so by default open
+//			// the first group
+//			if (eventsAdapter.getGroupCount() > 0) {
+//				expListView.setSelectedGroup(0);
+//				expListView.setSelectedChild(0, 0, true);
+//				expListView.expandGroup(0);
+//			}
+//		}
 
 	}
 
@@ -198,24 +201,24 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 					dateGroupList, eventCollection);
 
 		}
-		expListView = (ExpandableListView) getActivity().findViewById(R.id.events_list);
+		expListView = (ListView) getActivity().findViewById(R.id.events_list);
 		setListenerOnEvent();
 		list.setOnScrollListener(this);
 		expListView.setAdapter(eventsAdapter);
-		if (eventsAdapter.getGroupCount() > 0)
-			expListView.expandGroup(0);
+//		if (eventsAdapter.getGroupCount() > 0)
+//			expListView.expandGroup(0);
 
 	}
 
 	private void setListenerOnEvent() {
-		expListView.setOnChildClickListener(new OnChildClickListener() {
+		expListView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
-			public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
 				Log.i("LISTENER", "I should toast 1 ");
 
-				final ExplorerObject selected = (ExplorerObject) eventsAdapter.getChild(groupPosition, childPosition);
+				final ExplorerObject selected = (ExplorerObject) eventsAdapter.getChild(position);
 
 				Log.i("SCROLLTABS", "Load the scroll tabs!!");
 				FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
@@ -223,16 +226,16 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 
 				Bundle args = new Bundle();
 
-				Log.i("SCROLLTABS", "event selected ID: " + ((EventPlaceholder) v.getTag()).event.getId() + "!!");
-				event_id_selected = ((EventPlaceholder) v.getTag()).event.getId();
-				oldFromTime = ((EventPlaceholder) v.getTag()).event.getFromTime();
-				oldToTime = ((EventPlaceholder) v.getTag()).event.getToTime();
-				previousGroup = groupPosition;
-				previousItem = childPosition;
-				args.putString(Utils.ARG_EVENT_ID, ((EventPlaceholder) v.getTag()).event.getId());
+				Log.i("SCROLLTABS", "event selected ID: " + ((EventPlaceholder) view.getTag()).event.getId() + "!!");
+				event_id_selected = ((EventPlaceholder) view.getTag()).event.getId();
+				oldFromTime = ((EventPlaceholder) view.getTag()).event.getFromTime();
+				oldToTime = ((EventPlaceholder) view.getTag()).event.getToTime();
+//				previousGroup = groupPosition;
+//				previousItem = childPosition;
+				args.putString(Utils.ARG_EVENT_ID, ((EventPlaceholder) view.getTag()).event.getId());
 				try {
-					args.putString(Utils.ARG_EVENT_IMAGE_URL,
-							eventImageUrls.get(dateGroupList.get(groupPosition)).get(childPosition));
+//					args.putString(Utils.ARG_EVENT_IMAGE_URL,
+//							eventImageUrls.get(dateGroupList.get(groupPosition)).get(childPosition));
 				} catch (Exception e) {
 				}
 
@@ -244,9 +247,9 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 				fragmentTransaction.addToBackStack(fragment.getTag());
 				fragmentTransaction.commit();
 
-				return true;
 			}
 		});
+
 	}
 
 	@Override
@@ -339,7 +342,8 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 			}
 			if (found) {
 				eventCollection.get(date_with_day).remove(index);
-				eventImageUrls.get(date_with_day).remove(index);
+//				eventImageUrls.get(date_with_day).remove(index);
+				eventImageUrlsbyId.remove(new_event.getId());
 			}
 
 		}
@@ -383,7 +387,8 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 	protected void load() {
 		if (position == 0) {
 			eventCollection.clear();
-			eventImageUrls.clear();
+//			eventImageUrls.clear();
+			eventImageUrlsbyId.clear();
 		}
 		new SCListingFragmentTask<ListingRequest, Void>(getActivity(), getLoader()).execute(new ListingRequest(
 				position, size));
@@ -419,8 +424,8 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 				// eventsAdapter.notifyDataSetInvalidated();
 
 				eventsAdapter.notifyDataSetChanged();
-				if (expListView.getExpandableListAdapter().getGroupCount() > 0)
-					expListView.expandGroup(0);
+//				if (expListView.getExpandableListAdapter().getGroupCount() > 0)
+//					expListView.expandGroup(0);
 
 			} else {
 				TextView no_result = (TextView) getActivity().findViewById(R.id.events_no_results);
@@ -511,7 +516,7 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 		if (!dateGroupList.contains(date_with_day)) {
 			dateGroupList.add(date_with_day);
 			eventCollection.put(date_with_day, new ArrayList<ExplorerObject>());
-			eventImageUrls.put(date_with_day, new ArrayList<String>());
+//			eventImageUrls.put(date_with_day, new ArrayList<String>());
 
 		}
 		// insert se precedente era presente
@@ -522,10 +527,14 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 
 		// get event image urls
 		String eventImg = expObj.getImage();
-		if (previousItem != -1 && previousGroup == dateGroupList.indexOf(date_with_day))
-			eventImageUrls.get(date_with_day).add(previousItem, eventImg);
-		else
-			eventImageUrls.get(date_with_day).add(eventImg);
+		if (previousItem != -1 && previousGroup == dateGroupList.indexOf(date_with_day)){
+//			eventImageUrls.get(date_with_day).add(previousItem, eventImg);
+			eventImageUrlsbyId.put(expObj.getId(),eventImg);
+		}
+		else{
+//			eventImageUrls.get(date_with_day).add(eventImg);
+			eventImageUrlsbyId.put(expObj.getId(),eventImg);
+		}
 	}
 
 	// private void addEvent(ExplorerObject expObj, String date_with_day) {
@@ -723,8 +732,8 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 				// eventsAdapter.notifyDataSetInvalidated();
 
 				eventsAdapter.notifyDataSetChanged();
-				if (expListView.getExpandableListAdapter().getGroupCount() > 0)
-					expListView.expandGroup(0);
+//				if (expListView.getExpandableListAdapter().getGroupCount() > 0)
+//					expListView.expandGroup(0);
 
 			} else {
 				TextView no_result = (TextView) getActivity().findViewById(R.id.events_no_results);

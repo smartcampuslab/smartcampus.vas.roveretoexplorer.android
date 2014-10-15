@@ -35,7 +35,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="32dp"
                 android:layout_marginTop="4dp"
-                android:background="@color/app_green"
+                android:background="@color/actionbar_default"
                 android:gravity="center_vertical"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"

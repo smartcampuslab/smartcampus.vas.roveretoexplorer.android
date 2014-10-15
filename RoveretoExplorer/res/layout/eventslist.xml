@@ -31,12 +31,12 @@
         android:visibility="gone"
         android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title" />
  
-    <ExpandableListView
+    <ListView
         android:id="@+id/events_list"
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
         >
-    </ExpandableListView>
+    </ListView>
  
 </RelativeLayout>
 
