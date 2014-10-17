@@ -20,41 +20,50 @@ import android.content.Context;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.Review;
 
 public class ReviewHelper {
-
+	private static Context mContext;
 	public interface ReviewHandler {
 		public void onReviewChanged(Review review);
 	}
-	
-	public static void reviewDialog(Context context, final float initValue, final ReviewHandler handler, int  ResourceString) {
+
+	public static void reviewDialog(Context context, final float initValue,
+			final ReviewHandler handler, int ResourceString) {
+		mContext = context;
 		final Dialog rankDialog = new Dialog(context);
-        rankDialog.setContentView(R.layout.commenting);
-        rankDialog.setCancelable(true);
-        rankDialog.setTitle(ResourceString);
-//        final RatingBar ratingBar = (RatingBar) rankDialog.findViewById(R.id.ratingBar);
-//        ratingBar.setRating(initValue);
-		final EditText comment = (EditText) rankDialog.findViewById(R.id.rating_text);
-        
-        Button updateButton = (Button) rankDialog.findViewById(R.id.rating_ok);
-        updateButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            	Review r = new Review(null,comment.getText().toString(),(int)initValue);
-            	handler.onReviewChanged(r);
-                rankDialog.dismiss();
-            }
-        });
-        Button cancelButton = (Button) rankDialog.findViewById(R.id.rating_cancel);
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                rankDialog.dismiss();
-            }
-        });
-        rankDialog.show();
+		rankDialog.setContentView(R.layout.commenting);
+		rankDialog.setCancelable(true);
+		rankDialog.setTitle(ResourceString);
+		final EditText comment = (EditText) rankDialog
+				.findViewById(R.id.rating_text);
+
+		Button updateButton = (Button) rankDialog.findViewById(R.id.rating_ok);
+		updateButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if (!comment.getText().toString().isEmpty()) {
+					Review r = new Review(null, comment.getText().toString(),
+							(int) initValue);
+					handler.onReviewChanged(r);
+					rankDialog.dismiss();
+				}
+				else {
+					Toast.makeText(mContext, R.string.no_empty_comment, Toast.LENGTH_LONG).show();
+				}
+			}
+		});
+		Button cancelButton = (Button) rankDialog
+				.findViewById(R.id.rating_cancel);
+		cancelButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				rankDialog.dismiss();
+			}
+		});
+		rankDialog.show();
 	}
 
 }

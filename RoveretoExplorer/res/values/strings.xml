@@ -16,6 +16,7 @@
     <string name="title_txt">Titolo</string>
     <string name="origin_txt">Promotore</string>
     <string name="contacts_txt">Contatti</string>
+    <string name="event_no_information">No information available</string>
     <string name="invalid_emails">Email non valide: \'%1$s\'</string>
     <string name="invalid_phones">Numeri di telefono non validi: \'%1$s\'</string>
     <string name="invalid_email">Email non valida</string>
@@ -175,12 +176,14 @@
     <string name="drawer_close">Close navigation drawer</string>
     <string name="label_attending">Attending</string>
     <string name="label_comments">Comments</string>
+    <string name="event_no_comments">There are no comments</string>
     <string name="community_attendees">Attendees</string>
-    <string name="community_attending">Attending</string>
+    <string name="community_attending">Want to join?</string>
+    <string name="vote">Vote for this event</string>
     <string name="label_rating">Rating</string>
     <string name="community_my_rate">My rate</string>
     <string name="community_avg_rate">Average rate</string>
-    <string name="community_tot_rate">Total rate</string>
+    <string name="community_tot_rate">votes</string>
     <string name="attend_success">Added to your attending list!</string>
     <string name="not_attend_success">Removed from your attending list!</string>
 
@@ -278,4 +281,6 @@ The Application is provided "as is" and you use it under your own responsibility
 	<string name="next_quiz">Next</string>
 	<string name="skip_quiz">Skip</string>
 	<string name="categories_event_all">All events</string>
+	<string name="no_empty_comment">Empty comment</string>
+	
 </resources>

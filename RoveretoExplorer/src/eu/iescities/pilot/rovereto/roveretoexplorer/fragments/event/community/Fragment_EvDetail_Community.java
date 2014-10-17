@@ -3,20 +3,17 @@ package eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.community;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ExpandableListView;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,8 +24,6 @@ import eu.iescities.pilot.rovereto.roveretoexplorer.custom.RatingHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.RatingHelper.RatingHandler;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.Utils;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.DTHelper;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.Rating;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.CommunityData;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ExplorerObject;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.Review;
 import eu.iescities.pilot.rovereto.roveretoexplorer.log.LogHelper;
@@ -142,6 +137,13 @@ public class Fragment_EvDetail_Community extends Fragment implements RefreshComm
 			expListView.setAdapter(listAdapter);
 
 			listAdapter.notifyDataSetChanged();
+			expListView.expandGroup(0);
+			if (result.size()==0)
+			{
+				//show message no comments yet
+				View footer = getActivity().getLayoutInflater().inflate(R.layout.frag_ev_detail_community_nocomments, null);
+				expListView.addFooterView(footer);
+			}
 			//
 			// listAdapter.getGroup(0).clear();
 			// for (Review r : result) {
@@ -153,7 +155,7 @@ public class Fragment_EvDetail_Community extends Fragment implements RefreshComm
 
 	private void setHeaderInteraction(View header) {
 		setAttendingInteraction(header);
-		setRatingInteraction(header);
+//		setRatingInteraction(header);
 	}
 
 	private ExplorerObject getEvent() {
@@ -194,16 +196,13 @@ public class Fragment_EvDetail_Community extends Fragment implements RefreshComm
 		});
 
 		// set listener for rating
-		RatingBar rating = (RatingBar) getView().findViewById(R.id.event_my_rating);
-		rating.setOnTouchListener(new View.OnTouchListener() {
+		Button rating = (Button) getView().findViewById(R.id.button_vote);
+		rating.setOnClickListener(new OnClickListener() {
+			
 			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				if (event.getAction() == MotionEvent.ACTION_UP) {
-					{
-						ratingDialog();
-					}
-				}
-				return true;
+			public void onClick(View v) {
+				ratingDialog();
+				
 			}
 		});
 
@@ -247,20 +246,20 @@ public class Fragment_EvDetail_Community extends Fragment implements RefreshComm
 
 	private void updateRating() {
 		if (this.getView() != null) {
-			// set my rating
-			RatingBar myRating = (RatingBar) getActivity().findViewById(R.id.event_my_rating);
-			if (getEvent().getCommunityData() != null) {
-				CommunityData cd = getEvent().getCommunityData();
-
-				if (cd.getRatings() != null && !cd.getRatings().isEmpty()) {
-					rate = 0;
-					for (Rating rating : cd.getRatings()) {
-						rate = rating.getValue();
-					}
-					myRating.setRating(rate);
-				}
-
-			}
+//			// set my rating
+//			RatingBar myRating = (RatingBar) getActivity().findViewById(R.id.event_my_rating);
+//			if (getEvent().getCommunityData() != null) {
+//				CommunityData cd = getEvent().getCommunityData();
+//
+//				if (cd.getRatings() != null && !cd.getRatings().isEmpty()) {
+//					rate = 0;
+//					for (Rating rating : cd.getRatings()) {
+//						rate = rating.getValue();
+//					}
+//					myRating.setRating(rate);
+//				}
+//
+//			}
 			// set avg rating
 			RatingBar avgRating = (RatingBar) getActivity().findViewById(R.id.event_avg_rating);
 			if (getEvent().getCommunityData() != null) {
@@ -271,54 +270,54 @@ public class Fragment_EvDetail_Community extends Fragment implements RefreshComm
 			if (getEvent().getCommunityData() != null) {
 				totRating.setText(Integer.toString(getEvent().getCommunityData().getRatingsCount()));
 			}
-			// set visible or invisible
-			final ImageView attending_open = (ImageView) header.findViewById(R.id.attending_is_open);
-			final ImageView attending_close = (ImageView) header.findViewById(R.id.attending_is_close);
-			final LinearLayout attending_layout = (LinearLayout) header.findViewById(R.id.attending_layout);
-			attending_open.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					attending_is_open = false;
-					attending_layout.setVisibility(View.GONE);
-					attending_open.setVisibility(View.GONE);
-					attending_close.setVisibility(View.VISIBLE);
-				}
-			});
-			attending_close.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					attending_is_open = true;
-					attending_layout.setVisibility(View.VISIBLE);
-					attending_open.setVisibility(View.VISIBLE);
-					attending_close.setVisibility(View.GONE);
-				}
-			});
+//			// set visible or invisible
+//			final ImageView attending_open = (ImageView) header.findViewById(R.id.attending_is_open);
+//			final ImageView attending_close = (ImageView) header.findViewById(R.id.attending_is_close);
+//			final LinearLayout attending_layout = (LinearLayout) header.findViewById(R.id.attending_layout);
+//			attending_open.setOnClickListener(new OnClickListener() {
+//				@Override
+//				public void onClick(View v) {
+//					attending_is_open = false;
+//					attending_layout.setVisibility(View.GONE);
+//					attending_open.setVisibility(View.GONE);
+//					attending_close.setVisibility(View.VISIBLE);
+//				}
+//			});
+//			attending_close.setOnClickListener(new OnClickListener() {
+//				@Override
+//				public void onClick(View v) {
+//					attending_is_open = true;
+//					attending_layout.setVisibility(View.VISIBLE);
+//					attending_open.setVisibility(View.VISIBLE);
+//					attending_close.setVisibility(View.GONE);
+//				}
+//			});
 		}
 	}
 
-	private void setRatingInteraction(View header2) {
-		final ImageView rating_open = (ImageView) header.findViewById(R.id.rating_is_open);
-		final ImageView rating_close = (ImageView) header.findViewById(R.id.rating_is_close);
-		final LinearLayout rating_layout = (LinearLayout) header.findViewById(R.id.rating_layout);
-		rating_open.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				rating_is_open = false;
-				rating_layout.setVisibility(View.GONE);
-				rating_open.setVisibility(View.GONE);
-				rating_close.setVisibility(View.VISIBLE);
-			}
-		});
-		rating_close.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				rating_is_open = true;
-				rating_layout.setVisibility(View.VISIBLE);
-				rating_open.setVisibility(View.VISIBLE);
-				rating_close.setVisibility(View.GONE);
-			}
-		});
-	}
+//	private void setRatingInteraction(View header2) {
+//		final ImageView rating_open = (ImageView) header.findViewById(R.id.rating_is_open);
+//		final ImageView rating_close = (ImageView) header.findViewById(R.id.rating_is_close);
+//		final LinearLayout rating_layout = (LinearLayout) header.findViewById(R.id.rating_layout);
+//		rating_open.setOnClickListener(new OnClickListener() {
+//			@Override
+//			public void onClick(View v) {
+//				rating_is_open = false;
+//				rating_layout.setVisibility(View.GONE);
+//				rating_open.setVisibility(View.GONE);
+//				rating_close.setVisibility(View.VISIBLE);
+//			}
+//		});
+//		rating_close.setOnClickListener(new OnClickListener() {
+//			@Override
+//			public void onClick(View v) {
+//				rating_is_open = true;
+//				rating_layout.setVisibility(View.VISIBLE);
+//				rating_open.setVisibility(View.VISIBLE);
+//				rating_close.setVisibility(View.GONE);
+//			}
+//		});
+//	}
 
 	private class AttendProcessor extends AbstractAsyncTaskProcessor<Boolean, ExplorerObject> {
 		private CompoundButton buttonView;

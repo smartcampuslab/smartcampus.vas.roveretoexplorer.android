@@ -17,8 +17,10 @@
     <string name="categories_event_today">Eventi di oggi</string>
     <string name="categories_event_my">I miei eventi</string>
     <string name="categories_story_my">Le mie storie</string>
+    <string name="event_no_information">Nessuna informazione disponibile</string>
     <string name="search_txt">Cerca</string>
     <string name="comments">Vedi recensioni</string>
+    <string name="event_no_comments">Non ci sono commenti</string>
     <string name="source_smartcampus">SmartCampus</string>
     <string name="submenu_related_events">Eventi in programma</string>
     <string name="search_in_category">nella categoria</string>
@@ -72,11 +74,12 @@
     <string name="label_attending">Partecipazione</string>
     <string name="label_comments">Commenti</string>
     <string name="community_attendees">Partecipanti</string>
-    <string name="community_attending">Intendo partecipare</string>
+    <string name="community_attending">Parteciperai all\'evento?</string>
+    <string name="vote">Vota anche tu</string>
     <string name="label_rating">Rating</string>
     <string name="community_my_rate">Il mio giudizio</string>
     <string name="community_avg_rate">Giudizio medio</string>
-    <string name="community_tot_rate">Giudizio totale</string>
+    <string name="community_tot_rate">voti</string>
     <string name="attend_success">Aggiunto alla tua lista di partecipazioni!</string>
     <string name="not_attend_success">Rimosso dalla tua lista di partecipazioni!</string>
 
@@ -96,7 +99,8 @@
     <string name="address_select_toast">Selezionare un indirizzo</string>
     <string name="toast_time_wrong">Il tempo dell\'evento è errato</string>
     <string name="when_where">Dove e quando</string>
-   <string name="terms_of_service"><![CDATA[
+    <string name="terms_of_service">
+<![CDATA[
        <b>Introduction<br>
         Applicable worldwide except where we publish specific territorial terms and conditions.</b><br>
 These terms and conditions ("Terms") set important information regarding the rights, obligations and restrictions that may apply you as user ("User") when you access to the Internet site at  <a href="http://www.iescities.eu/server">http://www.iescities.eu/server</a> ("Website") or when you access to, download and use the application IES Cities Player ("Application") or whatever the services provided by using it. The application act as a marketplace for those applications developed within the IES Cities framework, allowing users to discover which applications are available on their surroundings making use of public data. Moreover the Application and the Website allow the access to other Applications and Websites. The Website and the Application, where no specifically provided, are supplied by all the partners that make up IES Cities Consortium. IES Cities Project ( <a href="http://www.iescities.eu">http://www.iescities.eu</a>) has received funding from the European Union’s Competitiveness and Innovation Framework Programme under grant agreement nº 325097.
@@ -119,7 +123,8 @@ h) files, links or other material which tries to stole other users accounts; <br
 i) any piece of software to collect information from other user; <br>
 j) any other thing that circumvents or doesn’t comply with current local laws.<br>
 Sometimes you will need to register at the Website and/or some of the applications in order to be able to use them. The User commits to provide real information during the registration process and whenever the Service asks for it. You must update the information when there are any changes in it. In case of suspicion about the veracity of your data we are entitled to suspend your account.
-The infringement of the policy of use will cause the cancelation of the user account and the rejection to the creation of a new one and we could also apply some methods to avoid the future use of the Application by the banned user.
+The infringement of the policy of us	<string name="no_empty_comment">Empty comment</string>
+e will cause the cancelation of the user account and the rejection to the creation of a new one and we could also apply some methods to avoid the future use of the Application by the banned user.
 We can change the Service at any time, adding, modifying or suppressing some of them. We’ll try to communicate those changes in a reasonable way. If you continue using the Service, we understand then you have accepted the changes and the Terms.
 <br><br><b> Pay for the Service</b><br>
 The Application and the Service provided by IES Cities are cost free.
@@ -157,8 +162,8 @@ c) collect data of the users of the application; <br>
 d) threaten, disturb, extort to other users; <br>
 e) Interfere third parties services; <br>
 f) affect third parties copyrights.<br>
-The Application is provided "as is" and you use it under your own responsibility. FBK and partners from IES Cities consortium disclaims liability for errors, malfunctions in your terminal, interruptions to other applications, data loss and unavailability, if you use the Application.]]></string>
- 
+The Application is provided "as is" and you use it under your own responsibility. FBK and partners from IES Cities consortium disclaims liability for errors, malfunctions in your terminal, interruptions to other applications, data loss and unavailability, if you use the Application.]]>
+    </string>
     <string name="exit_quiz">Grazie per il tuo contributo</string>
     <string name="not_now">Non adesso</string>
     <string name="open_answer">Altro (specificare)</string>
@@ -168,5 +173,6 @@ The Application is provided "as is" and you use it under your own responsibility
     <string name="next_quiz">Avanti</string>
     <string name="skip_quiz">Salta</string>
     <string name="categories_event_all">Tutti gli eventi</string>
-
+	<string name="no_empty_comment">Commento vuoto</string>
+    
 </resources>

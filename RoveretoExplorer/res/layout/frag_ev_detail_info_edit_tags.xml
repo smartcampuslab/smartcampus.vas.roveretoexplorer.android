@@ -32,7 +32,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:layout_weight="0"
-        android:background="@color/jungle_green"
+        android:background="@color/app_default"
         android:gravity="center_vertical"
         android:paddingBottom="4dp"
         android:paddingLeft="16dp"

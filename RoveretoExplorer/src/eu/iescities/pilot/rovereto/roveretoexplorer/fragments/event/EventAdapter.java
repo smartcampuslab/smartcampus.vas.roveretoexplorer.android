@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.Map;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -37,10 +39,11 @@ import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
 
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
 import eu.iescities.pilot.rovereto.roveretoexplorer.RoveretoExplorerApplication;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.CategoryHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.Utils;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.Address;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ExplorerObject;
-
+import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.search.SearchFragment;
 
 // in EventsListingFragment
 public class EventAdapter extends BaseAdapter {
@@ -53,45 +56,47 @@ public class EventAdapter extends BaseAdapter {
 	private List<String> dateCollectionPlan;
 	private List<String> dateGroupList;
 	private int layoutResourceId;
-
+	private int colorCategory;
 	private EventPlaceholder eventPlaceHolder = null;
 	private View row = null;
 	protected int visualizedGroup = 0;
 	protected int visualizedItem = 0;
-	
-	//for loading images
+
+	// for loading images
 	private ImageLoadingListener animateFirstListener = new AnimateFirstDisplayListener();
-
-
 
 	EventsListingFragment fragment;
 
 	private ReloadAdapter reloadAdapter;
-	
 
-	public EventAdapter(Context context, int layoutResourceId, List<String> events_dates,
-			Map<String, List<ExplorerObject>> eventCollections) {
+	public EventAdapter(Context context, int layoutResourceId,
+			List<String> events_dates,
+			Map<String, List<ExplorerObject>> eventCollections,
+			int colorCategory) {
 		this.context = context;
 		this.eventCollections = eventCollections;
 		this.dateGroupList = events_dates;
 		this.layoutResourceId = layoutResourceId;
+		this.colorCategory = colorCategory;
 
 	}
-	
-	
-	public EventAdapter(Context context, int layoutResourceId, EventsListingFragment fragment, List<String> events_dates,
-			Map<String, List<ExplorerObject>> eventCollections) {
+
+	public EventAdapter(Context context, int layoutResourceId,
+			EventsListingFragment fragment, List<String> events_dates,
+			Map<String, List<ExplorerObject>> eventCollections,
+			int colorCategory) {
 		this.context = context;
 		this.eventCollections = eventCollections;
 		this.dateGroupList = events_dates;
 		this.layoutResourceId = layoutResourceId;
 		this.fragment = fragment;
+		this.colorCategory = colorCategory;
 		this.eventsCollectionPlan = new ArrayList<ExplorerObject>();
 		this.dateCollectionPlan = new ArrayList<String>();
-		for (Map.Entry<String, List<ExplorerObject>> entry : eventCollections.entrySet())
-		{
+		for (Map.Entry<String, List<ExplorerObject>> entry : eventCollections
+				.entrySet()) {
 			this.eventsCollectionPlan.addAll(entry.getValue());
-			for (ExplorerObject explorerObject : entry.getValue()){
+			for (ExplorerObject explorerObject : entry.getValue()) {
 				this.dateCollectionPlan.add(entry.getKey());
 			}
 
@@ -103,130 +108,145 @@ public class EventAdapter extends BaseAdapter {
 		return eventCollections;
 	}
 
-
-	public void setEventCollections(Map<String, List<ExplorerObject>> eventCollections) {
+	public void setEventCollections(
+			Map<String, List<ExplorerObject>> eventCollections) {
 		this.eventCollections = eventCollections;
-		for (Map.Entry<String, List<ExplorerObject>> entry : eventCollections.entrySet())
-		{
+		this.eventsCollectionPlan = new ArrayList<ExplorerObject>();
+		this.dateCollectionPlan = new ArrayList<String>();
+		for (Map.Entry<String, List<ExplorerObject>> entry : eventCollections
+				.entrySet()) {
 			this.eventsCollectionPlan.addAll(entry.getValue());
-			for (ExplorerObject explorerObject : entry.getValue()){
+			for (ExplorerObject explorerObject : entry.getValue()) {
 				this.dateCollectionPlan.add(entry.getKey());
 			}
 		}
 	}
 
-
 	public List<String> getDateGroupList() {
 		return dateGroupList;
 	}
 
-
-//	@Override
-//	public View getChildView(final int groupPosition, final int childPosition, boolean isLastChild, View convertView,
-//			ViewGroup parent) {
-//		
-//		final ExplorerObject event = (ExplorerObject) getChild(groupPosition, childPosition);
-//
-//		row = convertView;
-//		if (row == null) {
-//			LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//			row = inflater.inflate(layoutResourceId, parent, false);
-//			eventPlaceHolder = new EventPlaceholder();
-//			eventPlaceHolder.title = (TextView) row.findViewById(R.id.event_placeholder_title);
-//			eventPlaceHolder.title.setTag(eventPlaceHolder.title);
-//			eventPlaceHolder.location = (TextView) row.findViewById(R.id.event_placeholder_loc);
-//			// e.hour = (TextView)
-//			// row.findViewById(R.id.event_placeholder_hour);
-//			eventPlaceHolder.icon = (ImageView) row.findViewById(R.id.event_placeholder_photo);
-//			eventPlaceHolder.attendees = (TextView) row.findViewById(R.id.event_placeholder_participants);
-//			eventPlaceHolder.rating = (RatingBar) row.findViewById(R.id.rating_bar);
-//			// e.dateSeparator = (TextView)
-//			// row.findViewById(R.id.date_separator);
-//			row.setTag(eventPlaceHolder);
-//		} else {
-//			eventPlaceHolder = (EventPlaceholder) row.getTag();
-//			 Log.i("BACKPRESSED", "EventAdapter -->get Tag: !!");
-//
-//		}
-//
-//		eventPlaceHolder.event = event;
-//
-//		// **** EVENT INFO ***** //
-//		// Log.i("EVENT", "EventAdapter --> EVENT ID: " + eventPlaceHolder.event.getId() + "!!");
-//		 Log.i("BACKPRESSED", "EventAdapter --> title: " + eventPlaceHolder.event.getTitle() + "!!");
-//		// Log.i("EVENT", "rating: " +
-//		// eventPlaceHolder.event.getCommunityData().getAverageRating() + "!!");
-//		// Log.i("EVENT", "participants: " +
-//		// eventPlaceHolder.event.getCommunityData().getAttendees() + "!!");
-//		// Log.i("EVENT", "location: " + (String)
-//		// e.event.getCustomData().get("where_name") + "!!");
-//		// Log.i("EVENT", "when: " + e.event.eventDatesString() + "!!");
-//		// Log.i("EVENT", "image: " +
-//		// e.event.getCustomData().get("event_img").toString() + "!!");
-//
-//		eventPlaceHolder.title.setText(eventPlaceHolder.event.getTitle());
-//		eventPlaceHolder.attendees.setText(eventPlaceHolder.event.getCommunityData().getAttendees().toString());
-//
-//		Address address = eventPlaceHolder.event.getAddress();
-//		if (address != null) {
-//
-//			String place = (address.getLuogo() != null) ? (String) address.getLuogo() : null;
-//			if ((place != null) && (!place.matches(""))){
-//				eventPlaceHolder.location.setText(place);
-//			}
-//			else 
-//				eventPlaceHolder.location.setText(context.getString(R.string.city_hint));
-//		}
-//
-//		// load the event image
-////		Log.i("IMAGES", "START ADAPTER, EVENT TITLE: " + eventPlaceHolder.event.getTitle() + "!!");
-////
-////		if (fragment.eventImageUrls!=null){
-////			Log.i("IMAGES", "EventAdapter --> image array size: " + fragment.eventImageUrls.size() );
-////			this.eventImageUrls = fragment.eventImageUrls.toArray(new String[fragment.eventImageUrls.size()]);
-////		}
-////
-////		Log.i("IMAGES", "EventAdapter --> group position: " + groupPosition );
-////		Log.i("IMAGES", "EventAdapter --> child position: " + childPosition );
-////
-////		
-////		
-//		
-//		String imgUrl = null;
-//		try {
-//			imgUrl = fragment.eventImageUrls.get(dateGroupList.get(groupPosition)).get(childPosition);
-//		} catch (Exception e){
-//			e.printStackTrace();
-//		}
-//		Log.i("IMAGES", "EventAdapter --> image new url : " + imgUrl );
-//		
-//		RoveretoExplorerApplication.imageLoader.displayImage(imgUrl, eventPlaceHolder.icon, fragment.imgOptions, animateFirstListener);
-//		
-//		
-//		
-//		//set the rating bar
-//		eventPlaceHolder.rating.setRating(eventPlaceHolder.event.getCommunityData().getAverageRating());
-//		
-//		eventPlaceHolder.rating.setOnTouchListener(new OnTouchListener() {
-//	        public boolean onTouch(View v, MotionEvent event) {
-//	            return true;
-//	        }
-//	    });	
-//		
-//		
-//		eventPlaceHolder.rating.setFocusable(false);
-//	       
-//		
-//		Calendar previousEvent = null;
-//		Calendar currentEvent = Calendar.getInstance();
-//		
-//
-//		if (event.getFromTime() != null)
-//			currentEvent.setTimeInMillis(event.getFromTime());
-//		visualizedGroup=groupPosition;
-//		visualizedItem = childPosition;
-//		return row;
-//	}
+	// @Override
+	// public View getChildView(final int groupPosition, final int
+	// childPosition, boolean isLastChild, View convertView,
+	// ViewGroup parent) {
+	//
+	// final ExplorerObject event = (ExplorerObject) getChild(groupPosition,
+	// childPosition);
+	//
+	// row = convertView;
+	// if (row == null) {
+	// LayoutInflater inflater = (LayoutInflater)
+	// context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+	// row = inflater.inflate(layoutResourceId, parent, false);
+	// eventPlaceHolder = new EventPlaceholder();
+	// eventPlaceHolder.title = (TextView)
+	// row.findViewById(R.id.event_placeholder_title);
+	// eventPlaceHolder.title.setTag(eventPlaceHolder.title);
+	// eventPlaceHolder.location = (TextView)
+	// row.findViewById(R.id.event_placeholder_loc);
+	// // e.hour = (TextView)
+	// // row.findViewById(R.id.event_placeholder_hour);
+	// eventPlaceHolder.icon = (ImageView)
+	// row.findViewById(R.id.event_placeholder_photo);
+	// eventPlaceHolder.attendees = (TextView)
+	// row.findViewById(R.id.event_placeholder_participants);
+	// eventPlaceHolder.rating = (RatingBar) row.findViewById(R.id.rating_bar);
+	// // e.dateSeparator = (TextView)
+	// // row.findViewById(R.id.date_separator);
+	// row.setTag(eventPlaceHolder);
+	// } else {
+	// eventPlaceHolder = (EventPlaceholder) row.getTag();
+	// Log.i("BACKPRESSED", "EventAdapter -->get Tag: !!");
+	//
+	// }
+	//
+	// eventPlaceHolder.event = event;
+	//
+	// // **** EVENT INFO ***** //
+	// // Log.i("EVENT", "EventAdapter --> EVENT ID: " +
+	// eventPlaceHolder.event.getId() + "!!");
+	// Log.i("BACKPRESSED", "EventAdapter --> title: " +
+	// eventPlaceHolder.event.getTitle() + "!!");
+	// // Log.i("EVENT", "rating: " +
+	// // eventPlaceHolder.event.getCommunityData().getAverageRating() + "!!");
+	// // Log.i("EVENT", "participants: " +
+	// // eventPlaceHolder.event.getCommunityData().getAttendees() + "!!");
+	// // Log.i("EVENT", "location: " + (String)
+	// // e.event.getCustomData().get("where_name") + "!!");
+	// // Log.i("EVENT", "when: " + e.event.eventDatesString() + "!!");
+	// // Log.i("EVENT", "image: " +
+	// // e.event.getCustomData().get("event_img").toString() + "!!");
+	//
+	// eventPlaceHolder.title.setText(eventPlaceHolder.event.getTitle());
+	// eventPlaceHolder.attendees.setText(eventPlaceHolder.event.getCommunityData().getAttendees().toString());
+	//
+	// Address address = eventPlaceHolder.event.getAddress();
+	// if (address != null) {
+	//
+	// String place = (address.getLuogo() != null) ? (String) address.getLuogo()
+	// : null;
+	// if ((place != null) && (!place.matches(""))){
+	// eventPlaceHolder.location.setText(place);
+	// }
+	// else
+	// eventPlaceHolder.location.setText(context.getString(R.string.city_hint));
+	// }
+	//
+	// // load the event image
+	// // Log.i("IMAGES", "START ADAPTER, EVENT TITLE: " +
+	// eventPlaceHolder.event.getTitle() + "!!");
+	// //
+	// // if (fragment.eventImageUrls!=null){
+	// // Log.i("IMAGES", "EventAdapter --> image array size: " +
+	// fragment.eventImageUrls.size() );
+	// // this.eventImageUrls = fragment.eventImageUrls.toArray(new
+	// String[fragment.eventImageUrls.size()]);
+	// // }
+	// //
+	// // Log.i("IMAGES", "EventAdapter --> group position: " + groupPosition );
+	// // Log.i("IMAGES", "EventAdapter --> child position: " + childPosition );
+	// //
+	// //
+	// //
+	//
+	// String imgUrl = null;
+	// try {
+	// imgUrl =
+	// fragment.eventImageUrls.get(dateGroupList.get(groupPosition)).get(childPosition);
+	// } catch (Exception e){
+	// e.printStackTrace();
+	// }
+	// Log.i("IMAGES", "EventAdapter --> image new url : " + imgUrl );
+	//
+	// RoveretoExplorerApplication.imageLoader.displayImage(imgUrl,
+	// eventPlaceHolder.icon, fragment.imgOptions, animateFirstListener);
+	//
+	//
+	//
+	// //set the rating bar
+	// eventPlaceHolder.rating.setRating(eventPlaceHolder.event.getCommunityData().getAverageRating());
+	//
+	// eventPlaceHolder.rating.setOnTouchListener(new OnTouchListener() {
+	// public boolean onTouch(View v, MotionEvent event) {
+	// return true;
+	// }
+	// });
+	//
+	//
+	// eventPlaceHolder.rating.setFocusable(false);
+	//
+	//
+	// Calendar previousEvent = null;
+	// Calendar currentEvent = Calendar.getInstance();
+	//
+	//
+	// if (event.getFromTime() != null)
+	// currentEvent.setTimeInMillis(event.getFromTime());
+	// visualizedGroup=groupPosition;
+	// visualizedItem = childPosition;
+	// return row;
+	// }
 
 	/*
 	 * public int getElementSelected() { return elementSelected; }
@@ -236,13 +256,14 @@ public class EventAdapter extends BaseAdapter {
 	 */
 
 	// Methods needed for the Expandable adapter
-	
+
 	public Object getChild(int childPosition) {
 		return eventsCollectionPlan.get(childPosition);
 	}
-	
+
 	public Object getChild(int groupPosition, int childPosition) {
-		return eventCollections.get(dateGroupList.get(groupPosition)).get(childPosition);
+		return eventCollections.get(dateGroupList.get(groupPosition)).get(
+				childPosition);
 	}
 
 	public long getChildId(int groupPosition, int childPosition) {
@@ -260,30 +281,34 @@ public class EventAdapter extends BaseAdapter {
 	public int getGroupCount() {
 		if (dateGroupList != null)
 			return dateGroupList.size();
-		else return 0;
+		else
+			return 0;
 	}
 
 	public long getGroupId(int groupPosition) {
 		return groupPosition;
 	}
 
-//	public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-//
-//		String dateLabel = (String) getGroup(groupPosition);
-//		if (convertView == null) {
-//			LayoutInflater infalInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//			convertView = infalInflater.inflate(R.layout.event_list_group_item, null);
-//		}
-//
-//		convertView.setBackgroundResource(getBackgroundColor(groupPosition));
-//
-//		TextView item = (TextView) convertView.findViewById(R.id.events_date);
-//		item.setTypeface(null, Typeface.BOLD);
-//		item.setText(dateLabel);
-//
-//		return convertView;
-//
-//	}
+	// public View getGroupView(int groupPosition, boolean isExpanded, View
+	// convertView, ViewGroup parent) {
+	//
+	// String dateLabel = (String) getGroup(groupPosition);
+	// if (convertView == null) {
+	// LayoutInflater infalInflater = (LayoutInflater)
+	// context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+	// convertView = infalInflater.inflate(R.layout.event_list_group_item,
+	// null);
+	// }
+	//
+	// convertView.setBackgroundResource(getBackgroundColor(groupPosition));
+	//
+	// TextView item = (TextView) convertView.findViewById(R.id.events_date);
+	// item.setTypeface(null, Typeface.BOLD);
+	// item.setText(dateLabel);
+	//
+	// return convertView;
+	//
+	// }
 
 	public int getBackgroundColor(int groupPosition) {
 
@@ -299,40 +324,36 @@ public class EventAdapter extends BaseAdapter {
 		return true;
 	}
 
-
 	public void setDateGroupList(List<String> dateGroupList2) {
 		this.dateGroupList = dateGroupList2;
 	}
 
-
-	public void setEventCollection(Map<String, List<ExplorerObject>> eventCollection) {
+	public void setEventCollection(
+			Map<String, List<ExplorerObject>> eventCollection) {
 		this.eventCollections = eventCollection;
-		for (Map.Entry<String, List<ExplorerObject>> entry : eventCollections.entrySet())
-		{
+		this.eventsCollectionPlan = new ArrayList<ExplorerObject>();
+		this.dateCollectionPlan = new ArrayList<String>();
+		for (Map.Entry<String, List<ExplorerObject>> entry : eventCollections
+				.entrySet()) {
 			this.eventsCollectionPlan.addAll(entry.getValue());
-			for (ExplorerObject explorerObject : entry.getValue()){
+			for (ExplorerObject explorerObject : entry.getValue()) {
 				this.dateCollectionPlan.add(entry.getKey());
 			}
 		}
 	}
-	
-	
+
 	public int getVisualizedGroup() {
 		return visualizedGroup;
 	}
-
-
 
 	public int getVisualizedItem() {
 		return visualizedItem;
 	}
 
-
 	@Override
 	public int getCount() {
 		return eventsCollectionPlan.size();
 	}
-
 
 	@Override
 	public Object getItem(int position) {
@@ -340,13 +361,11 @@ public class EventAdapter extends BaseAdapter {
 		return null;
 	}
 
-
 	@Override
 	public long getItemId(int position) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
-
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
@@ -354,33 +373,51 @@ public class EventAdapter extends BaseAdapter {
 
 		row = convertView;
 		if (row == null) {
-			LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			LayoutInflater inflater = (LayoutInflater) context
+					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			row = inflater.inflate(layoutResourceId, parent, false);
 			eventPlaceHolder = new EventPlaceholder();
-			eventPlaceHolder.date = (TextView) row.findViewById(R.id.event_date);
+			eventPlaceHolder.date = (TextView) row
+					.findViewById(R.id.event_date);
 			eventPlaceHolder.date.setText(dateCollectionPlan.get(position));
-			eventPlaceHolder.title = (TextView) row.findViewById(R.id.event_placeholder_title);
+			eventPlaceHolder.title = (TextView) row
+					.findViewById(R.id.event_placeholder_title);
 			eventPlaceHolder.title.setTag(eventPlaceHolder.title);
-//			eventPlaceHolder.location = (TextView) row.findViewById(R.id.event_placeholder_loc);
+			// eventPlaceHolder.location = (TextView)
+			// row.findViewById(R.id.event_placeholder_loc);
 			// e.hour = (TextView)
 			// row.findViewById(R.id.event_placeholder_hour);
-			eventPlaceHolder.icon = (ImageView) row.findViewById(R.id.event_placeholder_photo);
-			eventPlaceHolder.attendees = (TextView) row.findViewById(R.id.event_placeholder_participants);
-			eventPlaceHolder.rating = (RatingBar) row.findViewById(R.id.rating_bar);
+			eventPlaceHolder.icon = (ImageView) row
+					.findViewById(R.id.event_placeholder_photo);
+			// if (event.categoryString(context)!=null){
+			eventPlaceHolder.icon.setBackgroundColor(colorCategory);
+			// }
+			// else {
+			// eventPlaceHolder.icon.setBackgroundColor(Color.parseColor(context.getString(R.color.actionbar_default)));
+
+			// color = new
+			// ColorDrawable(Color.parseColor(getString(R.color.actionbar_default)));
+			// }
+			eventPlaceHolder.attendees = (TextView) row
+					.findViewById(R.id.event_placeholder_participants);
+			eventPlaceHolder.rating = (RatingBar) row
+					.findViewById(R.id.rating_bar);
 			// e.dateSeparator = (TextView)
 			// row.findViewById(R.id.date_separator);
 			row.setTag(eventPlaceHolder);
 		} else {
 			eventPlaceHolder = (EventPlaceholder) row.getTag();
-			 Log.i("BACKPRESSED", "EventAdapter -->get Tag: !!");
+			Log.i("BACKPRESSED", "EventAdapter -->get Tag: !!");
 
 		}
 
 		eventPlaceHolder.event = event;
 
 		// **** EVENT INFO ***** //
-		// Log.i("EVENT", "EventAdapter --> EVENT ID: " + eventPlaceHolder.event.getId() + "!!");
-		 Log.i("BACKPRESSED", "EventAdapter --> title: " + eventPlaceHolder.event.getTitle() + "!!");
+		// Log.i("EVENT", "EventAdapter --> EVENT ID: " +
+		// eventPlaceHolder.event.getId() + "!!");
+		Log.i("BACKPRESSED", "EventAdapter --> title: "
+				+ eventPlaceHolder.event.getTitle() + "!!");
 		// Log.i("EVENT", "rating: " +
 		// eventPlaceHolder.event.getCommunityData().getAverageRating() + "!!");
 		// Log.i("EVENT", "participants: " +
@@ -393,79 +430,84 @@ public class EventAdapter extends BaseAdapter {
 
 		eventPlaceHolder.title.setText(eventPlaceHolder.event.getTitle());
 		eventPlaceHolder.date.setText(dateCollectionPlan.get(position));
-		if (position==0 || !dateCollectionPlan.get(position).equals(dateCollectionPlan.get(position-1)) )
-		{
-			//visible
+		if (position == 0
+				|| !dateCollectionPlan.get(position).equals(
+						dateCollectionPlan.get(position - 1))) {
+			// visible
 			eventPlaceHolder.date.setVisibility(View.VISIBLE);
-		}
-		else {
-			//invisible
+		} else {
+			// invisible
 			eventPlaceHolder.date.setVisibility(View.GONE);
 
 		}
-		eventPlaceHolder.attendees.setText(eventPlaceHolder.event.getCommunityData().getAttendees().toString());
+		eventPlaceHolder.attendees.setText(eventPlaceHolder.event
+				.getCommunityData().getAttendees().toString());
 
 		Address address = eventPlaceHolder.event.getAddress();
 		if (address != null) {
 
-			String place = (address.getLuogo() != null) ? (String) address.getLuogo() : null;
-//			if ((place != null) && (!place.matches(""))){
-//				eventPlaceHolder.location.setText(place);
-//			}
-//			else 
-//				eventPlaceHolder.location.setText(context.getString(R.string.city_hint));
+			String place = (address.getLuogo() != null) ? (String) address
+					.getLuogo() : null;
+			// if ((place != null) && (!place.matches(""))){
+			// eventPlaceHolder.location.setText(place);
+			// }
+			// else
+			// eventPlaceHolder.location.setText(context.getString(R.string.city_hint));
 		}
 
 		// load the event image
-//		Log.i("IMAGES", "START ADAPTER, EVENT TITLE: " + eventPlaceHolder.event.getTitle() + "!!");
-//
-//		if (fragment.eventImageUrls!=null){
-//			Log.i("IMAGES", "EventAdapter --> image array size: " + fragment.eventImageUrls.size() );
-//			this.eventImageUrls = fragment.eventImageUrls.toArray(new String[fragment.eventImageUrls.size()]);
-//		}
-//
-//		Log.i("IMAGES", "EventAdapter --> group position: " + groupPosition );
-//		Log.i("IMAGES", "EventAdapter --> child position: " + childPosition );
-//
-//		
-//		
-		
+		// Log.i("IMAGES", "START ADAPTER, EVENT TITLE: " +
+		// eventPlaceHolder.event.getTitle() + "!!");
+		//
+		// if (fragment.eventImageUrls!=null){
+		// Log.i("IMAGES", "EventAdapter --> image array size: " +
+		// fragment.eventImageUrls.size() );
+		// this.eventImageUrls = fragment.eventImageUrls.toArray(new
+		// String[fragment.eventImageUrls.size()]);
+		// }
+		//
+		// Log.i("IMAGES", "EventAdapter --> group position: " + groupPosition
+		// );
+		// Log.i("IMAGES", "EventAdapter --> child position: " + childPosition
+		// );
+		//
+		//
+		//
+
 		String imgUrl = null;
 		try {
-//			imgUrl = fragment.eventImageUrls.get(dateGroupList.get(groupPosition)).get(childPosition);
+			// imgUrl =
+			// fragment.eventImageUrls.get(dateGroupList.get(groupPosition)).get(childPosition);
 			imgUrl = fragment.eventImageUrlsbyId.get(event.getId());
-		} catch (Exception e){
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		Log.i("IMAGES", "EventAdapter --> image new url : " + imgUrl );
-		
-		RoveretoExplorerApplication.imageLoader.displayImage(imgUrl, eventPlaceHolder.icon, fragment.imgOptions, animateFirstListener);
-		
-		
-		
-		//set the rating bar
-		eventPlaceHolder.rating.setRating(eventPlaceHolder.event.getCommunityData().getAverageRating());
-		
+		Log.i("IMAGES", "EventAdapter --> image new url : " + imgUrl);
+
+		RoveretoExplorerApplication.imageLoader.displayImage(imgUrl,
+				eventPlaceHolder.icon, fragment.imgOptions,
+				animateFirstListener);
+
+		// set the rating bar
+		eventPlaceHolder.rating.setRating(eventPlaceHolder.event
+				.getCommunityData().getAverageRating());
+
 		eventPlaceHolder.rating.setOnTouchListener(new OnTouchListener() {
-	        public boolean onTouch(View v, MotionEvent event) {
-	            return true;
-	        }
-	    });	
-		
-		
+			public boolean onTouch(View v, MotionEvent event) {
+				return true;
+			}
+		});
+
 		eventPlaceHolder.rating.setFocusable(false);
-	       
-		
+
 		Calendar previousEvent = null;
 		Calendar currentEvent = Calendar.getInstance();
-		
 
 		if (event.getFromTime() != null)
 			currentEvent.setTimeInMillis(event.getFromTime());
-//		visualizedGroup=groupPosition;
-//		visualizedItem = childPosition;
+		// visualizedGroup=groupPosition;
+		// visualizedItem = childPosition;
 		return row;
 	}
-	
 
 }

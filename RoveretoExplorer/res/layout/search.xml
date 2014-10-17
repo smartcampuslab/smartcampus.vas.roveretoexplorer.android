@@ -56,7 +56,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:text="@string/search_what"
-                    android:textColor="@color/app_green"
+                    android:textColor="@color/app_default"
                     android:textStyle="bold" />
 
                 <EditText
@@ -72,7 +72,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:text="@string/search_when"
-                    android:textColor="@color/app_green"
+                    android:textColor="@color/app_default"
                     android:textStyle="bold" />
 
                 <Spinner
@@ -86,7 +86,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:text="@string/search_where"
-                    android:textColor="@color/app_green"
+                    android:textColor="@color/app_default"
                     android:textStyle="bold" />
 
                 <Spinner

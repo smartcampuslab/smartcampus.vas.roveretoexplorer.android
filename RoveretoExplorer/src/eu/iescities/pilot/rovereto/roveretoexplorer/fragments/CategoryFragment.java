@@ -1,13 +1,12 @@
 package eu.iescities.pilot.rovereto.roveretoexplorer.fragments;
 
-import java.util.ArrayList;
-
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,12 +15,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.Toast;
-import android.widget.ViewFlipper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.MainActivity;
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.CategoryHelper;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.BaseDTObject;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.EventsListingFragment;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.search.SearchFragment;
 import eu.iescities.pilot.rovereto.roveretoexplorer.map.MapFragment;
@@ -118,8 +114,9 @@ public class CategoryFragment extends Fragment {
 				executeTransactionEventListFragment(args);
 			}
 		});
-		getActivity().getActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor(getResources().getString(R.color.actionbar_default))));
-
+		((ActionBarActivity) getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor(getResources().getString(R.color.actionbar_default))));
+		((ActionBarActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
+		((ActionBarActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(true);
 	}
 
 	private void executeTransactionEventListFragment(Bundle args) {

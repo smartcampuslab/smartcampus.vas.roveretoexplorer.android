@@ -17,7 +17,8 @@
     <color name="background_tab_pressed">#6633B5E5</color>
     <color name="app_green">#7CBF33</color>
     <color name="label_header">#FFFFFF</color>
-    <color name="jungle_green">#347C2C</color>
+    <color name="tabs_lines">#444444</color>
+    <color name="jungle_green">#444444</color>
     <color name="light_jungle_green">#E8FFE0</color>
     <color name="color_event_all">#edcc18</color>
     <color name="color_event_cultural">#e89a1a</color>
@@ -28,6 +29,7 @@
     <color name="color_drawer">#e5e5e5</color>
     <color name="drawer_text">#444444</color>
     <color name="actionbar_default">#444444</color>
+    <color name="app_default">#444444</color>
     <color name="category_text">#444444</color>
 
 </resources>

@@ -39,7 +39,7 @@ public class Fragment_EventDetails extends Fragment {
 	private ViewPager pager;
 	private MyPagerAdapter adapter;
 	// private int currentColor = R.color.jungle_green;
-	private int currentColor = 0xFF96AA39;
+//	private int currentColor = 0xFF96AA39;
 	public ExplorerObject mEvent = null;
 	private String mEventId;
 	private String mEventImageUrl;
@@ -109,9 +109,9 @@ public class Fragment_EventDetails extends Fragment {
 		pager.setPageMargin(pageMargin);
 
 		tabs.setViewPager(pager);
-		tabs.setIndicatorColor(currentColor);
-		tabs.setUnderlineColor(currentColor);
-		tabs.setDividerColor(currentColor);
+		tabs.setIndicatorColor(getResources().getColor(R.color.tabs_lines));
+		tabs.setUnderlineColor(getResources().getColor(R.color.tabs_lines));
+		tabs.setDividerColor(getResources().getColor(R.color.tabs_lines));
 		LogHelper.sendEventViewed(mEventId,getActivity());
 
 	}

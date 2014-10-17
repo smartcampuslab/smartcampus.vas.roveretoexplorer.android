@@ -3,7 +3,7 @@
 
     <item
         android:id="@+id/map_filter"
-        android:icon="@drawable/ic_filter"
+        android:icon="@drawable/ic_action_filter"
         android:orderInCategory="2"
         android:title="@string/overflow"
         eu.iescities.pilot.rovereto.roveretoexplorer:showAsAction="always">

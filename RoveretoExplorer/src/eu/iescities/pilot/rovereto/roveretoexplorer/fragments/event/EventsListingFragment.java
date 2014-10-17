@@ -37,6 +37,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -47,7 +48,6 @@ import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -73,7 +73,8 @@ import eu.trentorise.smartcampus.android.common.listing.AbstractLstingFragment.L
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 
 // to be used for event listing both in categories and in My Events
-public class EventsListingFragment extends Fragment implements OnScrollListener, ReloadAdapter {
+public class EventsListingFragment extends Fragment implements
+		OnScrollListener, ReloadAdapter {
 	private ListView list;
 	private Context context;
 
@@ -108,6 +109,7 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 	// For the expandable list view
 	private WhenForSearch whenForSearch = null;
 	List<String> dateGroupList = new ArrayList<String>();
+	private int colorCategory = 0;
 
 	private List<ExplorerObject> listEvents = new ArrayList<ExplorerObject>();
 	Map<String, List<ExplorerObject>> eventCollection = new LinkedHashMap<String, List<ExplorerObject>>();
@@ -118,7 +120,8 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 	private int firstVis;
 	private int lastVis;;
 
-//	protected Map<String, List<String>> eventImageUrls = new LinkedHashMap<String, List<String>>();
+	// protected Map<String, List<String>> eventImageUrls = new
+	// LinkedHashMap<String, List<String>>();
 	protected Map<String, String> eventImageUrlsbyId = new LinkedHashMap<String, String>();
 
 	private int previousGroup;
@@ -140,19 +143,19 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 			indexAdapter = 0;
 		}
 
-//		try {
-//			expListView.setSelectedGroup(previousGroup);
-//			expListView.setSelectedChild(previousGroup, previousItem, true);
-//			expListView.expandGroup(previousGroup);
-//		} catch (IndexOutOfBoundsException e) {
-//			// the changes modify the order of the group, so by default open
-//			// the first group
-//			if (eventsAdapter.getGroupCount() > 0) {
-//				expListView.setSelectedGroup(0);
-//				expListView.setSelectedChild(0, 0, true);
-//				expListView.expandGroup(0);
-//			}
-//		}
+		// try {
+		// expListView.setSelectedGroup(previousGroup);
+		// expListView.setSelectedChild(previousGroup, previousItem, true);
+		// expListView.expandGroup(previousGroup);
+		// } catch (IndexOutOfBoundsException e) {
+		// // the changes modify the order of the group, so by default open
+		// // the first group
+		// if (eventsAdapter.getGroupCount() > 0) {
+		// expListView.setSelectedGroup(0);
+		// expListView.setSelectedChild(0, 0, true);
+		// expListView.expandGroup(0);
+		// }
+		// }
 
 	}
 
@@ -174,7 +177,8 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
 		return inflater.inflate(R.layout.eventslist, container, false);
 	}
 
@@ -182,8 +186,10 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 	public void onActivityCreated(Bundle arg0) {
 		super.onActivityCreated(arg0);
 
-		imgOptions = new DisplayImageOptions.Builder().showImageOnLoading(R.drawable.ic_stub)
-				.showImageForEmptyUri(R.drawable.ic_empty).showImageOnFail(R.drawable.ic_error).cacheInMemory(true)
+		imgOptions = new DisplayImageOptions.Builder()
+				.showImageOnLoading(R.drawable.ic_no_img)
+				.showImageForEmptyUri(R.drawable.ic_no_img)
+				.showImageOnFail(R.drawable.ic_no_img).cacheInMemory(true)
 				.cacheOnDisc(true).considerExifParams(true)
 				// .displayer(new RoundedBitmapDisplayer(20))
 				.build();
@@ -197,16 +203,17 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 		}
 
 		if (eventsAdapter == null) {
-			eventsAdapter = new EventAdapter(context, R.layout.event_list_child_item, EventsListingFragment.this,
-					dateGroupList, eventCollection);
+			eventsAdapter = new EventAdapter(context,
+					R.layout.event_list_child_item, EventsListingFragment.this,
+					dateGroupList, eventCollection, colorCategory);
 
 		}
 		expListView = (ListView) getActivity().findViewById(R.id.events_list);
 		setListenerOnEvent();
 		list.setOnScrollListener(this);
 		expListView.setAdapter(eventsAdapter);
-//		if (eventsAdapter.getGroupCount() > 0)
-//			expListView.expandGroup(0);
+		// if (eventsAdapter.getGroupCount() > 0)
+		// expListView.expandGroup(0);
 
 	}
 
@@ -218,32 +225,42 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 					int position, long id) {
 				Log.i("LISTENER", "I should toast 1 ");
 
-				final ExplorerObject selected = (ExplorerObject) eventsAdapter.getChild(position);
+				final ExplorerObject selected = (ExplorerObject) eventsAdapter
+						.getChild(position);
 
 				Log.i("SCROLLTABS", "Load the scroll tabs!!");
-				FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+				FragmentTransaction fragmentTransaction = getActivity()
+						.getSupportFragmentManager().beginTransaction();
 				Fragment_EventDetails fragment = new Fragment_EventDetails();
 
 				Bundle args = new Bundle();
 
-				Log.i("SCROLLTABS", "event selected ID: " + ((EventPlaceholder) view.getTag()).event.getId() + "!!");
-				event_id_selected = ((EventPlaceholder) view.getTag()).event.getId();
-				oldFromTime = ((EventPlaceholder) view.getTag()).event.getFromTime();
-				oldToTime = ((EventPlaceholder) view.getTag()).event.getToTime();
-//				previousGroup = groupPosition;
-//				previousItem = childPosition;
-				args.putString(Utils.ARG_EVENT_ID, ((EventPlaceholder) view.getTag()).event.getId());
+				Log.i("SCROLLTABS", "event selected ID: "
+						+ ((EventPlaceholder) view.getTag()).event.getId()
+						+ "!!");
+				event_id_selected = ((EventPlaceholder) view.getTag()).event
+						.getId();
+				oldFromTime = ((EventPlaceholder) view.getTag()).event
+						.getFromTime();
+				oldToTime = ((EventPlaceholder) view.getTag()).event
+						.getToTime();
+				// previousGroup = groupPosition;
+				// previousItem = childPosition;
+				args.putString(Utils.ARG_EVENT_ID,
+						((EventPlaceholder) view.getTag()).event.getId());
 				try {
-//					args.putString(Utils.ARG_EVENT_IMAGE_URL,
-//							eventImageUrls.get(dateGroupList.get(groupPosition)).get(childPosition));
+					// args.putString(Utils.ARG_EVENT_IMAGE_URL,
+					// eventImageUrls.get(dateGroupList.get(groupPosition)).get(childPosition));
 				} catch (Exception e) {
 				}
 
 				fragment.setArguments(args);
 
-				fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+				fragmentTransaction
+						.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
 				// fragmentTransaction.detach(this);
-				fragmentTransaction.replace(R.id.content_frame, fragment, "event_details");
+				fragmentTransaction.replace(R.id.content_frame, fragment,
+						"event_details");
 				fragmentTransaction.addToBackStack(fragment.getTag());
 				fragmentTransaction.commit();
 
@@ -259,8 +276,9 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 		// I need to pass the interface to the fragment whenwhere. Now reloading
 		// the adapter everytime is too slow
 		// if (reload){
-		eventsAdapter = new EventAdapter(context, R.layout.event_list_child_item, EventsListingFragment.this,
-				dateGroupList, eventCollection);
+		eventsAdapter = new EventAdapter(context,
+				R.layout.event_list_child_item, EventsListingFragment.this,
+				dateGroupList, eventCollection, colorCategory);
 
 		expListView.setAdapter(eventsAdapter);
 		setListenerOnEvent();
@@ -294,23 +312,28 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 
 	private void removeOldSingleEvent(ExplorerObject new_event) {
 		String date_with_day;
-		date_with_day = Utils.getDateTimeString(context, new_event.getFromTime(), Utils.DATE_FORMAT_2, true, true)[0];
+		date_with_day = Utils.getDateTimeString(context,
+				new_event.getFromTime(), Utils.DATE_FORMAT_2, true, true)[0];
 
 		if ((new_event.getToTime() == null) || ((new_event.getToTime() == 0))) {
 			if (getArguments().getBoolean(SearchFragment.ARG_MY)
-					|| (new_event.getFromTime() >= DTHelper.getCurrentDateTimeForSearching())) {
+					|| (new_event.getFromTime() >= DTHelper
+							.getCurrentDateTimeForSearching())) {
 				// get event-dates
 				removeEvent(new_event, date_with_day);
 
 			}
 		} else {
 			// get the list of dates
-			List<Date> listOfDate = Utils.getDatesBetweenInterval(new Date(oldFromTime), new Date(oldToTime));
+			List<Date> listOfDate = Utils.getDatesBetweenInterval(new Date(
+					oldFromTime), new Date(oldToTime));
 			// get event-dates
 			for (Date date : listOfDate) {
-				date_with_day = Utils.getDateTimeString(context, date.getTime(), Utils.DATE_FORMAT_2, true, true)[0];
+				date_with_day = Utils.getDateTimeString(context,
+						date.getTime(), Utils.DATE_FORMAT_2, true, true)[0];
 				if (getArguments().getBoolean(SearchFragment.ARG_MY)
-						|| (date.getTime() >= DTHelper.getCurrentDateTimeForSearching())) {
+						|| (date.getTime() >= DTHelper
+								.getCurrentDateTimeForSearching())) {
 					removeEvent(new_event, date_with_day);
 
 				}
@@ -319,11 +342,14 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 		}
 		// clean empty date
 
-		List<Date> listOfDate = Utils.getDatesBetweenInterval(new Date(oldFromTime), new Date(oldToTime));
+		List<Date> listOfDate = Utils.getDatesBetweenInterval(new Date(
+				oldFromTime), new Date(oldToTime));
 		// get event-dates
 		for (Date date : listOfDate) {
-			date_with_day = Utils.getDateTimeString(context, date.getTime(), Utils.DATE_FORMAT_2, true, true)[0];
-			if (eventCollection.get(date_with_day) != null && eventCollection.get(date_with_day).size() == 0) {
+			date_with_day = Utils.getDateTimeString(context, date.getTime(),
+					Utils.DATE_FORMAT_2, true, true)[0];
+			if (eventCollection.get(date_with_day) != null
+					&& eventCollection.get(date_with_day).size() == 0) {
 				dateGroupList.remove(date_with_day);
 			}
 		}
@@ -342,7 +368,7 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 			}
 			if (found) {
 				eventCollection.get(date_with_day).remove(index);
-//				eventImageUrls.get(date_with_day).remove(index);
+				// eventImageUrls.get(date_with_day).remove(index);
 				eventImageUrlsbyId.remove(new_event.getId());
 			}
 
@@ -368,37 +394,41 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 
 	private void setFollowByIntent() {
 		try {
-			ApplicationInfo ai = getActivity().getPackageManager().getApplicationInfo(getActivity().getPackageName(),
-					PackageManager.GET_META_DATA);
+			ApplicationInfo ai = getActivity().getPackageManager()
+					.getApplicationInfo(getActivity().getPackageName(),
+							PackageManager.GET_META_DATA);
 			Bundle aBundle = ai.metaData;
 			mFollowByIntent = aBundle.getBoolean("follow-by-intent");
 		} catch (NameNotFoundException e) {
 			mFollowByIntent = false;
-			Log.e(EventsListingFragment.class.getName(), "you should set the follow-by-intent metadata in app manifest");
+			Log.e(EventsListingFragment.class.getName(),
+					"you should set the follow-by-intent metadata in app manifest");
 		}
 
 	}
 
 	@Override
-	public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+	public void onScroll(AbsListView view, int firstVisibleItem,
+			int visibleItemCount, int totalItemCount) {
 
 	}
 
 	protected void load() {
 		if (position == 0) {
 			eventCollection.clear();
-//			eventImageUrls.clear();
+			// eventImageUrls.clear();
 			eventImageUrlsbyId.clear();
 		}
-		new SCListingFragmentTask<ListingRequest, Void>(getActivity(), getLoader()).execute(new ListingRequest(
-				position, size));
+		new SCListingFragmentTask<ListingRequest, Void>(getActivity(),
+				getLoader()).execute(new ListingRequest(position, size));
 	}
 
 	protected SCAsyncTaskProcessor<AbstractLstingFragment.ListingRequest, List<ExplorerObject>> getLoader() {
 		return new EventLoader(getActivity());
 	}
 
-	private class EventLoader extends
+	private class EventLoader
+			extends
 			AbstractAsyncTaskProcessor<AbstractLstingFragment.ListingRequest, List<ExplorerObject>> {
 
 		private FragmentActivity currentRootActivity = null;
@@ -408,7 +438,8 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 		}
 
 		@Override
-		public List<ExplorerObject> performAction(AbstractLstingFragment.ListingRequest... params)
+		public List<ExplorerObject> performAction(
+				AbstractLstingFragment.ListingRequest... params)
 				throws SecurityException, Exception {
 			return getEvents(params);
 		}
@@ -424,11 +455,13 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 				// eventsAdapter.notifyDataSetInvalidated();
 
 				eventsAdapter.notifyDataSetChanged();
-//				if (expListView.getExpandableListAdapter().getGroupCount() > 0)
-//					expListView.expandGroup(0);
+				// if (expListView.getExpandableListAdapter().getGroupCount() >
+				// 0)
+				// expListView.expandGroup(0);
 
 			} else {
-				TextView no_result = (TextView) getActivity().findViewById(R.id.events_no_results);
+				TextView no_result = (TextView) getActivity().findViewById(
+						R.id.events_no_results);
 				no_result.setVisibility(View.VISIBLE);
 				expListView.setVisibility(View.GONE);
 			}
@@ -448,11 +481,13 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 
 	private void updateSingleEvent(ExplorerObject expObj) {
 		String date_with_day;
-		date_with_day = Utils.getDateTimeString(context, expObj.getFromTime(), Utils.DATE_FORMAT_2, true, true)[0];
+		date_with_day = Utils.getDateTimeString(context, expObj.getFromTime(),
+				Utils.DATE_FORMAT_2, true, true)[0];
 
 		if ((expObj.getToTime() == null) || ((expObj.getToTime() == 0))) {
 			if (getArguments().getBoolean(SearchFragment.ARG_MY)
-					|| (expObj.getFromTime() >= DTHelper.getCurrentDateTimeForSearching())) {
+					|| (expObj.getFromTime() >= DTHelper
+							.getCurrentDateTimeForSearching())) {
 				// get event-dates
 				addEvent(expObj, date_with_day);
 			}
@@ -460,8 +495,9 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 			List<Date> listOfDate = null;
 			// get the list of dates
 			if (!today)
-				listOfDate = Utils
-						.getDatesBetweenInterval(new Date(expObj.getFromTime()), new Date(expObj.getToTime()));
+				listOfDate = Utils.getDatesBetweenInterval(
+						new Date(expObj.getFromTime()),
+						new Date(expObj.getToTime()));
 			else {
 				// get only today
 				listOfDate = new ArrayList<Date>() {
@@ -475,12 +511,15 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 
 			for (Date date : listOfDate) {
 				if (date.before(nextSixMonthsDate())) {
-					if (!(whenForSearch != null && (date.before(startLimitChoosen(whenForSearch)) || date
+					if (!(whenForSearch != null && (date
+							.before(startLimitChoosen(whenForSearch)) || date
 							.after(endLimitChoosen(whenForSearch))))) {
-						date_with_day = Utils.getDateTimeString(context, date.getTime(), Utils.DATE_FORMAT_2, true,
-								true)[0];
+						date_with_day = Utils
+								.getDateTimeString(context, date.getTime(),
+										Utils.DATE_FORMAT_2, true, true)[0];
 						if (getArguments().getBoolean(SearchFragment.ARG_MY)
-								|| (date.getTime() >= DTHelper.getCurrentDateTimeForSearching())) {
+								|| (date.getTime() >= DTHelper
+										.getCurrentDateTimeForSearching())) {
 							addEvent(expObj, date_with_day);
 						}
 					}
@@ -503,7 +542,8 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 	private Date startLimitChoosen(WhenForSearch whenForSearch2) {
 		if (whenForSearch2.getFrom() != 0)
 			return new Date(whenForSearch2.getFrom());
-		else return new Date();
+		else
+			return new Date();
 	}
 
 	private Date nextSixMonthsDate() {
@@ -516,24 +556,25 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 		if (!dateGroupList.contains(date_with_day)) {
 			dateGroupList.add(date_with_day);
 			eventCollection.put(date_with_day, new ArrayList<ExplorerObject>());
-//			eventImageUrls.put(date_with_day, new ArrayList<String>());
+			// eventImageUrls.put(date_with_day, new ArrayList<String>());
 
 		}
 		// insert se precedente era presente
-		if (previousItem != -1 && previousGroup == dateGroupList.indexOf(date_with_day))
+		if (previousItem != -1
+				&& previousGroup == dateGroupList.indexOf(date_with_day))
 			eventCollection.get(date_with_day).add(previousItem, expObj);
 		else
 			eventCollection.get(date_with_day).add(expObj);
 
 		// get event image urls
 		String eventImg = expObj.getImage();
-		if (previousItem != -1 && previousGroup == dateGroupList.indexOf(date_with_day)){
-//			eventImageUrls.get(date_with_day).add(previousItem, eventImg);
-			eventImageUrlsbyId.put(expObj.getId(),eventImg);
-		}
-		else{
-//			eventImageUrls.get(date_with_day).add(eventImg);
-			eventImageUrlsbyId.put(expObj.getId(),eventImg);
+		if (previousItem != -1
+				&& previousGroup == dateGroupList.indexOf(date_with_day)) {
+			// eventImageUrls.get(date_with_day).add(previousItem, eventImg);
+			eventImageUrlsbyId.put(expObj.getId(), eventImg);
+		} else {
+			// eventImageUrls.get(date_with_day).add(eventImg);
+			eventImageUrlsbyId.put(expObj.getId(), eventImg);
 		}
 	}
 
@@ -552,7 +593,8 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 	// eventImageUrls.get(date_with_day).add(eventImg);
 	// }
 
-	private List<ExplorerObject> getEvents(AbstractLstingFragment.ListingRequest... params) {
+	private List<ExplorerObject> getEvents(
+			AbstractLstingFragment.ListingRequest... params) {
 		try {
 			Collection<ExplorerObject> result = null;
 
@@ -569,60 +611,95 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 			String categories = bundle.getString(SearchFragment.ARG_CATEGORY);
 			SortedMap<String, Integer> sort = new TreeMap<String, Integer>();
 			sort.put("fromTime", 1);
-			whenForSearch = bundle.getParcelable(SearchFragment.ARG_WHEN_SEARCH);
+			whenForSearch = bundle
+					.getParcelable(SearchFragment.ARG_WHEN_SEARCH);
 			if (bundle.containsKey(SearchFragment.ARG_CATEGORY)
 					&& (bundle.getString(SearchFragment.ARG_CATEGORY) != null)) {
 
-				result = DTHelper.searchInGeneral(0, -1, bundle.getString(SearchFragment.ARG_QUERY),
-						(WhereForSearch) bundle.getParcelable(SearchFragment.ARG_WHERE_SEARCH),
-						(WhenForSearch) bundle.getParcelable(SearchFragment.ARG_WHEN_SEARCH), my, ExplorerObject.class,
-						sort, categories);
-				LogHelper.sendListViewed(category,getActivity());
+				result = DTHelper
+						.searchInGeneral(
+								0,
+								-1,
+								bundle.getString(SearchFragment.ARG_QUERY),
+								(WhereForSearch) bundle
+										.getParcelable(SearchFragment.ARG_WHERE_SEARCH),
+								(WhenForSearch) bundle
+										.getParcelable(SearchFragment.ARG_WHEN_SEARCH),
+								my, ExplorerObject.class, sort, categories);
+				LogHelper.sendListViewed(category, getActivity());
 
-			} else if (bundle.containsKey(ARG_POI) && (bundle.getString(ARG_POI) != null)) {
-				result = DTHelper.getEventsByPOI(0, -1, bundle.getString(ARG_POI));
-			} else if (bundle.containsKey(SearchFragment.ARG_MY) && (bundle.getBoolean(SearchFragment.ARG_MY))) {
+			} else if (bundle.containsKey(ARG_POI)
+					&& (bundle.getString(ARG_POI) != null)) {
+				result = DTHelper.getEventsByPOI(0, -1,
+						bundle.getString(ARG_POI));
+			} else if (bundle.containsKey(SearchFragment.ARG_MY)
+					&& (bundle.getBoolean(SearchFragment.ARG_MY))) {
 
-				result = DTHelper.searchInGeneral(0, -1, bundle.getString(SearchFragment.ARG_QUERY),
-						(WhereForSearch) bundle.getParcelable(SearchFragment.ARG_WHERE_SEARCH),
-						(WhenForSearch) bundle.getParcelable(SearchFragment.ARG_WHEN_SEARCH), my, ExplorerObject.class,
-						sort, categories);
-				LogHelper.sendListViewed(SearchFragment.ARG_MY,getActivity());
+				result = DTHelper
+						.searchInGeneral(
+								0,
+								-1,
+								bundle.getString(SearchFragment.ARG_QUERY),
+								(WhereForSearch) bundle
+										.getParcelable(SearchFragment.ARG_WHERE_SEARCH),
+								(WhenForSearch) bundle
+										.getParcelable(SearchFragment.ARG_WHEN_SEARCH),
+								my, ExplorerObject.class, sort, categories);
+				LogHelper.sendListViewed(SearchFragment.ARG_MY, getActivity());
 
 			} else if (bundle.containsKey(SearchFragment.ARG_ALL)) {
 
-				result = DTHelper.searchInGeneral(0, -1, bundle.getString(SearchFragment.ARG_QUERY),
-						(WhereForSearch) bundle.getParcelable(SearchFragment.ARG_WHERE_SEARCH),
-						(WhenForSearch) bundle.getParcelable(SearchFragment.ARG_WHEN_SEARCH), my, ExplorerObject.class,
-						sort, "");
-				LogHelper.sendListViewed(SearchFragment.ARG_ALL,getActivity());
+				result = DTHelper
+						.searchInGeneral(
+								0,
+								-1,
+								bundle.getString(SearchFragment.ARG_QUERY),
+								(WhereForSearch) bundle
+										.getParcelable(SearchFragment.ARG_WHERE_SEARCH),
+								(WhenForSearch) bundle
+										.getParcelable(SearchFragment.ARG_WHEN_SEARCH),
+								my, ExplorerObject.class, sort, "");
+				LogHelper.sendListViewed(SearchFragment.ARG_ALL, getActivity());
 
 			} else if (bundle.containsKey(SearchFragment.ARG_QUERY)) {
 
-				result = DTHelper.searchInGeneral(0, -1, bundle.getString(SearchFragment.ARG_QUERY),
-						(WhereForSearch) bundle.getParcelable(SearchFragment.ARG_WHERE_SEARCH),
-						(WhenForSearch) bundle.getParcelable(SearchFragment.ARG_WHEN_SEARCH), my, ExplorerObject.class,
-						sort, categories);
-				LogHelper.sendSearch(bundle.getString(SearchFragment.ARG_QUERY),getActivity());
+				result = DTHelper
+						.searchInGeneral(
+								0,
+								-1,
+								bundle.getString(SearchFragment.ARG_QUERY),
+								(WhereForSearch) bundle
+										.getParcelable(SearchFragment.ARG_WHERE_SEARCH),
+								(WhenForSearch) bundle
+										.getParcelable(SearchFragment.ARG_WHEN_SEARCH),
+								my, ExplorerObject.class, sort, categories);
+				LogHelper.sendSearch(
+						bundle.getString(SearchFragment.ARG_QUERY),
+						getActivity());
 
 			} else if (bundle.containsKey(ARG_QUERY_TODAY)) {
 				today = true;
-				result = DTHelper.searchTodayEvents(0, -1, bundle.getString(SearchFragment.ARG_QUERY));
-				LogHelper.sendListViewed(ARG_QUERY_TODAY,getActivity());
+				result = DTHelper.searchTodayEvents(0, -1,
+						bundle.getString(SearchFragment.ARG_QUERY));
+				LogHelper.sendListViewed(ARG_QUERY_TODAY, getActivity());
 
 			} else if (bundle.containsKey(SearchFragment.ARG_LIST)) {
-				result = (Collection<ExplorerObject>) bundle.get(SearchFragment.ARG_LIST);
+				result = (Collection<ExplorerObject>) bundle
+						.get(SearchFragment.ARG_LIST);
 			} else {
 				return Collections.emptyList();
 			}
 
 			listEvents.addAll(result);
 
-			List<ExplorerObject> sorted = new ArrayList<ExplorerObject>(listEvents);
+			List<ExplorerObject> sorted = new ArrayList<ExplorerObject>(
+					listEvents);
 
 			return sorted;
 		} catch (Exception e) {
 			Log.e(EventsListingFragment.class.getName(), e.getMessage());
+			int colorCategory = 0;
+
 			e.printStackTrace();
 			listEvents = Collections.emptyList();
 			return listEvents;
@@ -632,23 +709,36 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 	@Override
 	public void onPrepareOptionsMenu(Menu menu) {
 
-		Log.i("MENU", "start on Prepare Options Menu EVENT LISTING frag: " + menu.toString());
+		Log.i("MENU", "start on Prepare Options Menu EVENT LISTING frag: "
+				+ menu.toString());
 
-		 menu.clear();
+		menu.clear();
 
 		getActivity().getMenuInflater().inflate(R.menu.list_menu, menu);
 
 		if (category == null) {
-			category = (getArguments() != null) ? getArguments().getString(SearchFragment.ARG_CATEGORY) : null;
+			category = (getArguments() != null) ? getArguments().getString(
+					SearchFragment.ARG_CATEGORY) : null;
 			ColorDrawable color = null;
-			if (category!=null && !getArguments().containsKey(SearchFragment.ARG_LIST)){
-				color = new ColorDrawable(Color.parseColor(CategoryHelper.getCategoryDescriptorByCategoryFiltered(null, category).color));
+			if (getArguments().containsKey(SearchFragment.ARG_ALL)){
+				colorCategory = Color
+						.parseColor(getString(R.color.color_event_all));
+				color = new ColorDrawable(colorCategory);
+			}
+			else if (category != null
+					&& !getArguments().containsKey(SearchFragment.ARG_LIST)) {
+				colorCategory = Color
+						.parseColor(CategoryHelper
+								.getCategoryDescriptorByCategoryFiltered(null,
+										category).color);
+				color = new ColorDrawable(colorCategory);
 
+			}  else {
+				colorCategory = Color
+						.parseColor(getString(R.color.actionbar_default));
+				color = new ColorDrawable(colorCategory);
 			}
-			else {
-				color = new ColorDrawable(Color.parseColor(getString(R.color.actionbar_default)));
-			}
-			getActivity().getActionBar().setBackgroundDrawable(color);
+			((ActionBarActivity) getActivity()).getSupportActionBar().setBackgroundDrawable(color);
 
 		}
 
@@ -659,30 +749,38 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 	public boolean onOptionsItemSelected(MenuItem item) {
 
 		if (item.getItemId() == R.id.map_view) {
-			category = (getArguments() != null) ? getArguments().getString(SearchFragment.ARG_CATEGORY) : null;
-			if (category == null && (getArguments() != null) && getArguments().containsKey(SearchFragment.ARG_MY))
+			category = (getArguments() != null) ? getArguments().getString(
+					SearchFragment.ARG_CATEGORY) : null;
+			if (category == null && (getArguments() != null)
+					&& getArguments().containsKey(SearchFragment.ARG_MY))
 				category = CategoryHelper.EVENTS_MY.category;
-			if (category == null && (getArguments() != null) && getArguments().getString(ARG_QUERY_TODAY) != null)
+			if (category == null && (getArguments() != null)
+					&& getArguments().getString(ARG_QUERY_TODAY) != null)
 				category = CategoryHelper.EVENTS_TODAY.category;
-			if (category == null && (getArguments() != null) && getArguments().containsKey(SearchFragment.ARG_ALL))
+			if (category == null && (getArguments() != null)
+					&& getArguments().containsKey(SearchFragment.ARG_ALL))
 				category = CategoryHelper.EVENTS_ALL.category;
-			boolean query = getArguments().containsKey(SearchFragment.ARG_QUERY);
+			boolean query = getArguments()
+					.containsKey(SearchFragment.ARG_QUERY);
 
 			if (category != null && !query) {
 				Log.i("AB TITLE", "switchToMapView category:" + category);
-				MapManager.switchToMapView(category, MapFragment.ARG_EVENT_CATEGORY, this);
+				MapManager.switchToMapView(category,
+						MapFragment.ARG_EVENT_CATEGORY, this);
 			} else {
 				ArrayList<BaseDTObject> target = new ArrayList<BaseDTObject>();
 				if (list != null) {
 					for (int i = 0; i < listEvents.size(); i++) {
 						ExplorerObject o = listEvents.get(i);
-						if (o.getLocation() != null && o.getLocation()[0] != 0 && o.getLocation()[1] != 0) {
+						if (o.getLocation() != null && o.getLocation()[0] != 0
+								&& o.getLocation()[1] != 0) {
 							target.add(o);
 						}
 					}
 				}
 
-				Log.i("AB TITLE", "switchToMapView BaseDTOObjects:" + target.toString());
+				Log.i("AB TITLE",
+						"switchToMapView BaseDTOObjects:" + target.toString());
 				MapManager.switchToMapView(target, this);
 			}
 			return true;
@@ -691,16 +789,21 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 		else if (item.getItemId() == R.id.search_action) {
 			FragmentTransaction fragmentTransaction;
 			Fragment fragment;
-			fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+			fragmentTransaction = getActivity().getSupportFragmentManager()
+					.beginTransaction();
 			fragment = new SearchFragment();
 			Bundle args = new Bundle();
 			args.putString(SearchFragment.ARG_CATEGORY, category);
-			args.putString(CategoryHelper.CATEGORY_TYPE_EVENTS, CategoryHelper.CATEGORY_TYPE_EVENTS);
-			if (getArguments() != null && getArguments().containsKey(SearchFragment.ARG_MY)
+			args.putString(CategoryHelper.CATEGORY_TYPE_EVENTS,
+					CategoryHelper.CATEGORY_TYPE_EVENTS);
+			if (getArguments() != null
+					&& getArguments().containsKey(SearchFragment.ARG_MY)
 					&& getArguments().getBoolean(SearchFragment.ARG_MY))
-				args.putBoolean(SearchFragment.ARG_MY, getArguments().getBoolean(SearchFragment.ARG_MY));
+				args.putBoolean(SearchFragment.ARG_MY, getArguments()
+						.getBoolean(SearchFragment.ARG_MY));
 			fragment.setArguments(args);
-			fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+			fragmentTransaction
+					.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
 			fragmentTransaction.replace(R.id.content_frame, fragment, "events");
 			fragmentTransaction.addToBackStack(fragment.getTag());
 			fragmentTransaction.commit();
@@ -712,9 +815,11 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 		}
 	}
 
-	protected class SCListingFragmentTask<Params, Progress> extends SCAsyncTask<Params, Progress, List<ExplorerObject>> {
+	protected class SCListingFragmentTask<Params, Progress> extends
+			SCAsyncTask<Params, Progress, List<ExplorerObject>> {
 
-		public SCListingFragmentTask(Activity activity,
+		public SCListingFragmentTask(
+				Activity activity,
 				SCAsyncTask.SCAsyncTaskProcessor<Params, List<ExplorerObject>> processor) {
 			super(activity, processor);
 		}
@@ -732,11 +837,13 @@ public class EventsListingFragment extends Fragment implements OnScrollListener,
 				// eventsAdapter.notifyDataSetInvalidated();
 
 				eventsAdapter.notifyDataSetChanged();
-//				if (expListView.getExpandableListAdapter().getGroupCount() > 0)
-//					expListView.expandGroup(0);
+				// if (expListView.getExpandableListAdapter().getGroupCount() >
+				// 0)
+				// expListView.expandGroup(0);
 
 			} else {
-				TextView no_result = (TextView) getActivity().findViewById(R.id.events_no_results);
+				TextView no_result = (TextView) getActivity().findViewById(
+						R.id.events_no_results);
 				no_result.setVisibility(View.VISIBLE);
 				expListView.setVisibility(View.GONE);
 			}

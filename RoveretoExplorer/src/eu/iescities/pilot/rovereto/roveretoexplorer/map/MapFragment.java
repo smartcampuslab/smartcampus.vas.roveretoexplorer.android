@@ -20,6 +20,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.InflateException;
 import android.view.LayoutInflater;
@@ -227,8 +228,9 @@ public class MapFragment extends Fragment implements MapItemsHandler,
 						MapManager.DEFAULT_POINT, MapManager.ZOOM_DEFAULT));
 
 		}
-		getActivity().getActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor(getResources().getString(R.color.actionbar_default))));
-
+		((ActionBarActivity) getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor(getResources().getString(R.color.actionbar_default))));
+		((ActionBarActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
+		((ActionBarActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(true);
 	}
 
 	@Override

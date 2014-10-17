@@ -123,6 +123,7 @@ public class MainActivity extends AbstractNavDrawerActivity {
 		LogHelper.sendStartLog(this);
 		// check if still a quiz to be done
 		QuizHelper.checkQuiz(this);
+		
 
 	}
 
@@ -328,7 +329,7 @@ public class MainActivity extends AbstractNavDrawerActivity {
 	private ArrayList<NavDrawerItem> getMenuItems(int... ids) {
 
 		ArrayList<NavDrawerItem> menu_items = new ArrayList<NavDrawerItem>();
-		menu_items.add(NavMenuSection.create(0, "Eventi"));
+//		menu_items.add(NavMenuSection.create(0, "Eventi"));
 		String[] labels = getResources().getStringArray(ids[0]);
 		String[] abTitles = getResources().getStringArray(ids[2]);
 
