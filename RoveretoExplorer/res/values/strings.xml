@@ -209,7 +209,8 @@
     <string name="address_select_toast">Select an address</string>
     <string name="toast_time_wrong">Event\'s time is wrong</string>
     <string name="when_where">When and where</string>
-   <string name="terms_of_service"><![CDATA[
+    <string name="terms_of_service">
+<![CDATA[
        <b>Introduction<br>
         Applicable worldwide except where we publish specific territorial terms and conditions.</b><br>
 These terms and conditions ("Terms") set important information regarding the rights, obligations and restrictions that may apply you as user ("User") when you access to the Internet site at  <a href="http://www.iescities.eu/server">http://www.iescities.eu/server</a> ("Website") or when you access to, download and use the application IES Cities Player ("Application") or whatever the services provided by using it. The application act as a marketplace for those applications developed within the IES Cities framework, allowing users to discover which applications are available on their surroundings making use of public data. Moreover the Application and the Website allow the access to other Applications and Websites. The Website and the Application, where no specifically provided, are supplied by all the partners that make up IES Cities Consortium. IES Cities Project ( <a href="http://www.iescities.eu">http://www.iescities.eu</a>) has received funding from the European Union\'s Competitiveness and Innovation Framework Programme under grant agreement n 325097.
@@ -270,17 +271,27 @@ c) collect data of the users of the application; <br>
 d) threaten, disturb, extort to other users; <br>
 e) Interfere third parties services; <br>
 f) affect third parties copyrights.<br>
-The Application is provided "as is" and you use it under your own responsibility. FBK and partners from IES Cities consortium disclaims liability for errors, malfunctions in your terminal, interruptions to other applications, data loss and unavailability, if you use the Application.]]></string>
- 
+The Application is provided "as is" and you use it under your own responsibility. FBK and partners from IES Cities consortium disclaims liability for errors, malfunctions in your terminal, interruptions to other applications, data loss and unavailability, if you use the Application.]]>
+    </string>
     <string name="exit_quiz">Thank you for your contribute</string>
     <string name="not_now">Not now</string>
     <string name="open_answer">Other</string>
     <string name="questionnaire_welcome_back">Welcome back, do you want to restart with the questionnaire?</string>
-    <string name="questionnary_intro">Do you want to do a questionnaire? </string>
+    <string name="questionnary_intro">
+<![CDATA[
+<html>
+ <head></head>
+ <body style="text-align:justify;color:black;background-color:white;">
+This app is part of the European IES Cities project. May we ask you a few short questions about it? Your responses are stored anonymously. You can do this on Google Play or within the app itself?
+ </body>
+</html>
+]]>
+    </string>
     <string name="questionnaire_exit">Thank you for your contribute</string>
-	<string name="next_quiz">Next</string>
-	<string name="skip_quiz">Skip</string>
-	<string name="categories_event_all">All events</string>
-	<string name="no_empty_comment">Empty comment</string>
-	
+    <string name="next_quiz">Next</string>
+    <string name="skip_quiz">Skip</string>
+    <string name="no_quiz">No</string>
+    <string name="categories_event_all">All events</string>
+    <string name="no_empty_comment">Empty comment</string>
+
 </resources>

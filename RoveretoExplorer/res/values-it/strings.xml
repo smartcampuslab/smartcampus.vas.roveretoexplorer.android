@@ -168,11 +168,19 @@ The Application is provided "as is" and you use it under your own responsibility
     <string name="not_now">Non adesso</string>
     <string name="open_answer">Altro (specificare)</string>
     <string name="questionnaire_welcome_back">Bentornato, vuoi ripartire con il questionario?</string>
-    <string name="questionnary_intro">Vuoi partecipare ad un questionario? </string>
+    <string name="questionnary_intro">
+<![CDATA[
+<html>
+ <head></head>
+ <body style="text-align:justify;color:black;background-color:white;">
+Quest\' applicazione \è parte del progetto europeo IES Cities. Possiamo farti qualche domanda sull\' applicazione? Le sue risposte verranno memorizzate in modo anonimo. Lei pu\ò farlo tramite Google Play o direttamente dall\' interno dell\' applicazione </body>
+</html>
+]]>
+    </string>
     <string name="questionnaire_exit">Grazie per il tuo contributo</string>
     <string name="next_quiz">Avanti</string>
     <string name="skip_quiz">Salta</string>
     <string name="categories_event_all">Tutti gli eventi</string>
-	<string name="no_empty_comment">Commento vuoto</string>
-    
+    <string name="no_empty_comment">Commento vuoto</string>
+
 </resources>

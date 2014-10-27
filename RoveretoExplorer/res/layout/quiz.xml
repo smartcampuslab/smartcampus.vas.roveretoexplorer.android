@@ -10,12 +10,12 @@
         android:layout_height="match_parent"
         android:orientation="vertical" >
 
-        <TextView
+        <WebView
             android:id="@+id/introText"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:text="@string/questionnary_intro"
+            android:padding="8dp"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <LinearLayout
@@ -27,15 +27,22 @@
             <Button
                 android:id="@+id/btnIntroNo"
                 android:layout_width="0dip"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.5"
+                android:layout_height="match_parent"
+                android:layout_weight="0.33"
                 android:text="@string/not_now" />
+
+            <Button
+                android:id="@+id/btnNo"
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:layout_weight="0.33"
+                android:text="@string/no_quiz" />
 
             <Button
                 android:id="@+id/btnIntroOk"
                 android:layout_width="0dip"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.5"
+                android:layout_height="match_parent"
+                android:layout_weight="0.33"
                 android:text="@android:string/ok" />
         </LinearLayout>
     </LinearLayout>
@@ -117,7 +124,7 @@
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <LinearLayout
-            android:id="@+id/linearLayout01"
+            android:id="@+id/linearLayout02"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical" >

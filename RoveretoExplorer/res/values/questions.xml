@@ -15,9 +15,22 @@
         <item>How would you like to see the app improved?</item>
         <item>Please leave your email address if you would be prepared to take part in a more detailed survey</item>
     </string-array>
+
+    <integer-array name="default_answers">
+        <item>2</item>
+        <item>2</item>
+        <item>2</item>
+        <item>2</item>
+        <item>2</item>
+        <item>2</item>
+        <item>2</item>
+        <item>2</item>
+    </integer-array>
+
     <string-array name="answers01">
         <item>Citizen</item>
         <item>Visitor</item>
+        <item>Neither</item>
     </string-array>
     <string-array name="answers02">
         <item>Yes</item>
@@ -25,46 +38,46 @@
         <item>Don\'t know</item>
     </string-array>
     <string-array name="answers03">
-        <item>Poor</item>
-        <item>Below average</item>
-        <item>Average</item>
-        <item>Above average</item>
         <item>Excellent</item>
+        <item>Above average</item>
+        <item>Average</item>
+        <item>Below average</item>
+        <item>Poor</item>
     </string-array>
     <string-array name="answers04">
-        <item> Poor</item>
-        <item>Below average</item>
-        <item>Average</item>
-        <item>Above average</item>
         <item>Excellent</item>
+        <item>Above average</item>
+        <item>Average</item>
+        <item>Below average</item>
+        <item>Poor</item>
     </string-array>
     <string-array name="answers05">
-        <item>Poor</item>
-        <item>Below average</item>
-        <item>Average</item>
-        <item>Above average</item>
         <item>Excellent</item>
+        <item>Above average</item>
+        <item>Average</item>
+        <item>Below average</item>
+        <item>Poor</item>
     </string-array>
     <string-array name="answers06">
-        <item>Poor</item>
-        <item>Below average</item>
-        <item>Average</item>
-        <item>Above average</item>
         <item>Excellent</item>
+        <item>Above average</item>
+        <item>Average</item>
+        <item>Below average</item>
+        <item>Poor</item>
     </string-array>
     <string-array name="answers07">
-        <item>Poor</item>
-        <item>Below average</item>
-        <item>Average</item>
-        <item>Above average</item>
         <item>Excellent</item>
+        <item>Above average</item>
+        <item>Average</item>
+        <item>Below average</item>
+        <item>Poor</item>
     </string-array>
     <string-array name="answers08">
-        <item>Poor</item>
-        <item>Below average</item>
-        <item>Average</item>
-        <item>Above average</item>
         <item>Excellent</item>
+        <item>Above average</item>
+        <item>Average</item>
+        <item>Below average</item>
+        <item>Poor</item>
     </string-array>
     <string-array name="answers09">
         <item>By date</item>

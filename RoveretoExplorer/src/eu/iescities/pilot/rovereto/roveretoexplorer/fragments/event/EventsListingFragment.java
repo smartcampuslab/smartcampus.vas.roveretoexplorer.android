@@ -201,7 +201,7 @@ public class EventsListingFragment extends Fragment implements
 			indexAdapter = arg0.getInt(ARG_INDEX);
 
 		}
-
+		setColorCategory();
 		if (eventsAdapter == null) {
 			eventsAdapter = new EventAdapter(context,
 					R.layout.event_list_child_item, EventsListingFragment.this,
@@ -276,6 +276,7 @@ public class EventsListingFragment extends Fragment implements
 		// I need to pass the interface to the fragment whenwhere. Now reloading
 		// the adapter everytime is too slow
 		// if (reload){
+		setColorCategory();
 		eventsAdapter = new EventAdapter(context,
 				R.layout.event_list_child_item, EventsListingFragment.this,
 				dateGroupList, eventCollection, colorCategory);
@@ -716,16 +717,21 @@ public class EventsListingFragment extends Fragment implements
 
 		getActivity().getMenuInflater().inflate(R.menu.list_menu, menu);
 
+		setColorCategory();
+
+		super.onPrepareOptionsMenu(menu);
+	}
+
+	private void setColorCategory() {
 		if (category == null) {
 			category = (getArguments() != null) ? getArguments().getString(
 					SearchFragment.ARG_CATEGORY) : null;
 			ColorDrawable color = null;
-			if (getArguments().containsKey(SearchFragment.ARG_ALL)){
+			if (getArguments().containsKey(SearchFragment.ARG_ALL)) {
 				colorCategory = Color
 						.parseColor(getString(R.color.color_event_all));
 				color = new ColorDrawable(colorCategory);
-			}
-			else if (category != null
+			} else if (category != null
 					&& !getArguments().containsKey(SearchFragment.ARG_LIST)) {
 				colorCategory = Color
 						.parseColor(CategoryHelper
@@ -733,16 +739,15 @@ public class EventsListingFragment extends Fragment implements
 										category).color);
 				color = new ColorDrawable(colorCategory);
 
-			}  else {
+			} else {
 				colorCategory = Color
 						.parseColor(getString(R.color.actionbar_default));
 				color = new ColorDrawable(colorCategory);
 			}
-			((ActionBarActivity) getActivity()).getSupportActionBar().setBackgroundDrawable(color);
+			((ActionBarActivity) getActivity()).getSupportActionBar()
+					.setBackgroundDrawable(color);
 
 		}
-
-		super.onPrepareOptionsMenu(menu);
 	}
 
 	@Override
@@ -752,14 +757,17 @@ public class EventsListingFragment extends Fragment implements
 			category = (getArguments() != null) ? getArguments().getString(
 					SearchFragment.ARG_CATEGORY) : null;
 			if (category == null && (getArguments() != null)
-					&& getArguments().containsKey(SearchFragment.ARG_MY))
+					&& getArguments().containsKey(SearchFragment.ARG_MY)) {
 				category = CategoryHelper.EVENTS_MY.category;
+			}
 			if (category == null && (getArguments() != null)
-					&& getArguments().getString(ARG_QUERY_TODAY) != null)
+					&& getArguments().getString(ARG_QUERY_TODAY) != null) {
 				category = CategoryHelper.EVENTS_TODAY.category;
+			}
 			if (category == null && (getArguments() != null)
-					&& getArguments().containsKey(SearchFragment.ARG_ALL))
+					&& getArguments().containsKey(SearchFragment.ARG_ALL)) {
 				category = CategoryHelper.EVENTS_ALL.category;
+			}
 			boolean query = getArguments()
 					.containsKey(SearchFragment.ARG_QUERY);
 

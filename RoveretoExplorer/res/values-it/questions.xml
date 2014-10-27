@@ -18,6 +18,7 @@
     <string-array name="answers01">
         <item>Cittadino</item>
         <item>Visitatore</item>
+        <item>Nessuno di questi</item>
     </string-array>
     <string-array name="answers02">
         <item>Si</item>
@@ -25,25 +26,25 @@
         <item>Non so</item>
     </string-array>
     <string-array name="answers03">
-        <item>Scarsa</item>
-        <item>Sotto la media</item>
-        <item>Nella media</item>
-        <item>Sopra la media</item>
         <item>Eccellente</item>
+        <item>Sopra la media</item>
+        <item>Nella media</item>
+        <item>Sotto la media</item>
+        <item>Scarsa</item>
     </string-array>
     <string-array name="answers04">
-        <item>Scarsa</item>
-        <item>Sotto la media</item>
-        <item>Nella media</item>
-        <item>Sopra la media</item>
         <item>Eccellente</item>
+        <item>Sopra la media</item>
+        <item>Nella media</item>
+        <item>Sotto la media</item>
+        <item>Scarsa</item>
     </string-array>
     <string-array name="answers05">
-        <item>Scarso</item>
-        <item>Sotto la media</item>
-        <item>Nella media</item>
-        <item>Sopra la media</item>
         <item>Eccellente</item>
+        <item>Sopra la media</item>
+        <item>Nella media</item>
+        <item>Sotto la media</item>
+        <item>Scarsa</item>
     </string-array>
     <string-array name="answers06">
         <item>Scarsa</item>
@@ -53,18 +54,18 @@
         <item>Eccellente</item>
     </string-array>
     <string-array name="answers07">
-        <item>Scarsa</item>
-        <item>Sotto la media</item>
-        <item>Nella media</item>
-        <item>Sopra la media</item>
         <item>Eccellente</item>
+        <item>Sopra la media</item>
+        <item>Nella media</item>
+        <item>Sotto la media</item>
+        <item>Scarsa</item>
     </string-array>
     <string-array name="answers08">
-        <item>Scarsa</item>
-        <item>Sotto la media</item>
-        <item>Nella media</item>
-        <item>Sopra la media</item>
         <item>Eccellente</item>
+        <item>Sopra la media</item>
+        <item>Nella media</item>
+        <item>Sotto la media</item>
+        <item>Scarsa</item>
     </string-array>
     <string-array name="answers09">
         <item>Per data</item>

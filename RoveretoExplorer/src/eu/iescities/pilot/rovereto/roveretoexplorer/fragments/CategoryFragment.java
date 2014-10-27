@@ -38,15 +38,17 @@ public class CategoryFragment extends Fragment {
 	}
 
 	private void initLayoutAction() {
-//		final ViewFlipper slideShow = (ViewFlipper) getActivity().findViewById(
-//				R.id.category_view_flipper);
-//		// sets auto flipping
-//		slideShow.setAutoStart(true);
-//		slideShow.setFlipInterval(4000);
-//		slideShow.startFlipping();
-//		slideShow.setInAnimation(getActivity(), android.R.anim.slide_in_left);
-//		slideShow
-//				.setOutAnimation(getActivity(), android.R.anim.slide_out_right);
+		// final ViewFlipper slideShow = (ViewFlipper)
+		// getActivity().findViewById(
+		// R.id.category_view_flipper);
+		// // sets auto flipping
+		// slideShow.setAutoStart(true);
+		// slideShow.setFlipInterval(4000);
+		// slideShow.startFlipping();
+		// slideShow.setInAnimation(getActivity(),
+		// android.R.anim.slide_in_left);
+		// slideShow
+		// .setOutAnimation(getActivity(), android.R.anim.slide_out_right);
 		LinearLayout lAll = (LinearLayout) getActivity().findViewById(
 				R.id.layout_category_all);
 		lAll.setOnClickListener(new OnClickListener() {
@@ -114,9 +116,14 @@ public class CategoryFragment extends Fragment {
 				executeTransactionEventListFragment(args);
 			}
 		});
-		((ActionBarActivity) getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor(getResources().getString(R.color.actionbar_default))));
-		((ActionBarActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
-		((ActionBarActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(true);
+		((ActionBarActivity) getActivity()).getSupportActionBar()
+				.setBackgroundDrawable(
+						new ColorDrawable(Color.parseColor(getResources()
+								.getString(R.color.actionbar_default))));
+		((ActionBarActivity) getActivity()).getSupportActionBar()
+				.setDisplayShowTitleEnabled(false);
+		((ActionBarActivity) getActivity()).getSupportActionBar()
+				.setDisplayShowTitleEnabled(true);
 	}
 
 	private void executeTransactionEventListFragment(Bundle args) {
@@ -132,30 +139,35 @@ public class CategoryFragment extends Fragment {
 				FragmentManager.POP_BACK_STACK_INCLUSIVE);
 		ft.commit();
 	}
-@Override
-public void onCreate(Bundle savedInstanceState) {
-	super.onCreate(savedInstanceState);
-	setHasOptionsMenu(true);
 
-}
 	@Override
-	public void onPrepareOptionsMenu(Menu menu) {
-		super.onPrepareOptionsMenu(menu);
-
-		getActivity().getMenuInflater().inflate(R.menu.category_event_menu,
-				menu);
-
-//		menu.findItem(R.id.map_view).setVisible(false);
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setHasOptionsMenu(true);
 
 	}
-@Override
-public boolean onOptionsItemSelected(MenuItem item) {
-	 if (item.getItemId() == R.id.map_view) {
-		 MapManager.switchToMapView(CategoryHelper.CATEGORY_ALL, MapFragment.ARG_EVENT_CATEGORY, this);
-		 return true;
-		 }
-	 return false;
-}
+
+	@Override
+	public void onPrepareOptionsMenu(Menu menu) {
+		menu.clear();
+		getActivity().getMenuInflater().inflate(R.menu.category_event_menu,
+				menu);
+		super.onPrepareOptionsMenu(menu);
+
+		// menu.findItem(R.id.map_view).setVisible(false);
+
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if (item.getItemId() == R.id.map_view) {
+			MapManager.switchToMapView(CategoryHelper.CATEGORY_ALL,
+					MapFragment.ARG_EVENT_CATEGORY, this);
+			return true;
+		}
+		return false;
+	}
+
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		super.onCreateOptionsMenu(menu, inflater);

@@ -26,7 +26,6 @@ import eu.iescities.pilot.rovereto.roveretoexplorer.R;
 import eu.iescities.pilot.rovereto.roveretoexplorer.log.LogConstants;
 import eu.iescities.pilot.rovereto.roveretoexplorer.log.LogHelper;
 
-
 public class QuizHelper {
 
 	public static final String MY_PREFERENCES = "Questionnaire";
@@ -37,6 +36,7 @@ public class QuizHelper {
 	private static final String QUIZ_FINISHED = "quiz finished";
 
 	private static String[][] answers;
+	private static int[] default_answers;
 	private String[] questions;
 	private static Context ctx;
 	private static SharedPreferences sp;
@@ -56,6 +56,16 @@ public class QuizHelper {
 		return questions;
 	}
 
+	public int[] getDefaultAnswers() {
+		return default_answers;
+	}
+
+	public int getDefaultAnswer(int i) {
+		if (i <= default_answers.length - 1)
+			return default_answers[i];
+		else return 0;
+	}
+
 	public ArrayList<String> getAnswers(int i) {
 		return new ArrayList<String>(Arrays.asList(answers[i]));
 	}
@@ -64,6 +74,7 @@ public class QuizHelper {
 		// qpa stores pairs of question and its possible answers
 		Resources res = ctx.getResources();
 		questions = res.getStringArray(R.array.questions);
+		default_answers = res.getIntArray(R.array.default_answers);
 		TypedArray taAnswers = res.obtainTypedArray(R.array.answers);
 		int n = taAnswers.length();
 		answers = new String[n][];
@@ -84,7 +95,8 @@ public class QuizHelper {
 		ast.execute(obj);
 	}
 
-	private static class SendQuestionTask extends AsyncTask<Object, Void, Boolean> {
+	private static class SendQuestionTask extends
+			AsyncTask<Object, Void, Boolean> {
 		ProgressDialog pd;
 		int questionNumber;
 		int answerNumber;
@@ -101,8 +113,9 @@ public class QuizHelper {
 			if ("".equals(answerTosend)) {
 				answerTosend = "multiplechoice";
 			}
-			String url = LogConstants.SERVICE_QUESTIONS_RESPONSE + "/" + LogConstants.APP_ID + "/"
-					+ (questionNumber + 1) + "/" + (answerNumber + 1) + "/" + answerTosend;
+			String url = LogConstants.SERVICE_QUESTIONS_RESPONSE + "/"
+					+ LogConstants.APP_ID + "/" + (questionNumber + 1) + "/"
+					+ (answerNumber + 1) + "/" + answerTosend;
 			try {
 				RemoteConnector.postJSON(LogConstants.HOST, url, "", null);
 			} catch (Exception e) {
@@ -129,7 +142,7 @@ public class QuizHelper {
 			if (result == true) {
 				// store on SharedPreferences number of question
 				SharedPreferences.Editor editor = sp.edit();
-				editor.putLong(NEXT_QUESTION, questionNumber+1);
+				editor.putLong(NEXT_QUESTION, questionNumber + 1);
 				editor.commit();
 				// next question
 				quizActivityInterface.nextQuestion();
@@ -147,13 +160,16 @@ public class QuizHelper {
 	}
 
 	public static void checkQuiz(FragmentActivity activity) {
-		DateFormat readFormat = new SimpleDateFormat("MM dd HH:mm:ss zzz yyyy",Locale.getDefault());
+		DateFormat readFormat = new SimpleDateFormat("MM dd HH:mm:ss zzz yyyy",
+				Locale.getDefault());
 		Date oldDate, newDate;
-		sp = activity.getSharedPreferences(QuizHelper.MY_PREFERENCES, Context.MODE_PRIVATE);
+		sp = activity.getSharedPreferences(QuizHelper.MY_PREFERENCES,
+				Context.MODE_PRIVATE);
 		if (sp.contains(TIME_TO_QUIZ)) {
 			// check if time is finished and starty quiz activity
 			try {
-				oldDate = readFormat.parse(sp.getString(TIME_TO_QUIZ, readFormat.format(new Date())));
+				oldDate = readFormat.parse(sp.getString(TIME_TO_QUIZ,
+						readFormat.format(new Date())));
 			} catch (ParseException e) {
 				e.printStackTrace();
 				oldDate = new Date();
@@ -165,8 +181,10 @@ public class QuizHelper {
 
 			if (newDate.after(c.getTime())) {
 				// we are after 5 days so do the quiz
-//				activity.startActivity(new Intent(activity, QuizFragment.class));
-				FragmentTransaction ft = activity.getSupportFragmentManager().beginTransaction();
+				// activity.startActivity(new Intent(activity,
+				// QuizFragment.class));
+				FragmentTransaction ft = activity.getSupportFragmentManager()
+						.beginTransaction();
 				ft.setCustomAnimations(R.anim.enter, R.anim.exit);
 				Fragment fragment = QuizFragment.newInstance();
 				// fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
@@ -187,18 +205,19 @@ public class QuizHelper {
 	}
 
 	public static boolean isEmailValid(String email) {
-	    boolean isValid = false;
+		boolean isValid = false;
 
-	    String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
-	    CharSequence inputStr = email;
+		String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
+		CharSequence inputStr = email;
 
-	    Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
-	    Matcher matcher = pattern.matcher(inputStr);
-	    if (matcher.matches()) {
-	        isValid = true;
-	    }
-	    return isValid;
+		Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+		Matcher matcher = pattern.matcher(inputStr);
+		if (matcher.matches()) {
+			isValid = true;
+		}
+		return isValid;
 	}
+
 	public static void finished() {
 		SharedPreferences.Editor editor = sp.edit();
 		editor.putBoolean(QUIZ_FINISHED, true);

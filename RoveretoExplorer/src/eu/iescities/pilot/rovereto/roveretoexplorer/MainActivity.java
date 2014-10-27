@@ -436,16 +436,6 @@ public class MainActivity extends AbstractNavDrawerActivity {
 
 		inflater.inflate(R.menu.global_menu, menu);
 
-		// if (listmenu) {
-		// Log.i("MENU", "ITEM 0" + menu.getItem(0).toString());
-		// menu.getItem(0).setVisible(false);
-		// }
-
-		// else {
-		// Log.i("MENU", "ITEM 1" + menu.getItem(1).toString());
-		// menu.getItem(1).setVisible(false);
-		// }
-		// super.onCreateOptionsMenu(menu, inflater);
 
 		return true;
 	}

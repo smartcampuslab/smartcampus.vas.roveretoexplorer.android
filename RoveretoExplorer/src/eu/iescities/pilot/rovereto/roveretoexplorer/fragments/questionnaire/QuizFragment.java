@@ -3,7 +3,6 @@ package eu.iescities.pilot.rovereto.roveretoexplorer.fragments.questionnaire;
 import java.util.ArrayList;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,6 +10,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -43,6 +43,7 @@ public class QuizFragment extends Fragment implements QuizInterface {
 	private QuizHelper db = null;
 	private String questions;
 	private ArrayList<String> answers;
+	private int default_answer;
 
 	// private int counter = 1;
 	// private String label;
@@ -113,6 +114,8 @@ public class QuizFragment extends Fragment implements QuizInterface {
 		btnClose.setOnClickListener(btnNextTime_Listener);
 		Button btnNext = (Button) getActivity().findViewById(R.id.btnIntroOk);
 		btnNext.setOnClickListener(btnIntro_Listener);
+		Button btnNoQuestionnaire = (Button) getActivity().findViewById(R.id.btnNo);
+		btnNoQuestionnaire.setOnClickListener(btnNo_Quiz_Listener);
 	}
 
 	private void setupEndLayout() {
@@ -128,6 +131,9 @@ public class QuizFragment extends Fragment implements QuizInterface {
 
 	private void setupIntroLayout() {
 		introLayout.setVisibility(View.VISIBLE);
+		WebView view = (WebView) getActivity().findViewById(R.id.introText);
+	    view.setVerticalScrollBarEnabled(false);
+	    view.loadData(getString(R.string.questionnary_intro), "text/html", "utf-8");
 		questionsLayout.setVisibility(View.GONE);
 		endLayout.setVisibility(View.GONE);
 		quizQuestion = (TextView) getActivity().findViewById(R.id.TextView01);
@@ -135,6 +141,8 @@ public class QuizFragment extends Fragment implements QuizInterface {
 		btnClose.setOnClickListener(btnNextTime_Listener);
 		Button btnNext = (Button) getActivity().findViewById(R.id.btnIntroOk);
 		btnNext.setOnClickListener(btnIntro_Listener);
+		Button btnNoQuestionnaire = (Button) getActivity().findViewById(R.id.btnNo);
+		btnNoQuestionnaire.setOnClickListener(btnNo_Quiz_Listener);
 	}
 
 	private boolean isEndTime() {
@@ -174,12 +182,7 @@ public class QuizFragment extends Fragment implements QuizInterface {
 		@Override
 		public void onClick(View v) {
 			// close everything and goodbye
-//			Intent mIntent = new Intent(getActivity(), MainActivity.class);
-//			Bundle mBundle = new Bundle();
-//			mBundle.putBoolean(QuizHelper.TIME_TO_QUIZ, true);
-//			mIntent.putExtras(mBundle);
-//			startActivity(mIntent);
-//			getActivity().finish();
+
 			FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
 			ft.setCustomAnimations(R.anim.enter, R.anim.exit);
 			Fragment fragment = QuizFragment.newInstance();
@@ -191,6 +194,20 @@ public class QuizFragment extends Fragment implements QuizInterface {
 					Context.MODE_PRIVATE).edit();
 			editor.remove(QuizHelper.TIME_TO_QUIZ);
 			editor.commit();
+		}
+
+	};
+	private View.OnClickListener btnNo_Quiz_Listener = new View.OnClickListener() {
+
+		@Override
+		public void onClick(View v) {
+			QuizHelper.finished();
+			FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+			ft.setCustomAnimations(R.anim.enter, R.anim.exit);
+			Fragment fragment = QuizFragment.newInstance();
+			ft.replace(R.id.content_frame, new MapFragment(), MainActivity.TAG_FRAGMENT_MAP);
+			ft.addToBackStack(fragment.getTag());
+			ft.commit();
 		}
 
 	};
@@ -280,7 +297,7 @@ public class QuizFragment extends Fragment implements QuizInterface {
 	};
 
 	private void displayQuestion() {
-
+		default_answer=0;
 		if (isTheLastQuestion()) {
 			// if last question you can also skip the answer
 			Button skipButton = (Button) getActivity().findViewById(R.id.btnSkip);
@@ -291,6 +308,7 @@ public class QuizFragment extends Fragment implements QuizInterface {
 		openQuestion.setText("");
 		questions = db.getQuestion(questNo);
 		answers = db.getAnswers(questNo);
+		default_answer=db.getDefaultAnswer(questNo);
 		quizQuestion.setText(questions);
 		// check if answer has more than 1 elements
 		if (answers.size() > 1) {
@@ -305,13 +323,15 @@ public class QuizFragment extends Fragment implements QuizInterface {
 				radioButton.setId(i);
 				radioButton.setOnCheckedChangeListener(rbChange_Listener);
 				radioGroup.addView(radioButton);
+				if (default_answer==i)
+					radioButton.setChecked(true);
 
 			}
 		} else {
 			openQuestion.setVisibility(View.VISIBLE);
 			radioGroup.setVisibility(View.GONE);
 		}
-
+		
 	}
 
 	private boolean isTheLastQuestion() {
