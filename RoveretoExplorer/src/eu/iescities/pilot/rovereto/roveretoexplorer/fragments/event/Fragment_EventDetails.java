@@ -55,7 +55,7 @@ public class Fragment_EventDetails extends Fragment {
 		super.onCreate(savedInstanceState);
 		if (savedInstanceState == null) {
 			Log.d("SCROLLTABS", "onCreate FIRST TIME");
-			setHasOptionsMenu(true);
+//			setHasOptionsMenu(true);
 
 			if (getArguments() != null) {
 				mEventId = getArguments().getString(Utils.ARG_EVENT_ID);
@@ -217,21 +217,21 @@ public class Fragment_EventDetails extends Fragment {
 
 	}
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		 if (item.getItemId() == R.id.map_view) {
-		 ArrayList<BaseDTObject> list = new ArrayList<BaseDTObject>();
-		 getEvent().setLocation(mEvent.getLocation());
-		 list.add(getEvent());
-		 MapManager.switchToMapView(list, this);
-		 return true;
-		 } else if (item.getItemId() == R.id.direction_action) {
-		 callBringMeThere();
-		
-		 return true;
-		 }
-		return true;
-	}
+//	@Override
+//	public boolean onOptionsItemSelected(MenuItem item) {
+//		 if (item.getItemId() == R.id.map_view) {
+//		 ArrayList<BaseDTObject> list = new ArrayList<BaseDTObject>();
+//		 getEvent().setLocation(mEvent.getLocation());
+//		 list.add(getEvent());
+//		 MapManager.switchToMapView(list, this);
+//		 return true;
+//		 } else if (item.getItemId() == R.id.direction_action) {
+//		 callBringMeThere();
+//		
+//		 return true;
+//		 }
+//		return true;
+//	}
 
 	protected void callBringMeThere() {
 		 Address to = new Address(Locale.getDefault());
@@ -248,27 +248,27 @@ public class Fragment_EventDetails extends Fragment {
 		 LogHelper.sendViaggiaRequest(getActivity());
 	}
 
-	@Override
-	public void onPrepareOptionsMenu(Menu menu) {
-		// Log.i("MENU", "start on Prepare Options Menu EVENT LISTING frag: " +
-		// menu.toString());
-		//
-		// // menu.clear();
-		//
-		 getActivity().getMenuInflater().inflate(R.menu.event_detail_menu,
-		 menu);
-		 if (getEvent()== null || getEvent().getLocation() == null ||
-		 (getEvent().getLocation()[0] == 0 && getEvent().getLocation()[1] ==
-		 0)) {
-		 menu.findItem(R.id.map_view).setVisible(false);
-		 menu.findItem(R.id.direction_action).setVisible(false);
-		 }
-		// /*
-		// * if (category == null) { category = (getArguments() != null) ?
-		// * getArguments().getString(SearchFragment.ARG_CATEGORY) : null; }
-		// */
-		super.onPrepareOptionsMenu(menu);
-	}
+//	@Override
+//	public void onPrepareOptionsMenu(Menu menu) {
+//		// Log.i("MENU", "start on Prepare Options Menu EVENT LISTING frag: " +
+//		// menu.toString());
+//		//
+//		// // menu.clear();
+//		//
+//		 getActivity().getMenuInflater().inflate(R.menu.event_detail_menu,
+//		 menu);
+//		 if (getEvent()== null || getEvent().getLocation() == null ||
+//		 (getEvent().getLocation()[0] == 0 && getEvent().getLocation()[1] ==
+//		 0)) {
+//		 menu.findItem(R.id.map_view).setVisible(false);
+//		 menu.findItem(R.id.direction_action).setVisible(false);
+//		 }
+//		// /*
+//		// * if (category == null) { category = (getArguments() != null) ?
+//		// * getArguments().getString(SearchFragment.ARG_CATEGORY) : null; }
+//		// */
+//		super.onPrepareOptionsMenu(menu);
+//	}
 	
 	private ExplorerObject getEvent() {
 		if (mEventId == null) {

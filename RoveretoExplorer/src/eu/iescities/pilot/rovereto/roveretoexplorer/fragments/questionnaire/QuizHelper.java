@@ -221,6 +221,10 @@ public class QuizHelper {
 	public static void finished() {
 		SharedPreferences.Editor editor = sp.edit();
 		editor.putBoolean(QUIZ_FINISHED, true);
+		if (sp.contains(TIME_TO_QUIZ))
+		{
+			editor.remove(TIME_TO_QUIZ);
+		}
 		editor.commit();
 
 	}

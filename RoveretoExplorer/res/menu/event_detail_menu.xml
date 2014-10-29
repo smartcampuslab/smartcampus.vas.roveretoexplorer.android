@@ -14,4 +14,11 @@
         android:orderInCategory="1"
         eu.iescities.pilot.rovereto.roveretoexplorer:showAsAction="always">
     </item>
+        <item
+        android:id="@+id/edit"
+        android:icon="@drawable/ic_action_edit"
+        android:title="@string/action_poi"
+        android:orderInCategory="2"
+        eu.iescities.pilot.rovereto.roveretoexplorer:showAsAction="always">
+    </item>
 </menu>

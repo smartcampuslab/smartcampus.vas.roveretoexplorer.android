@@ -1,24 +1,22 @@
 package eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-
-import com.google.android.maps.GeoPoint;
 
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ExpandableListView;
+import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -27,13 +25,9 @@ import eu.iescities.pilot.rovereto.roveretoexplorer.RoveretoExplorerApplication;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.Utils;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.Address;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.DTHelper;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.BaseDTObject;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ExplorerObject;
-import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.Fragment_EventDetails;
-import eu.iescities.pilot.rovereto.roveretoexplorer.log.LogHelper;
-import eu.iescities.pilot.rovereto.roveretoexplorer.map.MapManager;
 
-public class Fragment_EvDetail_Info extends Fragment {
+public class Fragment_EvDetail_Edit extends Fragment {
 
 	protected Context context;
 
@@ -64,17 +58,17 @@ public class Fragment_EvDetail_Info extends Fragment {
 
 	Activity infoActivity = null;
 
-	public static Fragment_EvDetail_Info newInstance(String event_id) {
-		Fragment_EvDetail_Info f = new Fragment_EvDetail_Info();
+	public static Fragment_EvDetail_Edit newInstance(String event_id) {
+		Fragment_EvDetail_Edit f = new Fragment_EvDetail_Edit();
 		Bundle b = new Bundle();
 		b.putString(Utils.ARG_EVENT_ID, event_id);
 		f.setArguments(b);
 		return f;
 	}
 
-	public static Fragment_EvDetail_Info newInstance(String event_id,
+	public static Fragment_EvDetail_Edit newInstance(String event_id,
 			String event_img_url) {
-		Fragment_EvDetail_Info f = new Fragment_EvDetail_Info();
+		Fragment_EvDetail_Edit f = new Fragment_EvDetail_Edit();
 		Bundle b = new Bundle();
 		b.putString(Utils.ARG_EVENT_ID, event_id);
 		b.putString(Utils.ARG_EVENT_IMAGE_URL, event_img_url);
@@ -106,9 +100,10 @@ public class Fragment_EvDetail_Info extends Fragment {
 			Log.d("SCROLLTABS", "onCreate SUBSEQUENT TIME");
 			mEventId = savedInstanceState.getString(Utils.ARG_EVENT_ID);
 		}
+		setHasOptionsMenu(true);
 		Log.d("IMAGES", "Fragment_evDetail_Info --> image url:"
 				+ mEventImageUrl + "!");
-		setHasOptionsMenu(true);
+
 	}
 
 	@Override
@@ -127,69 +122,13 @@ public class Fragment_EvDetail_Info extends Fragment {
 
 	}
 
-//	@Override
-//	public void onPrepareOptionsMenu(Menu menu) {
-//		super.onPrepareOptionsMenu(menu);
-//		menu.clear();
-//		getActivity().getMenuInflater().inflate(R.menu.detail_edit_menu, menu);
-//	}
 	@Override
 	public void onPrepareOptionsMenu(Menu menu) {
-//		Log.i("MENU", "start on Prepare Options Menu EVENT LISTING frag: "
-//				+ menu.toString());
-		menu.clear();
-		getActivity().getMenuInflater().inflate(R.menu.event_detail_menu, menu);
 		super.onPrepareOptionsMenu(menu);
+		menu.clear();
+		getActivity().getMenuInflater().inflate(R.menu.detail_edit_confirm_menu, menu);
 	}
-	
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		 if (item.getItemId() == R.id.map_view) {
-			 ArrayList<BaseDTObject> list = new ArrayList<BaseDTObject>();
-			 getEvent().setLocation(mEvent.getLocation());
-			 list.add(getEvent());
-			 MapManager.switchToMapView(list, this);
-			 return true;
-			 } else if (item.getItemId() == R.id.direction_action) {
-			 callBringMeThere();
-			
-			 return true;
-			 } else if (item.getItemId() == R.id.edit) {
-			// call fragment edit with the event for parameter
-			FragmentTransaction fragmentTransaction = getActivity()
-					.getSupportFragmentManager().beginTransaction();
-			Fragment_EventDetails fragment = new Fragment_EventDetails();
-
-			Bundle args = new Bundle();
-
-			args.putString(Utils.ARG_EVENT_ID, mEvent.getId());
-			fragment.setArguments(args);
-
-			fragmentTransaction
-					.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-			fragmentTransaction.replace(R.id.content_frame, fragment,
-					"event_edit");
-			fragmentTransaction.addToBackStack(fragment.getTag());
-			fragmentTransaction.commit();
-		}
-		return true;
-
-	}
-	protected void callBringMeThere() {
-		 android.location.Address to = new android.location.Address(Locale.getDefault());
-		 to.setLatitude(mEvent.getLocation()[0]);
-		 to.setLongitude(mEvent.getLocation()[1]);
-		 android.location.Address from = null;
-		 GeoPoint mylocation = MapManager.requestMyLocation(getActivity());
-		 if (mylocation != null) {
-		 from = new android.location.Address(Locale.getDefault());
-		 from.setLatitude(mylocation.getLatitudeE6() / 1E6);
-		 from.setLongitude(mylocation.getLongitudeE6() / 1E6);
-		 }
-		 DTHelper.bringmethere(getActivity(), from, to);
-		 LogHelper.sendViaggiaRequest(getActivity());
-	}
 	// private void editField(String field_type) {
 	//
 	// Log.d("FRAGMENT LC", "Fragment_evDetail_Info --> INFO ACTIVITY: " +
