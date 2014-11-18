@@ -100,6 +100,8 @@
     <string name="toast_time_wrong">Il tempo dell\'evento è errato</string>
     <string name="when_where">Dove e quando</string>
     <string name="terms_of_service">
+        <!-- create and update -->
+<string name="update_success">Le tue modifiche sono state salvate con successo.</string> <string name="update_failed">Co sono stati problemi nel salvataggio delle modifiche. Riprova. </string>
 <![CDATA[
        <b>Introduction<br>
         Applicable worldwide except where we publish specific territorial terms and conditions.</b><br>
@@ -182,5 +184,10 @@ Quest\'applicazione e\' parte del progetto europeo IES Cities. Possiamo farti qu
     <string name="skip_quiz">Salta</string>
     <string name="categories_event_all">Tutti gli eventi</string>
     <string name="no_empty_comment">Commento vuoto</string>
+    <string name="warning_fill_fields">Riempi i campi extra</string>
+    <string name="hint_dasapere_content">Inserisci qui il testo</string>
+    <string name="hint_dasapere_name">Aggiungi una nuova informazione</string>
+    <string name="empty_to_know">Riempi iil valore</string>
+    <string name="empty_da_sapere">No fields available. Add informations</string>
 
 </resources>

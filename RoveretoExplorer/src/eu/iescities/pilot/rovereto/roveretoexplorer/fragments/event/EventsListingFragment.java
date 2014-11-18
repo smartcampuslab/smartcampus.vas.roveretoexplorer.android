@@ -490,7 +490,9 @@ public class EventsListingFragment extends Fragment implements
 					|| (expObj.getFromTime() >= DTHelper
 							.getCurrentDateTimeForSearching())) {
 				// get event-dates
+
 				addEvent(expObj, date_with_day);
+
 			}
 		} else {
 			List<Date> listOfDate = null;
@@ -532,6 +534,11 @@ public class EventsListingFragment extends Fragment implements
 		}
 	}
 
+	private boolean eventPresent(ExplorerObject expObj) {
+		//check if the event is already present in the list 
+		return false;
+	}
+
 	private Date endLimitChoosen(WhenForSearch whenForSearch2) {
 		if (whenForSearch2.getTo() != 0)
 			return new Date(whenForSearch2.getTo());
@@ -561,21 +568,32 @@ public class EventsListingFragment extends Fragment implements
 
 		}
 		// insert se precedente era presente
-		if (previousItem != -1
-				&& previousGroup == dateGroupList.indexOf(date_with_day))
-			eventCollection.get(date_with_day).add(previousItem, expObj);
-		else
-			eventCollection.get(date_with_day).add(expObj);
 
-		// get event image urls
-		String eventImg = expObj.getImage();
-		if (previousItem != -1
-				&& previousGroup == dateGroupList.indexOf(date_with_day)) {
-			// eventImageUrls.get(date_with_day).add(previousItem, eventImg);
-			eventImageUrlsbyId.put(expObj.getId(), eventImg);
-		} else {
-			// eventImageUrls.get(date_with_day).add(eventImg);
-			eventImageUrlsbyId.put(expObj.getId(), eventImg);
+		// add only if not present event with same name and date
+		boolean present = false;
+		for (ExplorerObject event : eventCollection.get(date_with_day)) {
+			if (event.getTitle().equals(expObj.getTitle())) {
+				present = true;
+			}
+		}
+		if (!present) {
+			if (previousItem != -1
+					&& previousGroup == dateGroupList.indexOf(date_with_day))
+				eventCollection.get(date_with_day).add(previousItem, expObj);
+			else
+				eventCollection.get(date_with_day).add(expObj);
+
+			// get event image urls
+			String eventImg = expObj.getImage();
+			if (previousItem != -1
+					&& previousGroup == dateGroupList.indexOf(date_with_day)) {
+				// eventImageUrls.get(date_with_day).add(previousItem,
+				// eventImg);
+				eventImageUrlsbyId.put(expObj.getId(), eventImg);
+			} else {
+				// eventImageUrls.get(date_with_day).add(eventImg);
+				eventImageUrlsbyId.put(expObj.getId(), eventImg);
+			}
 		}
 	}
 

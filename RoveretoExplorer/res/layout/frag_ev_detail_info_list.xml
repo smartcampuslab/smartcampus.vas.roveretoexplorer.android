@@ -1,11 +1,330 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="16dp"
-    android:background="@android:color/white"
-    android:orientation="vertical" >
+    android:layout_height="wrap_content" >
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:orientation="vertical" >
+
+        <!-- <ExpandableListView -->
+        <!-- android:id="@+id/event_details_info" -->
+        <!-- android:layout_marginTop="16dp" -->
+        <!-- android:choiceMode="singleChoice" -->
+        <!-- android:listSelector = "@drawable/event_info_selector_list_item" -->
+        <!-- android:layout_width="match_parent" -->
+        <!-- android:layout_height="fill_parent" > -->
+        <!-- </ExpandableListView> -->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="1" >
+
+            <ImageView
+                android:id="@+id/event_placeholder_photo"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:contentDescription="@string/empty"
+                android:paddingBottom="10dp"
+                android:paddingLeft="10dp"
+                android:paddingTop="10dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_no_img" />
+
+            <eu.iescities.pilot.rovereto.roveretoexplorer.custom.AutoResizeTextView
+                android:id="@+id/event_info_placeholder_title"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:ellipsize="none"
+                android:maxLines="4"
+                android:paddingLeft="20dp"
+                android:paddingRight="4dp"
+                android:paddingTop="20dp"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textStyle="bold" />
+            <!-- maximum size -->
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ev_detail_placeholder_category"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="8dp" >
+
+            <ImageView
+                android:id="@+id/imageView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_drower_flag" />
+
+            <TextView
+                android:id="@+id/ev_detail_info_category"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="8dp"
+                android:text="TextView" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ev_detail_placeholder_whenwhere"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="8dp" >
+
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_information" />
+
+            <TextView
+                android:id="@+id/ev_detail_info_whenwhere"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="8dp"
+                android:text="TextView" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ev_detail_placeholder_place"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="8dp" >
+
+            <ImageView
+                android:id="@+id/imageView8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_location_black" />
+
+            <TextView
+                android:id="@+id/ev_detail_info_place"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="8dp"
+                android:text="TextView" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ev_detail_placeholder_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="8dp" >
+
+            <ImageView
+                android:id="@+id/imageView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_time" />
+
+            <TextView
+                android:id="@+id/ev_detail_info_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="8dp"
+                android:text="TextView" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ev_detail_placeholder_telephone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="8dp" >
+
+            <ImageView
+                android:id="@+id/imageView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_phone" />
+
+            <TextView
+                android:id="@+id/ev_detail_info_telephone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autoLink="phone"
+                android:linksClickable="true"
+                android:paddingLeft="8dp"
+                android:text="TextView" />
+            
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/ev_detail_placeholder_telephone_extra"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:padding="8dp" />
+        <LinearLayout
+            android:id="@+id/ev_detail_placeholder_mail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="8dp" >
+
+            <ImageView
+                android:id="@+id/imageView7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_email" />
+
+            <TextView
+                android:id="@+id/ev_detail_info_mail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autoLink="email"
+                android:linksClickable="true"
+                android:paddingLeft="8dp"
+                android:text="TextView" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/ev_detail_placeholder_mail_extra"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:padding="8dp" />
+        <LinearLayout
+            android:id="@+id/ev_detail_placeholder_web"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="8dp" >
+
+            <ImageView
+                android:id="@+id/imageView9"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_web" />
+
+            <TextView
+                android:id="@+id/ev_detail_info_web"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autoLink="web"
+                android:linksClickable="true"
+                android:paddingLeft="8dp"
+                android:text="TextView" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ev_detail_placeholder_facebook"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="8dp" >
+
+            <ImageView
+                android:id="@+id/imageView5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_action_ic_facebook_18" />
+
+            <TextView
+                android:id="@+id/ev_detail_info_facebook"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autoLink="web"
+                android:linksClickable="true"
+                android:paddingLeft="8dp"
+                android:text="TextView" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ev_detail_placeholder_twitter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:padding="8dp" >
+
+            <ImageView
+                android:id="@+id/imageView6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_twitter" />
+
+            <TextView
+                android:id="@+id/ev_detail_info_twitter"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autoLink="web"
+                android:linksClickable="true"
+                android:paddingLeft="8dp"
+                android:text="TextView" />
+        </LinearLayout>
+    </LinearLayout>
+ <!-- <?xml version="1.0" encoding="utf-8"?> -->
+    <!-- <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" -->
+    <!-- android:layout_width="match_parent" -->
+    <!-- android:layout_height="wrap_content" -->
+    <!-- android:layout_marginTop="16dp" -->
+    <!-- android:orientation="vertical" > -->
+
+
+    <!-- <LinearLayout -->
+    <!-- android:layout_width="match_parent" -->
+    <!-- android:layout_height="wrap_content" -->
+    <!-- android:orientation="horizontal" -->
+    <!-- android:weightSum="1" > -->
+
+
+    <!-- <ImageView -->
+    <!-- android:id="@+id/event_placeholder_photo" -->
+    <!-- android:layout_width="120dp" -->
+    <!-- android:layout_height="120dp" -->
+    <!-- android:contentDescription="@string/empty" -->
+    <!-- android:paddingBottom="10dp" -->
+    <!-- android:paddingLeft="10dp" -->
+    <!-- android:paddingTop="10dp" -->
+    <!-- android:scaleType="fitXY" -->
+    <!-- android:src="@drawable/ic_empty" /> -->
+
+
+    <!-- <eu.iescities.pilot.rovereto.roveretoexplorer.custom.AutoResizeTextView -->
+    <!-- android:id="@+id/event_info_placeholder_title" -->
+    <!-- android:layout_width="match_parent" -->
+    <!-- android:layout_height="120dp" -->
+    <!-- android:ellipsize="none" -->
+    <!-- android:maxLines="4" -->
+    <!-- android:paddingLeft="20dp" -->
+    <!-- android:paddingRight="4dp" -->
+    <!-- android:paddingTop="20dp" -->
+    <!-- android:textAppearance="?android:attr/textAppearanceLarge" -->
+    <!-- android:textStyle="bold" /> -->
+
+
+    <!-- </LinearLayout> -->
+
+
+    <!-- <TextView -->
+    <!-- android:id="@+id/event_placeholder_what" -->
+    <!-- android:layout_width="wrap_content" -->
+    <!-- android:layout_height="wrap_content" -->
+    <!-- android:text="TextView" /> -->
+
+
+    <!-- <View -->
+    <!-- android:layout_width="fill_parent" -->
+    <!-- android:layout_height="0.2dp" -->
+    <!-- android:layout_marginTop="16dp" -->
+    <!-- android:background="@color/light_jungle_green" /> -->
     <!-- <ExpandableListView -->
     <!-- android:id="@+id/event_details_info" -->
     <!-- android:layout_marginTop="16dp" -->
@@ -15,469 +334,168 @@
     <!-- android:layout_height="fill_parent" > -->
     <!-- </ExpandableListView> -->
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="1" >
-
-        <ImageView
-            android:id="@+id/event_placeholder_photo"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:contentDescription="@string/empty"
-            android:paddingBottom="10dp"
-            android:paddingLeft="10dp"
-            android:paddingTop="10dp"
-            android:scaleType="fitXY"
-            android:src="@drawable/ic_no_img" />
-
-        <eu.iescities.pilot.rovereto.roveretoexplorer.custom.AutoResizeTextView
-            android:id="@+id/event_info_placeholder_title"
-            android:layout_width="match_parent"
-            android:layout_height="120dp"
-            android:ellipsize="none"
-            android:maxLines="4"
-            android:paddingLeft="20dp"
-            android:paddingRight="4dp"
-            android:paddingTop="20dp"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textStyle="bold" />
-        <!-- maximum size -->
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/ev_detail_placeholder_category"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:padding="8dp" >
-
-        <ImageView
-            android:id="@+id/imageView1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_drower_flag" />
-
-        <TextView
-            android:id="@+id/ev_detail_info_category"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="8dp"
-            android:text="TextView" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/ev_detail_placeholder_whenwhere"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:padding="8dp" >
-
-        <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_information" />
-
-        <TextView
-            android:id="@+id/ev_detail_info_whenwhere"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="8dp"
-            android:text="TextView" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/ev_detail_placeholder_place"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:padding="8dp" >
-
-        <ImageView
-            android:id="@+id/imageView8"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_location_black" />
-
-        <TextView
-            android:id="@+id/ev_detail_info_place"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="8dp"
-            android:text="TextView" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/ev_detail_placeholder_time"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:padding="8dp" >
-
-        <ImageView
-            android:id="@+id/imageView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_time" />
-
-        <TextView
-            android:id="@+id/ev_detail_info_time"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="8dp"
-            android:text="TextView" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/ev_detail_placeholder_telephone"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:padding="8dp" >
-
-        <ImageView
-            android:id="@+id/imageView4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_phone" />
-
-        <TextView
-            android:id="@+id/ev_detail_info_telephone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:autoLink="phone"
-            android:linksClickable="true"
-            android:paddingLeft="8dp"
-            android:text="TextView" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/ev_detail_placeholder_mail"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:padding="8dp" >
-
-        <ImageView
-            android:id="@+id/imageView7"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_email" />
-
-        <TextView
-            android:id="@+id/ev_detail_info_mail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:autoLink="phone"
-            android:linksClickable="true"
-            android:paddingLeft="8dp"
-            android:text="TextView" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/ev_detail_placeholder_web"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:padding="8dp" >
-
-        <ImageView
-            android:id="@+id/imageView9"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_web" />
-
-        <TextView
-            android:id="@+id/ev_detail_info_web"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:autoLink="web"
-            android:linksClickable="true"
-            android:paddingLeft="8dp"
-            android:text="TextView" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/ev_detail_placeholder_facebook"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:padding="8dp" >
-
-        <ImageView
-            android:id="@+id/imageView5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_action_ic_facebook_18" />
-
-        <TextView
-            android:id="@+id/ev_detail_info_facebook"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:autoLink="web"
-            android:linksClickable="true"
-            android:paddingLeft="8dp"
-            android:text="TextView" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/ev_detail_placeholder_twitter"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:padding="8dp" >
-
-        <ImageView
-            android:id="@+id/imageView6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_twitter" />
-
-        <TextView
-            android:id="@+id/ev_detail_info_twitter"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:autoLink="web"
-            android:linksClickable="true"
-            android:paddingLeft="8dp"
-            android:text="TextView" />
-    </LinearLayout>
-
-</LinearLayout> <!-- <?xml version="1.0" encoding="utf-8"?> -->
-<!-- <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" -->
-<!-- android:layout_width="match_parent" -->
-<!-- android:layout_height="wrap_content" -->
-<!-- android:layout_marginTop="16dp" -->
-<!-- android:orientation="vertical" > -->
-
-
-<!-- <LinearLayout -->
-<!-- android:layout_width="match_parent" -->
-<!-- android:layout_height="wrap_content" -->
-<!-- android:orientation="horizontal" -->
-<!-- android:weightSum="1" > -->
-
-
-<!-- <ImageView -->
-<!-- android:id="@+id/event_placeholder_photo" -->
-<!-- android:layout_width="120dp" -->
-<!-- android:layout_height="120dp" -->
-<!-- android:contentDescription="@string/empty" -->
-<!-- android:paddingBottom="10dp" -->
-<!-- android:paddingLeft="10dp" -->
-<!-- android:paddingTop="10dp" -->
-<!-- android:scaleType="fitXY" -->
-<!-- android:src="@drawable/ic_empty" /> -->
-
-
-<!-- <eu.iescities.pilot.rovereto.roveretoexplorer.custom.AutoResizeTextView -->
-<!-- android:id="@+id/event_info_placeholder_title" -->
-<!-- android:layout_width="match_parent" -->
-<!-- android:layout_height="120dp" -->
-<!-- android:ellipsize="none" -->
-<!-- android:maxLines="4" -->
-<!-- android:paddingLeft="20dp" -->
-<!-- android:paddingRight="4dp" -->
-<!-- android:paddingTop="20dp" -->
-<!-- android:textAppearance="?android:attr/textAppearanceLarge" -->
-<!-- android:textStyle="bold" /> -->
-
-
-<!-- </LinearLayout> -->
-
-
-<!-- <TextView -->
-<!-- android:id="@+id/event_placeholder_what" -->
-<!-- android:layout_width="wrap_content" -->
-<!-- android:layout_height="wrap_content" -->
-<!-- android:text="TextView" /> -->
-
-
-<!-- <View -->
-<!-- android:layout_width="fill_parent" -->
-<!-- android:layout_height="0.2dp" -->
-<!-- android:layout_marginTop="16dp" -->
-<!-- android:background="@color/light_jungle_green" /> -->
-<!-- <ExpandableListView -->
-<!-- android:id="@+id/event_details_info" -->
-<!-- android:layout_marginTop="16dp" -->
-<!-- android:choiceMode="singleChoice" -->
-<!-- android:listSelector = "@drawable/event_info_selector_list_item" -->
-<!-- android:layout_width="match_parent" -->
-<!-- android:layout_height="fill_parent" > -->
-<!-- </ExpandableListView> -->
-
-
-<!-- <LinearLayout -->
-<!-- android:layout_width="wrap_content" -->
-<!-- android:layout_height="match_parent" > -->
-
-
-<!-- <ImageView -->
-<!-- android:id="@+id/imageView1" -->
-<!-- android:layout_width="wrap_content" -->
-<!-- android:layout_height="wrap_content" -->
-<!-- android:src="@drawable/ic_drower_flag" /> -->
-
-
-<!-- <TextView -->
-<!-- android:id="@+id/event_placeholder_category" -->
-<!-- android:layout_width="wrap_content" -->
-<!-- android:layout_height="wrap_content" -->
-<!-- android:maxLines="3" -->
-<!-- android:paddingLeft="10dp" -->
-<!-- android:paddingRight="4dp" -->
-<!-- android:paddingTop="4dp" -->
-<!-- android:textAppearance="?android:attr/textAppearanceMedium" /> -->
-<!-- </LinearLayout> -->
-
-
-<!-- <LinearLayout -->
-<!-- android:layout_width="wrap_content" -->
-<!-- android:layout_height="match_parent" > -->
-
-
-<!-- <ImageView -->
-<!-- android:id="@+id/ImageView02" -->
-<!-- android:layout_width="wrap_content" -->
-<!-- android:layout_height="wrap_content" -->
-<!-- android:src="@drawable/ic_information" /> -->
-
-
-<!-- <TextView -->
-<!-- android:id="@+id/event_placeholder_information" -->
-<!-- android:layout_width="wrap_content" -->
-<!-- android:layout_height="wrap_content" -->
-<!-- android:maxLines="3" -->
-<!-- android:paddingLeft="10dp" -->
-<!-- android:paddingRight="4dp" -->
-<!-- android:paddingTop="4dp" -->
-<!-- android:text="info" -->
-<!-- android:textAppearance="?android:attr/textAppearanceMedium" /> -->
-<!-- </LinearLayout> -->
-
-
-<!-- <LinearLayout -->
-<!-- android:layout_width="wrap_content" -->
-<!-- android:layout_height="match_parent" > -->
-
-
-<!-- <ImageView -->
-<!-- android:id="@+id/ImageView03" -->
-<!-- android:layout_width="wrap_content" -->
-<!-- android:layout_height="wrap_content" -->
-<!-- android:src="@drawable/ic_time" /> -->
-
-
-<!-- <TextView -->
-<!-- android:id="@+id/event_placeholder_when" -->
-<!-- android:layout_width="wrap_content" -->
-<!-- android:layout_height="wrap_content" -->
-<!-- android:maxLines="3" -->
-<!-- android:paddingLeft="10dp" -->
-<!-- android:paddingRight="4dp" -->
-<!-- android:paddingTop="4dp" -->
-<!-- android:textAppearance="?android:attr/textAppearanceMedium" /> -->
-<!-- </LinearLayout> -->
-<!-- <LinearLayout -->
-<!-- android:layout_width="wrap_content" -->
-<!-- android:layout_height="match_parent" > -->
-
-
-<!-- <ImageView -->
-<!-- android:id="@+id/ImageView04" -->
-<!-- android:layout_width="wrap_content" -->
-<!-- android:layout_height="wrap_content" -->
-<!-- android:src="@drawable/ic_phone" /> -->
-
-
-<!-- <TextView -->
-<!-- android:id="@+id/event_placeholder_phone" -->
-<!-- android:layout_width="wrap_content" -->
-<!-- android:layout_height="wrap_content" -->
-<!-- android:maxLines="3" -->
-<!-- android:paddingLeft="10dp" -->
-<!-- android:paddingRight="4dp" -->
-<!-- android:paddingTop="4dp" -->
-<!-- android:textAppearance="?android:attr/textAppearanceMedium" /> -->
-<!-- </LinearLayout> -->
-<!-- <LinearLayout -->
-<!-- android:layout_width="wrap_content" -->
-<!-- android:layout_height="match_parent" > -->
-
-
-<!-- <ImageView -->
-<!-- android:id="@+id/ImageView07" -->
-<!-- android:layout_width="wrap_content" -->
-<!-- android:layout_height="wrap_content" -->
-<!-- android:src="@drawable/ic_phone" /> -->
-
-
-<!-- <TextView -->
-<!-- android:id="@+id/event_placeholder_email" -->
-<!-- android:layout_width="wrap_content" -->
-<!-- android:layout_height="wrap_content" -->
-<!-- android:maxLines="3" -->
-<!-- android:paddingLeft="10dp" -->
-<!-- android:paddingRight="4dp" -->
-<!-- android:paddingTop="4dp" -->
-<!-- android:textAppearance="?android:attr/textAppearanceMedium" /> -->
-<!-- </LinearLayout> -->
-<!-- <LinearLayout -->
-<!-- android:layout_width="wrap_content" -->
-<!-- android:layout_height="match_parent" > -->
-
-
-<!-- <ImageView -->
-<!-- android:id="@+id/ImageView05" -->
-<!-- android:layout_width="wrap_content" -->
-<!-- android:layout_height="wrap_content" -->
-<!-- android:src="@drawable/ic_facebook" /> -->
-
-
-<!-- <TextView -->
-<!-- android:id="@+id/event_placeholder_facebook" -->
-<!-- android:layout_width="wrap_content" -->
-<!-- android:layout_height="wrap_content" -->
-<!-- android:maxLines="3" -->
-<!-- android:paddingLeft="10dp" -->
-<!-- android:paddingRight="4dp" -->
-<!-- android:paddingTop="4dp" -->
-<!-- android:textAppearance="?android:attr/textAppearanceMedium" /> -->
-<!-- </LinearLayout> -->
-
-
-<!-- <LinearLayout -->
-<!-- android:layout_width="wrap_content" -->
-<!-- android:layout_height="match_parent" > -->
-
-
-<!-- <ImageView -->
-<!-- android:id="@+id/ImageView06" -->
-<!-- android:layout_width="wrap_content" -->
-<!-- android:layout_height="wrap_content" -->
-<!-- android:src="@drawable/ic_twitter" /> -->
-
-
-<!-- <TextView -->
-<!-- android:id="@+id/event_placeholder_twitter" -->
-<!-- android:layout_width="wrap_content" -->
-<!-- android:layout_height="wrap_content" -->
-<!-- android:maxLines="3" -->
-<!-- android:paddingLeft="10dp" -->
-<!-- android:paddingRight="4dp" -->
-<!-- android:paddingTop="4dp" -->
-<!-- android:textAppearance="?android:attr/textAppearanceMedium" /> -->
-<!-- </LinearLayout> -->
-<!-- </LinearLayout> -->
+
+    <!-- <LinearLayout -->
+    <!-- android:layout_width="wrap_content" -->
+    <!-- android:layout_height="match_parent" > -->
+
+
+    <!-- <ImageView -->
+    <!-- android:id="@+id/imageView1" -->
+    <!-- android:layout_width="wrap_content" -->
+    <!-- android:layout_height="wrap_content" -->
+    <!-- android:src="@drawable/ic_drower_flag" /> -->
+
+
+    <!-- <TextView -->
+    <!-- android:id="@+id/event_placeholder_category" -->
+    <!-- android:layout_width="wrap_content" -->
+    <!-- android:layout_height="wrap_content" -->
+    <!-- android:maxLines="3" -->
+    <!-- android:paddingLeft="10dp" -->
+    <!-- android:paddingRight="4dp" -->
+    <!-- android:paddingTop="4dp" -->
+    <!-- android:textAppearance="?android:attr/textAppearanceMedium" /> -->
+    <!-- </LinearLayout> -->
+
+
+    <!-- <LinearLayout -->
+    <!-- android:layout_width="wrap_content" -->
+    <!-- android:layout_height="match_parent" > -->
+
+
+    <!-- <ImageView -->
+    <!-- android:id="@+id/ImageView02" -->
+    <!-- android:layout_width="wrap_content" -->
+    <!-- android:layout_height="wrap_content" -->
+    <!-- android:src="@drawable/ic_information" /> -->
+
+
+    <!-- <TextView -->
+    <!-- android:id="@+id/event_placeholder_information" -->
+    <!-- android:layout_width="wrap_content" -->
+    <!-- android:layout_height="wrap_content" -->
+    <!-- android:maxLines="3" -->
+    <!-- android:paddingLeft="10dp" -->
+    <!-- android:paddingRight="4dp" -->
+    <!-- android:paddingTop="4dp" -->
+    <!-- android:text="info" -->
+    <!-- android:textAppearance="?android:attr/textAppearanceMedium" /> -->
+    <!-- </LinearLayout> -->
+
+
+    <!-- <LinearLayout -->
+    <!-- android:layout_width="wrap_content" -->
+    <!-- android:layout_height="match_parent" > -->
+
+
+    <!-- <ImageView -->
+    <!-- android:id="@+id/ImageView03" -->
+    <!-- android:layout_width="wrap_content" -->
+    <!-- android:layout_height="wrap_content" -->
+    <!-- android:src="@drawable/ic_time" /> -->
+
+
+    <!-- <TextView -->
+    <!-- android:id="@+id/event_placeholder_when" -->
+    <!-- android:layout_width="wrap_content" -->
+    <!-- android:layout_height="wrap_content" -->
+    <!-- android:maxLines="3" -->
+    <!-- android:paddingLeft="10dp" -->
+    <!-- android:paddingRight="4dp" -->
+    <!-- android:paddingTop="4dp" -->
+    <!-- android:textAppearance="?android:attr/textAppearanceMedium" /> -->
+    <!-- </LinearLayout> -->
+    <!-- <LinearLayout -->
+    <!-- android:layout_width="wrap_content" -->
+    <!-- android:layout_height="match_parent" > -->
+
+
+    <!-- <ImageView -->
+    <!-- android:id="@+id/ImageView04" -->
+    <!-- android:layout_width="wrap_content" -->
+    <!-- android:layout_height="wrap_content" -->
+    <!-- android:src="@drawable/ic_phone" /> -->
+
+
+    <!-- <TextView -->
+    <!-- android:id="@+id/event_placeholder_phone" -->
+    <!-- android:layout_width="wrap_content" -->
+    <!-- android:layout_height="wrap_content" -->
+    <!-- android:maxLines="3" -->
+    <!-- android:paddingLeft="10dp" -->
+    <!-- android:paddingRight="4dp" -->
+    <!-- android:paddingTop="4dp" -->
+    <!-- android:textAppearance="?android:attr/textAppearanceMedium" /> -->
+    <!-- </LinearLayout> -->
+    <!-- <LinearLayout -->
+    <!-- android:layout_width="wrap_content" -->
+    <!-- android:layout_height="match_parent" > -->
+
+
+    <!-- <ImageView -->
+    <!-- android:id="@+id/ImageView07" -->
+    <!-- android:layout_width="wrap_content" -->
+    <!-- android:layout_height="wrap_content" -->
+    <!-- android:src="@drawable/ic_phone" /> -->
+
+
+    <!-- <TextView -->
+    <!-- android:id="@+id/event_placeholder_email" -->
+    <!-- android:layout_width="wrap_content" -->
+    <!-- android:layout_height="wrap_content" -->
+    <!-- android:maxLines="3" -->
+    <!-- android:paddingLeft="10dp" -->
+    <!-- android:paddingRight="4dp" -->
+    <!-- android:paddingTop="4dp" -->
+    <!-- android:textAppearance="?android:attr/textAppearanceMedium" /> -->
+    <!-- </LinearLayout> -->
+    <!-- <LinearLayout -->
+    <!-- android:layout_width="wrap_content" -->
+    <!-- android:layout_height="match_parent" > -->
+
+
+    <!-- <ImageView -->
+    <!-- android:id="@+id/ImageView05" -->
+    <!-- android:layout_width="wrap_content" -->
+    <!-- android:layout_height="wrap_content" -->
+    <!-- android:src="@drawable/ic_facebook" /> -->
+
+
+    <!-- <TextView -->
+    <!-- android:id="@+id/event_placeholder_facebook" -->
+    <!-- android:layout_width="wrap_content" -->
+    <!-- android:layout_height="wrap_content" -->
+    <!-- android:maxLines="3" -->
+    <!-- android:paddingLeft="10dp" -->
+    <!-- android:paddingRight="4dp" -->
+    <!-- android:paddingTop="4dp" -->
+    <!-- android:textAppearance="?android:attr/textAppearanceMedium" /> -->
+    <!-- </LinearLayout> -->
+
+
+    <!-- <LinearLayout -->
+    <!-- android:layout_width="wrap_content" -->
+    <!-- android:layout_height="match_parent" > -->
+
+
+    <!-- <ImageView -->
+    <!-- android:id="@+id/ImageView06" -->
+    <!-- android:layout_width="wrap_content" -->
+    <!-- android:layout_height="wrap_content" -->
+    <!-- android:src="@drawable/ic_twitter" /> -->
+
+
+    <!-- <TextView -->
+    <!-- android:id="@+id/event_placeholder_twitter" -->
+    <!-- android:layout_width="wrap_content" -->
+    <!-- android:layout_height="wrap_content" -->
+    <!-- android:maxLines="3" -->
+    <!-- android:paddingLeft="10dp" -->
+    <!-- android:paddingRight="4dp" -->
+    <!-- android:paddingTop="4dp" -->
+    <!-- android:textAppearance="?android:attr/textAppearanceMedium" /> -->
+    <!-- </LinearLayout> -->
+    <!-- </LinearLayout> -->
+
+</ScrollView>

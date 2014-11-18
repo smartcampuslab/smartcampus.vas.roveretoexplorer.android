@@ -156,8 +156,8 @@ public class EventDetailInfoAdapter extends BaseExpandableListAdapter {
 			eventChildViewHolder.imgsDx1 = (ImageView) row
 					.findViewById(R.id.event_info_action1);
 
-			eventChildViewHolder.divider = (View) row
-					.findViewById(R.id.event_info_item_divider);
+//			eventChildViewHolder.divider = (View) row
+//					.findViewById(R.id.event_info_item_divider);
 
 
 			//this will be added again when it will be possible to cancel/edit the single items

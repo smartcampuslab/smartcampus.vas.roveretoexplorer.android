@@ -15,21 +15,30 @@
         android:weightSum="1" >
 
         <TextView
+            android:id="@+id/event_info_bullet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:text="•" />
+
+        <TextView
             android:id="@+id/event_info_attribute_values"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center_vertical"
             android:minHeight="50dp"
-            android:paddingRight="10dp"
-            android:paddingLeft="10dp" />
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp" />
 
         <ImageView
             android:id="@+id/event_info_action1"
             android:layout_width="wrap_content"
             android:layout_height="25dp"
-            android:layout_marginRight="8dp"
             android:layout_gravity="center_vertical"
+            android:layout_marginRight="8dp"
             android:contentDescription="@string/empty"
             android:scaleType="centerInside" />
     </LinearLayout>

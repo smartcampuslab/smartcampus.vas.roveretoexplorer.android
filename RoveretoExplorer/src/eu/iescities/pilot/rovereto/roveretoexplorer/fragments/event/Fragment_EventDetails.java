@@ -1,6 +1,5 @@
 package eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event;
 
-import java.util.ArrayList;
 import java.util.Locale;
 
 import android.app.Activity;
@@ -14,8 +13,6 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -25,7 +22,6 @@ import eu.iescities.pilot.rovereto.roveretoexplorer.R;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.PagerSlidingTabStrip;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.Utils;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.DTHelper;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.BaseDTObject;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ExplorerObject;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.community.Fragment_EvDetail_Community;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.dasapere.Fragment_EvDetail_DaSapere;
@@ -55,7 +51,6 @@ public class Fragment_EventDetails extends Fragment {
 		super.onCreate(savedInstanceState);
 		if (savedInstanceState == null) {
 			Log.d("SCROLLTABS", "onCreate FIRST TIME");
-//			setHasOptionsMenu(true);
 
 			if (getArguments() != null) {
 				mEventId = getArguments().getString(Utils.ARG_EVENT_ID);
@@ -82,6 +77,8 @@ public class Fragment_EventDetails extends Fragment {
 		Log.d("FRAGMENT LC", "Fragment_evDetail --> onActivityCreated");
 	}
 
+	
+	
 	@Override
 	public void onStart() {
 		super.onStart();
@@ -102,6 +99,12 @@ public class Fragment_EventDetails extends Fragment {
 		tabs = (PagerSlidingTabStrip) getActivity().findViewById(R.id.tabs);
 		pager = (ViewPager) getActivity().findViewById(R.id.pager);
 		adapter = new MyPagerAdapter(getChildFragmentManager());
+//	    screenAdapter = new ScreenAdapter(this, getFragmentManager());
+		pager.post(new Runnable() {
+	        public void run() {
+	        	pager.setAdapter(adapter);
+	        }
+	    });
 		pager.setAdapter(adapter);
 
 		final int pageMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, getResources()

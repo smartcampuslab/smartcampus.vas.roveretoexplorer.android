@@ -119,7 +119,7 @@ public class MainActivity extends AbstractNavDrawerActivity {
 	protected void onStart() {
 		super.onStart();
 		// every new start a new session Id is generated
-		LogHelper.deleteSessionId(this);
+//		LogHelper.deleteSessionId(this);
 		LogHelper.sendStartLog(this);
 		// check if still a quiz to be done
 		QuizHelper.checkQuiz(this);

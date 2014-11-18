@@ -37,18 +37,32 @@ public class Utils {
 	public static final String userPoiObject = "eu.trentorise.smartcampus.dt.model.UserPOIObject";
 	public static final String servicePoiObject = "eu.trentorise.smartcampus.dt.model.ServicePOIObject";
 
-	public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
-	public static final SimpleDateFormat DATETIME_FORMAT_WITH_SEC = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
-	public static final SimpleDateFormat DATETIME_FORMAT = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+	public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(
+			"dd/MM/yyyy");
+	public static final SimpleDateFormat DATETIME_FORMAT_WITH_SEC = new SimpleDateFormat(
+			"dd/MM/yyyy hh:mm:ss");
+	public static final SimpleDateFormat DATETIME_FORMAT = new SimpleDateFormat(
+			"dd/MM/yyyy HH:mm");
+	public static final SimpleDateFormat DATETIME_FORMAT_DAY = new SimpleDateFormat(
+			"dd/MM/yyyy");
+	public static final SimpleDateFormat DATETIME_FORMAT_HOUR = new SimpleDateFormat(
+			"HH:mm");
 
-	public static final SimpleDateFormat DATE_FORMAT_2 = new SimpleDateFormat("dd MMM. yyyy");
-	public static final DateFormat DATE_FORMAT_2_with_dayweek = new SimpleDateFormat("EEEEEE dd MMM. yyyy");
-	public static final SimpleDateFormat DATE_FORMAT_2_with_time = new SimpleDateFormat("dd MMM. yyyy HH:mm");
-	public static final DateFormat DATE_FORMAT_2_with_dayweek_time = new SimpleDateFormat("EEEEEE dd MMM. yyyy HH:mm");
+	public static final SimpleDateFormat DATE_FORMAT_2 = new SimpleDateFormat(
+			"dd MMM. yyyy");
+	public static final DateFormat DATE_FORMAT_2_with_dayweek = new SimpleDateFormat(
+			"EEEEEE, dd MMM. yyyy");
+	public static final SimpleDateFormat DATE_FORMAT_2_with_time = new SimpleDateFormat(
+			"dd MMM. yyyy HH:mm");
+	public static final SimpleDateFormat DATE_FORMAT_2_with_dayweek_time = new SimpleDateFormat(
+			"EEEEEE, dd MMM. yyyy HH:mm");
 
-	public static final SimpleDateFormat FORMAT_DATE_UI = new SimpleDateFormat("dd/MM/yy", Locale.ENGLISH);
-	public static final SimpleDateFormat FORMAT_DATE_UI_LONG = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
-	public static final SimpleDateFormat FORMAT_TIME_UI = new SimpleDateFormat("HH:mm", Locale.ENGLISH);
+	public static final SimpleDateFormat FORMAT_DATE_UI = new SimpleDateFormat(
+			"dd/MM/yy", Locale.ENGLISH);
+	public static final SimpleDateFormat FORMAT_DATE_UI_LONG = new SimpleDateFormat(
+			"dd/MM/yyyy", Locale.ENGLISH);
+	public static final SimpleDateFormat FORMAT_TIME_UI = new SimpleDateFormat(
+			"HH:mm", Locale.ENGLISH);
 	public static final int PAST_MINUTES_SPAN = -5; // has to be negative
 
 	public static final String ARG_EVENT_ID = "event_id";
@@ -69,17 +83,13 @@ public class Utils {
 	public static final String EMAIL_CONTACT_TYPE = "email";
 	public static final String PHONE_CONTACT_TYPE = "phone";
 
-
-	public static final String[] stopWordsForOrigin = new String[]{"a cura", "acura"};
-
-
-
-
-
+	public static final String[] stopWordsForOrigin = new String[] { "a cura",
+			"acura" };
 
 	// public static List<ExplorerObject> appEvents = getFakeEventObjects();
 
-	public static List<Concept> conceptConvertSS(Collection<SemanticSuggestion> tags) {
+	public static List<Concept> conceptConvertSS(
+			Collection<SemanticSuggestion> tags) {
 		List<Concept> result = new ArrayList<Concept>();
 		for (SemanticSuggestion ss : tags) {
 			if (ss.getType() == TYPE.KEYWORD) {
@@ -96,7 +106,8 @@ public class Utils {
 		return result;
 	}
 
-	public static ArrayList<SemanticSuggestion> conceptConvertToSS(List<Concept> tags) {
+	public static ArrayList<SemanticSuggestion> conceptConvertToSS(
+			List<Concept> tags) {
 		if (tags == null)
 			return new ArrayList<SemanticSuggestion>();
 		ArrayList<SemanticSuggestion> result = new ArrayList<SemanticSuggestion>();
@@ -215,7 +226,8 @@ public class Utils {
 	 * @return
 	 */
 	public static String getEventShortAddress(ExplorerObject event) {
-		if (event.getCustomData() != null && event.getCustomData().get("place") != null) {
+		if (event.getCustomData() != null
+				&& event.getCustomData().get("place") != null) {
 			return event.getCustomData().get("place").toString();
 		} else {
 			return null;
@@ -235,7 +247,8 @@ public class Utils {
 		return mills;
 	}
 
-	public static CharSequence eventDatesString(DateFormat sdf, Long fromTime, Long toTime) {
+	public static CharSequence eventDatesString(DateFormat sdf, Long fromTime,
+			Long toTime) {
 		String res = sdf.format(new Date(fromTime));
 		if (toTime != null && toTime != fromTime) {
 			Calendar f = Calendar.getInstance();
@@ -613,8 +626,8 @@ public class Utils {
 	// }
 	// }
 
-	public static String[] getDateTimeString(Context context, Long fromTime, SimpleDateFormat sdf, boolean uppercase,
-			boolean dayweek) {
+	public static String[] getDateTimeString(Context context, Long fromTime,
+			SimpleDateFormat sdf, boolean uppercase, boolean dayweek) {
 
 		String[] date_time = { "", "" };
 		date_time[1] = "";
@@ -624,7 +637,8 @@ public class Utils {
 		if (dateAndTime.contains(":")) {
 			// there is a time
 			date = dateAndTime.substring(0, dateAndTime.lastIndexOf(" "));
-			date_time[1] = dateAndTime.substring(dateAndTime.lastIndexOf(" ") + 1);
+			date_time[1] = dateAndTime
+					.substring(dateAndTime.lastIndexOf(" ") + 1);
 		}
 
 		if (dayweek) {
@@ -638,23 +652,27 @@ public class Utils {
 			// check actual date
 			if (stringToday.equals(date)) {
 				// if equal put the Today string
-				date_time[0] = getDateFormatted(context.getString(R.string.list_event_today) + " " + stringToday,
-						uppercase);
+				date_time[0] = getDateFormatted(
+						context.getString(R.string.list_event_today) + " "
+								+ stringToday, uppercase);
 			} else if (stringTomorrow.equals(date)) {
 				// else if it's tomorrow, cat that string
-				date_time[0] = getDateFormatted(context.getString(R.string.list_event_tomorrow) + " " + stringTomorrow,
-						uppercase);
+				date_time[0] = getDateFormatted(
+						context.getString(R.string.list_event_tomorrow) + " "
+								+ stringTomorrow, uppercase);
 			}
 			// else put the day's name
 			else {
-				date_time[0] = getDateFormatted(DATE_FORMAT_2_with_dayweek.format(new Date(fromTime)), uppercase);
+				date_time[0] = getDateFormatted(
+						DATE_FORMAT_2_with_dayweek.format(new Date(fromTime)),
+						uppercase);
 			}
 		} else {
 			date_time[0] = date;
 		}
 
-		//Log.i("FORMAT", "Utils --> date formatted: " + date_time[0] + "!!");
-		//Log.i("FORMAT", "Utils --> time formatted: " + date_time[1] + "!!");
+		// Log.i("FORMAT", "Utils --> date formatted: " + date_time[0] + "!!");
+		// Log.i("FORMAT", "Utils --> time formatted: " + date_time[1] + "!!");
 
 		return date_time;
 
@@ -667,10 +685,12 @@ public class Utils {
 		for (int i = 0; i < dateformatted_split.length; i++) {
 			String piece = dateformatted_split[i];
 			if (uppercase) {
-				piece = (i == 0) ? piece.substring(0, 1).toUpperCase() + piece.substring(1) + "," : piece;
-				piece = (i == 2) ? piece.substring(0, 1).toUpperCase() + piece.substring(1) : piece;
+				piece = (i == 0) ? piece.substring(0, 1).toUpperCase()
+						+ piece.substring(1) : piece;
+				piece = (i == 2) ? piece.substring(0, 1).toUpperCase()
+						+ piece.substring(1) : piece;
 			} else
-				piece = (i == 0) ? piece + "," : piece;
+				piece = (i == 0) ? piece : piece;
 
 			// Log.i("FORMAT", "Utils --> string split: " + piece + "!!");
 			date_formatted = date_formatted + piece + " ";
@@ -697,65 +717,54 @@ public class Utils {
 		return from.compareTo(now) < 0 ? false : true;
 	}
 
-	//	public static List<ToKnow> toKnowMapToList(Map<String, String> map) {
-	//		List<ToKnow> list = new ArrayList<ToKnow>();
+	// public static List<ToKnow> toKnowMapToList(Map<String, String> map) {
+	// List<ToKnow> list = new ArrayList<ToKnow>();
 	//
-	//		for (Entry<String, String> entry : map.entrySet()) {
-	//			ToKnow toKnow = new ToKnow(entry.getKey(), entry.getValue());
-	//			list.add(toKnow);
-	//		}
+	// for (Entry<String, String> entry : map.entrySet()) {
+	// ToKnow toKnow = new ToKnow(entry.getKey(), entry.getValue());
+	// list.add(toKnow);
+	// }
 	//
-	//		return list;
-	//	}
-
-
+	// return list;
+	// }
 
 	public static List<ToKnow> toKnowMapToList(Map<String, List<String>> map) {
-
 
 		List<ToKnow> list = new ArrayList<ToKnow>();
 
 		for (Entry<String, List<String>> entry : map.entrySet()) {
+			if (!entry.getValue().isEmpty() && entry.getValue()!=null && !"".equals(entry.getValue().get(0))) {
+				List<String> values = new LinkedList<String>(
+						(List<String>) entry.getValue());
+				values.remove("");
 
-			List<String> values = new LinkedList<String>((List<String>) entry.getValue());
-			values.remove("");
+				if (entry.getKey().startsWith("_toknow_"))
+					list.add((values.size() != 0) ? ToKnow
+							.newCustomDataAttributeField(entry.getKey(), false,
+									2) : ToKnow.newCustomDataAttributeField(
+							entry.getKey(), false, 3));
+				else
+					list.add((values.size() != 0) ? ToKnow
+							.newCustomDataAttributeField(entry.getKey(), true,
+									2) : ToKnow.newCustomDataAttributeField(
+							entry.getKey(), true, 3));
 
-			if (entry.getKey().startsWith("_toknow_"))
-				list.add((values.size()!=0) ? ToKnow.newCustomDataAttributeField(entry.getKey(), false, 2) : 
-					ToKnow.newCustomDataAttributeField(entry.getKey(), false, 3));
-			else			
-				list.add((values.size()!=0) ? ToKnow.newCustomDataAttributeField(entry.getKey(), true, 2) :
-					ToKnow.newCustomDataAttributeField(entry.getKey(), true, 3));
+				for (int i = 0; i < values.size(); i++) {
+					String value = values.get(i);
 
-
-			for (int i = 0; i < values.size(); i++) {
-				String value = values.get(i);
-
-				if (i == (values.size() - 1)) {
-					// Last item...
-					list.add(ToKnow.newCustomDataValueField(value,3));
-				}else{
-					list.add(ToKnow.newCustomDataValueField(value,2));
+					if (i == (values.size() - 1)) {
+						// Last item...
+						list.add(ToKnow.newCustomDataValueField(value, 3));
+					} else {
+						list.add(ToKnow.newCustomDataValueField(value, 2));
+					}
 				}
-			}
-
+			} 
 
 		}
 
 		return list;
 	}
-
-
-
-
-
-
-
-
-
-
-
-
 
 	public static Map<String, List<String>> toKnowListToMap(List<ToKnow> list) {
 
@@ -766,68 +775,68 @@ public class Utils {
 		if (list != null) {
 
 			previousAttrName = list.get(0).getName();
-			List<String> values = new ArrayList<String>();		
+			List<String> values = new ArrayList<String>();
 			for (ToKnow toKnow : list) {
 
-				String currentAttrName = (toKnow.getType().matches(Constants.CUSTOM_TOKNOW_TYPE_ATTRIBUTE)) ? toKnow.getName() : previousAttrName;  
+				String currentAttrName = (toKnow.getType()
+						.matches(Constants.CUSTOM_TOKNOW_TYPE_ATTRIBUTE)) ? toKnow
+						.getName() : previousAttrName;
 
-				if ((currentAttrName.matches(previousAttrName)) && (toKnow.getType().matches(Constants.CUSTOM_TOKNOW_TYPE_VALUE)))
+				if ((currentAttrName.matches(previousAttrName))
+						&& (toKnow.getType()
+								.matches(Constants.CUSTOM_TOKNOW_TYPE_VALUE)))
 					values.add(toKnow.getName());
 
-				if (!currentAttrName.matches(previousAttrName)){
+				if (!currentAttrName.matches(previousAttrName)) {
 					map.put(previousAttrName, values);
-					values = new ArrayList<String>();		
+					values = new ArrayList<String>();
 					previousAttrName = currentAttrName;
-				} 
+				}
 			}
 		}
 
 		return map;
 	}
 
-
-
-	public static   Map<String, List<String>> convert(Map<String, String> oldMap) {
+	public static Map<String, List<String>> convert(Map<String, String> oldMap) {
 		Map<String, List<String>> ret = new HashMap<String, List<String>>();
 		for (String key : oldMap.keySet()) {
-			ret.put(key, Arrays.asList(new String[]{oldMap.get(key)}));
+			ret.put(key, Arrays.asList(new String[] { oldMap.get(key) }));
 		}
 		return ret;
 	}
 
-
-	public static boolean isOldMapType(Map<String,Object> map){
+	public static boolean isOldMapType(Map<String, Object> map) {
 
 		boolean isOld = false;
 
 		for (Entry<String, Object> entry : map.entrySet()) {
-			if(!(entry.getValue() instanceof List<?>)) {
-				isOld=true;
+			if (!(entry.getValue() instanceof List<?>)) {
+				isOld = true;
 				break;
 			}
 		}
 		return isOld;
 	}
 
+	public static Map<String, List<String>> getCustomToKnowDataFromEvent(
+			ExplorerObject event) {
+		Map<String, List<String>> toKnowMap = null;
+		if (event.getCustomData().containsKey(Constants.CUSTOM_TOKNOW)) {
 
-	public static Map<String,List<String>> getCustomToKnowDataFromEvent(ExplorerObject event){
-		Map<String,List<String>> toKnowMap = null;
-		if (event.getCustomData().containsKey(Constants.CUSTOM_TOKNOW)){
-
-			//eventually convert the old map type with the new one
-			if (Utils.isOldMapType((Map<String,Object>) event.getCustomData().get(Constants.CUSTOM_TOKNOW))){
-				toKnowMap = Utils.convert((Map<String,String>) event.getCustomData().get(Constants.CUSTOM_TOKNOW));
-			}
-			else{
-				toKnowMap = (Map<String,List<String>>) event.getCustomData().get(Constants.CUSTOM_TOKNOW);
+			// eventually convert the old map type with the new one
+			if (Utils.isOldMapType((Map<String, Object>) event.getCustomData()
+					.get(Constants.CUSTOM_TOKNOW))) {
+				toKnowMap = Utils.convert((Map<String, String>) event
+						.getCustomData().get(Constants.CUSTOM_TOKNOW));
+			} else {
+				toKnowMap = (Map<String, List<String>>) event.getCustomData()
+						.get(Constants.CUSTOM_TOKNOW);
 			}
 		}
 
-
 		return toKnowMap;
 	}
-
-
 
 	/**
 	 * This is used to check the given email is valid or not.
@@ -840,7 +849,8 @@ public class Utils {
 		if (target == null) {
 			return false;
 		} else {
-			return android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
+			return android.util.Patterns.EMAIL_ADDRESS.matcher(target)
+					.matches();
 		}
 	}
 
@@ -875,12 +885,14 @@ public class Utils {
 		if (cal1 == null || cal2 == null) {
 			throw new IllegalArgumentException("The dates must not be null");
 		}
-		return (cal1.get(Calendar.ERA) == cal2.get(Calendar.ERA) &&
-				cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
-				cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR));
+		return (cal1.get(Calendar.ERA) == cal2.get(Calendar.ERA)
+				&& cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) && cal1
+					.get(Calendar.DAY_OF_YEAR) == cal2
+				.get(Calendar.DAY_OF_YEAR));
 	}
 
-	public static List<Date> getDatesBetweenInterval(Date dateInitial, Date dateFinal) {
+	public static List<Date> getDatesBetweenInterval(Date dateInitial,
+			Date dateFinal) {
 		List<Date> dates = new ArrayList<Date>();
 		Calendar calendar = new GregorianCalendar();
 		calendar.setTime(dateInitial);
@@ -893,39 +905,37 @@ public class Utils {
 		return dates;
 	}
 
-
-
-	//delete an unwanted word from a sentence
-	public static String removeWord(String unwanted, String sentence)
-	{
-		return (sentence.indexOf(unwanted) != -1) ? sentence.replace(unwanted,"").trim() : sentence;
+	// delete an unwanted word from a sentence
+	public static String removeWord(String unwanted, String sentence) {
+		return (sentence.indexOf(unwanted) != -1) ? sentence.replace(unwanted,
+				"").trim() : sentence;
 
 	}
 
-
-	//delete a list of unwanted words from a sentence
-	public static String removeWords(List<String> unwanted, String sentence)
-	{
+	// delete a list of unwanted words from a sentence
+	public static String removeWords(List<String> unwanted, String sentence) {
 		for (String word : unwanted)
 			sentence = removeWord(word, sentence);
 		return sentence;
 	}
 
-	public static OSMAddress getOsmAddressFromAddress(android.location.Address address) {
+	public static OSMAddress getOsmAddressFromAddress(
+			android.location.Address address) {
 		OSMAddress returnAddress = new OSMAddress();
-		if (address!=null){
+		if (address != null) {
 
-			//city
-			Map<String,String> cities = new HashMap<String, String>();
+			// city
+			Map<String, String> cities = new HashMap<String, String>();
 			cities.put("", address.getLocality());
 			returnAddress.setCity(cities);
 
-			//name
+			// name
 			returnAddress.setName(address.getLocality());
-			//street
+			// street
 			returnAddress.setStreet(address.getAddressLine(0));
-			//location
-			double[] addressLocation = {address.getLatitude(),address.getLongitude()};
+			// location
+			double[] addressLocation = { address.getLatitude(),
+					address.getLongitude() };
 			returnAddress.setLocation(addressLocation);
 
 			return returnAddress;
@@ -933,8 +943,43 @@ public class Utils {
 		return null;
 	}
 
+	public static Map<String, List<String>> getToKnowEventData(
+			ExplorerObject mEvent) {
 
+		if (mEvent.getCustomData() == null) {
+			mEvent.setCustomData(new HashMap<String, Object>());
+		}
 
+		Map<String, List<String>> toKnowMap = Utils
+				.getCustomToKnowDataFromEvent(mEvent);
 
+		if (toKnowMap == null) {
 
+			Map<String, Object> customData = mEvent.getCustomData();
+
+			customData.put(Constants.CUSTOM_TOKNOW,
+					new LinkedHashMap<String, List<String>>());
+			mEvent.setCustomData(customData);
+			toKnowMap = (Map<String, List<String>>) mEvent.getCustomData().get(
+					Constants.CUSTOM_TOKNOW);
+
+		}
+
+		return toKnowMap;
+	}
+
+	public static boolean stringIsInAList(String[] arr, String targetValue) {
+		return Arrays.asList(arr).contains(targetValue);
+	}
+
+	public static boolean isDefaultExtraField(String targetValue) {
+		String[] extraField = { Constants.CUSTOM_TOKNOW_PLACE_TYPE,
+				Constants.CUSTOM_TOKNOW_ACCESS, Constants.CUSTOM_TOKNOW_CHANCE,
+				Constants.CUSTOM_TOKNOW_CLOTHING,
+				Constants.CUSTOM_TOKNOW_LANGUAGE_MAIN,
+				Constants.CUSTOM_TOKNOW_PLACE_TYPE,
+				Constants.CUSTOM_TOKNOW_TO_BRING };
+		return stringIsInAList(extraField, targetValue);
+
+	}
 }

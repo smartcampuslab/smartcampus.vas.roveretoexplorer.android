@@ -204,7 +204,7 @@ public class LogHelper {
 	public static long getSessionId(Context ctx) {
 		sp = ctx.getSharedPreferences(LogConstants.LOG_PREFERENCES, Context.MODE_PRIVATE);
 		Random r = new Random();
-		long newSessionId =((long) (r.nextDouble() * (MAX_SESSION_ID)));
+		long newSessionId =(-(long) (r.nextDouble() * (MAX_SESSION_ID)));
 		long sessionid = sp.getLong(LogConstants.SESSION_ID, newSessionId);
 		if (!isPresentSessionId(ctx))
 			{		

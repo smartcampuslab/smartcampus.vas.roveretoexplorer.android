@@ -1,35 +1,54 @@
 package eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
-import android.widget.ExpandableListView;
-import android.widget.ExpandableListView.OnChildClickListener;
+import android.view.ViewManager;
+import android.widget.AutoCompleteTextView;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.TimePicker;
+import android.widget.Toast;
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
 import eu.iescities.pilot.rovereto.roveretoexplorer.RoveretoExplorerApplication;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.AbstractAsyncTaskProcessor;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.Utils;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.Address;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.DTHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ExplorerObject;
+import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info.edit.AddressSelectActivity;
+import eu.trentorise.smartcampus.android.common.GeocodingAutocompletionHelper;
+import eu.trentorise.smartcampus.android.common.GeocodingAutocompletionHelper.OnAddressSelectedListener;
+import eu.trentorise.smartcampus.android.common.SCAsyncTask;
+import eu.trentorise.smartcampus.android.common.geo.OSMAddress;
+import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 
 public class Fragment_EvDetail_Edit extends Fragment {
+	public final static int REQUEST_CODE = 10;
 
 	protected Context context;
+	OSMAddress selectedAddress = null;
 
 	// For the expandable list view
 	List<String> attributeGroupList;
@@ -111,8 +130,8 @@ public class Fragment_EvDetail_Edit extends Fragment {
 			Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
 		Log.d("FRAGMENT LC", "Fragment_evDetail_Info --> onCreateView");
-		return inflater.inflate(R.layout.frag_ev_detail_info_list, container,
-				false);
+		return inflater.inflate(R.layout.frag_ev_detail_info_edit_list,
+				container, false);
 	}
 
 	@Override
@@ -126,56 +145,144 @@ public class Fragment_EvDetail_Edit extends Fragment {
 	public void onPrepareOptionsMenu(Menu menu) {
 		super.onPrepareOptionsMenu(menu);
 		menu.clear();
-		getActivity().getMenuInflater().inflate(R.menu.detail_edit_confirm_menu, menu);
+		getActivity().getMenuInflater().inflate(
+				R.menu.detail_edit_confirm_menu, menu);
 	}
 
-	// private void editField(String field_type) {
-	//
-	// Log.d("FRAGMENT LC", "Fragment_evDetail_Info --> INFO ACTIVITY: " +
-	// infoActivity.toString());
-	// Log.i("CONTACTS", "Fragment_EvDetail_Info --> event selected ID: " +
-	// mEventId + "!!");
-	//
-	// String frag_description = "event_details_info_edit_" + field_type;
-	// Bundle args = new Bundle();
-	// args.putString(Utils.ARG_EVENT_ID, mEventId);
-	// args.putString(Utils.ARG_EVENT_FIELD_TYPE, field_type);
-	//
-	// Fragment edit_fragment = new Fragment_EvDetail_Info_What();
-	//
-	// // FragmentTransaction transaction =
-	// // getChildFragmentManager().beginTransaction();
-	// // if (edit_fragment != null) {
-	// // edit_fragment.setArguments(args);
-	// // transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-	// // // fragmentTransaction.detach(this);
-	// // //transaction.replace(R.id.content_frame, edit_fragment,
-	// // frag_description);
-	// // transaction.add(edit_fragment, frag_description);
-	// // //transaction.addToBackStack(edit_fragment.getTag());
-	// // transaction.commit();
-	// // // reset event and event id
-	// // mEvent = null;
-	// // mEventId = null;
-	// // }
-	//
-	// FragmentTransaction fragmentTransaction =
-	// getActivity().getSupportFragmentManager().beginTransaction();
-	// if (edit_fragment != null) {
-	// // reset event and event id
-	// mEvent = null;
-	// mEventId = null;
-	// edit_fragment.setArguments(args);
-	// fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-	// // fragmentTransaction.detach(this);
-	// fragmentTransaction.replace(R.id.content_frame, edit_fragment,
-	// frag_description);
-	// fragmentTransaction.addToBackStack(getTag());
-	// fragmentTransaction.commit();
-	//
-	// }
-	//
-	// }
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// return super.onOptionsItemSelected(item);
+		if (item.getItemId() == R.id.edit_confirm) {
+			// save the new event e return on the previous fragment
+			saveEvent();
+			return true;
+		}
+
+		return false;
+	}
+
+	private void saveEvent() {
+		// new position is already saved by saveposition
+		
+		
+		
+		// save time
+        //update Mevent
+		EditText eventWhenFrom = (EditText) getActivity().findViewById(R.id.ev_detail_info_time_from);
+		EditText eventWhenFromHour = (EditText) getActivity().findViewById(R.id.ev_detail_info_time_hour_from);
+
+        String start_date = eventWhenFrom.getText().toString();
+        String start_date_hour = eventWhenFromHour.getText().toString();
+		
+		
+		
+		mEvent.setFromTime(Utils.toDateTimeLong(Utils.DATE_FORMAT_2_with_dayweek_time, start_date+" "+start_date_hour));
+		EditText eventWhenTo = (EditText) getActivity().findViewById(R.id.ev_detail_info_time_to);
+		EditText eventWhenToHour = (EditText) getActivity().findViewById(R.id.ev_detail_info_time_hour_to);
+
+        String stop_date = eventWhenTo.getText().toString();
+        String stop_date_hour = eventWhenToHour.getText().toString();
+		mEvent.setToTime(Utils.toDateTimeLong(Utils.DATE_FORMAT_2_with_dayweek_time, stop_date+" "+stop_date_hour));
+		
+		
+		
+		// mEvent.set
+		// save phones
+		List<String> phoneList = new ArrayList<String>();
+		// take the first
+		TextView phone = (TextView) getActivity().findViewById(
+				R.id.ev_detail_info_telephone);
+		if (phone != null && !"".equals(phone.getText().toString())) {
+			phoneList.add(phone.getText().toString());
+		}
+		LinearLayout llphone = (LinearLayout) getActivity().findViewById(
+				R.id.ev_detail_placeholder_telephone_extra);
+		if (llphone != null && llphone.getChildCount() != 0) {
+			for (int i = 0; i < llphone.getChildCount(); i++) {
+
+				View phoneView = llphone.getChildAt(i);
+				phone = (TextView) phoneView.findViewById(
+						R.id.ev_detail_info_telephone_extra);
+				if (phone != null && !"".equals(phone.getText().toString())) {
+					phoneList.add(phone.getText().toString());
+				}
+			}
+		}
+		// take the others
+		mEvent.setPhoneEmailContacts(Utils.PHONE_CONTACT_TYPE, phoneList);
+
+		// save mails
+		List<String> emailList = new ArrayList<String>();
+		// take the first
+		TextView email = (TextView) getActivity().findViewById(
+				R.id.ev_detail_info_mail);
+		if (email != null && !"".equals(email.getText().toString())) {
+			emailList.add(email.getText().toString());
+		}
+		LinearLayout llmail = (LinearLayout) getActivity().findViewById(
+				R.id.ev_detail_placeholder_mail_extra);
+		if (llmail != null && llmail.getChildCount() != 0) {
+			for (int i = 0; i < llmail.getChildCount(); i++) {
+
+				View emailView = llmail.getChildAt(i);
+				email = (TextView) emailView.findViewById(
+						R.id.ev_detail_info_mail_extra);
+				if (email != null && !"".equals(email.getText().toString())) {
+					emailList.add(email.getText().toString());
+				}
+			}
+		}
+		mEvent.setPhoneEmailContacts(Utils.EMAIL_CONTACT_TYPE, emailList);
+
+		// save website
+		EditText wbUrl = (EditText) getActivity().findViewById(
+				R.id.ev_detail_info_web);
+		mEvent.setWebsiteUrl(wbUrl.getText().toString());
+		// save facebook
+		EditText fbUrl = (EditText) getActivity().findViewById(
+				R.id.ev_detail_info_facebook);
+		mEvent.setFacebookUrl(fbUrl.getText().toString());
+		// save twitter
+		EditText twitterUrl = (EditText) getActivity().findViewById(
+				R.id.ev_detail_info_twitter);
+		mEvent.setTwitterUrl(twitterUrl.getText().toString());
+		new SCAsyncTask<Void, Void, Boolean>(getActivity(),
+				new SaveEventProcessor(getActivity())).execute();
+
+	}
+
+	private class SaveEventProcessor extends
+			AbstractAsyncTaskProcessor<Void, Boolean> {
+
+		Activity activity;
+
+		public SaveEventProcessor(Activity activity) {
+			super(activity);
+			this.activity = activity;
+		}
+
+		@Override
+		public Boolean performAction(Void... params) throws SecurityException,
+				Exception {
+			return DTHelper.saveEvent(mEvent, activity);
+		}
+
+		@Override
+		public void handleResult(Boolean result) {
+			if (!result)// false is for updating true is for creating, null in
+						// case of problem
+			{
+				// toast updated and go back
+				Toast.makeText(getActivity(), R.string.update_success, Toast.LENGTH_LONG).show();
+
+				getActivity().getSupportFragmentManager().popBackStack();
+			}
+
+			// toast problem and stay here
+			Toast.makeText(getActivity(), R.string.update_failed, Toast.LENGTH_LONG).show();
+
+		}
+	}
 
 	@Override
 	public void onStart() {
@@ -258,70 +365,336 @@ public class Fragment_EvDetail_Edit extends Fragment {
 				addressStr = context.getString(R.string.city_hint);
 
 			llPlace.setVisibility(View.VISIBLE);
-			TextView placeTextView = (TextView) getActivity().findViewById(
-					R.id.ev_detail_info_place);
-			placeTextView.setText(addressStr);
 
-		} else {
-			llPlace.setVisibility(View.GONE);
+			AutoCompleteTextView placeTextView = (AutoCompleteTextView) getActivity()
+					.findViewById(R.id.ev_detail_info_place);
+			placeTextView.setText(addressStr);
+			GeocodingAutocompletionHelper fromAutocompletionHelper = new GeocodingAutocompletionHelper(
+					getActivity(), placeTextView, Utils.ROVERETO_REGION,
+					Utils.ROVERETO_COUNTRY, Utils.ROVERETO_ADM_AREA,
+					mEvent.getLocation());
+			fromAutocompletionHelper
+					.setOnAddressSelectedListener(new OnAddressSelectedListener() {
+						@Override
+						public void onAddressSelected(
+								android.location.Address address) {
+
+							Log.i("ADDRESS",
+									"Fragment_EvDetail_Info_WhenWhere --> onAddressSelected");
+
+							// convert from address to OsmAddress
+
+							savePosition(Utils
+									.getOsmAddressFromAddress(address));
+
+						}
+
+					});
+
 		}
+		ImageView imgBtn = (ImageView) getView().findViewById(
+				R.id.select_where_map);
+
+		if (imgBtn != null) {
+			imgBtn.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					Intent intent = new Intent(getActivity(),
+							AddressSelectActivity.class);
+					// not useful but necessary because otherwise the app
+					// crashes
+					// in that it is dependent on line 57 of the InfoDialog
+					// class of the
+					// package eu.trentorise.smartcampus.android.map;
+					intent.putExtra("field", Utils.ADDRESS);
+					// launch the sub-activity to locate an address in the map
+					startActivityForResult(intent, REQUEST_CODE);
+				}
+			});
+
+		}
+		// else {
+		// llPlace.setVisibility(View.GONE);
+		// }
 
 		// set time
-		TextView eventWhen = (TextView) getActivity().findViewById(
-				R.id.ev_detail_info_time);
-		LinearLayout llTime = (LinearLayout) getActivity().findViewById(
-				R.id.ev_detail_placeholder_time);
+		final EditText eventWhenFrom = (EditText) getActivity().findViewById(
+				R.id.ev_detail_info_time_from);
 
 		if ((mEvent.getFromTime() != null) && (mEvent.getFromTime() != 0)) {
 			String[] fromDateTime = Utils.getDateTimeString(this.context,
 					mEvent.getFromTime(), Utils.DATETIME_FORMAT, false, true);
 
-			if (!fromDateTime[1].matches("")) {
-				eventWhen.setText(getResources().getString(
-						R.string.date_with_time, fromDateTime[0],
-						fromDateTime[1]));
-			} else
-				eventWhen.setText(fromDateTime[0]);
+				eventWhenFrom.setText(fromDateTime[0]);
 
 		}
+		
+		final Calendar myCalendar = Calendar.getInstance();
+		final DatePickerDialog.OnDateSetListener fromDate = new DatePickerDialog.OnDateSetListener() {
+
+		    @Override
+		    public void onDateSet(DatePicker view, int year, int monthOfYear,
+		            int dayOfMonth) {
+		        // TODO Auto-generated method stub
+		        myCalendar.set(Calendar.YEAR, year);
+		        myCalendar.set(Calendar.MONTH, monthOfYear);
+		        myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+		        updateLabel();
+		    }
+		    private void updateLabel() {
+		        eventWhenFrom.setText(Utils.DATE_FORMAT_2_with_dayweek.format(myCalendar.getTime()));
+
+		        }
+		};
+		
+		eventWhenFrom.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				new DatePickerDialog(getActivity(), fromDate, myCalendar
+	                    .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+	                    myCalendar.get(Calendar.DAY_OF_MONTH)).show();				
+			}
+		});
+		eventWhenFrom.setOnFocusChangeListener(new OnFocusChangeListener()
+		{
+		    @Override
+		    public void onFocusChange(View v, boolean isFocus) 
+		    {
+		        if (isFocus)
+		        {
+		           new DatePickerDialog(getActivity(), fromDate, myCalendar
+		                    .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+		                    myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+		        }
+			}
+		});
+		
+		final EditText eventWhenFromHour = (EditText) getActivity().findViewById(R.id.ev_detail_info_time_hour_from);
+
+		if ((mEvent.getFromTime() != null) && (mEvent.getFromTime() != 0)) {
+			String[] fromDateTime = Utils.getDateTimeString(this.context,
+					mEvent.getFromTime(), Utils.DATETIME_FORMAT, false, true);
+
+			eventWhenFromHour.setText(fromDateTime[1]);
+
+		}
+		
+		final TimePickerDialog.OnTimeSetListener fromHour = new TimePickerDialog.OnTimeSetListener() {
+			
+			@Override
+			public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+		        myCalendar.set(Calendar.HOUR, hourOfDay);
+		        myCalendar.set(Calendar.MINUTE, minute);
+		        updateLabel();
+		    }
+		    private void updateLabel() {
+		        eventWhenFromHour.setText(Utils.DATETIME_FORMAT_HOUR.format(myCalendar.getTime()));
+		        }
+			};
+		
+			eventWhenFromHour.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				new TimePickerDialog(getActivity(),fromHour, myCalendar
+	                    .get(Calendar.HOUR), myCalendar.get(Calendar.MINUTE),true).show();				
+			}
+		});
+			eventWhenFromHour.setOnFocusChangeListener(new OnFocusChangeListener()
+		{
+		    @Override
+		    public void onFocusChange(View v, boolean isFocus) 
+		    {
+		        if (isFocus)
+		        {
+		        	new TimePickerDialog(getActivity(),fromHour, myCalendar
+		                    .get(Calendar.HOUR), myCalendar.get(Calendar.MINUTE),true).show();	
+		        }
+			}
+		});
+
+	    
+		final EditText eventWhenTo = (EditText) getActivity().findViewById(
+				R.id.ev_detail_info_time_to);
+		LinearLayout llTimeTo = (LinearLayout) getActivity().findViewById(
+				R.id.ev_detail_placeholder_time_to);
 
 		if ((mEvent.getToTime() != null) && (mEvent.getToTime() != 0)) {
 			String[] toDateTime = Utils.getDateTimeString(this.context,
 					mEvent.getToTime(), Utils.DATETIME_FORMAT, false, true);
 
-			if (!toDateTime[1].matches("")) {
-				eventWhen.setText(eventWhen.getText()
-						+ " \n"
-						+ getResources().getString(R.string.date_with_time,
-								toDateTime[0], toDateTime[1]));
-
-			} else
-				eventWhen.setText(eventWhen.getText() + " \n" + toDateTime[0]);
-		}
-		if ((mEvent.getToTime() == null) || (mEvent.getToTime() == 0)
-				|| (mEvent.getFromTime() == null)
-				|| (mEvent.getFromTime() == 0)) {
-			llTime.setVisibility(View.GONE);
-
-		} else {
-			llTime.setVisibility(View.VISIBLE);
+//			if (toDateTime[1].matches("")|| toDateTime[1]==null) {
+//				llTimeTo.setVisibility(View.GONE);
+//			} else
+				eventWhenTo.setText(toDateTime[0]);
 
 		}
+		final DatePickerDialog.OnDateSetListener toDate = new DatePickerDialog.OnDateSetListener() {
+
+		    @Override
+		    public void onDateSet(DatePicker view, int year, int monthOfYear,
+		            int dayOfMonth) {
+		        // TODO Auto-generated method stub
+		        myCalendar.set(Calendar.YEAR, year);
+		        myCalendar.set(Calendar.MONTH, monthOfYear);
+		        myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+		        updateLabel();
+		    }
+		    private void updateLabel() {
+
+//		        String myFormat = "MM/dd/yy"; //In which you need put here
+//		        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+
+		        eventWhenTo.setText(Utils.DATE_FORMAT_2_with_dayweek.format(myCalendar.getTime()));
+		        }
+		};
+		
+		
+		eventWhenTo.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				new DatePickerDialog(getActivity(), toDate, myCalendar
+	                    .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+	                    myCalendar.get(Calendar.DAY_OF_MONTH)).show();				
+			}
+		});
+		
+		eventWhenTo.setOnFocusChangeListener(new OnFocusChangeListener()
+		{
+		    @Override
+		    public void onFocusChange(View v, boolean isFocus) 
+		    {
+		        if (isFocus)
+		        {
+		           new DatePickerDialog(getActivity(), toDate, myCalendar
+		                    .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+		                    myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+		        }
+			}
+		});
+
+		final EditText eventWhenToHour = (EditText) getActivity().findViewById(R.id.ev_detail_info_time_hour_to);
+
+		if ((mEvent.getToTime() != null) && (mEvent.getToTime() != 0)) {
+			String[] toDateTime = Utils.getDateTimeString(this.context,
+					mEvent.getToTime(), Utils.DATETIME_FORMAT, false, true);
+
+			eventWhenToHour.setText(toDateTime[1]);
+
+		}
+		
+		final TimePickerDialog.OnTimeSetListener toHour = new TimePickerDialog.OnTimeSetListener() {
+			
+			@Override
+			public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+		        myCalendar.set(Calendar.HOUR, hourOfDay);
+		        myCalendar.set(Calendar.MINUTE, minute);
+		        updateLabel();
+		    }
+		    private void updateLabel() {
+		        eventWhenToHour.setText(Utils.DATETIME_FORMAT_HOUR.format(myCalendar.getTime()));
+		        }
+			};
+		
+			eventWhenToHour.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				new TimePickerDialog(getActivity(),toHour, myCalendar
+	                    .get(Calendar.HOUR), myCalendar.get(Calendar.MINUTE),true).show();				
+			}
+		});
+			eventWhenToHour.setOnFocusChangeListener(new OnFocusChangeListener()
+		{
+		    @Override
+		    public void onFocusChange(View v, boolean isFocus) 
+		    {
+		        if (isFocus)
+		        {
+		        	new TimePickerDialog(getActivity(),toHour, myCalendar
+		                    .get(Calendar.HOUR), myCalendar.get(Calendar.MINUTE),true).show();	
+		        }
+			}
+		});
+		
+		
+		
 		// set Contacts (tel,mail,fb, twitter)
 		TextView eventPhone = (TextView) getActivity().findViewById(
 				R.id.ev_detail_info_telephone);
 		List<String> telephones = mEvent
 				.getPhoneEmailContacts(Utils.PHONE_CONTACT_TYPE);
 		LinearLayout llTelephone = (LinearLayout) getActivity().findViewById(
-				R.id.ev_detail_placeholder_telephone);
-
+				R.id.ev_detail_placeholder_telephone_extra);
+		llTelephone.removeAllViews();
 		if (telephones != null) {
-			llTelephone.setVisibility(View.VISIBLE);
+			eventPhone.setText(telephones.get(0));
+			// fill the linearlayout with the other numbers
+			if (telephones.size() > 1) {
+				llTelephone.setVisibility(View.VISIBLE);
+				for (int i = 1; i < telephones.size(); i++) {
+					final View child = getActivity().getLayoutInflater()
+							.inflate(R.layout.edit_thelephone_extra, null);
+					if (llTelephone.getChildCount() <= 3) {
 
-			eventPhone.setText(telephones.toString());
-		} else {
-			llTelephone.setVisibility(View.GONE);
+						llTelephone.addView(child);
+						EditText phoneNumbers = (EditText) child
+								.findViewById(R.id.ev_detail_info_telephone_extra);
+						phoneNumbers.setText(telephones.get(i));
+						// addlistener on the images for delete
+						ImageView delete = (ImageView) child
+								.findViewById(R.id.ev_detail_info_telephone_delete_extra);
+						delete.setOnClickListener(new OnClickListener() {
+
+							@Override
+							public void onClick(View v) {
+								LinearLayout ll = (LinearLayout) child
+										.findViewById(R.id.ev_detail_info_telephone_extra_layout);
+								((ViewManager) child.getParent())
+										.removeView(ll);
+							}
+						});
+					}
+				}
+			}
+
 		}
+		ImageView addPhones = (ImageView) getActivity().findViewById(
+				R.id.ev_detail_info_telephone_add);
+		addPhones.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// add a new line :images
+				LinearLayout llTelephone = (LinearLayout) getActivity()
+						.findViewById(
+								R.id.ev_detail_placeholder_telephone_extra);
+				final View child = getActivity().getLayoutInflater().inflate(
+						R.layout.edit_thelephone_extra, null);
+				if (llTelephone.getChildCount() <= 3) {
+
+					llTelephone.addView(child);
+					// addlistener on the images for delete
+					ImageView delete = (ImageView) child
+							.findViewById(R.id.ev_detail_info_telephone_delete_extra);
+					delete.setOnClickListener(new OnClickListener() {
+
+						@Override
+						public void onClick(View v) {
+							LinearLayout ll = (LinearLayout) child
+									.findViewById(R.id.ev_detail_info_telephone_extra_layout);
+							((ViewManager) child.getParent()).removeView(ll);
+						}
+					});
+				}
+			}
+		});
+		// else {
+		// llTelephone.setVisibility(View.GONE);
+		// }
 
 		// mails
 		TextView eventMail = (TextView) getActivity().findViewById(
@@ -329,14 +702,73 @@ public class Fragment_EvDetail_Edit extends Fragment {
 		List<String> emails = mEvent
 				.getPhoneEmailContacts(Utils.EMAIL_CONTACT_TYPE);
 		LinearLayout llEmail = (LinearLayout) getActivity().findViewById(
-				R.id.ev_detail_placeholder_mail);
-		if (emails != null) {
+				R.id.ev_detail_placeholder_mail_extra);
+		if (emails != null && emails.size() > 1) {
 			llEmail.setVisibility(View.VISIBLE);
+			eventMail.setText(emails.get(0));
+			// fill the linearlayout with the other numbers
+			if (emails.size() > 1) {
+				llEmail.setVisibility(View.VISIBLE);
+				for (int i = 1; i < emails.size(); i++) {
+					final View child = getActivity().getLayoutInflater()
+							.inflate(R.layout.edit_mail_extra, null);
+					if (llEmail.getChildCount() <= 3) {
 
-			eventMail.setText(emails.toString());
-		} else {
-			llEmail.setVisibility(View.GONE);
+						llEmail.addView(child);
+						EditText emailAddress = (EditText) child
+								.findViewById(R.id.ev_detail_info_mail_extra);
+						emailAddress.setText(emails.get(i));
+						// addlistener on the images for delete
+						ImageView delete = (ImageView) child
+								.findViewById(R.id.ev_detail_info_mail_delete_extra);
+						delete.setOnClickListener(new OnClickListener() {
+
+							@Override
+							public void onClick(View v) {
+								LinearLayout ll = (LinearLayout) child
+										.findViewById(R.id.ev_detail_info_mail_extra_layout);
+								((ViewManager) child.getParent())
+										.removeView(ll);
+							}
+						});
+					}
+				}
+			}
+
 		}
+		ImageView addMail = (ImageView) getActivity().findViewById(
+				R.id.ev_detail_info_mail_add);
+		addMail.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// add a new line :images
+				LinearLayout llMail = (LinearLayout) getActivity()
+						.findViewById(R.id.ev_detail_placeholder_mail_extra);
+				final View child = getActivity().getLayoutInflater().inflate(
+						R.layout.edit_mail_extra, null);
+				if (llMail.getChildCount() <= 3) {
+					llMail.addView(child);
+					// addlistener on the images for delete
+					ImageView delete = (ImageView) child
+							.findViewById(R.id.ev_detail_info_mail_delete_extra);
+					delete.setOnClickListener(new OnClickListener() {
+
+						@Override
+						public void onClick(View v) {
+							LinearLayout ll = (LinearLayout) child
+									.findViewById(R.id.ev_detail_info_mail_extra_layout);
+							((ViewManager) child.getParent()).removeView(ll);
+						}
+					});
+				}
+
+			}
+		});
+
+		// else {
+		// llEmail.setVisibility(View.GONE);
+		// }
 		// website
 		TextView eventWeb = (TextView) getActivity().findViewById(
 				R.id.ev_detail_info_web);
@@ -347,9 +779,10 @@ public class Fragment_EvDetail_Edit extends Fragment {
 			llWeb.setVisibility(View.VISIBLE);
 
 			eventWeb.setText(web.toString());
-		} else {
-			llWeb.setVisibility(View.GONE);
 		}
+		// else {
+		// llWeb.setVisibility(View.GONE);
+		// }
 
 		// facebook
 
@@ -361,9 +794,10 @@ public class Fragment_EvDetail_Edit extends Fragment {
 		if (facebook != null && !"http://".equals(facebook)) {
 			llFacebook.setVisibility(View.VISIBLE);
 			eventFacebook.setText(facebook);
-		} else {
-			llFacebook.setVisibility(View.GONE);
 		}
+		// else {
+		// llFacebook.setVisibility(View.GONE);
+		// }
 		// twitter
 
 		TextView eventTwitter = (TextView) getActivity().findViewById(
@@ -374,9 +808,10 @@ public class Fragment_EvDetail_Edit extends Fragment {
 		if (twitter != null && !"http://".equals(twitter)) {
 			llTwitter.setVisibility(View.VISIBLE);
 			eventTwitter.setText(twitter);
-		} else {
-			llTwitter.setVisibility(View.GONE);
 		}
+		// else {
+		// llTwitter.setVisibility(View.GONE);
+		// }
 	}
 
 	@Override
@@ -424,206 +859,30 @@ public class Fragment_EvDetail_Edit extends Fragment {
 		Log.d("FRAGMENT LC", "Fragment_evDetail_Info --> onDetach");
 	}
 
-	// private void setInformationLayout() {
-	// // set cosa
-	// TextView eventWhat = (TextView) getActivity().findViewById(
-	// R.id.event_placeholder_what);
-	// if (mEvent.categoryString(getActivity()) != null) {
-	// eventWhat.setText(mEvent.categoryString(getActivity()));
-	// }
-	// // set categories
-	// TextView eventCategories = (TextView) getActivity().findViewById(
-	// R.id.event_placeholder_category);
-	// if (mEvent.categoryString(getActivity()) != null) {
-	// eventCategories.setText(mEvent.categoryString(getActivity()));
-	// }
-	//
-	// // set when where
-	// TextView eventInformation = (TextView) getActivity().findViewById(
-	// R.id.event_placeholder_information);
-	// if (mEvent.categoryString(getActivity()) != null) {
-	// eventCategories.setText(mEvent.categoryString(getActivity()));
-	// }
-	// // set Time
-	// TextView eventWhen = (TextView) getActivity().findViewById(
-	// R.id.event_placeholder_when);
-	//
-	// if ((mEvent.getFromTime() != null) && (mEvent.getFromTime() != 0)) {
-	// String[] fromDateTime = Utils.getDateTimeString(this.context,
-	// mEvent.getFromTime(), Utils.DATETIME_FORMAT, false, true);
-	//
-	// if (!fromDateTime[1].matches("")) {
-	// eventWhen.setText(getResources().getString(
-	// R.string.date_with_time, fromDateTime[0],
-	// fromDateTime[1]));
-	// } else
-	// eventWhen.setText(fromDateTime[0]);
-	//
-	// }
-	//
-	// if ((mEvent.getToTime() != null) && (mEvent.getToTime() != 0)) {
-	// String[] toDateTime = Utils.getDateTimeString(this.context,
-	// mEvent.getToTime(), Utils.DATETIME_FORMAT, false, true);
-	//
-	// if (!toDateTime[1].matches("")) {
-	// eventWhen.setText(eventWhen.getText()
-	// + " "
-	// + getResources().getString(R.string.date_with_time,
-	// toDateTime[0], toDateTime[1]));
-	//
-	// } else
-	// eventWhen.setText(eventWhen.getText() + " " + toDateTime[0]);
-	// }
-	//
-	// // set Contacts (tel,mail,fb, twitter)
-	// TextView eventPhone = (TextView) getActivity().findViewById(
-	// R.id.event_placeholder_phone);
-	// if ((mEvent.getPhoneEmailContacts(Utils.PHONE_CONTACT_TYPE) != null)) {
-	//
-	// List<String> telephones = mEvent
-	// .getPhoneEmailContacts(Utils.PHONE_CONTACT_TYPE);
-	// eventPhone.setText(telephones.toString());
-	// }
-	//
-	// // temp
-	// TextView eventMail = (TextView) getActivity().findViewById(
-	// R.id.event_placeholder_email);
-	// if (mEvent.getPhoneEmailContacts(Utils.EMAIL_CONTACT_TYPE)!=null) {
-	//
-	// List<String> emails = mEvent
-	// .getPhoneEmailContacts(Utils.EMAIL_CONTACT_TYPE);
-	// eventMail.setText(emails.toString());
-	// }
-	// // temp
-	//
-	// TextView eventFacebook = (TextView) getActivity().findViewById(
-	// R.id.event_placeholder_category);
-	// if (mEvent.getFacebookUrl() != null) {
-	//
-	// eventFacebook.setText(mEvent.getFacebookUrl());
-	// }
-	// TextView eventTwitter = (TextView) getActivity().findViewById(
-	// R.id.event_placeholder_category);
-	// if (mEvent.getTwitterUrl()!= null) {
-	//
-	// eventTwitter.setText(mEvent.getTwitterUrl());
-	// }
-	// }
+	@Override
+	public void onActivityResult(int requestCode, int resultCode,
+			Intent result_data) {
 
-	// private void setExpandableListView() {
-	//
-	// Log.d("FRAGMENT LC", "Fragment_evDetail_Info --> setExpandableListView");
-	//
-	// // Creating static data in arraylist
-	// ArrayList<EventInfoParent> eventInfoList = getEventDetailData(mEvent);
-	// setGroupImages();
-	//
-	// // attributeGroupList = createAttributeGroupList();
-	// // //eventAttributeCollection =
-	// // createFakeEventDetailCollection(attributeGroupList);
-	// // eventAttributeCollection =
-	// // getEventDetailCollection(attributeGroupList, mEvent);
-	//
-	// // expListView = (ExpandableListView) getActivity().findViewById(
-	// // R.id.event_details_info);
-	// //
-	// // expListView.setChildDivider(null);
-	// // expListView.setChildDivider(getResources().getDrawable(
-	// // R.color.transparent));
-	//
-	// // // header part
-	// // header = getActivity().getLayoutInflater().inflate(
-	// // R.layout.frag_ev_detail_info_header, null);
-	//
-	// // adding header to the list
-	// // if (expListView.getHeaderViewsCount() == 0) {
-	// // expListView.addHeaderView(header);
-	// // expListView.setHeaderDividersEnabled(true);
-	// // }
-	//
-	// if (getArguments() != null) {
-	// // Restore last state for checked position.
-	// mEventId = getArguments().getString(Utils.ARG_EVENT_ID);
-	// indexAdapter = getArguments().getInt(ARG_INDEX);
-	// }
-	//
-	// /* create the adapter is it is the first time you load */
-	// // Adding ArrayList data to ExpandableListView values
-	// parents = eventInfoList;
-	//
-	// if (eventDetailInfoAdapter == null) {
-	// eventDetailInfoAdapter = new EventDetailInfoAdapter(
-	// Fragment_EvDetail_Info.this);
-	//
-	// }
-	// expListView.invalidateViews();
-	// expListView.setAdapter(eventDetailInfoAdapter);
-	//
-	// eventDetailInfoAdapter.notifyDataSetChanged();
-	//
-	// expListView.expandGroup(0);
-	// expListView.expandGroup(1);
-	// expListView.expandGroup(2);
-	// expListView.expandGroup(3);
-	//
-	// // this is not useful now
-	// expListView.setOnChildClickListener(new OnChildClickListener() {
-	//
-	// @Override
-	// public boolean onChildClick(ExpandableListView parent, View v,
-	// int groupPosition, int childPosition, long id) {
-	//
-	// // if(_lastColored != null)
-	// // {
-	// // _lastColored.setBackgroundColor(Color.WHITE);
-	// // _lastColored.invalidate();
-	// // }
-	// // _lastColored = v;
-	// //
-	// // v.setBackgroundColor(Color.BLUE);
-	//
-	// Log.i("GROUPVIEW", "parent == " + groupPosition
-	// + "=  child : ==" + childPosition);
-	//
-	// if (childClickStatus != childPosition) {
-	// childClickStatus = childPosition;
-	//
-	// // Toast.makeText(context, "Parent :" + groupPosition +
-	// // " Child :" + childPosition, Toast.LENGTH_LONG).show();
-	// }
-	//
-	// int iCount;
-	// int iIdx;
-	// EventInfoChild childItem;
-	//
-	// EventDetailInfoAdapter adapter = (EventDetailInfoAdapter) parent
-	// .getExpandableListAdapter();
-	//
-	// iCount = adapter.getChildrenCount(groupPosition);
-	// for (iIdx = 0; iIdx < iCount; ++iIdx) {
-	// childItem = (EventInfoChild) adapter.getChild(
-	// groupPosition, iIdx);
-	// if (childItem != null) {
-	// Log.i("GROUPVIEW", "child item not null");
-	//
-	// if (iIdx == childPosition) {
-	// // Here you would toggle checked state in the data
-	// // for this item
-	// } else {
-	// // Here you would clear checked state in the data
-	// // for this item
-	// }
-	// }
-	// }
-	//
-	// parent.invalidateViews(); // Update the list view
-	//
-	// return false;
-	//
-	// }
-	// });
-	//
-	// }
+		if (resultCode == android.app.Activity.RESULT_OK
+				&& requestCode == REQUEST_CODE) {
+			selectedAddress = (OSMAddress) result_data
+					.getSerializableExtra(Utils.ADDRESS);
+			savePosition(selectedAddress);
+		}
+	}
+
+	private void savePosition(OSMAddress address) {
+		if (address != null) {
+			AutoCompleteTextView location = (AutoCompleteTextView) getActivity()
+					.findViewById(R.id.ev_detail_info_place);
+			Address newAddress = new Address();
+			newAddress.setCitta(address.city());
+			newAddress.setVia(address.getStreet());
+			mEvent.setAddress(newAddress);
+			location.setText(address.getStreet() + " " + address.city());
+			mEvent.setLocation(address.getLocation());
+		}
+	}
 
 	private void setGroupImages() {
 
@@ -639,375 +898,6 @@ public class Fragment_EvDetail_Edit extends Fragment {
 		mEvent = null;
 		mEventId = null;
 	}
-
-	/**
-	 * here should come your data service implementation
-	 * 
-	 * @return
-	 */
-	// private ArrayList<EventInfoParent> getEventDetailData(ExplorerObject
-	// event) {
-	//
-	// // Creating ArrayList of type parent class to store parent class objects
-	// ArrayList<EventInfoParent> list = new ArrayList<EventInfoParent>();
-	//
-	// for (int i = 1; i < 5; i++) {
-	// // Create parent class object
-	// EventInfoParent parent = new EventInfoParent();
-	//
-	// if (event.getImage() != null) {
-	// Log.i("EVENT",
-	// "Fragment_EvDetail_Info --> image: " + event.getImage()
-	// + "!!");
-	// }
-	// //
-	// //
-	// // if (event.getCategory() != null) {
-	// // Log.i("EVENT", "Fragment_EvDetail_Info --> Category: " +
-	// // event.getCategory() + "!!");
-	// // }
-	// //
-	// // if (event.getOrigin() != null) {
-	// // Log.i("EVENT", "Fragment_EvDetail_Info --> Origin: " +
-	// // event.getOrigin() + "!!");
-	// // }
-	// //
-	// // if (event.getLocation() != null) {
-	// // Log.i("EVENT", "Fragment_EvDetail_Info --> Location: " +
-	// // event.getLocation() + "!!");
-	// // }
-	//
-	// // if (event.getCommunityData().getTags() != null) {
-	// // Log.i("EVENT", "Fragment_EvDetail_Info --> TAGS: "
-	// // + event.getCommunityData().getTags() + "!!");
-	// // } else
-	// // Log.i("EVENT", "Fragment_EvDetail_Info --> TAGS NULL!!");
-	//
-	// // Set values in parent class object
-	// if (i == 1) { // field DOVE e QUANDO
-	// parent.setName("" + i);
-	// parent.setText1("Dove e quando");
-	// parent.setChildren(new ArrayList<EventInfoChild>());
-	//
-	// if (event.getWhenWhere() != null) {
-	// Log.i("EVENT", "Fragment_EvDetail_Info --> WhenWhere: "
-	// + event.getWhenWhere() + "!!");
-	// EventInfoChild child = new EventInfoChild();
-	// child.setName("whenwhere");
-	// child.setText(event.getWhenWhere());
-	// child.setType(0);
-	// parent.getChildren().add(child);
-	// }
-	//
-	// Address address = event.getAddress();
-	// if (address != null) {
-	//
-	// String place = (address.getLuogo() != null) ? (String) address
-	// .getLuogo() : null;
-	//
-	// String street = (address.getVia() != null) ? (String) address
-	// .getVia() : null;
-	//
-	// String city = (address.getCitta() != null) ? (String) address
-	// .getCitta() : null;
-	//
-	// String addressStr = "";
-	//
-	// if ((place != null) && (!place.matches("")))
-	// addressStr = addressStr + place;
-	//
-	// if ((street != null) && (!street.matches("")))
-	// addressStr = addressStr + ", " + street;
-	//
-	// if ((city != null) && (!city.matches("")))
-	// addressStr = addressStr + ", " + city;
-	// // to be enabled again when on the server side there will be
-	// // distinction between street and city
-	// // else
-	// // addressStr = addressStr +
-	// // context.getString(R.string.city_hint);
-	//
-	// if (addressStr.startsWith(","))
-	// addressStr = addressStr.substring(1);
-	//
-	// if (addressStr.length() == 0)
-	// addressStr = context.getString(R.string.city_hint);
-	//
-	// // Create Child class object
-	// EventInfoChild child = new EventInfoChild();
-	// child.setName("address");
-	// // child.setText(getResources().getString(R.string.address)
-	// // + ": " + addressStr);
-	// child.setText(addressStr);
-	//
-	// child.setType(0);
-	// child.setLeftIconId(R.drawable.ic_action_place);
-	// parent.getChildren().add(child);
-	// }
-	//
-	// if ((event.getFromTime() != null) && (event.getFromTime() != 0)) {
-	// String[] fromDateTime = Utils.getDateTimeString(
-	// this.context, event.getFromTime(),
-	// Utils.DATETIME_FORMAT, false, true);
-	// EventInfoChild child = new EventInfoChild();
-	// child.setName(getResources().getString(R.string.start_date));
-	// if (!fromDateTime[1].matches("")) {
-	// child.setText(getResources().getString(
-	// R.string.date_with_time, fromDateTime[0],
-	// fromDateTime[1]));
-	// } else
-	// child.setText(fromDateTime[0]);
-	//
-	// child.setType(0);
-	// child.setLeftIconId(R.drawable.ic_start);
-	// parent.getChildren().add(child);
-	// }
-	//
-	// if ((event.getToTime() != null) && (event.getToTime() != 0)) {
-	// String[] toDateTime = Utils.getDateTimeString(this.context,
-	// event.getToTime(), Utils.DATETIME_FORMAT, false,
-	// true);
-	// EventInfoChild child = new EventInfoChild();
-	// child.setName(getResources().getString(R.string.end_date));
-	//
-	// if (!toDateTime[1].matches("")) {
-	// child.setText(getResources().getString(
-	// R.string.date_with_time, toDateTime[0],
-	// toDateTime[1]));
-	//
-	// } else
-	// child.setText(toDateTime[0]);
-	//
-	// Log.i("EVENT", "Fragment_EvDetail_Info --> toTime: "
-	// + child.getText() + "!!");
-	// child.setType(0);
-	// child.setLeftIconId(R.drawable.ic_end);
-	//
-	// parent.getChildren().add(child);
-	//
-	// // compute duration or get in from the Explorer Object when
-	// // there will be such info!!!
-	// // String duration = null;
-	// // if (duration != null) {
-	// // child = new EventInfoChild();
-	// // child.setName(getResources().getString(R.string.duration));
-	// // child.setText("Durata: " + duration);
-	// // child.setType(0);
-	// // parent.getChildren().add(child);
-	// // }
-	// }
-	// } else if (i == 2) { // field COSA
-	// parent.setName("" + i);
-	// parent.setText1("Cosa");
-	// parent.setChildren(new ArrayList<EventInfoChild>());
-	// if (event.getDescription() != null) {
-	// Log.i("EVENT", "Fragment_EvDetail_Info --> description: "
-	// + event.getDescription() + "!!");
-	// String desc = event.getDescription();
-	// EventInfoChild child = new EventInfoChild();
-	// child.setName("Description");
-	// child.setText(desc);
-	// child.setType(0);
-	// parent.getChildren().add(child);
-	// } else {
-	// emptyFields(parent);
-	//
-	// }
-	// } else if (i == 3) { // field CONTATTI
-	// parent.setName("" + i);
-	// parent.setText1("Contatti");
-	// parent.setChildren(new ArrayList<EventInfoChild>());
-	// // String[] telList = null;
-	//
-	// // set the Phone item of type 1
-	// List<String> telephones = event
-	// .getPhoneEmailContacts(Utils.PHONE_CONTACT_TYPE);
-	//
-	// // set the list of phone numbers
-	//
-	// if (telephones != null) {
-	// EventInfoChild telChildLabel = new EventInfoChild();
-	// telChildLabel.setName("Phones");
-	// telChildLabel.setText("Telefono");
-	// telChildLabel.setType(1);
-	// telChildLabel.setTextInBold(true);
-	// telChildLabel.setLeftIconId(R.drawable.ic_action_phone);
-	//
-	// // to be added again when it will be possible to add more
-	// // numbers
-	// // int[] rightIconIds = new int[]{R.drawable.ic_action_new};
-	// // telChildLabel.setRightIconIds(rightIconIds);
-	//
-	// parent.getChildren().add(telChildLabel);
-	// telChildLabel.setDividerHeight(0);
-	// for (String tel : telephones) {
-	// if (!tel.matches("")) {
-	// EventInfoChild child1 = new EventInfoChild();
-	// child1.setName("tel");
-	// child1.setText(tel);
-	// child1.setType(0);
-	// // to be added when it will be possible to
-	// // cancel/edit the single item
-	// // int[] rightIconIds1 = new
-	// // int[]{R.drawable.ic_action_edit,
-	// // R.drawable.ic_action_cancel,
-	// // R.drawable.ic_action_call};
-	// int[] rightIconIds1 = new int[] { R.drawable.ic_action_call };
-	//
-	// child1.setRightIconIds(rightIconIds1);
-	// child1.setDividerHeight(0);
-	//
-	// if (tel == telephones.get(telephones.size() - 1))
-	// child1.setDividerHeight(1);
-	//
-	// parent.getChildren().add(child1);
-	//
-	// }
-	// }
-	// }
-	// // set the Email item of type 1
-	//
-	// List<String> emails = event
-	// .getPhoneEmailContacts(Utils.EMAIL_CONTACT_TYPE);
-	//
-	// if (emails != null) {
-	// EventInfoChild emailChildLabel = new EventInfoChild();
-	// emailChildLabel.setName("Emails");
-	// emailChildLabel.setText("Email");
-	// emailChildLabel.setType(1);
-	// emailChildLabel.setTextInBold(true);
-	// emailChildLabel.setLeftIconId(R.drawable.ic_action_email);
-	//
-	// // to be added again when it will be possible to add more
-	// // emails
-	// // int[] rightIconIdsEmail = new
-	// // int[]{R.drawable.ic_action_new_email};
-	// // emailChildLabel.setRightIconIds(rightIconIdsEmail);
-	//
-	// parent.getChildren().add(emailChildLabel);
-	// emailChildLabel.setDividerHeight(0);
-	// for (String email : emails) {
-	// if (!email.matches("")) {
-	// EventInfoChild child = new EventInfoChild();
-	// child.setName("email");
-	// child.setText(email);
-	// child.setType(0);
-	// // to be added when it will be possible to
-	// // cancel/edit the single item
-	// // int[] rightIconIds2 = new
-	// // int[]{R.drawable.ic_action_edit,
-	// // R.drawable.ic_action_cancel,
-	// // R.drawable.ic_action_email};
-	// int[] rightIconIds2 = new int[] { R.drawable.ic_compose_email };
-	// child.setRightIconIds(rightIconIds2);
-	//
-	// child.setDividerHeight(0);
-	//
-	// if (email == emails.get(emails.size() - 1))
-	// child.setDividerHeight(1);
-	//
-	// parent.getChildren().add(child);
-	// }
-	//
-	// }
-	// }
-	//
-	// if (event.getWebsiteUrl() != null) {
-	// // set the Web Site item of type 0
-	// EventInfoChild siteChildLabel = new EventInfoChild();
-	// siteChildLabel.setName("Website ");
-	// siteChildLabel.setText(event.getWebsiteUrl());
-	// siteChildLabel.setType(0);
-	// siteChildLabel.setTextInBold(true);
-	// siteChildLabel.setLeftIconId(R.drawable.ic_action_web_site);
-	// Log.i("EVENT", "Fragment_EvDetail_Info --> website: "
-	// + siteChildLabel.getText() + "!!");
-	//
-	// parent.getChildren().add(siteChildLabel);
-	// }
-	// // else {
-	// // siteChildLabel.setText("Web Site");
-	// // }
-	//
-	// // set Facebook item of type 0
-	//
-	// if (event.getFacebookUrl() != null) {
-	// EventInfoChild fbChildLabel = new EventInfoChild();
-	// fbChildLabel.setName("Facebook ");
-	// fbChildLabel.setType(0);
-	// fbChildLabel.setTextInBold(true);
-	// fbChildLabel.setLeftIconId(R.drawable.ic_facebook);
-	// Log.i("EVENT", "Fragment_EvDetail_Info --> facebook: "
-	// + fbChildLabel.getText() + "!!");
-	// parent.getChildren().add(fbChildLabel);
-	// // fbChildLabel.setText("<a href=\"" +
-	// // event.getFacebookUrl() + "\">Facebook</a>");
-	// fbChildLabel.setText(event.getFacebookUrl());
-	// }
-	// // else
-	// // {
-	// // fbChildLabel.setText("Facebook");
-	// // }
-	//
-	// // set Twitter item of type 0
-	//
-	// if (event.getTwitterUrl() != null) {
-	// EventInfoChild twitterChildLabel = new EventInfoChild();
-	// twitterChildLabel.setName("Twitter ");
-	// twitterChildLabel.setType(0);
-	// twitterChildLabel.setTextInBold(true);
-	// twitterChildLabel.setLeftIconId(R.drawable.ic_twitter);
-	// Log.i("EVENT", "Fragment_EvDetail_Info --> twitter: "
-	// + twitterChildLabel.getText() + "!!");
-	// parent.getChildren().add(twitterChildLabel);
-	// // twitterChildLabel.setText("<a href=\"" +
-	// // event.getTwitterUrl() + "\">Twitter</a>");
-	// twitterChildLabel.setText(event.getTwitterUrl());
-	//
-	// }
-	// // else
-	// // {
-	// // twitterChildLabel.setText("Twitter ");
-	// // }
-	// if (parent.getChildren().isEmpty()) {
-	// emptyFields(parent);
-	// }
-	// } else if (i == 4) { // field TAGS
-	// parent.setName("" + i);
-	// parent.setText1("Tags");
-	// parent.setChildren(new ArrayList<EventInfoChild>());
-	// List<String> tags = null;
-	// if (event.getCommunityData().getTags() != null
-	// && !event.getCommunityData().getTags().isEmpty()) {
-	// tags = event.getCommunityData().getTags();
-	// for (String tag : tags) {
-	// EventInfoChild child = new EventInfoChild();
-	// child.setName("tag");
-	// child.setText(tag);
-	// child.setType(0);
-	// child.setLeftIconId(R.drawable.ic_action_labels_dark);
-	// parent.getChildren().add(child);
-	// }
-	// } else {
-	// emptyFields(parent);
-	// }
-	// }
-	//
-	// // delete the divider line for the last item of a group
-	//
-	// if (parent.getChildren().size() != 0) {
-	// EventInfoChild lastChild = parent.getChildren().get(
-	// parent.getChildren().size() - 1);
-	// lastChild.setDividerHeight(0);
-	// parent.getChildren().remove(parent.getChildren().size() - 1);
-	// parent.getChildren().add(lastChild);
-	// }
-	//
-	// // Adding Parent class object to ArrayList
-	// list.add(parent);
-	// }
-	// return list;
-	// }
 
 	private void emptyFields(EventInfoParent parent) {
 		EventInfoChild child = new EventInfoChild();
@@ -1034,9 +924,9 @@ public class Fragment_EvDetail_Edit extends Fragment {
 			mEventId = getArguments().getString(Utils.ARG_EVENT_ID);
 		}
 
-		// if (mEvent == null) {
-		mEvent = DTHelper.findEventById(mEventId);
-		// }
+		if (mEvent == null) {
+			mEvent = DTHelper.findEventById(mEventId);
+		}
 
 		return mEvent;
 	}

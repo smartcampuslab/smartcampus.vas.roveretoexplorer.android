@@ -16,6 +16,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -127,39 +128,44 @@ public class Fragment_EvDetail_Info extends Fragment {
 
 	}
 
-//	@Override
-//	public void onPrepareOptionsMenu(Menu menu) {
-//		super.onPrepareOptionsMenu(menu);
-//		menu.clear();
-//		getActivity().getMenuInflater().inflate(R.menu.detail_edit_menu, menu);
-//	}
+	// @Override
+	// public void onPrepareOptionsMenu(Menu menu) {
+	// super.onPrepareOptionsMenu(menu);
+	// menu.clear();
+	// getActivity().getMenuInflater().inflate(R.menu.detail_edit_menu, menu);
+	// }
+
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		super.onCreateOptionsMenu(menu, inflater);
+		inflater.inflate(R.menu.event_detail_info_menu, menu);
+	}
+
 	@Override
 	public void onPrepareOptionsMenu(Menu menu) {
-//		Log.i("MENU", "start on Prepare Options Menu EVENT LISTING frag: "
-//				+ menu.toString());
-		menu.clear();
-		getActivity().getMenuInflater().inflate(R.menu.event_detail_menu, menu);
 		super.onPrepareOptionsMenu(menu);
+		menu.clear();
+		getActivity().getMenuInflater().inflate(R.menu.event_detail_info_menu,
+				menu);
 	}
-	
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		 if (item.getItemId() == R.id.map_view) {
-			 ArrayList<BaseDTObject> list = new ArrayList<BaseDTObject>();
-			 getEvent().setLocation(mEvent.getLocation());
-			 list.add(getEvent());
-			 MapManager.switchToMapView(list, this);
-			 return true;
-			 } else if (item.getItemId() == R.id.direction_action) {
-			 callBringMeThere();
-			
-			 return true;
-			 } else if (item.getItemId() == R.id.edit) {
+		if (item.getItemId() == R.id.map_view) {
+			ArrayList<BaseDTObject> list = new ArrayList<BaseDTObject>();
+			getEvent().setLocation(mEvent.getLocation());
+			list.add(getEvent());
+			MapManager.switchToMapView(list, this);
+			return true;
+		} else if (item.getItemId() == R.id.direction_action) {
+			callBringMeThere();
+
+			return true;
+		} else if (item.getItemId() == R.id.edit) {
 			// call fragment edit with the event for parameter
 			FragmentTransaction fragmentTransaction = getActivity()
 					.getSupportFragmentManager().beginTransaction();
-			Fragment_EventDetails fragment = new Fragment_EventDetails();
+			Fragment_EvDetail_Edit fragment = new Fragment_EvDetail_Edit();
 
 			Bundle args = new Bundle();
 
@@ -176,20 +182,23 @@ public class Fragment_EvDetail_Info extends Fragment {
 		return true;
 
 	}
+
 	protected void callBringMeThere() {
-		 android.location.Address to = new android.location.Address(Locale.getDefault());
-		 to.setLatitude(mEvent.getLocation()[0]);
-		 to.setLongitude(mEvent.getLocation()[1]);
-		 android.location.Address from = null;
-		 GeoPoint mylocation = MapManager.requestMyLocation(getActivity());
-		 if (mylocation != null) {
-		 from = new android.location.Address(Locale.getDefault());
-		 from.setLatitude(mylocation.getLatitudeE6() / 1E6);
-		 from.setLongitude(mylocation.getLongitudeE6() / 1E6);
-		 }
-		 DTHelper.bringmethere(getActivity(), from, to);
-		 LogHelper.sendViaggiaRequest(getActivity());
+		android.location.Address to = new android.location.Address(
+				Locale.getDefault());
+		to.setLatitude(mEvent.getLocation()[0]);
+		to.setLongitude(mEvent.getLocation()[1]);
+		android.location.Address from = null;
+		GeoPoint mylocation = MapManager.requestMyLocation(getActivity());
+		if (mylocation != null) {
+			from = new android.location.Address(Locale.getDefault());
+			from.setLatitude(mylocation.getLatitudeE6() / 1E6);
+			from.setLongitude(mylocation.getLongitudeE6() / 1E6);
+		}
+		DTHelper.bringmethere(getActivity(), from, to);
+		LogHelper.sendViaggiaRequest(getActivity());
 	}
+
 	// private void editField(String field_type) {
 	//
 	// Log.d("FRAGMENT LC", "Fragment_evDetail_Info --> INFO ACTIVITY: " +
@@ -375,15 +384,28 @@ public class Fragment_EvDetail_Info extends Fragment {
 				.getPhoneEmailContacts(Utils.PHONE_CONTACT_TYPE);
 		LinearLayout llTelephone = (LinearLayout) getActivity().findViewById(
 				R.id.ev_detail_placeholder_telephone);
-
+		LinearLayout llTelephoneExtra = (LinearLayout) getActivity()
+				.findViewById(R.id.ev_detail_placeholder_telephone_extra);
 		if (telephones != null) {
 			llTelephone.setVisibility(View.VISIBLE);
-
-			eventPhone.setText(telephones.toString());
+			eventPhone.setText(telephones.get(0));
+			if (telephones.size() > 1) {
+				llTelephoneExtra.setVisibility(View.VISIBLE);
+				for (int i = 1; i < telephones.size(); i++) {
+					final View child = getActivity().getLayoutInflater()
+							.inflate(R.layout.edit_thelephone_extra_info, null);
+					TextView phoneExtra = (TextView) child
+							.findViewById(R.id.ev_detail_info_telephone_extra);
+					phoneExtra.setText(telephones.get(i));
+					llTelephoneExtra.addView(child);
+				}
+			} else {
+				llTelephoneExtra.setVisibility(View.GONE);
+			}
 		} else {
 			llTelephone.setVisibility(View.GONE);
-		}
 
+		}
 		// mails
 		TextView eventMail = (TextView) getActivity().findViewById(
 				R.id.ev_detail_info_mail);
@@ -391,10 +413,24 @@ public class Fragment_EvDetail_Info extends Fragment {
 				.getPhoneEmailContacts(Utils.EMAIL_CONTACT_TYPE);
 		LinearLayout llEmail = (LinearLayout) getActivity().findViewById(
 				R.id.ev_detail_placeholder_mail);
+		LinearLayout llEmailExtra = (LinearLayout) getActivity()
+				.findViewById(R.id.ev_detail_placeholder_mail_extra);
 		if (emails != null) {
 			llEmail.setVisibility(View.VISIBLE);
-
-			eventMail.setText(emails.toString());
+			eventMail.setText(emails.get(0));
+			if (emails.size() > 1) {
+				llEmailExtra.setVisibility(View.VISIBLE);
+				for (int i = 1; i < emails.size(); i++) {
+					final View child = getActivity().getLayoutInflater()
+							.inflate(R.layout.edit_mail_extra_info, null);
+					TextView mailExtra = (TextView) child
+							.findViewById(R.id.ev_detail_info_email_extra);
+					mailExtra.setText(emails.get(i));
+					llEmailExtra.addView(child);
+				}
+			} else {
+				llEmailExtra.setVisibility(View.GONE);
+			}
 		} else {
 			llEmail.setVisibility(View.GONE);
 		}
@@ -485,206 +521,6 @@ public class Fragment_EvDetail_Info extends Fragment {
 		Log.d("FRAGMENT LC", "Fragment_evDetail_Info --> onDetach");
 	}
 
-	// private void setInformationLayout() {
-	// // set cosa
-	// TextView eventWhat = (TextView) getActivity().findViewById(
-	// R.id.event_placeholder_what);
-	// if (mEvent.categoryString(getActivity()) != null) {
-	// eventWhat.setText(mEvent.categoryString(getActivity()));
-	// }
-	// // set categories
-	// TextView eventCategories = (TextView) getActivity().findViewById(
-	// R.id.event_placeholder_category);
-	// if (mEvent.categoryString(getActivity()) != null) {
-	// eventCategories.setText(mEvent.categoryString(getActivity()));
-	// }
-	//
-	// // set when where
-	// TextView eventInformation = (TextView) getActivity().findViewById(
-	// R.id.event_placeholder_information);
-	// if (mEvent.categoryString(getActivity()) != null) {
-	// eventCategories.setText(mEvent.categoryString(getActivity()));
-	// }
-	// // set Time
-	// TextView eventWhen = (TextView) getActivity().findViewById(
-	// R.id.event_placeholder_when);
-	//
-	// if ((mEvent.getFromTime() != null) && (mEvent.getFromTime() != 0)) {
-	// String[] fromDateTime = Utils.getDateTimeString(this.context,
-	// mEvent.getFromTime(), Utils.DATETIME_FORMAT, false, true);
-	//
-	// if (!fromDateTime[1].matches("")) {
-	// eventWhen.setText(getResources().getString(
-	// R.string.date_with_time, fromDateTime[0],
-	// fromDateTime[1]));
-	// } else
-	// eventWhen.setText(fromDateTime[0]);
-	//
-	// }
-	//
-	// if ((mEvent.getToTime() != null) && (mEvent.getToTime() != 0)) {
-	// String[] toDateTime = Utils.getDateTimeString(this.context,
-	// mEvent.getToTime(), Utils.DATETIME_FORMAT, false, true);
-	//
-	// if (!toDateTime[1].matches("")) {
-	// eventWhen.setText(eventWhen.getText()
-	// + " "
-	// + getResources().getString(R.string.date_with_time,
-	// toDateTime[0], toDateTime[1]));
-	//
-	// } else
-	// eventWhen.setText(eventWhen.getText() + " " + toDateTime[0]);
-	// }
-	//
-	// // set Contacts (tel,mail,fb, twitter)
-	// TextView eventPhone = (TextView) getActivity().findViewById(
-	// R.id.event_placeholder_phone);
-	// if ((mEvent.getPhoneEmailContacts(Utils.PHONE_CONTACT_TYPE) != null)) {
-	//
-	// List<String> telephones = mEvent
-	// .getPhoneEmailContacts(Utils.PHONE_CONTACT_TYPE);
-	// eventPhone.setText(telephones.toString());
-	// }
-	//
-	// // temp
-	// TextView eventMail = (TextView) getActivity().findViewById(
-	// R.id.event_placeholder_email);
-	// if (mEvent.getPhoneEmailContacts(Utils.EMAIL_CONTACT_TYPE)!=null) {
-	//
-	// List<String> emails = mEvent
-	// .getPhoneEmailContacts(Utils.EMAIL_CONTACT_TYPE);
-	// eventMail.setText(emails.toString());
-	// }
-	// // temp
-	//
-	// TextView eventFacebook = (TextView) getActivity().findViewById(
-	// R.id.event_placeholder_category);
-	// if (mEvent.getFacebookUrl() != null) {
-	//
-	// eventFacebook.setText(mEvent.getFacebookUrl());
-	// }
-	// TextView eventTwitter = (TextView) getActivity().findViewById(
-	// R.id.event_placeholder_category);
-	// if (mEvent.getTwitterUrl()!= null) {
-	//
-	// eventTwitter.setText(mEvent.getTwitterUrl());
-	// }
-	// }
-
-	// private void setExpandableListView() {
-	//
-	// Log.d("FRAGMENT LC", "Fragment_evDetail_Info --> setExpandableListView");
-	//
-	// // Creating static data in arraylist
-	// ArrayList<EventInfoParent> eventInfoList = getEventDetailData(mEvent);
-	// setGroupImages();
-	//
-	// // attributeGroupList = createAttributeGroupList();
-	// // //eventAttributeCollection =
-	// // createFakeEventDetailCollection(attributeGroupList);
-	// // eventAttributeCollection =
-	// // getEventDetailCollection(attributeGroupList, mEvent);
-	//
-	// // expListView = (ExpandableListView) getActivity().findViewById(
-	// // R.id.event_details_info);
-	// //
-	// // expListView.setChildDivider(null);
-	// // expListView.setChildDivider(getResources().getDrawable(
-	// // R.color.transparent));
-	//
-	// // // header part
-	// // header = getActivity().getLayoutInflater().inflate(
-	// // R.layout.frag_ev_detail_info_header, null);
-	//
-	// // adding header to the list
-	// // if (expListView.getHeaderViewsCount() == 0) {
-	// // expListView.addHeaderView(header);
-	// // expListView.setHeaderDividersEnabled(true);
-	// // }
-	//
-	// if (getArguments() != null) {
-	// // Restore last state for checked position.
-	// mEventId = getArguments().getString(Utils.ARG_EVENT_ID);
-	// indexAdapter = getArguments().getInt(ARG_INDEX);
-	// }
-	//
-	// /* create the adapter is it is the first time you load */
-	// // Adding ArrayList data to ExpandableListView values
-	// parents = eventInfoList;
-	//
-	// if (eventDetailInfoAdapter == null) {
-	// eventDetailInfoAdapter = new EventDetailInfoAdapter(
-	// Fragment_EvDetail_Info.this);
-	//
-	// }
-	// expListView.invalidateViews();
-	// expListView.setAdapter(eventDetailInfoAdapter);
-	//
-	// eventDetailInfoAdapter.notifyDataSetChanged();
-	//
-	// expListView.expandGroup(0);
-	// expListView.expandGroup(1);
-	// expListView.expandGroup(2);
-	// expListView.expandGroup(3);
-	//
-	// // this is not useful now
-	// expListView.setOnChildClickListener(new OnChildClickListener() {
-	//
-	// @Override
-	// public boolean onChildClick(ExpandableListView parent, View v,
-	// int groupPosition, int childPosition, long id) {
-	//
-	// // if(_lastColored != null)
-	// // {
-	// // _lastColored.setBackgroundColor(Color.WHITE);
-	// // _lastColored.invalidate();
-	// // }
-	// // _lastColored = v;
-	// //
-	// // v.setBackgroundColor(Color.BLUE);
-	//
-	// Log.i("GROUPVIEW", "parent == " + groupPosition
-	// + "=  child : ==" + childPosition);
-	//
-	// if (childClickStatus != childPosition) {
-	// childClickStatus = childPosition;
-	//
-	// // Toast.makeText(context, "Parent :" + groupPosition +
-	// // " Child :" + childPosition, Toast.LENGTH_LONG).show();
-	// }
-	//
-	// int iCount;
-	// int iIdx;
-	// EventInfoChild childItem;
-	//
-	// EventDetailInfoAdapter adapter = (EventDetailInfoAdapter) parent
-	// .getExpandableListAdapter();
-	//
-	// iCount = adapter.getChildrenCount(groupPosition);
-	// for (iIdx = 0; iIdx < iCount; ++iIdx) {
-	// childItem = (EventInfoChild) adapter.getChild(
-	// groupPosition, iIdx);
-	// if (childItem != null) {
-	// Log.i("GROUPVIEW", "child item not null");
-	//
-	// if (iIdx == childPosition) {
-	// // Here you would toggle checked state in the data
-	// // for this item
-	// } else {
-	// // Here you would clear checked state in the data
-	// // for this item
-	// }
-	// }
-	// }
-	//
-	// parent.invalidateViews(); // Update the list view
-	//
-	// return false;
-	//
-	// }
-	// });
-	//
-	// }
 
 	private void setGroupImages() {
 
@@ -701,374 +537,7 @@ public class Fragment_EvDetail_Info extends Fragment {
 		mEventId = null;
 	}
 
-	/**
-	 * here should come your data service implementation
-	 * 
-	 * @return
-	 */
-	// private ArrayList<EventInfoParent> getEventDetailData(ExplorerObject
-	// event) {
-	//
-	// // Creating ArrayList of type parent class to store parent class objects
-	// ArrayList<EventInfoParent> list = new ArrayList<EventInfoParent>();
-	//
-	// for (int i = 1; i < 5; i++) {
-	// // Create parent class object
-	// EventInfoParent parent = new EventInfoParent();
-	//
-	// if (event.getImage() != null) {
-	// Log.i("EVENT",
-	// "Fragment_EvDetail_Info --> image: " + event.getImage()
-	// + "!!");
-	// }
-	// //
-	// //
-	// // if (event.getCategory() != null) {
-	// // Log.i("EVENT", "Fragment_EvDetail_Info --> Category: " +
-	// // event.getCategory() + "!!");
-	// // }
-	// //
-	// // if (event.getOrigin() != null) {
-	// // Log.i("EVENT", "Fragment_EvDetail_Info --> Origin: " +
-	// // event.getOrigin() + "!!");
-	// // }
-	// //
-	// // if (event.getLocation() != null) {
-	// // Log.i("EVENT", "Fragment_EvDetail_Info --> Location: " +
-	// // event.getLocation() + "!!");
-	// // }
-	//
-	// // if (event.getCommunityData().getTags() != null) {
-	// // Log.i("EVENT", "Fragment_EvDetail_Info --> TAGS: "
-	// // + event.getCommunityData().getTags() + "!!");
-	// // } else
-	// // Log.i("EVENT", "Fragment_EvDetail_Info --> TAGS NULL!!");
-	//
-	// // Set values in parent class object
-	// if (i == 1) { // field DOVE e QUANDO
-	// parent.setName("" + i);
-	// parent.setText1("Dove e quando");
-	// parent.setChildren(new ArrayList<EventInfoChild>());
-	//
-	// if (event.getWhenWhere() != null) {
-	// Log.i("EVENT", "Fragment_EvDetail_Info --> WhenWhere: "
-	// + event.getWhenWhere() + "!!");
-	// EventInfoChild child = new EventInfoChild();
-	// child.setName("whenwhere");
-	// child.setText(event.getWhenWhere());
-	// child.setType(0);
-	// parent.getChildren().add(child);
-	// }
-	//
-	// Address address = event.getAddress();
-	// if (address != null) {
-	//
-	// String place = (address.getLuogo() != null) ? (String) address
-	// .getLuogo() : null;
-	//
-	// String street = (address.getVia() != null) ? (String) address
-	// .getVia() : null;
-	//
-	// String city = (address.getCitta() != null) ? (String) address
-	// .getCitta() : null;
-	//
-	// String addressStr = "";
-	//
-	// if ((place != null) && (!place.matches("")))
-	// addressStr = addressStr + place;
-	//
-	// if ((street != null) && (!street.matches("")))
-	// addressStr = addressStr + ", " + street;
-	//
-	// if ((city != null) && (!city.matches("")))
-	// addressStr = addressStr + ", " + city;
-	// // to be enabled again when on the server side there will be
-	// // distinction between street and city
-	// // else
-	// // addressStr = addressStr +
-	// // context.getString(R.string.city_hint);
-	//
-	// if (addressStr.startsWith(","))
-	// addressStr = addressStr.substring(1);
-	//
-	// if (addressStr.length() == 0)
-	// addressStr = context.getString(R.string.city_hint);
-	//
-	// // Create Child class object
-	// EventInfoChild child = new EventInfoChild();
-	// child.setName("address");
-	// // child.setText(getResources().getString(R.string.address)
-	// // + ": " + addressStr);
-	// child.setText(addressStr);
-	//
-	// child.setType(0);
-	// child.setLeftIconId(R.drawable.ic_action_place);
-	// parent.getChildren().add(child);
-	// }
-	//
-	// if ((event.getFromTime() != null) && (event.getFromTime() != 0)) {
-	// String[] fromDateTime = Utils.getDateTimeString(
-	// this.context, event.getFromTime(),
-	// Utils.DATETIME_FORMAT, false, true);
-	// EventInfoChild child = new EventInfoChild();
-	// child.setName(getResources().getString(R.string.start_date));
-	// if (!fromDateTime[1].matches("")) {
-	// child.setText(getResources().getString(
-	// R.string.date_with_time, fromDateTime[0],
-	// fromDateTime[1]));
-	// } else
-	// child.setText(fromDateTime[0]);
-	//
-	// child.setType(0);
-	// child.setLeftIconId(R.drawable.ic_start);
-	// parent.getChildren().add(child);
-	// }
-	//
-	// if ((event.getToTime() != null) && (event.getToTime() != 0)) {
-	// String[] toDateTime = Utils.getDateTimeString(this.context,
-	// event.getToTime(), Utils.DATETIME_FORMAT, false,
-	// true);
-	// EventInfoChild child = new EventInfoChild();
-	// child.setName(getResources().getString(R.string.end_date));
-	//
-	// if (!toDateTime[1].matches("")) {
-	// child.setText(getResources().getString(
-	// R.string.date_with_time, toDateTime[0],
-	// toDateTime[1]));
-	//
-	// } else
-	// child.setText(toDateTime[0]);
-	//
-	// Log.i("EVENT", "Fragment_EvDetail_Info --> toTime: "
-	// + child.getText() + "!!");
-	// child.setType(0);
-	// child.setLeftIconId(R.drawable.ic_end);
-	//
-	// parent.getChildren().add(child);
-	//
-	// // compute duration or get in from the Explorer Object when
-	// // there will be such info!!!
-	// // String duration = null;
-	// // if (duration != null) {
-	// // child = new EventInfoChild();
-	// // child.setName(getResources().getString(R.string.duration));
-	// // child.setText("Durata: " + duration);
-	// // child.setType(0);
-	// // parent.getChildren().add(child);
-	// // }
-	// }
-	// } else if (i == 2) { // field COSA
-	// parent.setName("" + i);
-	// parent.setText1("Cosa");
-	// parent.setChildren(new ArrayList<EventInfoChild>());
-	// if (event.getDescription() != null) {
-	// Log.i("EVENT", "Fragment_EvDetail_Info --> description: "
-	// + event.getDescription() + "!!");
-	// String desc = event.getDescription();
-	// EventInfoChild child = new EventInfoChild();
-	// child.setName("Description");
-	// child.setText(desc);
-	// child.setType(0);
-	// parent.getChildren().add(child);
-	// } else {
-	// emptyFields(parent);
-	//
-	// }
-	// } else if (i == 3) { // field CONTATTI
-	// parent.setName("" + i);
-	// parent.setText1("Contatti");
-	// parent.setChildren(new ArrayList<EventInfoChild>());
-	// // String[] telList = null;
-	//
-	// // set the Phone item of type 1
-	// List<String> telephones = event
-	// .getPhoneEmailContacts(Utils.PHONE_CONTACT_TYPE);
-	//
-	// // set the list of phone numbers
-	//
-	// if (telephones != null) {
-	// EventInfoChild telChildLabel = new EventInfoChild();
-	// telChildLabel.setName("Phones");
-	// telChildLabel.setText("Telefono");
-	// telChildLabel.setType(1);
-	// telChildLabel.setTextInBold(true);
-	// telChildLabel.setLeftIconId(R.drawable.ic_action_phone);
-	//
-	// // to be added again when it will be possible to add more
-	// // numbers
-	// // int[] rightIconIds = new int[]{R.drawable.ic_action_new};
-	// // telChildLabel.setRightIconIds(rightIconIds);
-	//
-	// parent.getChildren().add(telChildLabel);
-	// telChildLabel.setDividerHeight(0);
-	// for (String tel : telephones) {
-	// if (!tel.matches("")) {
-	// EventInfoChild child1 = new EventInfoChild();
-	// child1.setName("tel");
-	// child1.setText(tel);
-	// child1.setType(0);
-	// // to be added when it will be possible to
-	// // cancel/edit the single item
-	// // int[] rightIconIds1 = new
-	// // int[]{R.drawable.ic_action_edit,
-	// // R.drawable.ic_action_cancel,
-	// // R.drawable.ic_action_call};
-	// int[] rightIconIds1 = new int[] { R.drawable.ic_action_call };
-	//
-	// child1.setRightIconIds(rightIconIds1);
-	// child1.setDividerHeight(0);
-	//
-	// if (tel == telephones.get(telephones.size() - 1))
-	// child1.setDividerHeight(1);
-	//
-	// parent.getChildren().add(child1);
-	//
-	// }
-	// }
-	// }
-	// // set the Email item of type 1
-	//
-	// List<String> emails = event
-	// .getPhoneEmailContacts(Utils.EMAIL_CONTACT_TYPE);
-	//
-	// if (emails != null) {
-	// EventInfoChild emailChildLabel = new EventInfoChild();
-	// emailChildLabel.setName("Emails");
-	// emailChildLabel.setText("Email");
-	// emailChildLabel.setType(1);
-	// emailChildLabel.setTextInBold(true);
-	// emailChildLabel.setLeftIconId(R.drawable.ic_action_email);
-	//
-	// // to be added again when it will be possible to add more
-	// // emails
-	// // int[] rightIconIdsEmail = new
-	// // int[]{R.drawable.ic_action_new_email};
-	// // emailChildLabel.setRightIconIds(rightIconIdsEmail);
-	//
-	// parent.getChildren().add(emailChildLabel);
-	// emailChildLabel.setDividerHeight(0);
-	// for (String email : emails) {
-	// if (!email.matches("")) {
-	// EventInfoChild child = new EventInfoChild();
-	// child.setName("email");
-	// child.setText(email);
-	// child.setType(0);
-	// // to be added when it will be possible to
-	// // cancel/edit the single item
-	// // int[] rightIconIds2 = new
-	// // int[]{R.drawable.ic_action_edit,
-	// // R.drawable.ic_action_cancel,
-	// // R.drawable.ic_action_email};
-	// int[] rightIconIds2 = new int[] { R.drawable.ic_compose_email };
-	// child.setRightIconIds(rightIconIds2);
-	//
-	// child.setDividerHeight(0);
-	//
-	// if (email == emails.get(emails.size() - 1))
-	// child.setDividerHeight(1);
-	//
-	// parent.getChildren().add(child);
-	// }
-	//
-	// }
-	// }
-	//
-	// if (event.getWebsiteUrl() != null) {
-	// // set the Web Site item of type 0
-	// EventInfoChild siteChildLabel = new EventInfoChild();
-	// siteChildLabel.setName("Website ");
-	// siteChildLabel.setText(event.getWebsiteUrl());
-	// siteChildLabel.setType(0);
-	// siteChildLabel.setTextInBold(true);
-	// siteChildLabel.setLeftIconId(R.drawable.ic_action_web_site);
-	// Log.i("EVENT", "Fragment_EvDetail_Info --> website: "
-	// + siteChildLabel.getText() + "!!");
-	//
-	// parent.getChildren().add(siteChildLabel);
-	// }
-	// // else {
-	// // siteChildLabel.setText("Web Site");
-	// // }
-	//
-	// // set Facebook item of type 0
-	//
-	// if (event.getFacebookUrl() != null) {
-	// EventInfoChild fbChildLabel = new EventInfoChild();
-	// fbChildLabel.setName("Facebook ");
-	// fbChildLabel.setType(0);
-	// fbChildLabel.setTextInBold(true);
-	// fbChildLabel.setLeftIconId(R.drawable.ic_facebook);
-	// Log.i("EVENT", "Fragment_EvDetail_Info --> facebook: "
-	// + fbChildLabel.getText() + "!!");
-	// parent.getChildren().add(fbChildLabel);
-	// // fbChildLabel.setText("<a href=\"" +
-	// // event.getFacebookUrl() + "\">Facebook</a>");
-	// fbChildLabel.setText(event.getFacebookUrl());
-	// }
-	// // else
-	// // {
-	// // fbChildLabel.setText("Facebook");
-	// // }
-	//
-	// // set Twitter item of type 0
-	//
-	// if (event.getTwitterUrl() != null) {
-	// EventInfoChild twitterChildLabel = new EventInfoChild();
-	// twitterChildLabel.setName("Twitter ");
-	// twitterChildLabel.setType(0);
-	// twitterChildLabel.setTextInBold(true);
-	// twitterChildLabel.setLeftIconId(R.drawable.ic_twitter);
-	// Log.i("EVENT", "Fragment_EvDetail_Info --> twitter: "
-	// + twitterChildLabel.getText() + "!!");
-	// parent.getChildren().add(twitterChildLabel);
-	// // twitterChildLabel.setText("<a href=\"" +
-	// // event.getTwitterUrl() + "\">Twitter</a>");
-	// twitterChildLabel.setText(event.getTwitterUrl());
-	//
-	// }
-	// // else
-	// // {
-	// // twitterChildLabel.setText("Twitter ");
-	// // }
-	// if (parent.getChildren().isEmpty()) {
-	// emptyFields(parent);
-	// }
-	// } else if (i == 4) { // field TAGS
-	// parent.setName("" + i);
-	// parent.setText1("Tags");
-	// parent.setChildren(new ArrayList<EventInfoChild>());
-	// List<String> tags = null;
-	// if (event.getCommunityData().getTags() != null
-	// && !event.getCommunityData().getTags().isEmpty()) {
-	// tags = event.getCommunityData().getTags();
-	// for (String tag : tags) {
-	// EventInfoChild child = new EventInfoChild();
-	// child.setName("tag");
-	// child.setText(tag);
-	// child.setType(0);
-	// child.setLeftIconId(R.drawable.ic_action_labels_dark);
-	// parent.getChildren().add(child);
-	// }
-	// } else {
-	// emptyFields(parent);
-	// }
-	// }
-	//
-	// // delete the divider line for the last item of a group
-	//
-	// if (parent.getChildren().size() != 0) {
-	// EventInfoChild lastChild = parent.getChildren().get(
-	// parent.getChildren().size() - 1);
-	// lastChild.setDividerHeight(0);
-	// parent.getChildren().remove(parent.getChildren().size() - 1);
-	// parent.getChildren().add(lastChild);
-	// }
-	//
-	// // Adding Parent class object to ArrayList
-	// list.add(parent);
-	// }
-	// return list;
-	// }
+
 
 	private void emptyFields(EventInfoParent parent) {
 		EventInfoChild child = new EventInfoChild();

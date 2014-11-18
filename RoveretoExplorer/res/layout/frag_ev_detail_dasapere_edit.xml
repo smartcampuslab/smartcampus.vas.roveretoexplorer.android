@@ -1,81 +1,165 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/LinearLayout1"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/scrollView1"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
-
-    <TextView
-        android:id="@+id/toknow_label_textview"
-        android:layout_width="match_parent"
-        android:layout_height="32dp"
-        android:layout_marginTop="4dp"
-        android:background="@color/jungle_green"
-        android:gravity="center_vertical"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:text="@string/toknow_label_new"
-        android:textColor="@color/sc_light_gray" />
+    android:layout_height="match_parent" >
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="vertical"
-        android:padding="8dp" >
-
-        <TextView
-            android:id="@+id/toknow_label_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="@string/toknow_label_title"
-            android:textColor="@color/jungle_green"
-            android:textStyle="bold" />
-
-        <EditText
-            android:id="@+id/toknow_edittext_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="text" />
-
-        <TextView
-            android:id="@+id/toknow_label_content"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="@string/toknow_label_content"
-            android:textColor="@color/jungle_green"
-            android:textStyle="bold" />
-
-        <EditText
-            android:id="@+id/toknow_edittext_content"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="text" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/choice_buttons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:weightSum="2" >
+        android:background="@android:color/white"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:id="@+id/ev_detail_dasapere_tobring_placeholder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:padding="8dp" >
+
+            <TextView
+                android:id="@+id/ev_detail_dasapere_tobring_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="8dp"
+                android:text="@string/_toknow_to_bring" />
+
+            <EditText
+                android:id="@+id/ev_detail_dasapere_tobring"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="8dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ev_detail_dasapere_place_type_placeholder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:padding="8dp" >
+
+            <TextView
+                android:id="@+id/ev_detail_dasapere_place_type_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="8dp"
+                android:text="@string/_toknow_place_type" />
+
+            <EditText
+                android:id="@+id/ev_detail_dasapere_place_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="8dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ev_detail_dasapere_access_type_placeholder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:padding="8dp" >
+
+            <TextView
+                android:id="@+id/ev_detail_dasapere_access_type_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="8dp"
+                android:text="@string/_toknow_access" />
+
+            <EditText
+                android:id="@+id/ev_detail_dasapere_access_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="8dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ev_detail_dasapere_language_type_placeholder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:padding="8dp" >
+
+            <TextView
+                android:id="@+id/ev_detail_dasapere_language_type_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="8dp"
+                android:text="@string/_toknow_language_main" />
+
+            <EditText
+                android:id="@+id/ev_detail_dasapere_language_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="8dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ev_detail_dasapere_dresscode_type_placeholder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:padding="8dp" >
+
+            <TextView
+                android:id="@+id/ev_detail_dasapere_dresscode_type_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="8dp"
+                android:text="@string/_toknow_clothing" />
+
+            <EditText
+                android:id="@+id/ev_detail_dasapere_dresscode_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="8dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ev_detail_dasapere_probability_type_placeholder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:padding="8dp" >
+
+            <TextView
+                android:id="@+id/ev_detail_dasapere_probability_type_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="8dp"
+                android:text="@string/_toknow_chance" />
+
+            <EditText
+                android:id="@+id/ev_detail_dasapere_probability_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autoLink="phone"
+                android:linksClickable="true"
+                android:paddingLeft="8dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ev_detail_dasapere_extra_type_placeholder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:padding="8dp" />
 
         <Button
-            android:id="@+id/edit_contacts_cancel_button"
-            android:layout_width="wrap_content"
+            android:id="@+id/toKnowAddButton"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@android:string/cancel" />
-
-        <Button
-            android:id="@+id/edit_contacts_modify_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/modify" />
+            android:layout_margin="8dp"
+            android:background="@color/app_default"
+            android:text="@string/toknow_button_add"
+            android:textColor="@android:color/white" />
     </LinearLayout>
 
-</LinearLayout>
+</ScrollView>

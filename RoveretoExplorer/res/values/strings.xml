@@ -87,6 +87,7 @@
 
     <string name="event_create_success">Event successfully created!</string>
     <string name="update_success">Your updates have been saved.</string>
+    <string name="update_failed">Problems trying to update your event.</string>
     <string name="categories_poi_family_audit">\"Family Audit\"</string>
     <string name="categories_poi_summer_holyday">Vacanze al mare</string>
     <string name="categories_poi_new_media">Tavolo \"Nuovi Media\"</string>
@@ -293,5 +294,9 @@ This app is part of the European IES Cities project. May we ask you a few short 
     <string name="no_quiz">No</string>
     <string name="categories_event_all">All events</string>
     <string name="no_empty_comment">Empty comment</string>
-
+    <string name="warning_fill_fields">Fill the extra fields</string>
+    <string name="hint_dasapere_content">Insert here the text</string>
+    <string name="hint_dasapere_name">Add a new information</string>
+    <string name="empty_to_know">Fill the value</string>
+ <string name="empty_da_sapere">No fields available. Add informations</string>
 </resources>

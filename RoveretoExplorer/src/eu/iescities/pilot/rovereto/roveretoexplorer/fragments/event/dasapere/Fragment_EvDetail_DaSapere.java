@@ -15,24 +15,33 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.AbstractAsyncTaskProcessor;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.Utils;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.Constants;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.DTHelper;
+import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.BaseDTObject;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ExplorerObject;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ToKnow;
+import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info.Fragment_EvDetail_Edit;
+import eu.iescities.pilot.rovereto.roveretoexplorer.map.MapManager;
 import eu.trentorise.smartcampus.android.common.SCAsyncTask;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 
 public class Fragment_EvDetail_DaSapere extends ListFragment {
 
-	private static final List<String> CUSTOM_TOKNOW_FIELDS = Arrays.asList(Constants.CUSTOM_TOKNOW_PLACE_TYPE,
-			Constants.CUSTOM_TOKNOW_ACCESS, Constants.CUSTOM_TOKNOW_CHANCE, Constants.CUSTOM_TOKNOW_LANGUAGE_MAIN,
+	private static final List<String> CUSTOM_TOKNOW_FIELDS = Arrays.asList(
+			Constants.CUSTOM_TOKNOW_PLACE_TYPE, Constants.CUSTOM_TOKNOW_ACCESS,
+			Constants.CUSTOM_TOKNOW_CHANCE,
+			Constants.CUSTOM_TOKNOW_LANGUAGE_MAIN,
 			Constants.CUSTOM_TOKNOW_CLOTHING, Constants.CUSTOM_TOKNOW_TO_BRING);
 
 	protected Context mContext;
@@ -51,7 +60,13 @@ public class Fragment_EvDetail_DaSapere extends ListFragment {
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
-		//Log.d("FRAGMENT LC", "Fragment_evDetail_DaSapere --> onAttach");
+		// Log.d("FRAGMENT LC", "Fragment_evDetail_DaSapere --> onAttach");
+	}
+
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		super.onCreateOptionsMenu(menu, inflater);
+		inflater.inflate(R.menu.detail_edit_da_sapere_menu, menu);
 	}
 
 	@Override
@@ -70,95 +85,106 @@ public class Fragment_EvDetail_DaSapere extends ListFragment {
 				Log.d("SCROLLTABS", "onCreate SUBSEQUENT TIME");
 			}
 		}
+		setHasOptionsMenu(true);
+
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
-		//Log.d("FRAGMENT LC", "Fragment_evDetail_DaSapere --> onCreateView");
-		return inflater.inflate(R.layout.frag_ev_detail_dasapere, container, false);
+		// Log.d("FRAGMENT LC", "Fragment_evDetail_DaSapere --> onCreateView");
+		return inflater.inflate(R.layout.frag_ev_detail_dasapere, container,
+				false);
 	}
-
-
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		//Log.d("FRAGMENT LC", "Fragment_evDetail_DaSapere --> onActivityCreated");
+		// Log.d("FRAGMENT LC",
+		// "Fragment_evDetail_DaSapere --> onActivityCreated");
 
 		mEvent = getEvent();
 
-		//adapter = new EventDetailToKnowAdapter(getActivity(), R.layout.event_toknow_row_item, getTag(), mEventId);
-		adapter = new EventDetailToKnowAdapter(getActivity(), R.layout.event_info_child_item, getTag(), mEventId);
+		// adapter = new EventDetailToKnowAdapter(getActivity(),
+		// R.layout.event_toknow_row_item, getTag(), mEventId);
+		adapter = new EventDetailToKnowAdapter(getActivity(),
+				R.layout.event_info_child_item, getTag(), mEvent);
+		getListView().setDividerHeight(0);
 
 
 		getListView().setDivider(null);
-		getListView().setDivider(getResources().getDrawable(R.color.transparent));
+		getListView().setDivider(
+				getResources().getDrawable(R.color.transparent));
 		setListAdapter(adapter);
 
-		//List<ToKnow> toKnowList = Utils.toKnowMapToList(getToKnowEventData());
+		// List<ToKnow> toKnowList =
+		// Utils.toKnowMapToList(getToKnowEventData());
 
 		List<ToKnow> toKnowList = Utils.toKnowMapToList(getToKnowEventData());
-
-		adapter.addAll(toKnowList);
+		if (toKnowList.size()!=0)
+		{adapter.addAll(toKnowList);
 		adapter.notifyDataSetChanged();
+		}
+		else {
+			//no information string
+			TextView emptyDaSapere= (TextView) getActivity().findViewById(R.id.empty_da_sapere_string);
+			emptyDaSapere.setVisibility(View.VISIBLE);
+		}
 
 
-
-		//handle the creation of new type of information by the user
-		Button toKnowAddButton = (Button) getActivity().findViewById(R.id.toKnowAddButton);
-		toKnowAddButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-
-				FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-				Bundle args = new Bundle();
-				String frag_description = null;
-
-				Fragment editFragment = new Fragment_EvDetail_AddNew_FieldType();
-				Log.i("CONTACTS", "EventDetailInfoAdapter --> event selected ID: " + mEventId + "!!");
-				args.putString(Utils.ARG_EVENT_ID, mEventId);
-				frag_description = "event_details_custom_addnew_fieldtype";
-
-				editFragment.setArguments(args);
-				fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-				// fragmentTransaction.detach(this);
-				fragmentTransaction.replace(R.id.content_frame, editFragment, frag_description);
-				fragmentTransaction.addToBackStack(getTag());
-				fragmentTransaction.commit();
-
-
-
-
-				// reset event and event id
-				// mEvent = null;
-				// mEventId = null;
-			}
-		});
 	}
 
+	@Override
+	public void onPrepareOptionsMenu(Menu menu) {
 
+		super.onPrepareOptionsMenu(menu);
+		menu.clear();
+		getActivity().getMenuInflater().inflate(R.menu.detail_edit_da_sapere_menu, menu);
+	}
 
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		 if (item.getItemId() == R.id.edit) {
+			// call fragment edit with the event for parameter
+			FragmentTransaction fragmentTransaction = getActivity()
+					.getSupportFragmentManager().beginTransaction();
+			Fragment_EvDetail_DaSapere_edit fragment = new Fragment_EvDetail_DaSapere_edit();
 
-	private Map<String, List<String>> getToKnowEventData(){
+			Bundle args = new Bundle();
 
+			args.putString(Utils.ARG_EVENT_ID, mEvent.getId());
+			fragment.setArguments(args);
+
+			fragmentTransaction
+					.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+			fragmentTransaction.replace(R.id.content_frame, fragment,
+					"event_edit");
+			fragmentTransaction.addToBackStack(fragment.getTag());
+			fragmentTransaction.commit();
+		}
+		return true;
+
+	}
+
+	private Map<String, List<String>> getToKnowEventData() {
 
 		if (mEvent.getCustomData() == null) {
 			mEvent.setCustomData(new HashMap<String, Object>());
 		}
 
-		Map<String, List<String>> toKnowMap = Utils.getCustomToKnowDataFromEvent(mEvent);
-
+		Map<String, List<String>> toKnowMap = Utils
+				.getCustomToKnowDataFromEvent(mEvent);
 
 		if (toKnowMap == null) {
 
-
 			Map<String, Object> customData = mEvent.getCustomData();
 
-
-			customData.put(Constants.CUSTOM_TOKNOW, new LinkedHashMap<String, List<String>>());
+			customData.put(Constants.CUSTOM_TOKNOW,
+					new LinkedHashMap<String, List<String>>());
 			mEvent.setCustomData(customData);
-			toKnowMap = (Map<String, List<String>>) mEvent.getCustomData().get(Constants.CUSTOM_TOKNOW);
+			toKnowMap = (Map<String, List<String>>) mEvent.getCustomData().get(
+					Constants.CUSTOM_TOKNOW);
 
 		}
 
@@ -166,13 +192,12 @@ public class Fragment_EvDetail_DaSapere extends ListFragment {
 
 			Log.i("DASAPERE", "DaSapere--> toKnowMap EMPTY");
 
-
-
 			try {
 
 				List<ToKnow> toKnowList = new ArrayList<ToKnow>();
 				for (String field : CUSTOM_TOKNOW_FIELDS) {
-					toKnowList.add(ToKnow.newCustomDataAttributeField(field, false, 3));
+					toKnowList.add(ToKnow.newCustomDataAttributeField(field,
+							false, 3));
 				}
 
 				Map<String, Object> customData = new HashMap<String, Object>();
@@ -181,69 +206,68 @@ public class Fragment_EvDetail_DaSapere extends ListFragment {
 				mEvent.setCustomData(customData);
 
 				// persistence
-				new SCAsyncTask<ExplorerObject, Void, Boolean>(getActivity(), new UpdateEventProcessor(getActivity()))
-				.execute(mEvent);
+				new SCAsyncTask<ExplorerObject, Void, Boolean>(getActivity(),
+						new UpdateEventProcessor(getActivity()))
+						.execute(mEvent);
 			} catch (Exception e) {
-				Log.e(getClass().getName(), e.getMessage() != null ? e.getMessage() : "");
+				Log.e(getClass().getName(),
+						e.getMessage() != null ? e.getMessage() : "");
 			}
 		}
 
-
-
-		return toKnowMap;		
+		return toKnowMap;
 	}
-
-
 
 	@Override
 	public void onStart() {
 		super.onStart();
-		//Log.d("FRAGMENT LC", "Fragment_evDetail_DaSapere --> onStart");
+		// Log.d("FRAGMENT LC", "Fragment_evDetail_DaSapere --> onStart");
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-		//Log.d("FRAGMENT LC", "Fragment_evDetail_DaSapere --> onResume");
+		// Log.d("FRAGMENT LC", "Fragment_evDetail_DaSapere --> onResume");
 	}
 
 	@Override
 	public void onPause() {
 		super.onPause();
-		//Log.d("FRAGMENT LC", "Fragment_evDetail_DaSapere --> onPause");
+		// Log.d("FRAGMENT LC", "Fragment_evDetail_DaSapere --> onPause");
 
 	}
 
 	@Override
 	public void onStop() {
 		super.onStop();
-		//Log.d("FRAGMENT LC", "Fragment_evDetail_DaSapere --> onStop");
+		// Log.d("FRAGMENT LC", "Fragment_evDetail_DaSapere --> onStop");
 	}
 
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
-		//Log.d("FRAGMENT LC", "Fragment_evDetail_DaSapere --> onSaveInstanceState");
+		// Log.d("FRAGMENT LC",
+		// "Fragment_evDetail_DaSapere --> onSaveInstanceState");
 
 	}
 
 	@Override
 	public void onDestroyView() {
 		super.onDestroyView();
-		//Log.d("FRAGMENT LC", "Fragment_evDetail_DaSapere --> onDestroyView");
+		// Log.d("FRAGMENT LC", "Fragment_evDetail_DaSapere --> onDestroyView");
 	}
 
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		//Log.d("FRAGMENT LC", "Fragment_evDetail_DaSapere --> onDestroy");
+		// Log.d("FRAGMENT LC", "Fragment_evDetail_DaSapere --> onDestroy");
 
 	}
 
 	@Override
 	public void onDetach() {
 		super.onDetach();
-		//Log.d("FRAGMENT LC", "Fragment_evDetail_DaSapere --> onDetach");
+		// Log.d("FRAGMENT LC", "Fragment_evDetail_DaSapere --> onDetach");
 	}
 
 	private ExplorerObject getEvent() {
@@ -254,16 +278,18 @@ public class Fragment_EvDetail_DaSapere extends ListFragment {
 		return mEvent;
 	}
 
-	private class UpdateEventProcessor extends AbstractAsyncTaskProcessor<ExplorerObject, Boolean> {
+	private class UpdateEventProcessor extends
+			AbstractAsyncTaskProcessor<ExplorerObject, Boolean> {
 
 		public UpdateEventProcessor(Activity activity) {
 			super(activity);
 		}
 
 		@Override
-		public Boolean performAction(ExplorerObject... params) throws SecurityException, Exception {
+		public Boolean performAction(ExplorerObject... params)
+				throws SecurityException, Exception {
 			// to be enabled when the connection with the server is ok
-			return DTHelper.saveEvent(params[0],mContext);
+			return DTHelper.saveEvent(params[0], mContext);
 		}
 
 		@Override
