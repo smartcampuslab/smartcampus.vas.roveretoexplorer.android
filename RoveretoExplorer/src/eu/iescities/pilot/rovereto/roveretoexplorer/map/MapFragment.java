@@ -30,6 +30,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.webkit.WebView.FindListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -58,7 +59,6 @@ import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ExplorerOb
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.EventsListingFragment;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.Fragment_EventDetails;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.search.SearchFragment;
-import eu.iescities.pilot.rovereto.roveretoexplorer.map.MapFilterDialogFragment.REQUEST_TYPE;
 import eu.trentorise.smartcampus.android.common.SCAsyncTask;
 
 public class MapFragment extends Fragment implements MapItemsHandler,
@@ -228,9 +228,14 @@ public class MapFragment extends Fragment implements MapItemsHandler,
 						MapManager.DEFAULT_POINT, MapManager.ZOOM_DEFAULT));
 
 		}
-		((ActionBarActivity) getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor(getResources().getString(R.color.actionbar_default))));
-		((ActionBarActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
-		((ActionBarActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(true);
+		((ActionBarActivity) getActivity()).getSupportActionBar()
+				.setBackgroundDrawable(
+						new ColorDrawable(Color.parseColor(getResources()
+								.getString(R.color.actionbar_default))));
+		((ActionBarActivity) getActivity()).getSupportActionBar()
+				.setDisplayShowTitleEnabled(false);
+		((ActionBarActivity) getActivity()).getSupportActionBar()
+				.setDisplayShowTitleEnabled(true);
 	}
 
 	@Override
@@ -426,7 +431,7 @@ public class MapFragment extends Fragment implements MapItemsHandler,
 		InfoDialog dtoTap = new InfoDialog();
 		dtoTap.setArguments(args);
 		dtoTap.show(getActivity().getSupportFragmentManager(), "me");
-		
+
 	}
 
 	private void onBaseDTObjectsTap(List<BaseDTObject> list) {
@@ -558,10 +563,13 @@ public class MapFragment extends Fragment implements MapItemsHandler,
 
 	private GoogleMap getSupportMap() {
 		if (mMap == null) {
-			if (getFragmentManager().findFragmentById(R.id.map) != null
-					&& getFragmentManager().findFragmentById(R.id.map) instanceof SupportMapFragment) {
-				mMap = ((SupportMapFragment) getFragmentManager()
-						.findFragmentById(R.id.map)).getMap();
+			if (getActivity().getSupportFragmentManager().findFragmentById(
+					R.id.map_explorer) != null
+					&& getActivity().getSupportFragmentManager()
+							.findFragmentById(R.id.map_explorer) instanceof SupportMapFragment) {
+				mMap = ((SupportMapFragment) getActivity()
+						.getSupportFragmentManager().findFragmentById(
+								R.id.map_explorer)).getMap();
 			}
 
 			if (mMap != null) {
@@ -642,8 +650,14 @@ public class MapFragment extends Fragment implements MapItemsHandler,
 			Collection<? extends BaseDTObject> objects) {
 		if (getSupportMap() != null) {
 			this.objects = objects;
+			if (objects.size()>0){
+
 			render(objects);
 			MapManager.fitMapWithOverlays(objects, getSupportMap());
+			}
+			else {
+				Toast.makeText(getActivity(), R.string.no_point_to_show_on_map, Toast.LENGTH_LONG).show();
+			}
 		}
 	}
 

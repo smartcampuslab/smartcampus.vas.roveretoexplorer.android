@@ -48,6 +48,7 @@ import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -308,7 +309,13 @@ public class EventsListingFragment extends Fragment implements
 
 	private void cahngeNewEventinCollection(ExplorerObject new_event) {
 		removeOldSingleEvent(new_event);
-		updateSingleEvent(new_event);
+		if (getArguments().containsKey(SearchFragment.ARG_MY)) {
+			addEvent(new_event, "");
+
+		}
+		else 	{
+			updateSingleEvent(new_event);
+		}
 	}
 
 	private void removeOldSingleEvent(ExplorerObject new_event) {
@@ -449,9 +456,13 @@ public class EventsListingFragment extends Fragment implements
 		public void handleResult(List<ExplorerObject> result) {
 			if (!result.isEmpty()) {
 
-				// order data by date
-				updateCollectionAndGetImages(result);
-				eventsAdapter.setDateGroupList(dateGroupList);
+				if (!getArguments().containsKey(SearchFragment.ARG_MY)) {
+					// order data by date
+					updateCollectionAndGetImages(result);
+					eventsAdapter.setDateGroupList(dateGroupList);
+				} else {
+					updateMyEvents(result);
+				}
 				eventsAdapter.setEventCollection(eventCollection);
 				// eventsAdapter.notifyDataSetInvalidated();
 
@@ -466,6 +477,14 @@ public class EventsListingFragment extends Fragment implements
 				no_result.setVisibility(View.VISIBLE);
 				expListView.setVisibility(View.GONE);
 			}
+
+		}
+
+	}
+
+	private void updateMyEvents(List<ExplorerObject> result) {
+		for (ExplorerObject expObj : result) {
+			addEvent(expObj, "");
 
 		}
 
@@ -535,7 +554,7 @@ public class EventsListingFragment extends Fragment implements
 	}
 
 	private boolean eventPresent(ExplorerObject expObj) {
-		//check if the event is already present in the list 
+		// check if the event is already present in the list
 		return false;
 	}
 
@@ -855,11 +874,13 @@ public class EventsListingFragment extends Fragment implements
 			super.handleSuccess(result);
 			// eventsAdapter.notifyDataSetInvalidated();
 			if (!result.isEmpty()) {
+				if (!getArguments().containsKey(SearchFragment.ARG_MY)) {
 
-				// order data by date
-				updateCollectionAndGetImages(result);
-				eventsAdapter.setDateGroupList(dateGroupList);
-				eventsAdapter.setEventCollection(eventCollection);
+					// order data by date
+					updateCollectionAndGetImages(result);
+					eventsAdapter.setDateGroupList(dateGroupList);
+					eventsAdapter.setEventCollection(eventCollection);
+				}
 				// eventsAdapter.notifyDataSetInvalidated();
 
 				eventsAdapter.notifyDataSetChanged();
@@ -867,11 +888,22 @@ public class EventsListingFragment extends Fragment implements
 				// 0)
 				// expListView.expandGroup(0);
 
+			} else if (getArguments().containsKey(SearchFragment.ARG_MY)) {
+				LinearLayout no_my_event_result = (LinearLayout) getActivity()
+						.findViewById(R.id.my_events_no_results);
+				no_my_event_result.setVisibility(View.VISIBLE);
+				expListView.setVisibility(View.GONE);
+				TextView no_result = (TextView) getActivity().findViewById(
+						R.id.events_no_results);
+				no_result.setVisibility(View.GONE);
 			} else {
 				TextView no_result = (TextView) getActivity().findViewById(
 						R.id.events_no_results);
 				no_result.setVisibility(View.VISIBLE);
 				expListView.setVisibility(View.GONE);
+				LinearLayout no_my_event_result = (LinearLayout) getActivity()
+						.findViewById(R.id.my_events_no_results);
+				no_my_event_result.setVisibility(View.GONE);
 			}
 		}
 	}

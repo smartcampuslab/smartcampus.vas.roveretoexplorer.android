@@ -147,6 +147,12 @@ public class Fragment_EvDetail_Info extends Fragment {
 		menu.clear();
 		getActivity().getMenuInflater().inflate(R.menu.event_detail_info_menu,
 				menu);
+		if (mEvent != null) {
+			if (mEvent.getLocation() == null
+					|| (mEvent.getLocation()[0] == 0 && mEvent.getLocation()[1] == 0)) {
+				menu.getItem(0).setVisible(false);
+			}
+		}
 	}
 
 	@Override
@@ -413,8 +419,8 @@ public class Fragment_EvDetail_Info extends Fragment {
 				.getPhoneEmailContacts(Utils.EMAIL_CONTACT_TYPE);
 		LinearLayout llEmail = (LinearLayout) getActivity().findViewById(
 				R.id.ev_detail_placeholder_mail);
-		LinearLayout llEmailExtra = (LinearLayout) getActivity()
-				.findViewById(R.id.ev_detail_placeholder_mail_extra);
+		LinearLayout llEmailExtra = (LinearLayout) getActivity().findViewById(
+				R.id.ev_detail_placeholder_mail_extra);
 		if (emails != null) {
 			llEmail.setVisibility(View.VISIBLE);
 			eventMail.setText(emails.get(0));
@@ -455,7 +461,7 @@ public class Fragment_EvDetail_Info extends Fragment {
 		String facebook = mEvent.getFacebookUrl();
 		LinearLayout llFacebook = (LinearLayout) getActivity().findViewById(
 				R.id.ev_detail_placeholder_facebook);
-		if (facebook != null && !"http://".equals(facebook)) {
+		if (facebook != null && !"http://".equals(facebook)&&!facebook.isEmpty()) {
 			llFacebook.setVisibility(View.VISIBLE);
 			eventFacebook.setText(facebook);
 		} else {
@@ -468,7 +474,7 @@ public class Fragment_EvDetail_Info extends Fragment {
 		String twitter = mEvent.getTwitterUrl();
 		LinearLayout llTwitter = (LinearLayout) getActivity().findViewById(
 				R.id.ev_detail_placeholder_twitter);
-		if (twitter != null && !"http://".equals(twitter)) {
+		if (twitter != null && !"http://".equals(twitter) && !twitter.isEmpty()) {
 			llTwitter.setVisibility(View.VISIBLE);
 			eventTwitter.setText(twitter);
 		} else {
@@ -521,7 +527,6 @@ public class Fragment_EvDetail_Info extends Fragment {
 		Log.d("FRAGMENT LC", "Fragment_evDetail_Info --> onDetach");
 	}
 
-
 	private void setGroupImages() {
 
 		groupImages = new ArrayList<Integer>();
@@ -536,8 +541,6 @@ public class Fragment_EvDetail_Info extends Fragment {
 		mEvent = null;
 		mEventId = null;
 	}
-
-
 
 	private void emptyFields(EventInfoParent parent) {
 		EventInfoChild child = new EventInfoChild();

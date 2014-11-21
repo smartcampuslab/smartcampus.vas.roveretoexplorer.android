@@ -16,7 +16,6 @@
     <string name="categories_event_altri_eventi">Altri eventi</string>
     <string name="categories_event_today">Eventi di oggi</string>
     <string name="categories_event_my">I miei eventi</string>
-    <string name="categories_story_my">Le mie storie</string>
     <string name="event_no_information">Nessuna informazione disponibile</string>
     <string name="search_txt">Cerca</string>
     <string name="comments">Vedi recensioni</string>
@@ -188,6 +187,14 @@ Quest\'applicazione e\' parte del progetto europeo IES Cities. Possiamo farti qu
     <string name="hint_dasapere_content">Inserisci qui il testo</string>
     <string name="hint_dasapere_name">Aggiungi una nuova informazione</string>
     <string name="empty_to_know">Riempi iil valore</string>
-    <string name="empty_da_sapere">No fields available. Add informations</string>
+    <string name="empty_da_sapere">Nessuna informazione aggiuntiva</string>
+    <string name="empty_add_informations">
+<![CDATA[
+         <p>Tocca <img src = \'empty_info\' /> per aggiungere delle informazioni sull\'evento.</p>
+    ]]>
+    </string>
+    <string name="empty_my_events_1">Non hai ancora deciso di partecipare ad un evento!</string>
+    <string name="empty_my_events_2">Entra nei dettagli di un evento, dì che parteciparai e l\'evento apparirà in questa lista</string>
+    <string name="no_point_to_show_on_map">Nessun event geolocalizzato presente</string>
 
 </resources>

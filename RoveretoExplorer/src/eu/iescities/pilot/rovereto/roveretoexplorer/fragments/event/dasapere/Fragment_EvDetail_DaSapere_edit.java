@@ -450,9 +450,10 @@ public class Fragment_EvDetail_DaSapere_edit extends Fragment {
 			}
 
 			// toast problem and stay here
-			Toast.makeText(getActivity(), R.string.update_failed,
-					Toast.LENGTH_LONG).show();
-
+			else {
+				Toast.makeText(getActivity(), R.string.update_failed,
+						Toast.LENGTH_LONG).show();
+			}
 		}
 	}
 

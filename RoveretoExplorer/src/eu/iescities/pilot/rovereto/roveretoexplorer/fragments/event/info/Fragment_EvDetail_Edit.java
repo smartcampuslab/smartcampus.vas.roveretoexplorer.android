@@ -163,29 +163,31 @@ public class Fragment_EvDetail_Edit extends Fragment {
 
 	private void saveEvent() {
 		// new position is already saved by saveposition
-		
-		
-		
+
 		// save time
-        //update Mevent
-		EditText eventWhenFrom = (EditText) getActivity().findViewById(R.id.ev_detail_info_time_from);
-		EditText eventWhenFromHour = (EditText) getActivity().findViewById(R.id.ev_detail_info_time_hour_from);
+		// update Mevent
+		EditText eventWhenFrom = (EditText) getActivity().findViewById(
+				R.id.ev_detail_info_time_from);
+		EditText eventWhenFromHour = (EditText) getActivity().findViewById(
+				R.id.ev_detail_info_time_hour_from);
 
-        String start_date = eventWhenFrom.getText().toString();
-        String start_date_hour = eventWhenFromHour.getText().toString();
-		
-		
-		
-		mEvent.setFromTime(Utils.toDateTimeLong(Utils.DATE_FORMAT_2_with_dayweek_time, start_date+" "+start_date_hour));
-		EditText eventWhenTo = (EditText) getActivity().findViewById(R.id.ev_detail_info_time_to);
-		EditText eventWhenToHour = (EditText) getActivity().findViewById(R.id.ev_detail_info_time_hour_to);
+		String start_date = eventWhenFrom.getText().toString();
+		String start_date_hour = eventWhenFromHour.getText().toString();
 
-        String stop_date = eventWhenTo.getText().toString();
-        String stop_date_hour = eventWhenToHour.getText().toString();
-		mEvent.setToTime(Utils.toDateTimeLong(Utils.DATE_FORMAT_2_with_dayweek_time, stop_date+" "+stop_date_hour));
-		
-		
-		
+		mEvent.setFromTime(Utils.toDateTimeLong(
+				Utils.DATE_FORMAT_2_with_dayweek_time, start_date + " "
+						+ start_date_hour));
+		EditText eventWhenTo = (EditText) getActivity().findViewById(
+				R.id.ev_detail_info_time_to);
+		EditText eventWhenToHour = (EditText) getActivity().findViewById(
+				R.id.ev_detail_info_time_hour_to);
+
+		String stop_date = eventWhenTo.getText().toString();
+		String stop_date_hour = eventWhenToHour.getText().toString();
+		mEvent.setToTime(Utils.toDateTimeLong(
+				Utils.DATE_FORMAT_2_with_dayweek_time, stop_date + " "
+						+ stop_date_hour));
+
 		// mEvent.set
 		// save phones
 		List<String> phoneList = new ArrayList<String>();
@@ -201,8 +203,8 @@ public class Fragment_EvDetail_Edit extends Fragment {
 			for (int i = 0; i < llphone.getChildCount(); i++) {
 
 				View phoneView = llphone.getChildAt(i);
-				phone = (TextView) phoneView.findViewById(
-						R.id.ev_detail_info_telephone_extra);
+				phone = (TextView) phoneView
+						.findViewById(R.id.ev_detail_info_telephone_extra);
 				if (phone != null && !"".equals(phone.getText().toString())) {
 					phoneList.add(phone.getText().toString());
 				}
@@ -225,8 +227,8 @@ public class Fragment_EvDetail_Edit extends Fragment {
 			for (int i = 0; i < llmail.getChildCount(); i++) {
 
 				View emailView = llmail.getChildAt(i);
-				email = (TextView) emailView.findViewById(
-						R.id.ev_detail_info_mail_extra);
+				email = (TextView) emailView
+						.findViewById(R.id.ev_detail_info_mail_extra);
 				if (email != null && !"".equals(email.getText().toString())) {
 					emailList.add(email.getText().toString());
 				}
@@ -273,14 +275,16 @@ public class Fragment_EvDetail_Edit extends Fragment {
 						// case of problem
 			{
 				// toast updated and go back
-				Toast.makeText(getActivity(), R.string.update_success, Toast.LENGTH_LONG).show();
+				Toast.makeText(getActivity(), R.string.update_success,
+						Toast.LENGTH_LONG).show();
 
 				getActivity().getSupportFragmentManager().popBackStack();
 			}
 
-			// toast problem and stay here
-			Toast.makeText(getActivity(), R.string.update_failed, Toast.LENGTH_LONG).show();
-
+			else {// toast problem and stay here
+				Toast.makeText(getActivity(), R.string.update_failed,
+						Toast.LENGTH_LONG).show();
+			}
 		}
 	}
 
@@ -426,52 +430,53 @@ public class Fragment_EvDetail_Edit extends Fragment {
 			String[] fromDateTime = Utils.getDateTimeString(this.context,
 					mEvent.getFromTime(), Utils.DATETIME_FORMAT, false, true);
 
-				eventWhenFrom.setText(fromDateTime[0]);
+			eventWhenFrom.setText(fromDateTime[0]);
 
 		}
-		
+
 		final Calendar myCalendar = Calendar.getInstance();
 		final DatePickerDialog.OnDateSetListener fromDate = new DatePickerDialog.OnDateSetListener() {
 
-		    @Override
-		    public void onDateSet(DatePicker view, int year, int monthOfYear,
-		            int dayOfMonth) {
-		        // TODO Auto-generated method stub
-		        myCalendar.set(Calendar.YEAR, year);
-		        myCalendar.set(Calendar.MONTH, monthOfYear);
-		        myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-		        updateLabel();
-		    }
-		    private void updateLabel() {
-		        eventWhenFrom.setText(Utils.DATE_FORMAT_2_with_dayweek.format(myCalendar.getTime()));
+			@Override
+			public void onDateSet(DatePicker view, int year, int monthOfYear,
+					int dayOfMonth) {
+				// TODO Auto-generated method stub
+				myCalendar.set(Calendar.YEAR, year);
+				myCalendar.set(Calendar.MONTH, monthOfYear);
+				myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+				updateLabel();
+			}
 
-		        }
+			private void updateLabel() {
+				eventWhenFrom.setText(Utils.DATE_FORMAT_2_with_dayweek
+						.format(myCalendar.getTime()));
+
+			}
 		};
-		
+
 		eventWhenFrom.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				new DatePickerDialog(getActivity(), fromDate, myCalendar
-	                    .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-	                    myCalendar.get(Calendar.DAY_OF_MONTH)).show();				
+						.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+						myCalendar.get(Calendar.DAY_OF_MONTH)).show();
 			}
 		});
-		eventWhenFrom.setOnFocusChangeListener(new OnFocusChangeListener()
-		{
-		    @Override
-		    public void onFocusChange(View v, boolean isFocus) 
-		    {
-		        if (isFocus)
-		        {
-		           new DatePickerDialog(getActivity(), fromDate, myCalendar
-		                    .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-		                    myCalendar.get(Calendar.DAY_OF_MONTH)).show();
-		        }
+		eventWhenFrom.setOnFocusChangeListener(new OnFocusChangeListener() {
+			@Override
+			public void onFocusChange(View v, boolean isFocus) {
+				if (isFocus) {
+					new DatePickerDialog(getActivity(), fromDate, myCalendar
+							.get(Calendar.YEAR),
+							myCalendar.get(Calendar.MONTH), myCalendar
+									.get(Calendar.DAY_OF_MONTH)).show();
+				}
 			}
 		});
-		
-		final EditText eventWhenFromHour = (EditText) getActivity().findViewById(R.id.ev_detail_info_time_hour_from);
+
+		final EditText eventWhenFromHour = (EditText) getActivity()
+				.findViewById(R.id.ev_detail_info_time_hour_from);
 
 		if ((mEvent.getFromTime() != null) && (mEvent.getFromTime() != 0)) {
 			String[] fromDateTime = Utils.getDateTimeString(this.context,
@@ -480,42 +485,42 @@ public class Fragment_EvDetail_Edit extends Fragment {
 			eventWhenFromHour.setText(fromDateTime[1]);
 
 		}
-		
+
 		final TimePickerDialog.OnTimeSetListener fromHour = new TimePickerDialog.OnTimeSetListener() {
-			
+
 			@Override
 			public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-		        myCalendar.set(Calendar.HOUR, hourOfDay);
-		        myCalendar.set(Calendar.MINUTE, minute);
-		        updateLabel();
-		    }
-		    private void updateLabel() {
-		        eventWhenFromHour.setText(Utils.DATETIME_FORMAT_HOUR.format(myCalendar.getTime()));
-		        }
-			};
-		
-			eventWhenFromHour.setOnClickListener(new OnClickListener() {
-			
+				myCalendar.set(Calendar.HOUR, hourOfDay);
+				myCalendar.set(Calendar.MINUTE, minute);
+				updateLabel();
+			}
+
+			private void updateLabel() {
+				eventWhenFromHour.setText(Utils.DATETIME_FORMAT_HOUR
+						.format(myCalendar.getTime()));
+			}
+		};
+
+		eventWhenFromHour.setOnClickListener(new OnClickListener() {
+
 			@Override
 			public void onClick(View v) {
-				new TimePickerDialog(getActivity(),fromHour, myCalendar
-	                    .get(Calendar.HOUR), myCalendar.get(Calendar.MINUTE),true).show();				
+				new TimePickerDialog(getActivity(), fromHour, myCalendar
+						.get(Calendar.HOUR), myCalendar.get(Calendar.MINUTE),
+						true).show();
 			}
 		});
-			eventWhenFromHour.setOnFocusChangeListener(new OnFocusChangeListener()
-		{
-		    @Override
-		    public void onFocusChange(View v, boolean isFocus) 
-		    {
-		        if (isFocus)
-		        {
-		        	new TimePickerDialog(getActivity(),fromHour, myCalendar
-		                    .get(Calendar.HOUR), myCalendar.get(Calendar.MINUTE),true).show();	
-		        }
+		eventWhenFromHour.setOnFocusChangeListener(new OnFocusChangeListener() {
+			@Override
+			public void onFocusChange(View v, boolean isFocus) {
+				if (isFocus) {
+					new TimePickerDialog(getActivity(), fromHour, myCalendar
+							.get(Calendar.HOUR), myCalendar
+							.get(Calendar.MINUTE), true).show();
+				}
 			}
 		});
 
-	    
 		final EditText eventWhenTo = (EditText) getActivity().findViewById(
 				R.id.ev_detail_info_time_to);
 		LinearLayout llTimeTo = (LinearLayout) getActivity().findViewById(
@@ -525,58 +530,59 @@ public class Fragment_EvDetail_Edit extends Fragment {
 			String[] toDateTime = Utils.getDateTimeString(this.context,
 					mEvent.getToTime(), Utils.DATETIME_FORMAT, false, true);
 
-//			if (toDateTime[1].matches("")|| toDateTime[1]==null) {
-//				llTimeTo.setVisibility(View.GONE);
-//			} else
-				eventWhenTo.setText(toDateTime[0]);
+			// if (toDateTime[1].matches("")|| toDateTime[1]==null) {
+			// llTimeTo.setVisibility(View.GONE);
+			// } else
+			eventWhenTo.setText(toDateTime[0]);
 
 		}
 		final DatePickerDialog.OnDateSetListener toDate = new DatePickerDialog.OnDateSetListener() {
 
-		    @Override
-		    public void onDateSet(DatePicker view, int year, int monthOfYear,
-		            int dayOfMonth) {
-		        // TODO Auto-generated method stub
-		        myCalendar.set(Calendar.YEAR, year);
-		        myCalendar.set(Calendar.MONTH, monthOfYear);
-		        myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-		        updateLabel();
-		    }
-		    private void updateLabel() {
+			@Override
+			public void onDateSet(DatePicker view, int year, int monthOfYear,
+					int dayOfMonth) {
+				// TODO Auto-generated method stub
+				myCalendar.set(Calendar.YEAR, year);
+				myCalendar.set(Calendar.MONTH, monthOfYear);
+				myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+				updateLabel();
+			}
 
-//		        String myFormat = "MM/dd/yy"; //In which you need put here
-//		        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+			private void updateLabel() {
 
-		        eventWhenTo.setText(Utils.DATE_FORMAT_2_with_dayweek.format(myCalendar.getTime()));
-		        }
+				// String myFormat = "MM/dd/yy"; //In which you need put here
+				// SimpleDateFormat sdf = new SimpleDateFormat(myFormat,
+				// Locale.US);
+
+				eventWhenTo.setText(Utils.DATE_FORMAT_2_with_dayweek
+						.format(myCalendar.getTime()));
+			}
 		};
-		
-		
+
 		eventWhenTo.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				new DatePickerDialog(getActivity(), toDate, myCalendar
-	                    .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-	                    myCalendar.get(Calendar.DAY_OF_MONTH)).show();				
-			}
-		});
-		
-		eventWhenTo.setOnFocusChangeListener(new OnFocusChangeListener()
-		{
-		    @Override
-		    public void onFocusChange(View v, boolean isFocus) 
-		    {
-		        if (isFocus)
-		        {
-		           new DatePickerDialog(getActivity(), toDate, myCalendar
-		                    .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-		                    myCalendar.get(Calendar.DAY_OF_MONTH)).show();
-		        }
+						.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+						myCalendar.get(Calendar.DAY_OF_MONTH)).show();
 			}
 		});
 
-		final EditText eventWhenToHour = (EditText) getActivity().findViewById(R.id.ev_detail_info_time_hour_to);
+		eventWhenTo.setOnFocusChangeListener(new OnFocusChangeListener() {
+			@Override
+			public void onFocusChange(View v, boolean isFocus) {
+				if (isFocus) {
+					new DatePickerDialog(getActivity(), toDate, myCalendar
+							.get(Calendar.YEAR),
+							myCalendar.get(Calendar.MONTH), myCalendar
+									.get(Calendar.DAY_OF_MONTH)).show();
+				}
+			}
+		});
+
+		final EditText eventWhenToHour = (EditText) getActivity().findViewById(
+				R.id.ev_detail_info_time_hour_to);
 
 		if ((mEvent.getToTime() != null) && (mEvent.getToTime() != 0)) {
 			String[] toDateTime = Utils.getDateTimeString(this.context,
@@ -585,43 +591,42 @@ public class Fragment_EvDetail_Edit extends Fragment {
 			eventWhenToHour.setText(toDateTime[1]);
 
 		}
-		
+
 		final TimePickerDialog.OnTimeSetListener toHour = new TimePickerDialog.OnTimeSetListener() {
-			
+
 			@Override
 			public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-		        myCalendar.set(Calendar.HOUR, hourOfDay);
-		        myCalendar.set(Calendar.MINUTE, minute);
-		        updateLabel();
-		    }
-		    private void updateLabel() {
-		        eventWhenToHour.setText(Utils.DATETIME_FORMAT_HOUR.format(myCalendar.getTime()));
-		        }
-			};
-		
-			eventWhenToHour.setOnClickListener(new OnClickListener() {
-			
+				myCalendar.set(Calendar.HOUR, hourOfDay);
+				myCalendar.set(Calendar.MINUTE, minute);
+				updateLabel();
+			}
+
+			private void updateLabel() {
+				eventWhenToHour.setText(Utils.DATETIME_FORMAT_HOUR
+						.format(myCalendar.getTime()));
+			}
+		};
+
+		eventWhenToHour.setOnClickListener(new OnClickListener() {
+
 			@Override
 			public void onClick(View v) {
-				new TimePickerDialog(getActivity(),toHour, myCalendar
-	                    .get(Calendar.HOUR), myCalendar.get(Calendar.MINUTE),true).show();				
+				new TimePickerDialog(getActivity(), toHour, myCalendar
+						.get(Calendar.HOUR), myCalendar.get(Calendar.MINUTE),
+						true).show();
 			}
 		});
-			eventWhenToHour.setOnFocusChangeListener(new OnFocusChangeListener()
-		{
-		    @Override
-		    public void onFocusChange(View v, boolean isFocus) 
-		    {
-		        if (isFocus)
-		        {
-		        	new TimePickerDialog(getActivity(),toHour, myCalendar
-		                    .get(Calendar.HOUR), myCalendar.get(Calendar.MINUTE),true).show();	
-		        }
+		eventWhenToHour.setOnFocusChangeListener(new OnFocusChangeListener() {
+			@Override
+			public void onFocusChange(View v, boolean isFocus) {
+				if (isFocus) {
+					new TimePickerDialog(getActivity(), toHour, myCalendar
+							.get(Calendar.HOUR), myCalendar
+							.get(Calendar.MINUTE), true).show();
+				}
 			}
 		});
-		
-		
-		
+
 		// set Contacts (tel,mail,fb, twitter)
 		TextView eventPhone = (TextView) getActivity().findViewById(
 				R.id.ev_detail_info_telephone);

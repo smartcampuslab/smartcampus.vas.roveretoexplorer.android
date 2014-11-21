@@ -9,30 +9,28 @@ import java.util.Map;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.AbstractAsyncTaskProcessor;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.Utils;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.Constants;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.DTHelper;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.BaseDTObject;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ExplorerObject;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ToKnow;
-import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.info.Fragment_EvDetail_Edit;
-import eu.iescities.pilot.rovereto.roveretoexplorer.map.MapManager;
 import eu.trentorise.smartcampus.android.common.SCAsyncTask;
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 
@@ -122,14 +120,19 @@ public class Fragment_EvDetail_DaSapere extends ListFragment {
 		// Utils.toKnowMapToList(getToKnowEventData());
 
 		List<ToKnow> toKnowList = Utils.toKnowMapToList(getToKnowEventData());
+		LinearLayout emptyDaSapere= (LinearLayout) getActivity().findViewById(R.id.empty_da_sapere);
+
 		if (toKnowList.size()!=0)
-		{adapter.addAll(toKnowList);
+		{
+		adapter.addAll(toKnowList);
 		adapter.notifyDataSetChanged();
+		emptyDaSapere.setVisibility(View.GONE);
 		}
 		else {
 			//no information string
-			TextView emptyDaSapere= (TextView) getActivity().findViewById(R.id.empty_da_sapere_string);
 			emptyDaSapere.setVisibility(View.VISIBLE);
+			TextView message = (TextView) getActivity().findViewById(R.id.empty_add_info);  
+			message.setText(Html.fromHtml(getString(R.string.empty_add_informations),new ImageGetter(),null));
 		}
 
 
@@ -307,5 +310,22 @@ public class Fragment_EvDetail_DaSapere extends ListFragment {
 			}
 		}
 	}
+	public class ImageGetter implements Html.ImageGetter {
 
+	    public Drawable getDrawable(String source) {
+	        int id;
+
+	        if (source.equals("empty_info")) {
+	            id = R.drawable.empty_info;
+	        }
+
+	        else {
+	            return null;
+	        }
+
+	        Drawable d = getResources().getDrawable(id);
+	        d.setBounds(0,0,d.getIntrinsicWidth(),d.getIntrinsicHeight());
+	        return d;
+	    }
+	};
 }
