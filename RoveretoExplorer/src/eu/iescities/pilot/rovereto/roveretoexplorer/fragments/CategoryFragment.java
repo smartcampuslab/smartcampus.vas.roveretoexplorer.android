@@ -38,17 +38,7 @@ public class CategoryFragment extends Fragment {
 	}
 
 	private void initLayoutAction() {
-		// final ViewFlipper slideShow = (ViewFlipper)
-		// getActivity().findViewById(
-		// R.id.category_view_flipper);
-		// // sets auto flipping
-		// slideShow.setAutoStart(true);
-		// slideShow.setFlipInterval(4000);
-		// slideShow.startFlipping();
-		// slideShow.setInAnimation(getActivity(),
-		// android.R.anim.slide_in_left);
-		// slideShow
-		// .setOutAnimation(getActivity(), android.R.anim.slide_out_right);
+
 		LinearLayout lAll = (LinearLayout) getActivity().findViewById(
 				R.id.layout_category_all);
 		lAll.setOnClickListener(new OnClickListener() {

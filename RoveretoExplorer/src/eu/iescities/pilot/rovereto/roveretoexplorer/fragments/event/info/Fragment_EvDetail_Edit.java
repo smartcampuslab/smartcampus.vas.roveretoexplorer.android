@@ -48,21 +48,11 @@ public class Fragment_EvDetail_Edit extends Fragment {
 	public final static int REQUEST_CODE = 10;
 
 	protected Context context;
-	OSMAddress selectedAddress = null;
-
+	private OSMAddress selectedAddress = null;
 	// For the expandable list view
-	List<String> attributeGroupList;
-	// private List<LocalExplorerObject> listEvents = new
-	// ArrayList<LocalExplorerObject>();
-	Map<String, List<String>> eventAttributeCollection;
-	// ExpandableListView expListView;
 	protected ExplorerObject mEvent = null;
 	private EventDetailInfoAdapter eventDetailInfoAdapter;
-	View header;
-
 	public static final String ARG_INDEX = "index_adapter";
-
-	private Integer indexAdapter;
 	protected String mEventId;
 	private String mEventImageUrl;
 
@@ -71,7 +61,6 @@ public class Fragment_EvDetail_Edit extends Fragment {
 	protected int childClickStatus = -1;
 	protected ArrayList<EventInfoParent> parents;
 	protected List<Integer> groupImages;
-	// private HashMap<Integer, List<Integer>> childImages;
 	protected HashMap<Integer, List<Integer>> childType2Images;
 	protected HashMap<Integer, Integer> childType1Images;
 
@@ -166,6 +155,9 @@ public class Fragment_EvDetail_Edit extends Fragment {
 
 		// save time
 		// update Mevent
+		EditText eventWhenWhere = (EditText) getActivity().findViewById(
+				R.id.ev_detail_info_whenwhere);
+		mEvent.setWhenWhere(eventWhenWhere.getText().toString());
 		EditText eventWhenFrom = (EditText) getActivity().findViewById(
 				R.id.ev_detail_info_time_from);
 		EditText eventWhenFromHour = (EditText) getActivity().findViewById(
@@ -271,19 +263,28 @@ public class Fragment_EvDetail_Edit extends Fragment {
 
 		@Override
 		public void handleResult(Boolean result) {
-			if (!result)// false is for updating true is for creating, null in
-						// case of problem
-			{
-				// toast updated and go back
-				Toast.makeText(getActivity(), R.string.update_success,
-						Toast.LENGTH_LONG).show();
+			mEvent = null;
+			mEvent = getEvent();
+			if (result != null) {
+				if (!result)// false is for updating true is for creating, null
+							// in
+							// case of problem
+				{
+					// toast updated and go back
+					Toast.makeText(getActivity(), R.string.update_success,
+							Toast.LENGTH_LONG).show();
 
-				getActivity().getSupportFragmentManager().popBackStack();
-			}
+					getActivity().getSupportFragmentManager().popBackStack();
+				}
 
-			else {// toast problem and stay here
+				else {// toast problem and stay here
+					Toast.makeText(getActivity(), R.string.update_failed,
+							Toast.LENGTH_LONG).show();
+				}
+			} else {// problem of synch? refill the edit
 				Toast.makeText(getActivity(), R.string.update_failed,
 						Toast.LENGTH_LONG).show();
+				getFragmentManager().popBackStack();
 			}
 		}
 	}

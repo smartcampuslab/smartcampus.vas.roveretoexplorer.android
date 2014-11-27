@@ -323,13 +323,7 @@ public class DTHelper {
 			}
 
 			getInstance().syncInProgress = true;
-			// TO DO
 			getInstance().storage.synchronize(getAuthToken(), getAppUrl(), SYNC_SERVICE);
-			// activateAutoSync();
-
-			// getInstance().storage.synchronize(getAuthToken(),
-			// GlobalConfig.getAppUrl(mContext),
-			// Constants.SYNC_SERVICE);
 
 		} finally {
 			getInstance().syncInProgress = false;
@@ -339,41 +333,15 @@ public class DTHelper {
 
 	public static void synchronize() throws RemoteException, DataException, StorageConfigurationException,
 			SecurityException, ConnectionException, ProtocolException, AACException {
-		// TO DO
 		getInstance().storage.synchronize(getAuthToken(), getAppUrl(), SYNC_SERVICE);
-		// getInstance().storage.synchronize(getAuthToken(),
-		// GlobalConfig.getAppUrl(mContext),
-		// Constants.SYNC_SERVICE);
-		// ContentResolver.requestSync(new
-		// Account(eu.trentorise.smartcampus.ac.Constants.ACCOUNT_NAME,
-		// eu.trentorise.smartcampus.ac.Constants.ACCOUNT_TYPE),
-		// "eu.trentorise.smartcampus.dt", new Bundle());
+
 	}
+
 
 	public static void destroy() {
-		// try {
-		// String authority = Constants.getAuthority(mContext);
-		// Account account = new Account(
-		// eu.trentorise.smartcampus.ac.Constants.getAccountName(mContext),
-		// eu.trentorise.smartcampus.ac.Constants.getAccountType(mContext));
-		// ContentResolver.removePeriodicSync(account, authority, new Bundle());
-		// ContentResolver.setSyncAutomatically(account, authority, false);
-		// ContentResolver.setIsSyncable(account, authority, 0);
-		// } catch (Exception e) {
-		// Log.e(DTHelper.class.getName(), "Failed destroy: " + e.getMessage());
-		// }
-	}
 
-	// public static Collection<POIObject> getAllPOI() throws DataException,
-	// StorageConfigurationException, ConnectionException, ProtocolException,
-	// SecurityException {
-	// if (Utils.getObjectVersion(instance.mContext,
-	// DTParamsHelper.getAppToken()) > 0) {
-	// return getInstance().storage.getObjects(POIObject.class);
-	// } else {
-	// return Collections.emptyList();
-	// }
-	// }
+	}
+	
 	public static List<String> getAllPOITitles() {
 
 		Cursor cursor = null;
@@ -431,19 +399,25 @@ public class DTHelper {
 			event = updateEvent(event.getId(), event);
 			result = false;
 		}
-		
-		LogHelper.sendEventModified(event.getId(),ctx);
-		
-		return result;
+		if (event!=null)
+			{LogHelper.sendEventModified(event.getId(),ctx);
+			return result;
+			}
+		else return null;
 	}
 
 	private static ExplorerObject updateEvent(String id, ExplorerObject event) throws SecurityException,
 			eu.trentorise.smartcampus.network.RemoteException, RemoteException, DataException, StorageConfigurationException, ConnectionException, ProtocolException, AACException {
+		String string = null;
 		if (event != null) {
 
 			Log.i("POST EDIT", JsonUtils.toJSON(event));
-			String string = RemoteConnector.postJSON(getAppUrl(), "/social/edit", JsonUtils.toJSON(event),
+			try{
+			string = RemoteConnector.postJSON(getAppUrl(), "/social/edit", JsonUtils.toJSON(event),
 					getAuthToken());
+			} catch (Exception e){
+				e.printStackTrace();
+			}
 			synchronize();
 			return JsonUtils.toObject(string, ExplorerObject.class);
 		}
@@ -465,57 +439,6 @@ public class DTHelper {
 		return null;
 
 	}
-
-//	public static Collection<ExplorerObject> searchEventsByCategory(int position, int size, String text,
-//			String... inCategories) throws DataException, StorageConfigurationException, ConnectionException,
-//			ProtocolException, SecurityException, AACException {
-//		ArrayList<ExplorerObject> returnlist = new ArrayList<ExplorerObject>();
-//
-//		if (inCategories == null || inCategories.length == 0)
-//			return Collections.emptyList();
-//
-//		String[] categories = CategoryHelper.getAllCategories(new HashSet<String>(Arrays.asList(inCategories)));
-//
-//		if (Utils.getObjectVersion(mContext, DTParamsHelper.getAppToken(), Constants.SYNC_DB_NAME) > 0) {
-//			List<String> nonNullCategories = new ArrayList<String>();
-//			String where = "";
-//			for (int i = 0; i < categories.length; i++) {
-//				if (where.length() > 0)
-//					where += " or ";
-//				if (categories[i] != null) {
-//					nonNullCategories.add(categories[i]);
-//					where += " type = ?";
-//				} else {
-//					where += " type is null";
-//				}
-//			}
-//			if (where.length() > 0) {
-//				where = "(" + where + ")";
-//			}
-//			List<String> parameters = nonNullCategories;
-//
-//			if (text != null) {
-//				where += "AND ( events MATCH ? ) AND fromTime > " + getCurrentDateTimeForSearching();
-//				parameters.add(text);
-//			}
-//			Collection<ExplorerObject> events = getInstance().storage.query(ExplorerObject.class, where,
-//					parameters.toArray(new String[parameters.size()]), position, size, "fromTime ASC");
-//			for (ExplorerObject event : events) {
-//				returnlist.add(event);
-//			}
-//			return returnlist;
-//		} else {
-//			for (int c = 0; c < categories.length; c++) {
-//				ObjectFilter filter = new ObjectFilter();
-//				filter.setTypes(Arrays.asList(categories));
-//				filter.setSkip(position);
-//				filter.setLimit(size);
-//				// TO DO
-//				returnlist.addAll(getEventsRemote(filter, getAuthToken()));
-//			}
-//			return returnlist;
-//		}
-//	}
 
 	private static List<ExplorerObject> getEventsRemote(ObjectFilter filter, String authToken) {
 		try {
@@ -577,7 +500,6 @@ public class DTHelper {
 				if (where.length() > 0)
 					where += " or ";
 				if (categories[i] != null) {
-//					nonNullCategories.add(categories[i]);
 					where += " category like '%\""+categories[i]+"\"%'";
 				} else {
 					where += " type is null";
@@ -589,17 +511,13 @@ public class DTHelper {
 			where += "AND fromTime > " + getCurrentDateTimeForSearching();
 			return getInstance().storage.query(ExplorerObject.class, "", null, position, size, "fromTime ASC");
 		} else {
-			// ArrayList<ExplorerObject> result = new
-			// ArrayList<ExplorerObject>();
 			List<ExplorerObject> result = null;
 			for (int c = 0; c < categories.length; c++) {
 				ObjectFilter filter = new ObjectFilter();
 				filter.setTypes(Arrays.asList(categories));
 				filter.setSkip(position);
 				filter.setLimit(size);
-				// TO DO
 				result = getEventsRemote(filter, getAuthToken());
-				// returnlist.addAll(eu.trentorise.smartcampus.trentinofamiglia.custom.Utils.convertToLocalEvent(events));
 			}
 			return result;
 		}
@@ -621,7 +539,6 @@ public class DTHelper {
 				if (where.length() > 0)
 					where += " or ";
 				if (categories[i] != null) {
-//					nonNullCategories.add(categories[i]);
 					where += " category like '%\""+categories[i]+"\"%'";
 				} else {
 					where += " category is null";
@@ -634,131 +551,23 @@ public class DTHelper {
 			return getInstance().storage.query(ExplorerObject.class, where,
 					nonNullCategories.toArray(new String[nonNullCategories.size()]), position, size, "fromTime ASC");
 		} else {
-			// ArrayList<ExplorerObject> result = new
-			// ArrayList<ExplorerObject>();
 			List<ExplorerObject> result = null;
 			for (int c = 0; c < categories.length; c++) {
 				ObjectFilter filter = new ObjectFilter();
 				filter.setTypes(Arrays.asList(categories));
 				filter.setSkip(position);
 				filter.setLimit(size);
-				// TO DO
 				result = getEventsRemote(filter, getAuthToken());
-				// returnlist.addAll(eu.trentorise.smartcampus.trentinofamiglia.custom.Utils.convertToLocalEvent(events));
 			}
 			return result;
 		}
 	}
 
-	// public static Collection<ExplorerObject> getEventsByCategories(int
-	// position,
-	// int size, String... inCategories)
-	// throws DataException, StorageConfigurationException, ConnectionException,
-	// ProtocolException,
-	// SecurityException, AACException {
-	// ArrayList<ExplorerObject> returnlist = new ArrayList<ExplorerObject>();
-	//
-	// if (inCategories == null || inCategories.length == 0)
-	// return Collections.emptyList();
-	//
-	// String[] categories = CategoryHelper.getAllCategories(new
-	// HashSet<String>(Arrays.asList(inCategories)));
-	//
-	// if (Utils.getObjectVersion(mContext, DTParamsHelper.getAppToken(),
-	// Constants.SYNC_DB_NAME) > 0) {
-	// List<String> nonNullCategories = new ArrayList<String>();
-	// String where = "";
-	// for (int i = 0; i < categories.length; i++) {
-	// if (where.length() > 0)
-	// where += " or ";
-	// if (categories[i] != null) {
-	// nonNullCategories.add(categories[i]);
-	// where += " type = ?";
-	// } else {
-	// where += " type is null";
-	// }
-	// }
-	// if (where.length() > 0) {
-	// where = "(" + where + ")";
-	// }
-	// // if (where.length() > 0) where += " AND ";
-	// // where += "fromTime > " + getCurrentDateTimeForSearching();
-	// Collection<EventObjectForBean> events =
-	// getInstance().storage.query(EventObjectForBean.class, where,
-	// nonNullCategories.toArray(new String[nonNullCategories.size()]),
-	// position, size, "fromTime ASC");
-	// for (EventObjectForBean eventBean : events) {
-	// LocalExplorerObject event = new LocalExplorerObject();
-	// event.setEventFromEventObjectForBean(eventBean);
-	// returnlist.add(event);
-	// }
-	// return returnlist;
-	// } else {
-	// for (int c = 0; c < categories.length; c++) {
-	// ObjectFilter filter = new ObjectFilter();
-	// filter.setTypes(Arrays.asList(categories));
-	// filter.setSkip(position);
-	// filter.setLimit(size);
-	// List<ExplorerObject> events = tService.getEvents(filter, getAuthToken());
-	// returnlist
-	// .addAll(eu.iescities.pilot.rovereto.roveretoexplorer.custom.Utils.convertToLocalEvent(events));
-	//
-	// }
-	// return returnlist;
-	//
-	// }
-	// }
-
-	// public static Collection<ExplorerObject> searchTodayEvents(int position,
-	// int
-	// size, String text) throws DataException,
-	// StorageConfigurationException, ConnectionException, ProtocolException,
-	// SecurityException, AACException {
-	// ArrayList<ExplorerObject> returnlist = new ArrayList<ExplorerObject>();
-	//
-	// // Date now = new Date();
-	// Calendar cal = Calendar.getInstance();
-	// // cal.setTime(now);
-	// cal.set(Calendar.HOUR_OF_DAY, 0);
-	// cal.set(Calendar.MINUTE, 0);
-	// cal.set(Calendar.SECOND, 0);
-	// cal.set(Calendar.MILLISECOND, 0);
-	//
-	// cal.add(Calendar.DAY_OF_YEAR, 1);
-	// Date tomorrow = cal.getTime();
-	//
-	// if (Utils.getObjectVersion(mContext, DTParamsHelper.getAppToken(),
-	// Constants.SYNC_DB_NAME) > 0) {
-	// Collection<EventObjectForBean> events =
-	// getInstance().storage.query(EventObjectForBean.class, "( toTime > "
-	// + getCurrentDateTimeForSearching() + " AND fromTime < " +
-	// tomorrow.getTime() + " ) ", null,
-	// position, size, "fromTime ASC");
-	// /* convert from eventobj to localeventobj */
-	// for (EventObjectForBean eventBean : events) {
-	// ExplorerObject event = new ExplorerObject();
-	// event.setEventFromEventObjectForBean(eventBean);
-	// returnlist.add(event);
-	// }
-	// return returnlist;
-	// } else {
-	// ObjectFilter filter = new ObjectFilter();
-	// Map<String, Object> criteria = new HashMap<String, Object>(1);
-	// criteria.put("text", text);
-	// filter.setCriteria(criteria);
-	// filter.setSkip(position);
-	// filter.setLimit(size);
-	// List<ExplorerObject> events = tService.getEvents(filter, getAuthToken());
-	// returnlist.addAll(eu.iescities.pilot.rovereto.roveretoexplorer.custom.Utils.convertToLocalEvent(events));
-	// return returnlist;
-	// }
-	// }
+	
 	public static Collection<ExplorerObject> searchTodayEvents(int position, int size, String text)
 			throws DataException, StorageConfigurationException, ConnectionException, ProtocolException,
 			SecurityException {
-		// Date now = new Date();
 		Calendar cal = Calendar.getInstance();
-		// cal.setTime(now);
 		cal.set(Calendar.HOUR_OF_DAY, 0);
 		cal.set(Calendar.MINUTE, 0);
 		cal.set(Calendar.SECOND, 0);
@@ -769,11 +578,6 @@ public class DTHelper {
 		Date tomorrow = cal.getTime();
 
 		if (Utils.getObjectVersion(instance.mContext, DTParamsHelper.getAppToken(), Constants.SYNC_DB_NAME) > 0) {
-			// return getInstance().storage.query(ExplorerObject.class,
-			// "( (toTime > " +
-			// getCurrentDateTimeForSearching()+" OR toTime = 0 )"
-			// + " AND (fromTime < " + tomorrow.getTime() + " OR toTime >" +
-			// today.getTime() + " )) ", null, position, size, "fromTime ASC");
 			return getInstance().storage.query(ExplorerObject.class, "( toTime > " + getCurrentDateTimeForSearching()
 					+ " AND (fromTime < " + tomorrow.getTime() + " ) OR (fromTime < " + tomorrow.getTime()
 					+ " AND fromTime >" + today.getTime() + " )) ", null, position, size, "fromTime ASC");
@@ -784,7 +588,6 @@ public class DTHelper {
 			filter.setCriteria(criteria);
 			filter.setSkip(position);
 			filter.setLimit(size);
-			// TO DO
 			List<ExplorerObject> events = getEventsRemote(filter, getAuthToken());
 			return events;
 		}
@@ -809,10 +612,7 @@ public class DTHelper {
 			filter.setCriteria(criteria);
 			filter.setSkip(position);
 			filter.setLimit(size);
-			// TO DO
 			return getEventsRemote(filter, getAuthToken());
-
-			// return Collections.emptyList();
 		}
 	}
 
@@ -822,16 +622,6 @@ public class DTHelper {
 				DTParamsHelper.getAppToken());
 	}
 
-	// private static RemoteStorage getRemote(Context mContext, String token)
-	// throws ProtocolException, DataException {
-	// if (remoteStorage == null) {
-	// remoteStorage = new RemoteStorage(mContext,
-	// DTParamsHelper.getAppToken());
-	// }
-	// remoteStorage.setConfig(token, GlobalConfig.getAppUrl(mContext),
-	// Constants.SERVICE);
-	// return remoteStorage;
-	// }
 
 	public static void endAppFailure(Activity activity, int id) {
 		Toast.makeText(activity, activity.getResources().getString(id), Toast.LENGTH_LONG).show();
@@ -845,7 +635,6 @@ public class DTHelper {
 	public static boolean deleteEvent(ExplorerObject ExplorerObject) throws DataException, ConnectionException,
 			ProtocolException, SecurityException, RemoteException, StorageConfigurationException, AACException {
 		if (ExplorerObject.getId() != null) {
-			// TO DO
 			deleteEvent(ExplorerObject.getId(), getAuthToken());
 			synchronize();
 			return true;
@@ -864,27 +653,8 @@ public class DTHelper {
 
 	}
 
-	// public static int rate(BaseDTObject event, int rating) throws
-	// ConnectionException, ProtocolException,
-	// SecurityException, DataException, RemoteException,
-	// StorageConfigurationException, AACException {
-	// int returnValue = tService.rate(event.getId(), rating, getAuthToken());
-	// // MessageRequest request = new
-	// // MessageRequest(GlobalConfig.getAppUrl(mContext),
-	// // Constants.SERVICE
-	// // + "/objects/" + event.getId() + "/rate");
-	// // request.setMethod(Method.PUT);
-	// // String query = "rating=" + rating;
-	// // request.setQuery(query);
-	// // String response = getInstance().mProtocolCarrier.invokeSync(request,
-	// // DTParamsHelper.getAppToken(),
-	// // getAuthToken()).getBody();
-	// synchronize();
-	// return returnValue;
-	// }
 	public static int rate(BaseDTObject event, int rating) throws ConnectionException, ProtocolException,
 			SecurityException, DataException, RemoteException, StorageConfigurationException, AACException {
-		// TO DO
 		int returnValue = rate(event.getId(), rating, getAuthToken());
 		synchronize();
 		return returnValue;
@@ -894,10 +664,6 @@ public class DTHelper {
 		if (id != null) {
 			try {
 				Map<String, Object> params = Collections.<String, Object> singletonMap("rating", rating);
-				// getAppUrl(), "social/attend/" +
-				// id+"/"+JsonUtils.toJSON(add),"", getAuthToken()
-				// String json = RemoteConnector.putJSON(getAppUrl(),
-				// String.format(RATE, id), null, authToken, params);
 
 				String json = RemoteConnector.putJSON(getAppUrl(), "social/rate/" + id, null, authToken, params);
 				return Integer.parseInt(json);
@@ -1157,69 +923,6 @@ public class DTHelper {
 		}
 	}
 
-	// private static <T extends BasicObject> Collection<T>
-	// getObjectsFromServer(int position, int size, String what,
-	// WhereForSearch distance, WhenForSearch when, boolean myevent, Class<?>
-	// cls, String[] inCategories,
-	// SortedMap<String, Integer> sort) {
-	// try {
-	//
-	// ObjectFilter filter = new ObjectFilter();
-	//
-	// /* get position */
-	// // long currentDate = getCurrentDateTimeForSearching();
-	// if (when != null)
-	// filter.setFromTime(when.getFrom());
-	// if ((when != null) && (when.getTo() != 0))
-	// filter.setToTime(when.getTo());
-	//
-	// GeoPoint mypos = MapManager.requestMyLocation(mContext);
-	// if (distance != null) {
-	// filter.setCenter(new double[] { (double) mypos.getLatitudeE6() / 1000000,
-	// (double) mypos.getLongitudeE6() / 1000000 });
-	// filter.setRadius(distance.getFilter());
-	// }
-	// if (what != null && what.length() > 0) {
-	// filter.setText(what);
-	// }
-	// if (inCategories[0] != null) {
-	// filter.setTypes(Arrays.asList(CategoryHelper.getAllCategories(new
-	// HashSet<String>(Arrays
-	// .asList(inCategories)))));
-	// }
-	// filter.setSkip(position);
-	// filter.setLimit(size);
-	// // filter.setClassName(cls.getCanonicalName());
-	// if (sort != null)
-	// filter.setSort(sort);
-	// // Collection<T> result = getRemote(mContext,
-	// // getAuthToken()).searchObjects(filter, cls);
-	// Collection<T> result = new ArrayList<T>();
-	//
-	// if (cls == EventObjectForBean.class) {
-	// Collection<ExplorerObject> events = null;
-	// Collection<EventObjectForBean> eventsbean = new
-	// ArrayList<EventObjectForBean>();
-	// events = tService.getEvents(filter, null);
-	//
-	// for (ExplorerObject poi : events) {
-	// EventObjectForBean eventBean = new EventObjectForBean();
-	// eventBean.setObjectForBean(poi);
-	// eventsbean.add(eventBean);
-	// }
-	// result = (Collection<T>) eventsbean;
-	//
-	// }
-	//
-	// if (result != null) {
-	// synchronize();
-	// }
-	// return result;
-	//
-	// } catch (Exception e) {
-	// return null;
-	// }
-	// }
 
 	private static String addMyEventToWhere(String where) {
 		String whereReturns = new String(" attending IS NOT NULL ");
@@ -1235,14 +938,8 @@ public class DTHelper {
 			whereReturns = new String("(  toTime > " + whenFrom
 			+ " AND (fromTime < " + whenTo + " ) OR (fromTime < " + whenTo
 			+ " AND fromTime >" + whenFrom + " ))");
-//			whereReturns = new String("( fromTime > " + whenFrom + " AND fromTime < " + whenTo + " ) OR (  toTime < "
-//					+ whenTo + " AND toTime > " + whenFrom + " )");
-//			 whereReturns = " (  fromTime <= " + whenTo + " AND toTime >= " +
-//			 whenFrom + " )";
 		} else
 			whereReturns = new String(" ( fromTime > " + whenFrom + "  ) OR ( toTime > " + whenFrom + " )");
-
-		// whereReturns = " ( toTime >= " + whenFrom + " )";
 
 		if (where.length() > 0) {
 			return where += " and (" + whereReturns + ")";
@@ -1251,20 +948,6 @@ public class DTHelper {
 
 	}
 
-	@SuppressWarnings("rawtypes")
-	// private static <T extends GenericObjectForBean> String
-	// addWhatToWhere(Class<T> cls, String where, String what)
-	// throws StorageConfigurationException, DataException {
-	// String whereReturns = "";
-	//
-	// whereReturns = " " + getInstance().config.getTableName(cls) +
-	// " MATCH ? ";
-	// if (where.length() > 0) {
-	// return where += " and (" + whereReturns + ")";
-	// } else
-	// return where += whereReturns;
-	//
-	// }
 	private static <T extends BaseDTObject> String addWhatToWhere(Class<T> cls, String where, String what)
 			throws StorageConfigurationException, DataException {
 		String whereReturns = "";
@@ -1285,7 +968,6 @@ public class DTHelper {
 			if (whereReturns.length() > 0)
 				whereReturns += " or ";
 			if (categories[i] != null) {
-//				nonNullCategories.add(categories[i]);
 				whereReturns += " category like '%"+categories[i]+"%'";
 			} else {
 				whereReturns += " category is null OR category like'null'";
@@ -1313,17 +995,6 @@ public class DTHelper {
 		}
 	}
 
-	// public static ExplorerObject findEventById(String eventId) {
-	// ExplorerObject returnEvent = new ExplorerObject();
-	// try {
-	// EventObjectForBean event = getInstance().storage.getObjectById(eventId,
-	// EventObjectForBean.class);
-	// returnEvent.setEventFromEventObjectForBean(event);
-	// return returnEvent;
-	// } catch (Exception e) {
-	// return null;
-	// }
-	// }
 	public static ExplorerObject findEventById(String eventId) {
 
 		try {
@@ -1364,11 +1035,8 @@ public class DTHelper {
 				"eu.trentorise.smartcampus.viaggiarovereto");
 		if (intent == null) {
 			intent= new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.smartcampuslab.it/download/VAS/apk/iescities/ViaggiaRovereto.apk"));
-//			intent = new Intent(Intent.ACTION_VIEW,
-//					Uri.parse("market://details?id=eu.trentorise.smartcampus.viaggiarovereto"));
 			activity.startActivity(intent);
 		} else
-			// startActivity(intent);
 			NavigationHelper.bringMeThere(activity, from, to);
 
 	}

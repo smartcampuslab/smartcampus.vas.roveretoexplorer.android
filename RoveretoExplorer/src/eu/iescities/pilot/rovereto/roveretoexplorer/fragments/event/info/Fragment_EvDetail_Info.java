@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import com.google.android.maps.GeoPoint;
-
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
@@ -23,6 +21,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.google.android.maps.GeoPoint;
+
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
 import eu.iescities.pilot.rovereto.roveretoexplorer.RoveretoExplorerApplication;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.Utils;
@@ -30,7 +31,6 @@ import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.Address;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.DTHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.BaseDTObject;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.ExplorerObject;
-import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.Fragment_EventDetails;
 import eu.iescities.pilot.rovereto.roveretoexplorer.log.LogHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.map.MapManager;
 
@@ -39,27 +39,17 @@ public class Fragment_EvDetail_Info extends Fragment {
 	protected Context context;
 
 	// For the expandable list view
-	List<String> attributeGroupList;
-	// private List<LocalExplorerObject> listEvents = new
-	// ArrayList<LocalExplorerObject>();
-	Map<String, List<String>> eventAttributeCollection;
-	// ExpandableListView expListView;
 	protected ExplorerObject mEvent = null;
 	private EventDetailInfoAdapter eventDetailInfoAdapter;
 	View header;
-
 	public static final String ARG_INDEX = "index_adapter";
-
-	private Integer indexAdapter;
 	protected String mEventId;
 	private String mEventImageUrl;
-
 	// Initialize variables
 	protected int ParentClickStatus = -1;
 	protected int childClickStatus = -1;
 	protected ArrayList<EventInfoParent> parents;
 	protected List<Integer> groupImages;
-	// private HashMap<Integer, List<Integer>> childImages;
 	protected HashMap<Integer, List<Integer>> childType2Images;
 	protected HashMap<Integer, Integer> childType1Images;
 

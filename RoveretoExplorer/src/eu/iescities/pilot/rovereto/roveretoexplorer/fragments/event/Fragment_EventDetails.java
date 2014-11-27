@@ -34,8 +34,6 @@ public class Fragment_EventDetails extends Fragment {
 	private PagerSlidingTabStrip tabs;
 	private ViewPager pager;
 	private MyPagerAdapter adapter;
-	// private int currentColor = R.color.jungle_green;
-//	private int currentColor = 0xFF96AA39;
 	public ExplorerObject mEvent = null;
 	private String mEventId;
 	private String mEventImageUrl;
@@ -84,22 +82,15 @@ public class Fragment_EventDetails extends Fragment {
 		super.onStart();
 		Log.d("FRAGMENT LC", "Fragment_evDetail --> onStart");
 
-		// getActivity().getActionBar().setTitle(mEvent.getTitle());
 
 		// Set up the action bar.
-//		final ActionBar actionBar = getActivity().getActionBar();
 		((ActionBarActivity) getActivity()).getSupportActionBar().setTitle(mEvent.getTitle());
-//		actionBar.setTitle(mEvent.getTitle());
 		// Specify that the Home/Up button should not be enabled, since there is
 		// no hierarchical
 		// parent.
-
-		// getFragmentManager().addOnBackStackChangedListener(getListener());
-
 		tabs = (PagerSlidingTabStrip) getActivity().findViewById(R.id.tabs);
 		pager = (ViewPager) getActivity().findViewById(R.id.pager);
 		adapter = new MyPagerAdapter(getChildFragmentManager());
-//	    screenAdapter = new ScreenAdapter(this, getFragmentManager());
 		pager.post(new Runnable() {
 	        public void run() {
 	        	pager.setAdapter(adapter);
@@ -163,9 +154,7 @@ public class Fragment_EventDetails extends Fragment {
 
 	/* Pager Adapter */
 	public class MyPagerAdapter extends FragmentStatePagerAdapter {
-		//private final String[] TITLES = { "Info", "Da Sapere", "Multimedia", "Comunita" };
 		private final String[] TITLES = { "Info", "Da Sapere", "Comunita" };
-		//private final String[] TITLES = { "Info", "Eventi"};
 		
 		
 		private Fragment mPrimaryItem;
@@ -198,9 +187,6 @@ public class Fragment_EventDetails extends Fragment {
 				return Fragment_EvDetail_Info.newInstance(mEventId, mEventImageUrl);
 			case 1:
 				return Fragment_EvDetail_DaSapere.newInstance(mEventId);
-//			case 2:
-//				return Fragment_EvDetail_Multimedia.newInstance(mEventId);
-//			case 3:
 			case 2:
 				return Fragment_EvDetail_Community.newInstance(mEventId);
 			default:
@@ -220,21 +206,6 @@ public class Fragment_EventDetails extends Fragment {
 
 	}
 
-//	@Override
-//	public boolean onOptionsItemSelected(MenuItem item) {
-//		 if (item.getItemId() == R.id.map_view) {
-//		 ArrayList<BaseDTObject> list = new ArrayList<BaseDTObject>();
-//		 getEvent().setLocation(mEvent.getLocation());
-//		 list.add(getEvent());
-//		 MapManager.switchToMapView(list, this);
-//		 return true;
-//		 } else if (item.getItemId() == R.id.direction_action) {
-//		 callBringMeThere();
-//		
-//		 return true;
-//		 }
-//		return true;
-//	}
 
 	protected void callBringMeThere() {
 		 Address to = new Address(Locale.getDefault());
@@ -251,37 +222,11 @@ public class Fragment_EventDetails extends Fragment {
 		 LogHelper.sendViaggiaRequest(getActivity());
 	}
 
-//	@Override
-//	public void onPrepareOptionsMenu(Menu menu) {
-//		// Log.i("MENU", "start on Prepare Options Menu EVENT LISTING frag: " +
-//		// menu.toString());
-//		//
-//		// // menu.clear();
-//		//
-//		 getActivity().getMenuInflater().inflate(R.menu.event_detail_menu,
-//		 menu);
-//		 if (getEvent()== null || getEvent().getLocation() == null ||
-//		 (getEvent().getLocation()[0] == 0 && getEvent().getLocation()[1] ==
-//		 0)) {
-//		 menu.findItem(R.id.map_view).setVisible(false);
-//		 menu.findItem(R.id.direction_action).setVisible(false);
-//		 }
-//		// /*
-//		// * if (category == null) { category = (getArguments() != null) ?
-//		// * getArguments().getString(SearchFragment.ARG_CATEGORY) : null; }
-//		// */
-//		super.onPrepareOptionsMenu(menu);
-//	}
-	
 	private ExplorerObject getEvent() {
 		if (mEventId == null) {
 			mEventId = getArguments().getString(Utils.ARG_EVENT_ID);
 		}
-
-		// if (mEvent == null) {
 		mEvent = DTHelper.findEventById(mEventId);
-		// }
-
 		return mEvent;
 	}
 

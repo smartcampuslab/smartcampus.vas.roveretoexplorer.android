@@ -196,5 +196,11 @@ Quest\'applicazione e\' parte del progetto europeo IES Cities. Possiamo farti qu
     <string name="empty_my_events_1">Non hai ancora deciso di partecipare ad un evento!</string>
     <string name="empty_my_events_2">Entra nei dettagli di un evento, dì che parteciparai e l\'evento apparirà in questa lista</string>
     <string name="no_point_to_show_on_map">Nessun event geolocalizzato presente</string>
-
+    <string name="credits">Credits</string>
+    <string name="credits_appname">Rovereto Explorer</string>
+    <string name="credits_subtitle">Stai cercando qualcosa di interessante da fare a Rovereto?</string>
+    <string name="project_by">Un progetto di:</string>
+    <string name="collaboration_with">In collaborazione con:</string>
+    <string name="credits_info">Per informazioni, segnalazioni o suggerimenti:</string>
+    <string name="credits_details">Ulteriori dettagli:</string>
 </resources>

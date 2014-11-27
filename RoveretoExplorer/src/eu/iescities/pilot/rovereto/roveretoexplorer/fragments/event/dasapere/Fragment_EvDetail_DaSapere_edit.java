@@ -410,13 +410,6 @@ public class Fragment_EvDetail_DaSapere_edit extends Fragment {
 		Map<String, Object> customData = mEvent.getCustomData();
 		customData.put(Constants.CUSTOM_TOKNOW, toKnowMap);
 		mEvent.setCustomData(customData);
-
-		// persist the modified field
-		// new SCAsyncTask<ExplorerObject, Void, Boolean>(getActivity(),
-		// new UpdateEventProcessor(getActivity())).execute(mEvent);
-		// }
-		// }
-
 		new SCAsyncTask<Void, Void, Boolean>(getActivity(),
 				new SaveEventProcessor(getActivity())).execute();
 
@@ -457,18 +450,7 @@ public class Fragment_EvDetail_DaSapere_edit extends Fragment {
 		}
 	}
 
-	@Override
-	public void onResume() {
-		super.onResume();
-		Log.d("FRAGMENT LC", "Fragment_evDetail_Info_Tags --> onResume");
 
-	}
-
-	@Override
-	public void onPause() {
-		super.onPause();
-		Log.d("FRAGMENT LC", "Fragment_evDetail_Info_Tags --> onPause");
-	}
 
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
@@ -477,81 +459,8 @@ public class Fragment_EvDetail_DaSapere_edit extends Fragment {
 				"Fragment_evDetail_Info_Tags --> onSaveInstanceState");
 	}
 
-	@Override
-	public void onStop() {
-		super.onStop();
-		Log.d("FRAGMENT LC", "Fragment_evDetail_Info_Tags --> onStop");
-	}
+	
 
-	@Override
-	public void onDestroyView() {
-		super.onDestroyView();
-		Log.d("FRAGMENT LC", "Fragment_evDetail_Info_Tags --> onDestroyView");
-	}
-
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
-		Log.d("FRAGMENT LC", "Fragment_evDetail_Info_Tags --> onDestroy");
-	}
-
-	@Override
-	public void onDetach() {
-		super.onDetach();
-		Log.d("FRAGMENT LC", "Fragment_evDetail_Info_Tags --> onDetach");
-	}
-
-	// @Override
-	// public void onPrepareOptionsMenu(Menu menu) {
-	// Log.i("FRAGMENT LC",
-	// "start on Prepare Options Menu EVENT LISTING frag: "
-	// + menu.toString());
-	// menu.clear();
-	//
-	// // getActivity().getMenuInflater().inflate(R.menu.event_detail_menu,
-	// // menu);
-	//
-	// /*
-	// * if (category == null) { category = (getArguments() != null) ?
-	// * getArguments().getString(SearchFragment.ARG_CATEGORY) : null; }
-	// */
-	// super.onPrepareOptionsMenu(menu);
-	// }
-
-	// private class UpdateEventProcessor extends
-	// AbstractAsyncTaskProcessor<ExplorerObject, Boolean> {
-	//
-	// public UpdateEventProcessor(Activity activity) {
-	// super(activity);
-	// }
-	//
-	// @Override
-	// public Boolean performAction(ExplorerObject... params)
-	// throws SecurityException, Exception {
-	// // to be enabled when the connection with the server is ok
-	// return DTHelper.saveEvent(params[0], mContext);
-	// // store the modified event
-	// // int index = Utils.appEvents.indexOf(params[0]);
-	// // Utils.appEvents.set(index, params[0]);
-	// // ExplorerObject mNewEvent = Utils.appEvents.get(index);
-	// // return true;
-	// }
-	//
-	// @Override
-	// public void handleResult(Boolean result) {
-	// if (getActivity() != null) {
-	// getActivity().getSupportFragmentManager().popBackStack();
-	//
-	// if (result) {
-	// Toast.makeText(getActivity(),
-	// R.string.event_create_success, Toast.LENGTH_SHORT)
-	// .show();
-	// } else {
-	// Toast.makeText(getActivity(), R.string.update_success,
-	// Toast.LENGTH_SHORT).show();
-	// }
-	// }
-	// }
-	// }
+	
 
 }

@@ -27,6 +27,7 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
@@ -74,8 +75,7 @@ import eu.trentorise.smartcampus.android.common.listing.AbstractLstingFragment.L
 import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 
 // to be used for event listing both in categories and in My Events
-public class EventsListingFragment extends Fragment implements
-		OnScrollListener, ReloadAdapter {
+public class EventsListingFragment extends Fragment implements OnScrollListener {
 	private ListView list;
 	private Context context;
 
@@ -94,12 +94,8 @@ public class EventsListingFragment extends Fragment implements
 
 	private String category;
 	private EventAdapter eventsAdapter;
-	private boolean mFollowByIntent;
 	private String idEvent = "";
 	private Integer indexAdapter;
-	private Boolean reload = false;
-	private Integer postitionSelected = -1;
-	private boolean postProcAndHeader = true;
 	private String event_id_selected = null;
 	protected int lastSize = 0;
 	protected int position = 0;
@@ -118,46 +114,19 @@ public class EventsListingFragment extends Fragment implements
 
 	// for loading the images
 	protected DisplayImageOptions imgOptions;
-	private int firstVis;
-	private int lastVis;;
-
-	// protected Map<String, List<String>> eventImageUrls = new
-	// LinkedHashMap<String, List<String>>();
 	protected Map<String, String> eventImageUrlsbyId = new LinkedHashMap<String, String>();
-
 	private int previousGroup;
 	private int previousItem;;
-
-	// protected ImageLoader imageLoader = ImageLoader.getInstance();
 
 	@Override
 	public void onResume() {
 		super.onResume();
 		if (!idEvent.equals("")) {
 			// get info of the event
-			ExplorerObject event = DTHelper.findEventById(idEvent);
-			// notify
-			// eventsAdapter.notifyDataSetInvalidated();
-
 			eventsAdapter.notifyDataSetChanged();
 			idEvent = "";
 			indexAdapter = 0;
 		}
-
-		// try {
-		// expListView.setSelectedGroup(previousGroup);
-		// expListView.setSelectedChild(previousGroup, previousItem, true);
-		// expListView.expandGroup(previousGroup);
-		// } catch (IndexOutOfBoundsException e) {
-		// // the changes modify the order of the group, so by default open
-		// // the first group
-		// if (eventsAdapter.getGroupCount() > 0) {
-		// expListView.setSelectedGroup(0);
-		// expListView.setSelectedChild(0, 0, true);
-		// expListView.expandGroup(0);
-		// }
-		// }
-
 	}
 
 	@Override
@@ -174,7 +143,6 @@ public class EventsListingFragment extends Fragment implements
 		super.onCreate(savedInstanceState);
 		this.context = this.getActivity();
 		setHasOptionsMenu(true);
-		setFollowByIntent();
 	}
 
 	@Override
@@ -191,9 +159,7 @@ public class EventsListingFragment extends Fragment implements
 				.showImageOnLoading(R.drawable.ic_no_img)
 				.showImageForEmptyUri(R.drawable.ic_no_img)
 				.showImageOnFail(R.drawable.ic_no_img).cacheInMemory(true)
-				.cacheOnDisc(true).considerExifParams(true)
-				// .displayer(new RoundedBitmapDisplayer(20))
-				.build();
+				.cacheOnDisc(true).considerExifParams(true).build();
 
 		list = (ListView) getActivity().findViewById(R.id.events_list);
 		if (arg0 != null) {
@@ -213,8 +179,6 @@ public class EventsListingFragment extends Fragment implements
 		setListenerOnEvent();
 		list.setOnScrollListener(this);
 		expListView.setAdapter(eventsAdapter);
-		// if (eventsAdapter.getGroupCount() > 0)
-		// expListView.expandGroup(0);
 
 	}
 
@@ -245,21 +209,12 @@ public class EventsListingFragment extends Fragment implements
 						.getFromTime();
 				oldToTime = ((EventPlaceholder) view.getTag()).event
 						.getToTime();
-				// previousGroup = groupPosition;
-				// previousItem = childPosition;
 				args.putString(Utils.ARG_EVENT_ID,
 						((EventPlaceholder) view.getTag()).event.getId());
-				try {
-					// args.putString(Utils.ARG_EVENT_IMAGE_URL,
-					// eventImageUrls.get(dateGroupList.get(groupPosition)).get(childPosition));
-				} catch (Exception e) {
-				}
-
 				fragment.setArguments(args);
 
 				fragmentTransaction
 						.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-				// fragmentTransaction.detach(this);
 				fragmentTransaction.replace(R.id.content_frame, fragment,
 						"event_details");
 				fragmentTransaction.addToBackStack(fragment.getTag());
@@ -272,11 +227,9 @@ public class EventsListingFragment extends Fragment implements
 
 	@Override
 	public void onStart() {
-		Bundle bundle = this.getArguments();
 
 		// I need to pass the interface to the fragment whenwhere. Now reloading
 		// the adapter everytime is too slow
-		// if (reload){
 		setColorCategory();
 		eventsAdapter = new EventAdapter(context,
 				R.layout.event_list_child_item, EventsListingFragment.this,
@@ -284,8 +237,6 @@ public class EventsListingFragment extends Fragment implements
 
 		expListView.setAdapter(eventsAdapter);
 		setListenerOnEvent();
-		reload = false;
-		// }
 		if (event_id_selected != null) {
 			// get event's info
 			ExplorerObject new_event = null;
@@ -298,7 +249,6 @@ public class EventsListingFragment extends Fragment implements
 			cahngeNewEventinCollection(new_event);
 			eventsAdapter.setDateGroupList(dateGroupList);
 			eventsAdapter.setEventCollection(eventCollection);
-			// eventsAdapter.notifyDataSetInvalidated();
 			eventsAdapter.notifyDataSetChanged();
 
 		} else
@@ -312,8 +262,7 @@ public class EventsListingFragment extends Fragment implements
 		if (getArguments().containsKey(SearchFragment.ARG_MY)) {
 			addEvent(new_event, "");
 
-		}
-		else 	{
+		} else {
 			updateSingleEvent(new_event);
 		}
 	}
@@ -376,7 +325,6 @@ public class EventsListingFragment extends Fragment implements
 			}
 			if (found) {
 				eventCollection.get(date_with_day).remove(index);
-				// eventImageUrls.get(date_with_day).remove(index);
 				eventImageUrlsbyId.remove(new_event.getId());
 			}
 
@@ -398,21 +346,6 @@ public class EventsListingFragment extends Fragment implements
 
 	protected boolean loadOnStart() {
 		return true;
-	}
-
-	private void setFollowByIntent() {
-		try {
-			ApplicationInfo ai = getActivity().getPackageManager()
-					.getApplicationInfo(getActivity().getPackageName(),
-							PackageManager.GET_META_DATA);
-			Bundle aBundle = ai.metaData;
-			mFollowByIntent = aBundle.getBoolean("follow-by-intent");
-		} catch (NameNotFoundException e) {
-			mFollowByIntent = false;
-			Log.e(EventsListingFragment.class.getName(),
-					"you should set the follow-by-intent metadata in app manifest");
-		}
-
 	}
 
 	@Override
@@ -454,9 +387,14 @@ public class EventsListingFragment extends Fragment implements
 
 		@Override
 		public void handleResult(List<ExplorerObject> result) {
+			ProgressDialog progress = null;
+			progress = ProgressDialog.show(getActivity(), "", getActivity()
+					.getString(R.string.loading), true);
+
 			if (!result.isEmpty()) {
 
 				if (!getArguments().containsKey(SearchFragment.ARG_MY)) {
+
 					// order data by date
 					updateCollectionAndGetImages(result);
 					eventsAdapter.setDateGroupList(dateGroupList);
@@ -464,12 +402,8 @@ public class EventsListingFragment extends Fragment implements
 					updateMyEvents(result);
 				}
 				eventsAdapter.setEventCollection(eventCollection);
-				// eventsAdapter.notifyDataSetInvalidated();
-
 				eventsAdapter.notifyDataSetChanged();
-				// if (expListView.getExpandableListAdapter().getGroupCount() >
-				// 0)
-				// expListView.expandGroup(0);
+				progress.cancel();
 
 			} else {
 				TextView no_result = (TextView) getActivity().findViewById(
@@ -477,6 +411,7 @@ public class EventsListingFragment extends Fragment implements
 				no_result.setVisibility(View.VISIBLE);
 				expListView.setVisibility(View.GONE);
 			}
+			progress.cancel();
 
 		}
 
@@ -606,39 +541,19 @@ public class EventsListingFragment extends Fragment implements
 			String eventImg = expObj.getImage();
 			if (previousItem != -1
 					&& previousGroup == dateGroupList.indexOf(date_with_day)) {
-				// eventImageUrls.get(date_with_day).add(previousItem,
-				// eventImg);
 				eventImageUrlsbyId.put(expObj.getId(), eventImg);
 			} else {
-				// eventImageUrls.get(date_with_day).add(eventImg);
 				eventImageUrlsbyId.put(expObj.getId(), eventImg);
 			}
 		}
 	}
 
-	// private void addEvent(ExplorerObject expObj, String date_with_day) {
-	// if (!dateGroupList.contains(date_with_day)) {
-	//
-	// dateGroupList.add(date_with_day);
-	// eventCollection.put(date_with_day, new ArrayList<ExplorerObject>());
-	// eventImageUrls.put(date_with_day, new ArrayList<String>());
-	//
-	// }
-	// eventCollection.get(date_with_day).add(expObj);
-	//
-	// // get event image urls
-	// String eventImg = expObj.getImage();
-	// eventImageUrls.get(date_with_day).add(eventImg);
-	// }
-
 	private List<ExplorerObject> getEvents(
 			AbstractLstingFragment.ListingRequest... params) {
 		try {
 			Collection<ExplorerObject> result = null;
-
 			Bundle bundle = getArguments();
 			boolean my = false;
-			boolean all = false;
 
 			if (bundle == null) {
 				return Collections.emptyList();
@@ -872,7 +787,6 @@ public class EventsListingFragment extends Fragment implements
 		@Override
 		protected void handleSuccess(List<ExplorerObject> result) {
 			super.handleSuccess(result);
-			// eventsAdapter.notifyDataSetInvalidated();
 			if (!result.isEmpty()) {
 				if (!getArguments().containsKey(SearchFragment.ARG_MY)) {
 
@@ -881,12 +795,8 @@ public class EventsListingFragment extends Fragment implements
 					eventsAdapter.setDateGroupList(dateGroupList);
 					eventsAdapter.setEventCollection(eventCollection);
 				}
-				// eventsAdapter.notifyDataSetInvalidated();
 
 				eventsAdapter.notifyDataSetChanged();
-				// if (expListView.getExpandableListAdapter().getGroupCount() >
-				// 0)
-				// expListView.expandGroup(0);
 
 			} else if (getArguments().containsKey(SearchFragment.ARG_MY)) {
 				LinearLayout no_my_event_result = (LinearLayout) getActivity()
@@ -911,11 +821,6 @@ public class EventsListingFragment extends Fragment implements
 	@Override
 	public void onScrollStateChanged(AbsListView view, int scrollState) {
 
-	}
-
-	@Override
-	public void reload() {
-		reload = true;
 	}
 
 }

@@ -7,6 +7,7 @@
         <item>Home</item>
         <item>Map</item>
         <item>My events</item>
+        <item>About</item>
     </string-array>
 
     <!-- The icons associated to the menu items -->
@@ -15,6 +16,7 @@
         <item>@drawable/ic_drawer_home</item>
         <item>@drawable/ic_drower_map</item>
         <item>@drawable/ic_drower_myevents</item>
+        <item>@drawable/ic_credits</item>
     </string-array>
 
     <!-- The icons associated to the menu items -->
@@ -23,6 +25,7 @@
         <item>Home</item>
         <item>Maps</item>
         <item>My events</item>
+        <item>About</item>
     </string-array>
 
 </resources>

@@ -307,5 +307,16 @@ This app is part of the European IES Cities project. May we ask you a few short 
     </string>
     <string name="empty_my_events_1">You have not yet decided to attend some events!</string>
     <string name="empty_my_events_2">Enter into details of an event, say that you participate and the event will appear in this list</string>
-<string name="no_point_to_show_on_map">No geolocalized events available</string>
+    <string name="no_point_to_show_on_map">No geolocalized events available</string>
+    <string name="credits">Credits</string>
+    <string name="credits_appname">Rovereto Explorer</string>
+    <string name="credits_subtitle">Looking for something interesting to do in Rovereto? </string>
+    <string name="project_by">A project by:</string>
+    <string name="collaboration_with">In collaboration with:</string>
+    <string name="credits_info">For information, reports and suggestions:</string>
+    <string name="credits_details">More details:</string>
+    <string name="credits_email"><a href="mailto:roveretoexplorer@smartcampuslab.it">roveretoexplorer@smartcampuslab.it</a></string>
+    <string name="credits_swabout">www.smartcampuslab.it</string>
+    <string name="credits_version">v. %s</string>
+
 </resources>

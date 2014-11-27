@@ -31,7 +31,6 @@ import android.view.View;
 import android.view.ViewConfiguration;
 import android.widget.Toast;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.AbstractAsyncTaskProcessor;
-import eu.iescities.pilot.rovereto.roveretoexplorer.custom.CategoryHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.DTHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.BaseDTObject;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.CategoryFragment;
@@ -46,7 +45,6 @@ import eu.iescities.pilot.rovereto.roveretoexplorer.ui.navdrawer.NavDrawerActivi
 import eu.iescities.pilot.rovereto.roveretoexplorer.ui.navdrawer.NavDrawerAdapter;
 import eu.iescities.pilot.rovereto.roveretoexplorer.ui.navdrawer.NavDrawerItem;
 import eu.iescities.pilot.rovereto.roveretoexplorer.ui.navdrawer.NavMenuItem;
-import eu.iescities.pilot.rovereto.roveretoexplorer.ui.navdrawer.NavMenuSection;
 import eu.trentorise.smartcampus.ac.AACException;
 import eu.trentorise.smartcampus.ac.SCAccessProvider;
 import eu.trentorise.smartcampus.android.common.GlobalConfig;
@@ -61,7 +59,6 @@ public class MainActivity extends AbstractNavDrawerActivity {
 
 	private FragmentManager mFragmentManager;
 
-	private boolean isLoading;
 	private DrawerLayout mDrawerLayout;
 	private ActionBarDrawerToggle mDrawerToggle;
 
@@ -285,7 +282,6 @@ public class MainActivity extends AbstractNavDrawerActivity {
 							.show();
 				}
 				setSupportProgressBarIndeterminateVisibility(true);
-				isLoading = true;
 				new Thread(new Runnable() {
 					@Override
 					public void run() {
@@ -306,7 +302,6 @@ public class MainActivity extends AbstractNavDrawerActivity {
 													MainActivity.this
 															.setSupportProgressBarIndeterminateVisibility(false);
 												}
-												isLoading = false;
 											}
 										});
 							}
@@ -329,7 +324,6 @@ public class MainActivity extends AbstractNavDrawerActivity {
 	private ArrayList<NavDrawerItem> getMenuItems(int... ids) {
 
 		ArrayList<NavDrawerItem> menu_items = new ArrayList<NavDrawerItem>();
-//		menu_items.add(NavMenuSection.create(0, "Eventi"));
 		String[] labels = getResources().getStringArray(ids[0]);
 		String[] abTitles = getResources().getStringArray(ids[2]);
 
@@ -391,7 +385,6 @@ public class MainActivity extends AbstractNavDrawerActivity {
 
 	private Object[] getFragmentAndTag(int pos_in_list) {
 		Object[] out = new Object[2];
-		String cat = null;
 		Bundle args = new Bundle();
 		Fragment elf = null;
 
@@ -420,6 +413,11 @@ public class MainActivity extends AbstractNavDrawerActivity {
 			out[0] = elf;
 			out[1] = TAG_FRAGMENT_EVENT_LIST;
 			break;
+		case 4: // click on "I miei eventi" item
+//			args = new Bundle();
+			Intent i = new Intent(MainActivity.this, Credits.class);
+			startActivity(i);
+			return null;
 
 
 		default:
