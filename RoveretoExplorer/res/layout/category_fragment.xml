@@ -5,49 +5,47 @@
     android:background="@android:color/white"
     android:orientation="vertical" >
 
-    <ViewFlipper
-        android:id="@+id/category_view_flipper"
-        android:layout_width="fill_parent"
-        android:layout_height="154dp" >
-
-        <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent" >
-
-            <ImageView
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_alignParentBottom="true"
-                android:layout_gravity="center"
-                android:adjustViewBounds="true"
-                android:scaleType="centerCrop"
-                android:src="@drawable/img_home" />
-        </RelativeLayout>
-
-        <!-- <RelativeLayout -->
-        <!-- android:layout_width="fill_parent" -->
-        <!-- android:layout_height="fill_parent" > -->
-
-
-        <!-- <ImageView -->
-        <!-- android:layout_width="fill_parent" -->
-        <!-- android:layout_height="fill_parent" -->
-        <!-- android:layout_gravity="center" -->
-        <!-- android:adjustViewBounds="true" -->
-        <!-- android:scaleType="centerCrop" -->
-        <!-- android:src="@drawable/slide_2" /> -->
-        <!-- </RelativeLayout> -->
-    </ViewFlipper>
-
     <ScrollView
         android:id="@+id/scrollView1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true" >
+    <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                 <RelativeLayout
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content" >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                android:src="@drawable/img_home_notext" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:gravity="center"
+                android:padding="8dp"
+                android:text="@string/home_banner"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical"
             android:weightSum="1" >
 
@@ -160,6 +158,14 @@
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:textColor="@color/category_text" />
             </LinearLayout>
+            </LinearLayout>
+       
+
+
+
+
+
+        
         </LinearLayout>
     </ScrollView>
 

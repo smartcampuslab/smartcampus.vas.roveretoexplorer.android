@@ -291,8 +291,9 @@ This app is part of the European IES Cities project. May we ask you a few short 
     <string name="credits_email"><a href="mailto:roveretoexplorer@smartcampuslab.it">roveretoexplorer@smartcampuslab.it</a></string>
     <string name="credits_swabout">www.smartcampuslab.it</string>
     <string name="credits_version">v. %s</string>
-
-    <!-- tabs' strings -->
+    <string name="update_list">Updating the list</string>
+    <string name="home_banner">Find out what to do in Rovereto</string>
+<!-- tabs' strings -->
     <string name="tab_info">Info</string>
     <string name="tab_daSapere">to know</string>
     <string name="tab_comunita">community</string>

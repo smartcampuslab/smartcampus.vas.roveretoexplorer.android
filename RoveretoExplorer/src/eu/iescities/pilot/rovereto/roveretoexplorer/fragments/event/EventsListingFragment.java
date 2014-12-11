@@ -777,11 +777,14 @@ public class EventsListingFragment extends Fragment implements OnScrollListener 
 
 	protected class SCListingFragmentTask<Params, Progress> extends
 			SCAsyncTask<Params, Progress, List<ExplorerObject>> {
+		private ProgressDialog updateList = null;
 
 		public SCListingFragmentTask(
 				Activity activity,
 				SCAsyncTask.SCAsyncTaskProcessor<Params, List<ExplorerObject>> processor) {
 			super(activity, processor);
+			updateList = ProgressDialog.show(getActivity(), "",getActivity().getString(R.string.update_list), true);
+			
 		}
 
 		@Override
@@ -791,12 +794,15 @@ public class EventsListingFragment extends Fragment implements OnScrollListener 
 				if (!getArguments().containsKey(SearchFragment.ARG_MY)) {
 
 					// order data by date
+					
 					updateCollectionAndGetImages(result);
 					eventsAdapter.setDateGroupList(dateGroupList);
 					eventsAdapter.setEventCollection(eventCollection);
 				}
 
 				eventsAdapter.notifyDataSetChanged();
+				if (updateList.isShowing())
+					updateList.dismiss();
 
 			} else if (getArguments().containsKey(SearchFragment.ARG_MY)) {
 				LinearLayout no_my_event_result = (LinearLayout) getActivity()

@@ -3,7 +3,7 @@
 
     <string name="app_failure_init">Failed to initialize ViviTrento application</string>
     <string name="overflow">More</string>
-    
+
     <!-- Edit Fragment -->
     <string name="modify">Modifica</string>
     <string name="start_url">http://</string>
@@ -36,7 +36,6 @@
     <string name="new_field_type_label">Che tipo di info vuoi aggiungere?</string>
     <string name="addnewinfo">Aggiungi nuove informazioni</string>
     <string name="insert_info">Inserisci informazioni</string>
-    
 
     <!-- MainActivity -->
     <string name="nav_drawer_map">Eventi</string>
@@ -46,10 +45,9 @@
     <string name="categories_event_social">Social</string>
     <string name="categories_event_altri_eventi">Altri eventi</string>
 
-       <!-- Create/Update Operations -->
+    <!-- Create/Update Operations -->
 
     <string name="event_create_success">Evento screato con successo!</string>
-
     <string name="categories_info_news">Notizie</string>
     <string name="categories_info_organizations">Distretti e organizzazioni</string>
     <string name="categories_track_pedestrian">Piste ciclopedonali</string>
@@ -62,8 +60,7 @@
     <string name="info_dialog_title_event">Informazioni evento</string>
     <string name="info_dialog_title_track">Informazioni tracciato</string>
     <string name="app_failure_obj_not_found">Oggetto non trovato!</string>
-    
-    
+
     <!-- Event Info Contacts -->
     <string name="event_category">Evento %1$s, promosso da %2$s</string>
     <string name="categories_event_today">Eventi di oggi</string>
@@ -84,7 +81,6 @@
     <string name="app_failure_operation">OOPS! C\'è stato un errore. Controlla la connessione e riprova a breve.</string>
     <string name="initial_data_load">Loading initial data&#8230; (it may take a while this time)</string>
 
-    
     <!-- Event Info Contacts -->
     <string name="modify_contacts_txt">Modifica Contatti</string>
     <string name="phone">Telefono</string>
@@ -106,9 +102,8 @@
     <string name="start_time">Ora di Inizio</string>
     <string name="end_time">Ora di Fine</string>
     <string name="duration">Durata</string>
-    
-    
-      <!-- Event Info What -->
+
+    <!-- Event Info What -->
     <string name="event_desc">Descrizione</string>
 
     <!-- Event Info Description -->
@@ -118,7 +113,7 @@
     <!-- Event Info Tag -->
     <string name="modify_tag_txt">Modifica Tag</string>
     <string name="tag">tag</string>
-    
+
     <!-- String for the searching fragment -->
     <string name="search_what">Cosa: </string>
     <string name="search_when">Quando: </string>
@@ -185,8 +180,7 @@
     <string name="when_where">Dove e quando</string>
     <string name="terms_of_service">
         <!-- create and update -->
-<string name="update_success">Le tue modifiche sono state salvate con successo.</string> 
-<string name="update_failed">Ci sono stati problemi nel salvataggio delle modifiche. Riprova. </string>
+<string name="update_success">Le tue modifiche sono state salvate con successo.</string> <string name="update_failed">Ci sono stati problemi nel salvataggio delle modifiche. Riprova. </string>
 <![CDATA[
        <b>Introduction<br>
         Applicable worldwide except where we publish specific territorial terms and conditions.</b><br>
@@ -289,10 +283,12 @@ Quest\'applicazione e\' parte del progetto europeo IES Cities. Possiamo farti qu
     <string name="collaboration_with">In collaborazione con:</string>
     <string name="credits_info">Per informazioni, segnalazioni o suggerimenti:</string>
     <string name="credits_details">Ulteriori dettagli:</string>
-    
-    
-   <!-- tabs' strings -->
+    <string name="update_list">Aggiornando la lista</string>
+    <string name="home_banner">Scopri cosa fare a Rovereto</string>
+
+    <!-- tabs' strings -->
     <string name="tab_info">Info</string>
     <string name="tab_daSapere">da sapere</string>
     <string name="tab_comunita">Comunità</string>
+
 </resources>
