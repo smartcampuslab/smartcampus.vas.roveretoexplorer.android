@@ -154,7 +154,7 @@ public class Fragment_EventDetails extends Fragment {
 
 	/* Pager Adapter */
 	public class MyPagerAdapter extends FragmentStatePagerAdapter {
-		private final String[] TITLES = { "Info", "Da Sapere", "Comunita" };
+		private final String[] TITLES = {getString(R.string.tab_info),getString(R.string.tab_daSapere),getString(R.string.tab_comunita)};
 		
 		
 		private Fragment mPrimaryItem;

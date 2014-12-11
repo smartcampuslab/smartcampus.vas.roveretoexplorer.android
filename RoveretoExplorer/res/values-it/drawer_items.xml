@@ -7,7 +7,7 @@
         <item>Home</item>
         <item>Mappa</item>
         <item>I miei eventi</item>
-        <item>About</item>
+        <item>Credits</item>
     </string-array>
 
     <!-- The icons associated to the menu items -->
@@ -25,7 +25,7 @@
         <item>Home</item>
         <item>Mappa</item>
         <item>I miei eventi</item>
-        <item>About</item>
+        <item>Credits</item>
     </string-array>
 
 </resources>
