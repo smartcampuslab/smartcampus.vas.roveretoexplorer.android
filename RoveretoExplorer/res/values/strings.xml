@@ -289,7 +289,7 @@ This app is part of the European IES Cities project. May we ask you a few short 
     <string name="credits_info">For information, reports and suggestions:</string>
     <string name="credits_details">More details:</string>
     <string name="credits_email"><a href="mailto:roveretoexplorer@smartcampuslab.it">roveretoexplorer@smartcampuslab.it</a></string>
-    <string name="credits_swabout">www.smartcampuslab.it</string>
+    <string name="credits_swabout">www.iescities.eu</string>
     <string name="credits_version">v. %s</string>
     <string name="update_list">Updating the list</string>
     <string name="home_banner">Find out what to do in Rovereto</string>

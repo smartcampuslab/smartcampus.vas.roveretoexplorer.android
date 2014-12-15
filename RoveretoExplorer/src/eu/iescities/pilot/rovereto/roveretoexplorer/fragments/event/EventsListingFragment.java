@@ -161,7 +161,7 @@ public class EventsListingFragment extends Fragment implements OnScrollListener 
 				.showImageOnFail(R.drawable.ic_no_img).cacheInMemory(true)
 				.cacheOnDisc(true).considerExifParams(true).build();
 
-		list = (ListView) getActivity().findViewById(R.id.events_list);
+		list = (ListView) ((Activity) context).findViewById(R.id.events_list);
 		if (arg0 != null) {
 			// Restore last state for checked position.
 			idEvent = arg0.getString(ARG_ID);
@@ -175,7 +175,7 @@ public class EventsListingFragment extends Fragment implements OnScrollListener 
 					dateGroupList, eventCollection, colorCategory);
 
 		}
-		expListView = (ListView) getActivity().findViewById(R.id.events_list);
+		expListView = (ListView) ((Activity) context).findViewById(R.id.events_list);
 		setListenerOnEvent();
 		list.setOnScrollListener(this);
 		expListView.setAdapter(eventsAdapter);
@@ -360,12 +360,12 @@ public class EventsListingFragment extends Fragment implements OnScrollListener 
 			// eventImageUrls.clear();
 			eventImageUrlsbyId.clear();
 		}
-		new SCListingFragmentTask<ListingRequest, Void>(getActivity(),
+		new SCListingFragmentTask<ListingRequest, Void>(((Activity) context),
 				getLoader()).execute(new ListingRequest(position, size));
 	}
 
 	protected SCAsyncTaskProcessor<AbstractLstingFragment.ListingRequest, List<ExplorerObject>> getLoader() {
-		return new EventLoader(getActivity());
+		return new EventLoader(((Activity) context));
 	}
 
 	private class EventLoader
@@ -388,7 +388,7 @@ public class EventsListingFragment extends Fragment implements OnScrollListener 
 		@Override
 		public void handleResult(List<ExplorerObject> result) {
 			ProgressDialog progress = null;
-			progress = ProgressDialog.show(getActivity(), "", getActivity()
+			progress = ProgressDialog.show(context, "", context
 					.getString(R.string.loading), true);
 
 			if (!result.isEmpty()) {
@@ -406,7 +406,7 @@ public class EventsListingFragment extends Fragment implements OnScrollListener 
 				progress.cancel();
 
 			} else {
-				TextView no_result = (TextView) getActivity().findViewById(
+				TextView no_result = (TextView) ((Activity)context).findViewById(
 						R.id.events_no_results);
 				no_result.setVisibility(View.VISIBLE);
 				expListView.setVisibility(View.GONE);
@@ -579,7 +579,7 @@ public class EventsListingFragment extends Fragment implements OnScrollListener 
 								(WhenForSearch) bundle
 										.getParcelable(SearchFragment.ARG_WHEN_SEARCH),
 								my, ExplorerObject.class, sort, categories);
-				LogHelper.sendListViewed(category, getActivity());
+				LogHelper.sendListViewed(category, ((Activity) context));
 
 			} else if (bundle.containsKey(ARG_POI)
 					&& (bundle.getString(ARG_POI) != null)) {
@@ -598,7 +598,7 @@ public class EventsListingFragment extends Fragment implements OnScrollListener 
 								(WhenForSearch) bundle
 										.getParcelable(SearchFragment.ARG_WHEN_SEARCH),
 								my, ExplorerObject.class, sort, categories);
-				LogHelper.sendListViewed(SearchFragment.ARG_MY, getActivity());
+				LogHelper.sendListViewed(SearchFragment.ARG_MY,context );
 
 			} else if (bundle.containsKey(SearchFragment.ARG_ALL)) {
 
@@ -612,7 +612,7 @@ public class EventsListingFragment extends Fragment implements OnScrollListener 
 								(WhenForSearch) bundle
 										.getParcelable(SearchFragment.ARG_WHEN_SEARCH),
 								my, ExplorerObject.class, sort, "");
-				LogHelper.sendListViewed(SearchFragment.ARG_ALL, getActivity());
+				LogHelper.sendListViewed(SearchFragment.ARG_ALL, ((Activity) context));
 
 			} else if (bundle.containsKey(SearchFragment.ARG_QUERY)) {
 
@@ -628,13 +628,13 @@ public class EventsListingFragment extends Fragment implements OnScrollListener 
 								my, ExplorerObject.class, sort, categories);
 				LogHelper.sendSearch(
 						bundle.getString(SearchFragment.ARG_QUERY),
-						getActivity());
+						((Activity) context));
 
 			} else if (bundle.containsKey(ARG_QUERY_TODAY)) {
 				today = true;
 				result = DTHelper.searchTodayEvents(0, -1,
 						bundle.getString(SearchFragment.ARG_QUERY));
-				LogHelper.sendListViewed(ARG_QUERY_TODAY, getActivity());
+				LogHelper.sendListViewed(ARG_QUERY_TODAY, ((Activity) context));
 
 			} else if (bundle.containsKey(SearchFragment.ARG_LIST)) {
 				result = (Collection<ExplorerObject>) bundle
@@ -667,7 +667,7 @@ public class EventsListingFragment extends Fragment implements OnScrollListener 
 
 		menu.clear();
 
-		getActivity().getMenuInflater().inflate(R.menu.list_menu, menu);
+		((Activity) context).getMenuInflater().inflate(R.menu.list_menu, menu);
 
 		setColorCategory();
 
@@ -696,7 +696,7 @@ public class EventsListingFragment extends Fragment implements OnScrollListener 
 						.parseColor(getString(R.color.actionbar_default));
 				color = new ColorDrawable(colorCategory);
 			}
-			((ActionBarActivity) getActivity()).getSupportActionBar()
+			((ActionBarActivity) ((Activity) context)).getSupportActionBar()
 					.setBackgroundDrawable(color);
 
 		}
@@ -783,7 +783,7 @@ public class EventsListingFragment extends Fragment implements OnScrollListener 
 				Activity activity,
 				SCAsyncTask.SCAsyncTaskProcessor<Params, List<ExplorerObject>> processor) {
 			super(activity, processor);
-			updateList = ProgressDialog.show(getActivity(), "",getActivity().getString(R.string.update_list), true);
+			updateList = ProgressDialog.show(((Activity) context), "",((Activity) context).getString(R.string.update_list), true);
 			
 		}
 
@@ -801,26 +801,27 @@ public class EventsListingFragment extends Fragment implements OnScrollListener 
 				}
 
 				eventsAdapter.notifyDataSetChanged();
-				if (updateList.isShowing())
-					updateList.dismiss();
+			
 
 			} else if (getArguments().containsKey(SearchFragment.ARG_MY)) {
-				LinearLayout no_my_event_result = (LinearLayout) getActivity()
+				LinearLayout no_my_event_result = (LinearLayout) ((Activity) context)
 						.findViewById(R.id.my_events_no_results);
 				no_my_event_result.setVisibility(View.VISIBLE);
 				expListView.setVisibility(View.GONE);
-				TextView no_result = (TextView) getActivity().findViewById(
+				TextView no_result = (TextView) ((Activity) context).findViewById(
 						R.id.events_no_results);
 				no_result.setVisibility(View.GONE);
 			} else {
-				TextView no_result = (TextView) getActivity().findViewById(
+				TextView no_result = (TextView) ((Activity) context).findViewById(
 						R.id.events_no_results);
 				no_result.setVisibility(View.VISIBLE);
 				expListView.setVisibility(View.GONE);
-				LinearLayout no_my_event_result = (LinearLayout) getActivity()
+				LinearLayout no_my_event_result = (LinearLayout) ((Activity) context)
 						.findViewById(R.id.my_events_no_results);
 				no_my_event_result.setVisibility(View.GONE);
 			}
+			if (updateList.isShowing())
+				updateList.dismiss();
 		}
 	}
 
