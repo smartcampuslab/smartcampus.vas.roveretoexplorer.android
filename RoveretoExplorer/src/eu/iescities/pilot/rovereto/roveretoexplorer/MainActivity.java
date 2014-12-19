@@ -36,6 +36,7 @@ import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.model.BaseDTObje
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.CategoryFragment;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.AnimateFirstDisplayListener;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.EventsListingFragment;
+import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.questionnaire.QuizFragment;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.questionnaire.QuizHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.search.SearchFragment;
 import eu.iescities.pilot.rovereto.roveretoexplorer.log.LogHelper;
@@ -54,8 +55,12 @@ import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 public class MainActivity extends AbstractNavDrawerActivity {
 
 	private SharedPreferences sp;
+
+	public static final String TAG_FRAGMENT_CATEGORIES = "fragcat";
 	public static final String TAG_FRAGMENT_MAP = "fragmap";
-	public static final String TAG_FRAGMENT_EVENT_LIST = "fragevent";
+	public static final String TAG_FRAGMENT_QUESTIONNAIRE = "fragquest";
+	public static final String TAG_FRAGMENT_CREDITS = "fragcredits";
+	public static final String TAG_FRAGMENT_EVENT_LIST = "fraglist";
 
 	private FragmentManager mFragmentManager;
 
@@ -116,11 +121,9 @@ public class MainActivity extends AbstractNavDrawerActivity {
 	protected void onStart() {
 		super.onStart();
 		// every new start a new session Id is generated
-//		LogHelper.deleteSessionId(this);
 		LogHelper.sendStartLog(this);
 		// check if still a quiz to be done
 		QuizHelper.checkQuiz(this);
-		
 
 	}
 
@@ -339,7 +342,7 @@ public class MainActivity extends AbstractNavDrawerActivity {
 
 	@Override
 	protected NavDrawerActivityConfiguration getNavDrawerConfiguration() {
-
+		ArrayList<NavDrawerItem> menu_items = null;
 		NavDrawerActivityConfiguration navDrawerActivityConfiguration = new NavDrawerActivityConfiguration();
 		navDrawerActivityConfiguration.setMainLayout(R.layout.activity_main);
 		navDrawerActivityConfiguration.setDrawerLayoutId(R.id.drawer_layout);
@@ -351,10 +354,16 @@ public class MainActivity extends AbstractNavDrawerActivity {
 		navDrawerActivityConfiguration
 				.setDrawerCloseDesc(R.string.drawer_close);
 
-		ArrayList<NavDrawerItem> menu_items = getMenuItems(
-				R.array.drawer_items_labels, R.array.drawer_items_icons,
-				R.array.drawer_items_actionbar_titles);
-
+		if (QuizHelper.checkQuizForDrawer(this)) {
+			menu_items = getMenuItems(
+					R.array.drawer_items_labels_questionnaire,
+					R.array.drawer_items_icons_questionnaire,
+					R.array.drawer_items_actionbar_titles_questionnaire);
+		} else {
+			menu_items = getMenuItems(R.array.drawer_items_labels,
+					R.array.drawer_items_icons,
+					R.array.drawer_items_actionbar_titles);
+		}
 		navDrawerActivityConfiguration.setMenuItems(menu_items);
 
 		navDrawerActivityConfiguration.setBaseAdapter(new NavDrawerAdapter(
@@ -392,18 +401,16 @@ public class MainActivity extends AbstractNavDrawerActivity {
 		case 1: // click on "Oggi" item
 			args = new Bundle();
 			elf = new CategoryFragment();
-			args.putString(EventsListingFragment.ARG_QUERY_TODAY, "");
 			elf.setArguments(args);
 			out[0] = elf;
 			out[1] = TAG_FRAGMENT_EVENT_LIST;
 			break;
-		case 2: // click on "I miei eventi" item
+		case 2: // click on "Map" item
 			args = new Bundle();
 			elf = new MapFragment();
-			args.putBoolean(SearchFragment.ARG_MY, true);
 			elf.setArguments(args);
 			out[0] = elf;
-			out[1] = TAG_FRAGMENT_EVENT_LIST;
+			out[1] = TAG_FRAGMENT_MAP;
 			break;
 		case 3: // click on "I miei eventi" item
 			args = new Bundle();
@@ -413,13 +420,24 @@ public class MainActivity extends AbstractNavDrawerActivity {
 			out[0] = elf;
 			out[1] = TAG_FRAGMENT_EVENT_LIST;
 			break;
-		case 4: // click on "I miei eventi" item
-//			args = new Bundle();
+		case 4: // click on "Questionnaire" item
+			if (QuizHelper.checkQuizForDrawer(this)) {
+				args = new Bundle();
+				elf = new QuizFragment();
+				elf.setArguments(args);
+				out[0] = elf;
+				out[1] = TAG_FRAGMENT_QUESTIONNAIRE;
+				break;
+			}else {
+				Intent i = new Intent(MainActivity.this, Credits.class);
+				startActivity(i);
+			}
+		case 5: // click on "Credits" item
+			if (QuizHelper.checkQuizForDrawer(this)) {
 			Intent i = new Intent(MainActivity.this, Credits.class);
 			startActivity(i);
 			return null;
-
-
+			}
 		default:
 			return null;
 		}
@@ -433,7 +451,6 @@ public class MainActivity extends AbstractNavDrawerActivity {
 		MenuInflater inflater = getMenuInflater();
 
 		inflater.inflate(R.menu.global_menu, menu);
-
 
 		return true;
 	}

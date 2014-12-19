@@ -27,5 +27,34 @@
         <item>I miei eventi</item>
         <item>Credits</item>
     </string-array>
+    <string-array name="drawer_items_labels_questionnaire">
+        <item>Home</item>
+        <item>Mappa</item>
+        <item>I miei eventi</item>
+        <item>Questionario</item>
+        <item>Credits</item>
+    </string-array>
+
+    <!-- The icons associated to the menu items -->
+
+    <string-array name="drawer_items_icons_questionnaire">
+        <item>@drawable/ic_drawer_home</item>
+        <item>@drawable/ic_drower_map</item>
+        <item>@drawable/ic_drower_myevents</item>
+        <item>@drawable/ic_questionario</item>
+        <item>@drawable/ic_credits</item>
+    </string-array>
+
+    <!-- The icons associated to the menu items -->
+
+    <string-array name="drawer_items_actionbar_titles_questionnaire">
+        <item>Home</item>
+        <item>Mappa</item>
+        <item>I miei eventi</item>
+        <item>Questionario</item>
+        <item>Credits</item>
+    </string-array>
+
+    <string name="drawer_questionnaire">Questionario</string>
 
 </resources>

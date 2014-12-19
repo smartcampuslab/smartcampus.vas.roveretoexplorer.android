@@ -13,15 +13,14 @@ import java.util.regex.Pattern;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.widget.Toast;
 import eu.iescities.pilot.rovereto.roveretoexplorer.R;
 import eu.iescities.pilot.rovereto.roveretoexplorer.log.LogConstants;
 import eu.iescities.pilot.rovereto.roveretoexplorer.log.LogHelper;
@@ -149,6 +148,7 @@ public class QuizHelper {
 
 			} else {
 				// error
+				Toast.makeText(ctx, R.string.questionnaire_error, Toast.LENGTH_LONG).show();
 			}
 			if (pd.isShowing())
 				pd.dismiss();
@@ -158,8 +158,51 @@ public class QuizHelper {
 	public SharedPreferences getQuizPreferences() {
 		return sp;
 	}
+	
+	public static boolean checkQuizForDrawer(FragmentActivity activity){
+		// check if is done
+		sp = activity.getSharedPreferences(QuizHelper.MY_PREFERENCES,
+				Context.MODE_PRIVATE);
+			if (!sp.contains(QUIZ_FINISHED)) {
+				return true;
+			}
+			return false;
+	}
+	public static boolean checkQuiz(FragmentActivity activity){
+		DateFormat readFormat = new SimpleDateFormat("MM dd HH:mm:ss zzz yyyy",
+				Locale.getDefault());
+		Date oldDate, newDate;
+		sp = activity.getSharedPreferences(QuizHelper.MY_PREFERENCES,
+				Context.MODE_PRIVATE);
+		if (sp.contains(TIME_TO_QUIZ)) {
+			// check if time is finished and starty quiz activity
+			try {
+				oldDate = readFormat.parse(sp.getString(TIME_TO_QUIZ,
+						readFormat.format(new Date())));
+			} catch (ParseException e) {
+				e.printStackTrace();
+				oldDate = new Date();
+			}
+			newDate = new Date();
+			Calendar c = Calendar.getInstance();
+			c.setTime(oldDate); // Now use today date.
+			c.add(Calendar.DATE, QUIZ_SKIP_DAYS); // Adding 5 days
 
-	public static void checkQuiz(FragmentActivity activity) {
+			if (newDate.after(c.getTime())) {
+				return true;
+			}
+		} else {
+			// check if is done
+			if (!sp.contains(QUIZ_FINISHED)) {
+				// put the date
+				SharedPreferences.Editor editor = sp.edit();
+				editor.putString(TIME_TO_QUIZ, readFormat.format(new Date()));
+				editor.commit();
+			}
+		}
+		return false;
+	}
+	public static void launchQuiz(FragmentActivity activity) {
 		DateFormat readFormat = new SimpleDateFormat("MM dd HH:mm:ss zzz yyyy",
 				Locale.getDefault());
 		Date oldDate, newDate;

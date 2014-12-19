@@ -293,6 +293,7 @@ This app is part of the European IES Cities project. May we ask you a few short 
     <string name="credits_version">v. %s</string>
     <string name="update_list">Updating the list</string>
     <string name="home_banner">Find out what to do in Rovereto</string>
+    <string name="questionnaire_error">Error sending data</string>
 <!-- tabs' strings -->
     <string name="tab_info">Info</string>
     <string name="tab_daSapere">to know</string>

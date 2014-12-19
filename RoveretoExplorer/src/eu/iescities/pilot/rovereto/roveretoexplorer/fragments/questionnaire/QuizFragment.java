@@ -33,6 +33,7 @@ public class QuizFragment extends Fragment implements QuizInterface {
 
 	private RadioButton radioButton;
 	private TextView quizQuestion;
+	private WebView quizQuestionBack;
 	private int questNo = 0;
 	private int answerNo = 0;
 	private SharedPreferences prefs = null;
@@ -108,8 +109,8 @@ public class QuizFragment extends Fragment implements QuizInterface {
 		introLayout.setVisibility(View.VISIBLE);
 		questionsLayout.setVisibility(View.GONE);
 		endLayout.setVisibility(View.GONE);
-		quizQuestion = (TextView) getActivity().findViewById(R.id.introText);
-		quizQuestion.setText(R.string.questionnaire_welcome_back);
+		quizQuestionBack = (WebView) getActivity().findViewById(R.id.introText);
+		quizQuestionBack.loadData(getString(R.string.questionnaire_welcome_back), "text/html", "utf-8");
 		Button btnClose = (Button) getActivity().findViewById(R.id.btnIntroNo);
 		btnClose.setOnClickListener(btnNextTime_Listener);
 		Button btnNext = (Button) getActivity().findViewById(R.id.btnIntroOk);
@@ -208,6 +209,8 @@ public class QuizFragment extends Fragment implements QuizInterface {
 			ft.replace(R.id.content_frame, new MapFragment(), MainActivity.TAG_FRAGMENT_MAP);
 			ft.addToBackStack(fragment.getTag());
 			ft.commit();
+			getActivity().finish();
+			startActivity(getActivity().getIntent());
 		}
 
 	};
@@ -277,6 +280,7 @@ public class QuizFragment extends Fragment implements QuizInterface {
 			editor.remove(QuizHelper.TIME_TO_QUIZ);
 			editor.commit();
 			LogHelper.sendQuestionnarieFinished(getActivity());
+
 		}
 	};
 	private CompoundButton.OnCheckedChangeListener rbChange_Listener = new CompoundButton.OnCheckedChangeListener() {
@@ -348,6 +352,8 @@ public class QuizFragment extends Fragment implements QuizInterface {
 		} else {
 			QuizHelper.finished();
 			setupEndLayout();
+			getActivity().finish();
+			getActivity().startActivity(getActivity().getIntent());
 		}
 	}
 

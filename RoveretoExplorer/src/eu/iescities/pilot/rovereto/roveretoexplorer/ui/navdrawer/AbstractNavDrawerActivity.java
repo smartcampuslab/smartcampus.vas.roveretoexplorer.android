@@ -39,8 +39,8 @@ public abstract class AbstractNavDrawerActivity extends ActionBarActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		navConf = getNavDrawerConfiguration();
-
-		setContentView(navConf.getMainLayout()); 
+		changeMenuNav(navConf);
+//		setContentView(navConf.getMainLayout()); 
 
 		if ( savedInstanceState == null ) {
 			mTitle = mDrawerTitle = getTitle();
@@ -52,16 +52,45 @@ public abstract class AbstractNavDrawerActivity extends ActionBarActivity {
 			setTitle(mTitle);
 		}
 
-		mDrawerLayout = (DrawerLayout) findViewById(navConf.getDrawerLayoutId());
-		mDrawerList = (ListView) findViewById(navConf.getLeftDrawerId());
-		mDrawerList.setAdapter(navConf.getBaseAdapter());
-		mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+//		mDrawerLayout = (DrawerLayout) findViewById(navConf.getDrawerLayoutId());
+//		mDrawerList = (ListView) findViewById(navConf.getLeftDrawerId());
+//		mDrawerList.setAdapter(navConf.getBaseAdapter());
+//		mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
-		this.initDrawerShadow();
+//		this.initDrawerShadow();
 
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		getSupportActionBar().setHomeButtonEnabled(true);
 
+//		mDrawerToggle = new ActionBarDrawerToggle(
+//				this,
+//				mDrawerLayout,
+//				navConf.getDrawerIcon(),
+//				navConf.getDrawerOpenDesc(),
+//				navConf.getDrawerCloseDesc()
+//				) {
+//			public void onDrawerClosed(View view) {
+//				getSupportActionBar().setTitle(mTitle);
+//				ActivityCompat.invalidateOptionsMenu(AbstractNavDrawerActivity.this);
+//			}
+//
+//			public void onDrawerOpened(View drawerView) {
+//				getSupportActionBar().setTitle(mDrawerTitle);
+//				ActivityCompat.invalidateOptionsMenu(AbstractNavDrawerActivity.this);
+//			}
+//		};
+//		mDrawerLayout.setDrawerListener(mDrawerToggle);
+	}
+
+	
+	protected void changeMenuNav(NavDrawerActivityConfiguration navConf){
+		
+		setContentView(navConf.getMainLayout()); 
+		mDrawerLayout = (DrawerLayout) findViewById(navConf.getDrawerLayoutId());
+		mDrawerList = (ListView) findViewById(navConf.getLeftDrawerId());
+		mDrawerList.setAdapter(navConf.getBaseAdapter());
+		mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+		this.initDrawerShadow();
 		mDrawerToggle = new ActionBarDrawerToggle(
 				this,
 				mDrawerLayout,
@@ -81,7 +110,6 @@ public abstract class AbstractNavDrawerActivity extends ActionBarActivity {
 		};
 		mDrawerLayout.setDrawerListener(mDrawerToggle);
 	}
-
 	protected void initDrawerShadow() {
 		mDrawerLayout.setDrawerShadow(navConf.getDrawerShadow(), GravityCompat.START);
 	}

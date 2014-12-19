@@ -285,7 +285,8 @@ Quest\'applicazione e\' parte del progetto europeo IES Cities. Possiamo farti qu
     <string name="credits_details">Ulteriori dettagli:</string>
     <string name="update_list">Aggiornando la lista</string>
     <string name="home_banner">Scopri cosa fare a Rovereto</string>
-
+    <string name="questionnaire_error">Errore nell\'inviare i dati</string>
+    
     <!-- tabs' strings -->
     <string name="tab_info">Info</string>
     <string name="tab_daSapere">da sapere</string>
