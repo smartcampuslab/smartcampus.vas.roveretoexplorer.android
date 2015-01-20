@@ -113,9 +113,8 @@
     <string name="info_dialog_title_track">Track\'s information</string>
     <string name="app_failure_obj_not_found">Item not found!</string>
 
-    <!-- <string name="smartcampus_auth_url"> https://vas-dev.smartcampuslab.it/accesstoken-provider/ac</string> -->
-    <!-- <string name="smartcampus_app_url">https://vas.smartcampuslab.it</string> -->
-    <string name="smartcampus_app_url">https://vas-dev.smartcampuslab.it/roveretoexplorer</string>
+
+    <string name="smartcampus_app_url">https://rovereto.smartcommunitylab.it/roveretoexplorer</string>
     <!-- String for the searching fragment -->
     <string name="search_what">What: </string>
     <string name="search_when">When: </string>

@@ -2,15 +2,18 @@ package eu.iescities.pilot.rovereto.roveretoexplorer;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.http.HttpStatus;
 
 import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
 import android.content.res.Resources.NotFoundException;
@@ -39,6 +42,7 @@ import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.event.EventsListin
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.questionnaire.QuizFragment;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.questionnaire.QuizHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.fragments.search.SearchFragment;
+import eu.iescities.pilot.rovereto.roveretoexplorer.log.LogConstants;
 import eu.iescities.pilot.rovereto.roveretoexplorer.log.LogHelper;
 import eu.iescities.pilot.rovereto.roveretoexplorer.map.MapFragment;
 import eu.iescities.pilot.rovereto.roveretoexplorer.ui.navdrawer.AbstractNavDrawerActivity;
@@ -54,13 +58,12 @@ import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 
 public class MainActivity extends AbstractNavDrawerActivity {
 
-	private SharedPreferences sp;
-
 	public static final String TAG_FRAGMENT_CATEGORIES = "fragcat";
 	public static final String TAG_FRAGMENT_MAP = "fragmap";
 	public static final String TAG_FRAGMENT_QUESTIONNAIRE = "fragquest";
 	public static final String TAG_FRAGMENT_CREDITS = "fragcredits";
 	public static final String TAG_FRAGMENT_EVENT_LIST = "fraglist";
+	public static final String SP_NEW_SERVER = "new_server";
 
 	private FragmentManager mFragmentManager;
 
@@ -130,8 +133,12 @@ public class MainActivity extends AbstractNavDrawerActivity {
 	protected void signedIn() {
 		try {
 			SCAccessProvider provider = SCAccessProvider.getInstance(this);
+			// check version and if new server logout
 			if (!provider.isLoggedIn(MainActivity.this)) {
 				showLoginDialog(SCAccessProvider.getInstance(MainActivity.this));
+			}
+			else {
+				updateForNewServer();
 			}
 			initDataManagement();
 		} catch (Exception e) {
@@ -153,6 +160,7 @@ public class MainActivity extends AbstractNavDrawerActivity {
 				switch (which) {
 				case DialogInterface.BUTTON_POSITIVE:
 					try {
+
 						if (!SCAccessProvider.getInstance(MainActivity.this)
 								.login(MainActivity.this, null)) {
 							new TokenTask().execute();
@@ -170,6 +178,7 @@ public class MainActivity extends AbstractNavDrawerActivity {
 					break;
 				}
 			}
+
 		};
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setCancelable(false);
@@ -178,6 +187,17 @@ public class MainActivity extends AbstractNavDrawerActivity {
 						updateDialogClickListener)
 				.setNegativeButton(android.R.string.no,
 						updateDialogClickListener).show();
+	}
+
+	// check version and if new server logout
+	private void updateForNewServer() {
+		// check if sharedpreferences contains label "new server"
+		SharedPreferences sp = getSharedPreferences(DTHelper.T_D_PREFS,Context.MODE_PRIVATE);
+		if (!sp.contains(SP_NEW_SERVER)) {
+			// run task logout and login with new token
+			new updateAppTask().execute();
+		}
+
 	}
 
 	private void initDataManagement() {
@@ -217,6 +237,7 @@ public class MainActivity extends AbstractNavDrawerActivity {
 			if (resultCode == RESULT_OK) {
 				String token = data.getExtras().getString(
 						AccountManager.KEY_AUTHTOKEN);
+				newServerCheckVariable();
 				if (token == null) {
 					Toast.makeText(this, R.string.app_failure_security,
 							Toast.LENGTH_LONG).show();
@@ -229,6 +250,15 @@ public class MainActivity extends AbstractNavDrawerActivity {
 				DTHelper.endAppFailure(this, R.string.app_failure_security);
 			}
 		}
+	}
+
+	private void newServerCheckVariable() {
+		//write the new server workaround
+		SharedPreferences sharedPref = getSharedPreferences(DTHelper.T_D_PREFS,
+				Context.MODE_PRIVATE);
+		SharedPreferences.Editor editor = sharedPref.edit();
+		editor.putBoolean(SP_NEW_SERVER, true);
+		editor.commit();
 	}
 
 	private boolean initData() {
@@ -428,15 +458,15 @@ public class MainActivity extends AbstractNavDrawerActivity {
 				out[0] = elf;
 				out[1] = TAG_FRAGMENT_QUESTIONNAIRE;
 				break;
-			}else {
+			} else {
 				Intent i = new Intent(MainActivity.this, Credits.class);
 				startActivity(i);
 			}
 		case 5: // click on "Credits" item
 			if (QuizHelper.checkQuizForDrawer(this)) {
-			Intent i = new Intent(MainActivity.this, Credits.class);
-			startActivity(i);
-			return null;
+				Intent i = new Intent(MainActivity.this, Credits.class);
+				startActivity(i);
+				return null;
 			}
 		default:
 			return null;
@@ -517,6 +547,37 @@ public class MainActivity extends AbstractNavDrawerActivity {
 		return false;
 	}
 
+	
+	private class updateAppTask extends AsyncTask<Void, Void, Void> {
+		
+		SCAccessProvider provider=null;
+		@Override
+		protected Void doInBackground(Void... params) {
+			try {
+
+				provider = SCAccessProvider
+						.getInstance(MainActivity.this);
+				provider.logout(MainActivity.this);
+				newServerCheckVariable();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return null;
+		}
+
+		
+		@Override
+		protected void onPostExecute(Void result) {
+			super.onPostExecute(result);
+			try {
+				provider.login(MainActivity.this, null);
+			} catch (AACException e) {
+				e.printStackTrace();
+			}
+		}
+
+	}
+
 	private class TokenTask extends AsyncTask<Void, Void, String> {
 
 		@Override
@@ -549,7 +610,7 @@ public class MainActivity extends AbstractNavDrawerActivity {
 				try {
 					provider.login(MainActivity.this, null);
 					initDataManagement();
-
+					
 				} catch (AACException e) {
 					Log.e(MainActivity.class.getName(), "" + e.getMessage());
 				}

@@ -5,11 +5,22 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
 import eu.iescities.pilot.rovereto.roveretoexplorer.custom.data.DTHelper;
 
 public class SplashScreenActivity extends ActionBarActivity {
 private static final long SPLASH_TIME_OUT = 2000;
+
+
+
+
+
+@Override
+protected void onSaveInstanceState(Bundle outState) {
+    //No call for super(). Bug on API Level > 11.
+}
+
 
 @Override
 protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +41,10 @@ protected void onCreate(Bundle savedInstanceState) {
 			
 			if (DTHelper.showTermsDialog(getSharedPreferences(DTHelper.T_D_PREFS, Context.MODE_PRIVATE))){
 				  DialogFragment newFragment = TermsDialogBox.newInstance();
-				    newFragment.show(SplashScreenActivity.this.getSupportFragmentManager(), "dialog");
+				  FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+				  ft.add(newFragment, null);
+				  ft.commitAllowingStateLoss();
+//				    newFragment.show(SplashScreenActivity.this.getSupportFragmentManager(), "dialog");
 				} else {
 					finish();
 					Intent i = new Intent(SplashScreenActivity.this, MainActivity.class);

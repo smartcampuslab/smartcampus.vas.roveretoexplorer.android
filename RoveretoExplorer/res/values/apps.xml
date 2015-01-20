@@ -18,7 +18,7 @@
   
 
 
-    <string name="smartcampus_auth_url"> https://vas-dev.smartcampuslab.it/accesstoken-provider/ac</string>
-    <string name="smartcampus_app_url">https://vas-dev.smartcampuslab.it/roveretoexplorer</string>
+    <string name="smartcampus_auth_url">https://tn.smartcommunitylab.it/aac</string>
+    <string name="smartcampus_app_url">https://rovereto.smartcommunitylab.it/roveretoexplorer</string>
 
 </resources>
