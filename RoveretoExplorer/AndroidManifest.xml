@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="eu.iescities.pilot.rovereto.roveretoexplorer"
     android:installLocation="internalOnly"
-    android:versionCode="20"
-    android:versionName="1.4.2" >
+    android:versionCode="23"
+    android:versionName="1.4.4" >
 
     <uses-sdk
         android:minSdkVersion="10"
@@ -31,9 +31,6 @@
 
     <permission
         android:name="eu.trentorise.smartcampus.permission.MAPS_RECEIVE"
-        android:protectionLevel="signature" />
-    <permission
-        android:name="eu.trentorise.smartcampus.ac.AUTHENTICATE"
         android:protectionLevel="signature" />
 
     <uses-permission android:name="eu.trentorise.smartcampus.permission.MAPS_RECEIVE" />
@@ -80,7 +77,7 @@
             android:value="" />
         <meta-data
             android:name="eu.trentorise.smartcampus.account.AUTH_URL"
-            android:value="https://vas-dev.smartcampuslab.it/aac" />
+            android:value="https://tn.smartcommunitylab.it/aac" />
         <meta-data
             android:name="eu.trentorise.smartcampus.account.AUTHORITY_ARRAY"
             android:value="googlelocal" />
