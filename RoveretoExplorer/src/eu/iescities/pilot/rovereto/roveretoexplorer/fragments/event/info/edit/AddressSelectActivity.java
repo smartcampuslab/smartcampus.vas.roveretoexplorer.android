@@ -55,7 +55,7 @@ import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 public class AddressSelectActivity extends ActionBarActivity implements OnMapLongClickListener {
 
 	private GoogleMap mMap = null;
-	private String url = "https://vas.smartcampuslab.it";
+	private String url = "https://geo.smartcommunitylab.it/";
 	private OSMAddress osmAddress = null;
 	private String osmUrl = "http://otile1.mqcdn.com/tiles/1.0.0/osm/%d/%d/%d.jpg";
 	@Override
