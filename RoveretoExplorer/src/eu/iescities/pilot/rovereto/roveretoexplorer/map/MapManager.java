@@ -89,7 +89,8 @@ public class MapManager {
 	}
 
 	public static GeoPoint requestMyLocation(Context ctx) {
-		return DTHelper.getLocationHelper().getLocation();
+		Location l = DTHelper.getLocationHelper().getLocation();
+		return new GeoPoint((int)(l.getLatitude()* 1e6), (int)(l.getLongitude() * 1e6));
 	}
 
 	public static void fitMapWithOverlays(

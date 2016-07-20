@@ -55,9 +55,9 @@ import eu.trentorise.smartcampus.protocolcarrier.exceptions.SecurityException;
 public class AddressSelectActivity extends ActionBarActivity implements OnMapLongClickListener {
 
 	private GoogleMap mMap = null;
-	private String url = "https://vas.smartcampuslab.it";
+	private String url = "https://geo.smartcommunitylab.it";
 	private OSMAddress osmAddress = null;
-	private String osmUrl = "http://otile1.mqcdn.com/tiles/1.0.0/osm/%d/%d/%d.jpg";
+	private String osmUrl = "http://a.tile.openstreetmap.org/%d/%d/%d.png";
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -78,8 +78,8 @@ public class AddressSelectActivity extends ActionBarActivity implements OnMapLon
 			if (DTParamsHelper.getCenterMap() != null) {
 				centerLatLng = new LatLng(DTParamsHelper.getCenterMap().get(0), DTParamsHelper.getCenterMap().get(1));
 			} else if (DTHelper.getLocationHelper().getLocation() != null) {
-				centerLatLng = new LatLng(DTHelper.getLocationHelper().getLocation().getLatitudeE6() / 1e6, DTHelper
-						.getLocationHelper().getLocation().getLongitudeE6() / 1e6);
+				centerLatLng = new LatLng(DTHelper.getLocationHelper().getLocation().getLatitude(), DTHelper
+						.getLocationHelper().getLocation().getLongitude() );
 			}
 			if (centerLatLng != null) {
 				mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(centerLatLng, DTParamsHelper.getZoomLevelMap()));
