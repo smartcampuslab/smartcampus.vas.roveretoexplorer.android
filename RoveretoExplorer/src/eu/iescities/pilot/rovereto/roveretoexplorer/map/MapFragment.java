@@ -76,7 +76,7 @@ public class MapFragment extends Fragment implements MapItemsHandler,
 	private String[] tracksCategories = null;
 	private String[] eventsCleaned = null;
 	private Collection<? extends BaseDTObject> objects;
-	private String osmUrl = "http://otile1.mqcdn.com/tiles/1.0.0/osm/%d/%d/%d.jpg";
+	private String osmUrl = "http://a.tile.openstreetmap.org/%d/%d/%d.png";
 
 	private boolean loaded = false;
 	private boolean listmenu = false;
