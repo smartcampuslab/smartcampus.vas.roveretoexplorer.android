@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="eu.iescities.pilot.rovereto.roveretoexplorer"
     android:installLocation="internalOnly"
-    android:versionCode="23"
-    android:versionName="1.4.4" >
+    android:versionCode="29"
+    android:versionName="1.4.9" >
 
     <uses-sdk
         android:minSdkVersion="10"
@@ -28,11 +28,6 @@
     <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
-
-    <permission
-        android:name="eu.trentorise.smartcampus.permission.MAPS_RECEIVE"
-        android:protectionLevel="signature" />
-
     <uses-permission android:name="eu.trentorise.smartcampus.permission.MAPS_RECEIVE" />
 
     <uses-feature
@@ -66,15 +61,22 @@
         <meta-data
             android:name="follow-by-intent"
             android:value="false" />
-        <meta-data
+<!--         <meta-data -->
+<!--             android:name="com.google.android.maps.v2.API_KEY" -->
+<!--             android:value="AIzaSyBb2QaLKTYQhsgJu3PIUxWi5zx8HI30Q6c" /> -->
+
+
+<!--          To use with prod keystore -->
+      
+          <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="" />
+            android:value="AIzaSyCJQSqlPil5iQV16sSmMVOEP9vUsUUwt58" />
         <meta-data
             android:name="eu.trentorise.smartcampus.account.CLIENT_ID"
-            android:value="" />
+            android:value="2490e070-eb89-43b1-9dcd-6c86f98e910d" />
         <meta-data
             android:name="eu.trentorise.smartcampus.account.CLIENT_SECRET"
-            android:value="" />
+            android:value="481dd9d0-0aae-4fca-98b2-982a80fa9e3c" />
         <meta-data
             android:name="eu.trentorise.smartcampus.account.AUTH_URL"
             android:value="https://tn.smartcommunitylab.it/aac" />

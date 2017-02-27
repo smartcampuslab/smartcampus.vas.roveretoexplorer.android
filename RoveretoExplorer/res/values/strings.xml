@@ -298,4 +298,5 @@ This app is part of the European IES Cities project. May we ask you a few short 
     <string name="tab_daSapere">to know</string>
     <string name="tab_comunita">community</string>
 
+    <string name="privacy_url">http://www.smartcommunitylab.it/app-privacy/</string>
 </resources>

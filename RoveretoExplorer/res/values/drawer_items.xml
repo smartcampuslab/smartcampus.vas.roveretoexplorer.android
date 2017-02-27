@@ -32,6 +32,7 @@
         <item>Map</item>
         <item>My events</item>
         <item>Questionnaire</item>
+        <item>Privacy</item>
         <item>Credits</item>
     </string-array>
 
@@ -42,6 +43,7 @@
         <item>@drawable/ic_drower_map</item>
         <item>@drawable/ic_drower_myevents</item>
         <item>@drawable/ic_questionario</item>
+        <item>@drawable/ic_privacy</item>
         <item>@drawable/ic_credits</item>
     </string-array>
 
@@ -52,6 +54,7 @@
         <item>Maps</item>
         <item>My events</item>
         <item>Questionnaire</item>
+        <item>Privacy</item>
         <item>Credits</item>
     </string-array>
 

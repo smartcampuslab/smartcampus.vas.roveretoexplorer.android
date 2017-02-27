@@ -18,6 +18,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
 import android.content.res.Resources.NotFoundException;
 import android.content.res.TypedArray;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -413,12 +414,14 @@ public class MainActivity extends AbstractNavDrawerActivity {
 		if (objects != null) {
 			FragmentTransaction ft = mFragmentManager.beginTransaction();
 			ft.setCustomAnimations(R.anim.enter, R.anim.exit);
+			if (objects[0]!=null && objects[1]!=null){
 			ft.replace(R.id.content_frame, (Fragment) objects[0],
 					objects[1].toString());
 			// ft.addToBackStack(objects[1].toString());
 			mFragmentManager.popBackStack(null,
 					FragmentManager.POP_BACK_STACK_INCLUSIVE);
 			ft.commit();
+			}
 		}
 	}
 
@@ -462,7 +465,11 @@ public class MainActivity extends AbstractNavDrawerActivity {
 				Intent i = new Intent(MainActivity.this, Credits.class);
 				startActivity(i);
 			}
-		case 5: // click on "Credits" item
+		case 5: // click on "Questionnaire" item
+			Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(this.getString(R.string.privacy_url) ));
+			startActivity(browserIntent);
+			break;
+		case 6: // click on "Credits" item
 			if (QuizHelper.checkQuizForDrawer(this)) {
 				Intent i = new Intent(MainActivity.this, Credits.class);
 				startActivity(i);
