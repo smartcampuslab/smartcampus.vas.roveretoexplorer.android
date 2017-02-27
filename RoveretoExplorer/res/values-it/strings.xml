@@ -178,9 +178,11 @@
     <string name="address_select_toast">Selezionare un indirizzo</string>
     <string name="toast_time_wrong">Il tempo dell\'evento è errato</string>
     <string name="when_where">Dove e quando</string>
-    <string name="terms_of_service">
+   
         <!-- create and update -->
-<string name="update_success">Le tue modifiche sono state salvate con successo.</string> <string name="update_failed">Ci sono stati problemi nel salvataggio delle modifiche. Riprova. </string>
+<string name="update_success">Le tue modifiche sono state salvate con successo.</string>
+ <string name="update_failed">Ci sono stati problemi nel salvataggio delle modifiche. Riprova. </string>
+  <string name="terms_of_service">
 <![CDATA[
        <b>Introduction<br>
         Applicable worldwide except where we publish specific territorial terms and conditions.</b><br>
